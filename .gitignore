@@ -1,4 +1,7 @@
 /vendor
+/node_modules
 .env
 .idea
 .vagrant
+/public/css
+/public/js

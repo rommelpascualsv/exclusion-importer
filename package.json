@@ -1,0 +1,16 @@
+{
+  "name": "exclusions-import",
+  "version": "1.0.0",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap-sass": "^3.3.6",
+    "laravel-elixir": "^4.1.1"
+  }
+}
