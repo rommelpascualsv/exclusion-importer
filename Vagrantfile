@@ -39,5 +39,9 @@ Vagrant.configure(2) do |config|
     sudo apt-get install -y php5-fpm php5-cli php5-mysql php5-curl php5-mcrypt php5-gd
 
     sudo apt-get install -y mysql-5.6
+
+    curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
+    sudo apt-get install -y nodejs
+    sudo npm install --global gulp
   SHELL
 end
