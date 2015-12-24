@@ -14,3 +14,5 @@
 $app->get('/', function () use ($app) {
     return view('hello');
 });
+
+$app->get('import/{listPrefix}', 'ImportController@import');
