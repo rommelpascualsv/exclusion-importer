@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Import\Manager;
+use App\Import;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
 class ImportController extends BaseController
 {
     public function import($listPrefix)
     {
-        $listImportManager = new Manager($listPrefix);
+        $listImportManager = new Import\Manager($listPrefix);
 
-        return response()->json($listImportManager->configs);
+        $listObject = $listImportManager->getList();
+
+        return response()->json($listObject);
     }
 }
