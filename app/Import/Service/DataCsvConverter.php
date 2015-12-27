@@ -50,22 +50,25 @@ class DataCsvConverter
      */
     protected function convertDataToCsvFile($fileContent, $prefix)
     {
-        $directory = DATAPATH . $prefix . '_files';
+//        $directory = storage_path('app') . '/' . $prefix . '_files';
+//
+//        if ( ! is_dir($directory))
+//        {
+//            mkdir($directory, 02777);
+//
+//            chmod($directory, 02777);
+//        }
 
-        if ( ! is_dir($directory))
-        {
-            mkdir($directory, 02777);
+        $filePath = storage_path('app') . '/' . $prefix . '_temp.xls';
+        $newFilePath = storage_path('app') . '/' . $prefix . '_temp.csv';
 
-            chmod($directory, 02777);
-        }
+        file_put_contents($filePath, $fileContent);
 
-        file_put_contents($directory . '/temp.xls', $fileContent);
+        exec("ssconvert $filePath $newFilePath");
 
-        exec("ssconvert {$directory}/temp.xls {$directory}/temp.csv");
+        unlink($filePath);
 
-        unlink("{$directory}/temp.xls");
-
-        return "{$directory}/temp.csv";
+        return $newFilePath;
     }
 
 }

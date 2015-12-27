@@ -47,7 +47,7 @@ class CSVRetriever extends Retriever
 
         if ($this->uriIsRemote($list->uri))
         {
-            $response = $this->httpClient->get($list->uri)->send();
+            $response = $this->httpClient->get($list->uri);
             $contents = $response->getBody(true);
         }
         else
