@@ -11,8 +11,10 @@ class ImportController extends BaseController
     {
         $listImportManager = new Import\Manager($listPrefix);
 
-        $listObject = $listImportManager->getList();
+        $list = $listImportManager->getList();
 
-        return response()->json($listObject);
+        $exclusionsRetriever = $listImportManager->getRetriever();
+
+        return response()->json([$listImportManager, $list, $exclusionsRetriever]);
     }
 }
