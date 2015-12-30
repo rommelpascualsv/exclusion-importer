@@ -64,10 +64,8 @@ class ListProcessor
 	 */
 	private function createNewTable()
     {
-        DB::query(Database::INSERT, 'DROP TABLE IF EXISTS `' . $this->exclusionList->dbPrefix . '_records_new`')
-            ->execute('exclusion_lists_staging');
-       DB::query(Database::INSERT, 'CREATE TABLE  `' . $this->exclusionList->dbPrefix . '_records_new` LIKE `' . $this->exclusionList->dbPrefix . '_records`')
-            ->execute('exclusion_lists_staging');
+        app('db')->statement('DROP TABLE IF EXISTS `' . $this->exclusionList->dbPrefix . '_records_new`');
+        app('db')->statement('CREATE TABLE  `' . $this->exclusionList->dbPrefix . '_records_new` LIKE `' . $this->exclusionList->dbPrefix . '_records`');
     }
 
 
@@ -76,26 +74,24 @@ class ListProcessor
 	 */
 	private function populateNewTable()
     {
-		$headers = $this->exclusionList->fieldNames;
 		$records = $this->exclusionList->data;
-
-        array_push($headers, 'hash');
-
-        $insert = DB::insert($this->exclusionList->dbPrefix . '_records_new', $headers);
 
         foreach ($records as &$record)
         {
 			$hash = $this->getHash($record);
 
-            array_push($record, DB::expr("UNHEX('{$hash}')"));
+            $record['hash'] = hex2bin($hash);
 
-            if (count($record) == count($headers))
-            {
-                $insert->values($record);
-            }
+//            not sure what to do about this. why were we doing this?
+//            if (count($record) != count($headers))
+//            {
+//                $insert->values($record);
+//            }
         }
 
-        return $insert->execute('exclusion_lists_staging');
+        return app('db')
+            ->table($this->exclusionList->dbPrefix . '_records_new')
+            ->insert($records);
     }
 
 
@@ -106,16 +102,13 @@ class ListProcessor
 	private function activateNewTable()
     {
         // drop old table (this table shouldn't be there, but if it is, clear the way)
-        DB::query(Database::INSERT, 'DROP TABLE IF EXISTS `' . $this->exclusionList->dbPrefix . '_records_old`')
-            ->execute('exclusion_lists_staging');
+        app('db')->statement('DROP TABLE IF EXISTS `' . $this->exclusionList->dbPrefix . '_records_old`');
 
         // rename tables
-        DB::query(Database::INSERT, 'RENAME TABLE `' . $this->exclusionList->dbPrefix . '_records` TO `' .$this->exclusionList->dbPrefix . '_records_old`, `' . $this->exclusionList->dbPrefix . '_records_new` TO `' . $this->exclusionList->dbPrefix . '_records`')
-            ->execute('exclusion_lists_staging');
+        app('db')->statement('RENAME TABLE `' . $this->exclusionList->dbPrefix . '_records` TO `' .$this->exclusionList->dbPrefix . '_records_old`, `' . $this->exclusionList->dbPrefix . '_records_new` TO `' . $this->exclusionList->dbPrefix . '_records`');
 
         // drop old table
-        DB::query(Database::INSERT, 'DROP TABLE IF EXISTS `' . $this->exclusionList->dbPrefix . '_records_old`')
-            ->execute('exclusion_lists_staging');
+        app('db')->statement('DROP TABLE IF EXISTS `' . $this->exclusionList->dbPrefix . '_records_old`');
     }
 
 

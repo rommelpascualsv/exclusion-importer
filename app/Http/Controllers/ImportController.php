@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Import;
+use App\Import\Service\ListProcessor;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
 class ImportController extends BaseController
@@ -17,6 +18,13 @@ class ImportController extends BaseController
 
         $listObject = $exclusionsRetriever->retrieveData($listObject);
 
-        return response()->json($listObject);
+        $processingService = new ListProcessor($listObject);
+
+        $processingService->insertRecords();
+
+        return response()->json([
+            'success'	=> true,
+            'msg'		=> ''
+        ]);
     }
 }
