@@ -1,4 +1,4 @@
 import $ from 'jquery';
+require('bootstrap');
 
-alert('jquery is on the page!');
 console.log($);

@@ -10,8 +10,21 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bootstrap": "^3.3.6",
     "bootstrap-sass": "^3.3.6",
+    "browserify-shim": "^3.8.11",
     "jquery": "^2.1.4",
     "laravel-elixir": "^4.1.1"
+  },
+  "browserify": {
+    "transform": [
+      "browserify-shim"
+    ]
+  },
+  "browser": {
+    "jquery": "./node_modules/jquery/dist/jquery.js"
+  },
+  "browserify-shim": {
+    "jquery": "$"
   }
 }
