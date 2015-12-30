@@ -80,6 +80,8 @@ class ListProcessor
         {
 			$hash = $this->getHash($record);
 
+            // we can do this with db::raw if need be.
+            // i think this is cleaner, but we need to make sure it won't break the hashes.
             $record['hash'] = hex2bin($hash);
 
 //            not sure what to do about this. why were we doing this?
