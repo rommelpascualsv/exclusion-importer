@@ -16,3 +16,4 @@ $app->get('/', function () use ($app) {
 });
 
 $app->get('import/{listPrefix}', 'ImportController@import');
+$app->get('import', 'ImportController@index');
