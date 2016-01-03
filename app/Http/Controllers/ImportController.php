@@ -1,6 +1,4 @@
-<?php
-
-namespace App\Http\Controllers;
+<?php namespace App\Http\Controllers;
 
 use App\Import;
 use App\Import\Service\ListProcessor;
@@ -78,30 +76,37 @@ class ImportController extends BaseController
     public function index()
     {
         $lists = [
-            'az1'    => 'Arizona',
-            'ak1'    => 'Alaska',
-            'ar1'    => 'Arkansas',
-            'ct1'    => 'Connecticut',
-            'dc1'    => 'Washington Dc',
-            'fl2'    => 'Florida',
-            'ga1'    => 'Georgia',
-            'ia1'    => 'Iowa',
-            'ks1'    => 'Kansas',
-            'ky1'    => 'Kentucky',
-            'la1'    => 'Louisiana',
-            'me1'    => 'Maine',
-            'mo1'    => 'Missouri',
-            'ms1'    => 'Mississippi',
-            'mt1'    => 'Montana',
-            'nc1'    => 'North Carolina',
-            'nd1'    => 'North Dakota',
+            'az1' => 'Arizona',
+            'ak1' => 'Alaska',
+            'ar1' => 'Arkansas',
+            'ct1' => 'Connecticut',
+            'cus_spectrum_debar' => 'Custom Spectrum Debar List',
+            'dc1' => 'Washington Dc',
+            'fdac' => 'FDA Clinical Investigators',
+            'fdadl' => 'FDA Debarment List',
+            'fl2' => 'Florida',
+            'ga1' => 'Georgia',
+            'ia1' => 'Iowa',
+            'ks1' => 'Kansas',
+            'ky1' => 'Kentucky',
+            'la1' => 'Louisiana',
+            'me1' => 'Maine',
+            'mo1' => 'Missouri',
+            'ms1' => 'Mississippi',
+            'mt1' => 'Montana',
+            'nc1' => 'North Carolina',
+            'nd1' => 'North Dakota',
+            'njcdr' => 'New Jersey',
             'nyomig' => 'New York',
-            'njcdr'  => 'New Jersey',
-            'oh1'    => 'Ohio',
-            'pa1'    => 'Pennsylvania',
-            'wa1'    => 'Washington State',
-            'wv2'    => 'West Virginia',
-            'wy1'    => 'Wyoming',
+            'oh1' => 'Ohio',
+            'pa1' => 'Pennsylvania',
+            'phs' => 'NHH PHS',
+            'sc1' => 'South Carolina',
+            'tn1' => 'Tennessee',
+            'usdocdp' => 'US DoC Denied Persons List',
+            'wa1' => 'Washington State',
+            'wv2' => 'West Virginia',
+            'wy1' => 'Wyoming',
         ];
 
         $states = app('db')->table('exclusion_lists')->select(
