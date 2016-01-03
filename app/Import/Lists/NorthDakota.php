@@ -1,8 +1,5 @@
 <?php namespace App\Import\Lists;
 
-
-use DB;
-
 class NorthDakota extends ExclusionList
 {
 
@@ -66,19 +63,21 @@ class NorthDakota extends ExclusionList
 
     public function postHook()
     {
-        $query = DB::select('id', 'business_name_address')->from($this->dbPrefix . '_records');
-
-        $results = $query->execute('exclusion_lists_staging');
+        $results = app('db')
+            ->table($this->dbPrefix . '_records')
+            ->select('id', 'business_name_address')
+            ->get();
 
         foreach ($results as $key => $value)
         {
-            preg_match('/^(?!N\/A)[\D]+/', $value['business_name_address'], $match);
+            preg_match('/^(?!N\/A)[\D]+/', $value->business_name_address, $match);
 
             if ( ! empty($match))
             {
-                $query = DB::update($this->dbPrefix . '_records')->set(array('business' => $match))->where('id', '=', $value['id']);
-
-                $query->execute('exclusion_lists_staging');
+                app('db')
+                    ->table($this->dbPrefix . '_records')
+                    ->where('id', $value->id)
+                    ->update(['business' => $match[0]]);
             }
         }
     }

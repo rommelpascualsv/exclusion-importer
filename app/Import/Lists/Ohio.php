@@ -59,7 +59,6 @@ class Ohio extends ExclusionList
 
     public function postHook()
     {
-        \DB::query(\Database::UPDATE, 'UPDATE oh1_records SET npi = NULL WHERE npi = 0')
-            ->execute('exclusion_lists_staging');
+        app('db')->statement('UPDATE oh1_records SET npi = NULL WHERE npi = 0');
     }
 }
