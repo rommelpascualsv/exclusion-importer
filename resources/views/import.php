@@ -67,7 +67,7 @@
                         <td><?php echo $info[0] ?></td>
                         <td class="url" contenteditable="true"><?php echo $info['import_url'] ?></td>
                         <td>
-                            <button type="button" data-action="/import/start/<?php echo $info['prefix'] ?>"
+                            <button type="button" data-action="/import/<?php echo $info['prefix'] ?>"
                                     class="start-btn btn btn-1g btn-default">Start
                             </button>
                         </td>
