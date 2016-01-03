@@ -1,6 +1,4 @@
-<?php
-
-namespace Import\Lists;
+<?php namespace App\Import\Lists;
 
 class NewJersey extends ExclusionList
 {
