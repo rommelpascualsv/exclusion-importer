@@ -5,13 +5,14 @@ $('.create-tables-btn').click(() =>{
     $.get("/import/createOldTables");
 });
 
-$('.start-btn').click(function(e) {
+$('.start-btn').click(() => {
+    const btn = e.target;
 
-    const url = $(this).parents('tr').find('.url').html();
+    const altUrl = $(btn).parents('tr').find('.url').html();
 
-    const a = new Importer(this);
+    const a = new Importer(btn);
 
-    a.upload(url);
+    a.upload(altUrl);
 
 });
 
@@ -43,9 +44,6 @@ class Importer {
     };
 
     responseFail(response) {
-
-        console.log(response);
-
         this.btn.removeClass('btn-default')
             .addClass('btn-danger')
             .html('Error')
