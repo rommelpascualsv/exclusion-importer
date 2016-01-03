@@ -11,7 +11,7 @@ class ImportController extends BaseController
 
     public function index()
     {
-        $lists = array(
+        $lists = [
             'az1'    => 'Arizona',
             'ak1'    => 'Alaska',
             'ar1'    => 'Arkansas',
@@ -36,13 +36,13 @@ class ImportController extends BaseController
             'wa1'    => 'Washington State',
             'wv2'    => 'West Virginia',
             'wy1'    => 'Wyoming',
-        );
+        ];
 
         $states = app('db')->table('exclusion_lists')->select(
             'prefix',
             'accr',
             'import_url'
-        )->get();
+        )->whereIn('prefix', array_keys($lists))->get();
 
         $collection = [];
         foreach($states as $state)
@@ -50,7 +50,7 @@ class ImportController extends BaseController
             $collection[$state->prefix] = json_decode(json_encode($state),true);
         }
 
-        $exclusionLists = array_merge_recursive($lists, array_intersect_key($collection, $lists));
+        $exclusionLists = array_merge_recursive($lists, $collection);
 
         return view('import')->with('exclusionLists', $exclusionLists);
     }
