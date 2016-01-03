@@ -1,90 +1,73 @@
 import $ from 'jquery';
 require('bootstrap');
 
-function createtables(){
-    var createTablesBtn = $('.start-btn');
-}
+$('.create-tables-btn').click(() =>{
+    $.get("/import/createOldTables");
+});
 
-function Import(btn) {
+$('.start-btn').click(function(e) {
 
-    this.btn = $(btn);
+    const url = $(this).parents('tr').find('.url').html();
 
-}
+    const a = new Importer(this);
 
-Import.prototype._responseSuccess = function(data) {
+    a.upload(url);
 
-    var me = this;
+});
 
-    if ( ! data.success) {
+class Importer {
+    constructor(btn) {
+        this.btn = $(btn);
+    }
+    responseSuccess(data) {
 
-        var modal = $('#error-modal');
+        if (!data.success) {
 
-        var modalBody = modal.find('.modal-body');
+            let modal = $('#error-modal');
 
-        me.btn.removeClass('btn-default')
+            this.btn.removeClass('btn-default')
+                .addClass('btn-danger')
+                .html('Error')
+                .attr('disabled', true);
+
+            modal.find('.modal-body').html(data.msg);
+            modal.modal();
+
+            return;
+        }
+
+        this.btn.removeClass('btn-default')
+            .addClass('btn-success')
+            .html('Done!')
+            .attr('disabled', true);
+    };
+
+    responseFail(response) {
+
+        console.log(response);
+
+        this.btn.removeClass('btn-default')
             .addClass('btn-danger')
             .html('Error')
             .attr('disabled', true);
+    };
 
-        modal.find('.modal-body').html(data.msg);
-        modal.modal();
+    upload(appendedUrl) {
 
-        return;
-    }
+        let url = this.btn.data('action');
 
-    me.btn.removeClass('btn-default')
-        .addClass('btn-success')
-        .html('Done!')
-        .attr('disabled', true);
-};
+        if (appendedUrl) {
+            url += "?url=" + encodeURIComponent(url);
+        }
 
-Import.prototype._responseFail = function(response) {
+        this.btn.html('Running..');
 
-    this.btn.removeClass('btn-default')
-        .addClass('btn-danger')
-        .html('Error')
-        .attr('disabled', true);
-};
-
-Import.prototype.upload = function (url) {
-
-    var appendedUrl = '';
-
-    if (url) {
-        appendedUrl = "?url=" + encodeURIComponent(url);
-    }
-
-    var me = this;
-
-    me.btn.html('Running..');
-
-    $.get(me.btn.data('action') + appendedUrl, function (data) {
-            me._responseSuccess.call(me, data);
-        })
-        .fail(function(response) {
-            me._responseFail.call(me, response);
+        $.get(url, data => {
+            this.responseSuccess(data);
+        }).fail(response => {
+            this.responseFail(response);
         });
 
-};
+    };
+}
 
-
-$(function() {
-
-    var createTablesBtn = $('.create-tables-btn');
-
-    createTablesBtn.click(function(e){
-        $.get("/import/createOldTables");
-    });
-
-    var startButtons = $('.start-btn');
-
-    startButtons.click(function(e) {
-
-        var url = $(this).parents('tr').find('.url').html();
-
-        var a = new Import(this);
-
-        a.upload(url);
-
-    });
-});
