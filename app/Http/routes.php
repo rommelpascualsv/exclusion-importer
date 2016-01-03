@@ -15,6 +15,6 @@ $app->get('/', function () use ($app) {
     return view('hello');
 });
 
-$app->get('import', 'ImportController@index');
-$app->get('import/{listPrefix}', 'ImportController@import');
 $app->get('import/createOldTables', 'ImportController@createOldTables');
+$app->get('import/{listPrefix}', 'ImportController@import');
+$app->get('import', 'ImportController@index');

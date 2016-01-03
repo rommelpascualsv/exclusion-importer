@@ -5,7 +5,7 @@ $('.create-tables-btn').click(() =>{
     $.get("/import/createOldTables");
 });
 
-$('.start-btn').click(() => {
+$('.start-btn').click((e) => {
     const btn = e.target;
 
     const altUrl = $(btn).parents('tr').find('.url').html();
