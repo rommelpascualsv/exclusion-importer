@@ -1,14 +1,13 @@
-<?php defined('SYSPATH') OR die('No Direct Script Access');
+<?php namespace App\Console\Commands;
 
-use Guzzle\Http\Client as HTTPClient;
-use SLV\Common\File;
-use Stream\Entity\SamHash;
-use League\Flysystem\Filesystem;
-use League\Flysystem\Adapter\Local as LocalAdapter;
+use Illuminate\Console\Command;
 
-class Task_ImportSam extends Minion_Task {
+use GuzzleHttp\Client as HTTPClient;
+use App\Common\File;
+use App\Common\Entity\SamHash;
 
-    use Trait_Log;
+class ImportSam extends Command {
+
     protected static $columnMappings = [
         'State / Province' => 'State',
         'Zip Code' => 'Zip',
@@ -24,54 +23,42 @@ class Task_ImportSam extends Minion_Task {
 
 
     /**
-     * @var	League\Flysystem\filesystem	$filesystem
-     */
-    private $filesystem;
-
-
-    /**
      * Construct
      */
     public function __construct()
     {
         parent::__construct();
 
-        $this->filesystem = new Filesystem(new LocalAdapter(DATAPATH));
         $this->columnsToImport = $this->getDBColumns();
 
         ini_set('memory_limit', '2048M');
 
     }
 
-    public function build_validation(Validation $validation)
-    {
-        return parent::build_validation($validation)
-            ->rule('url', 'not_empty');
-    }
-
     private function prepareTempTable()
     {
-        $this->logCli('Preparing temp table...');
+        $this->info('Preparing temp table...');
 
         $tableName = 'sam_records';
         $tempTableName = 'sam_records_temp';
 
-        DB::query(Database::DELETE, "DROP TABLE IF EXISTS $tempTableName")->execute('exclusion_lists_staging');
-        DB::query(Database::INSERT, "CREATE TABLE IF NOT EXISTS $tempTableName LIKE $tableName")->execute('exclusion_lists_staging');
-        DB::query(Database::INSERT, "INSERT INTO $tempTableName SELECT * FROM $tableName")->execute('exclusion_lists_staging');
-        $this->logCli('temp table ready!');
+        app('db')->statement("DROP TABLE IF EXISTS $tempTableName");
+        app('db')->statement("CREATE TABLE IF NOT EXISTS $tempTableName LIKE $tableName");
+        app('db')->statement("INSERT INTO $tempTableName SELECT * FROM $tableName");
+        $this->info('temp table ready!');
     }
 
-    protected function _execute(array $params)
+    protected function fire()
     {
-        $parsedUrl = parse_url($params['url']);
-        $filepath = tempnam(DATAPATH . 'temp', 'samdb');
+        $parsedUrl = parse_url($this->option('url'));
+        // TODO: replace DATAPATH with path to storage
+        $filepath = tempnam(app('storage') . '/temp', 'samdb');
 
         if (! $this->getFileFromSam($parsedUrl, $filepath)) {
-            $this->logCli('Could not retrieve file from ' . $filepath);
+            $this->error('Could not retrieve file from ' . $filepath);
             die;
         }
-        $this->logCli('Put ZIP file in ' . $filepath);
+        $this->info('Put ZIP file in ' . $filepath);
 
         if (! $unzippedFileDir = $this->unzipFile($filepath)) {
             die;
@@ -79,23 +66,23 @@ class Task_ImportSam extends Minion_Task {
 
         $unzippedFilepath = $unzippedFileDir . str_ireplace('.ZIP', '.CSV', basename($parsedUrl['path']));
 
-        $this->logCli('Put UnZIPed file in ' . $unzippedFilepath);
+        $this->info('Put UnZIPed file in ' . $unzippedFilepath);
 
         $this->prepareTempTable();
 
         $file = new File($unzippedFilepath);
-        $file->setFlags(SplFileObject::DROP_NEW_LINE | SplFileObject::SKIP_EMPTY);
+        $file->setFlags(\SplFileObject::DROP_NEW_LINE | \SplFileObject::SKIP_EMPTY);
         $file->setCsvControl(',', "\"", "|");
 
-        $this->logCli('Getting all current records...');
+        $this->info('Getting all current records...');
         $currentRecords = $this->getCurrentRecords();
-        $this->logCli('Finished getting all current records');
+        $this->info('Finished getting all current records');
 
         $columnsInFile = $this->mapColumns($file->fgetcsv());
-        $this->logCli('Importing columns ' . implode(',', $columnsInFile));
+        $this->info('Importing columns ' . implode(',', $columnsInFile));
 
         $totalLines = $file->getTotalLines();
-        $this->logCli('Total lines in file: ' . $totalLines);
+        $this->info('Total lines in file: ' . $totalLines);
 
         $activeRecordHashes = [];
 		$updated = 0;
@@ -114,7 +101,7 @@ class Task_ImportSam extends Minion_Task {
             try {
                 $newHash = new SamHash($rowData);
             } catch (\InvalidArgumentException $e) {
-                $this->logCli('An error occurred at row ' . $file->key() . ': ' . $e->getMessage());
+                $this->warn('An error occurred at row ' . $file->key() . ': ' . $e->getMessage());
                 continue;
             }
 
@@ -126,8 +113,8 @@ class Task_ImportSam extends Minion_Task {
 
             if (! array_key_exists(strtoupper($newHash), $currentRecords))
             {
-                $rowData['hash'] = DB::expr("UNHEX('{$newHash}')");
-                $rowData['new_hash'] = DB::expr("UNHEX('{$newHash}')");
+                $rowData['hash'] = app('db')->raw("UNHEX('{$newHash}')");
+                $rowData['new_hash'] = app('db')->raw("UNHEX('{$newHash}')");
                 $this->toCreate[] = $rowData;
             }
             else
@@ -143,66 +130,67 @@ class Task_ImportSam extends Minion_Task {
             $total = ($toCreate = count($this->toCreate)) + $updated + $skipped;
             if ($total % 1000 === 0) {
                 $statsPattern = 'Total processed: %d -- Total to Create: %d -- Total Updated: %d -- Total Skipped: %d';
-                $this->logCli(sprintf($statsPattern, $total, $toCreate, $updated, $skipped));
+                $this->info(sprintf($statsPattern, $total, $toCreate, $updated, $skipped));
             }
         }
 
-		$this->logCli('Creating new records...');
+		$this->info('Creating new records...');
         $this->createNewRecords($this->toCreate);
-        $this->logCli('Finished creating new records');
+        $this->info('Finished creating new records');
 
 		$toDeactivate = $this->getRecordsToDeactivate($currentRecords, $activeRecordHashes);
-		$this->logCli(count($toDeactivate) . ' Total to Deactivate.');
-		$this->logCli('Deactivating...');
+		$this->info(count($toDeactivate) . ' Total to Deactivate.');
+		$this->info('Deactivating...');
 		$deactivated = $this->deactivate($toDeactivate);
-		$this->logCli('Finished deactivating');
+		$this->info('Finished deactivating');
 
-        $this->logCli('===================================================');
-        $this->logCli(count($this->toCreate) . ' Records Created');
-        $this->logCli($updated . ' Records Updated');
-        $this->logCli($skipped . ' Records Skipped');
-        $this->logCli($total . ' Total Processed From New File');
-        $this->logCli($deactivated . ' Total Records Deactivated');
-        $this->logCli('DONE!');
-        $this->logCli('===================================================');
+        $this->info('===================================================');
+        $this->info(count($this->toCreate) . ' Records Created');
+        $this->info($updated . ' Records Updated');
+        $this->info($skipped . ' Records Skipped');
+        $this->info($total . ' Total Processed From New File');
+        $this->info($deactivated . ' Total Records Deactivated');
+        $this->info('DONE!');
+        $this->info('===================================================');
     }
 
     private function getDBColumns()
     {
-        return array_column(DB::query(Database::SELECT, "SHOW COLUMNS FROM sam_records")->execute('exclusion_lists_staging')->as_array(), 'Field');
+        // TODO: this will probably break because of laravel returning objects
+        return array_column(app('db')->statement("SHOW COLUMNS FROM sam_records"), 'Field');
     }
 
     private function getCurrentRecords()
     {
-        return DB::select('*')
-                 ->select(DB::expr('HEX(new_hash) as hex_new_hash'))
-                 ->from('sam_records')
-                 ->execute('exclusion_lists_staging')
-                 ->as_array('hex_new_hash');
+        // TODO: figure out what to do with the as_array thingy
+        return app('db')->table('sam_records')
+            ->select('*')
+            ->addSelect(app('db')->raw('HEX(new_hash) as hex_new_hash'))
+            ->get();
+//            ->as_array('hex_new_hash');
     }
 
     private function createNewRecords($toInsert)
     {
-        Database::instance('exclusion_lists_staging')->begin();
-        foreach ($toInsert as $record) {
-            $columns = array_keys($record);
-            $values = array_values($record);
-            $this->insertRecord($columns, $values);
-        }
-        Database::instance('exclusion_lists_staging')->commit();
+        app('db')->transaction(function () use ($toInsert){
+            foreach ($toInsert as $record) {
+                $columns = array_keys($record);
+                $values = array_values($record);
+                $this->insertRecord($columns, $values);
+            }
+        });
     }
 
     /**
      * @param $columns
      * @param $values
-     * @throws Kohana_Exception
      */
     protected function insertRecord($columns, $values)
     {
-        DB::insert('sam_records_temp')
+        // TODO: this no good
+        app('db')->table('sam_records_temp')
               ->columns($columns)
-              ->values($values)
-              ->execute('exclusion_lists_staging');
+              ->values($values);
     }
 
     /**
@@ -212,10 +200,10 @@ class Task_ImportSam extends Minion_Task {
      */
     protected function updateRecords($rowData, $newHash)
     {
-        $affectedRows = DB::update('sam_records_temp')
-            ->set($rowData)
-            ->where(DB::expr("HEX(new_hash)"), '=', strtoupper($newHash))
-            ->execute('exclusion_lists_staging');
+        $affectedRows = app('db')->table('sam_records_temp')
+            ->update($rowData)
+            ->where(app('db')->raw("HEX(new_hash)"), strtoupper($newHash));
+
         return $affectedRows;
     }
 
@@ -253,8 +241,9 @@ class Task_ImportSam extends Minion_Task {
      */
     protected function getFileFromSam($parsedUrl, $filepath)
     {
-        $curlOpts = [
-            HTTPClient::CURL_OPTIONS => [
+        $options = [
+            'base_uri' => 'https://' . $parsedUrl['host'],
+            'curl' => [
                 'ssl' => [
                     'verify_peer' => false,
                     'verify_peer_name' => false,
@@ -262,12 +251,12 @@ class Task_ImportSam extends Minion_Task {
                 ]
             ]
         ];
-        $guzzleClient = new HTTPClient('https://' . $parsedUrl['host'], $curlOpts);
+        $guzzleClient = new HTTPClient($options);
 
-        $this->logCli('Retrieving Data...');
+        $this->info('Retrieving Data...');
 
-        if ($fileData = $guzzleClient->get(substr($parsedUrl['path'], 1))->send()) {
-            file_put_contents($filepath, $fileData->getBody(true));
+        if ($fileData = $guzzleClient->get(substr($parsedUrl['path'], 1))) {
+            file_put_contents($filepath, $fileData->getBody());
         };
 
         return ($fileData->getStatusCode() < 300);
@@ -275,14 +264,14 @@ class Task_ImportSam extends Minion_Task {
 
     private function unzipFile($filepath)
     {
-        $zip = new ZipArchive();
+        $zip = new \ZipArchive();
         if (! $response = $zip->open($filepath) === true) {
-            $this->logCli('Failed to open zip file ' . $response);
+            $this->error('Failed to open zip file ' . $response);
             return false;
         }
 
         if (! $zip->extractTo($dir = dirname($filepath))) {
-            $this->logCli('Failed to extract zip file.');
+            $this->error('Failed to extract zip file.');
         }
 
         $zip->close();
@@ -306,8 +295,7 @@ class Task_ImportSam extends Minion_Task {
         $sql = "UPDATE sam_records_temp SET Record_Status = 0 WHERE new_hash IN (unhex('" . implode("'),unhex('", $toDeactivateHexHashes) . "'))";
 
         $affectedRows = 0;
-        $affectedRows += DB::query(Database::UPDATE, DB::expr($sql))
-                            ->execute('exclusion_lists_staging');
+        $affectedRows += app('db')->statement(app('db')->raw($sql));
 
 		return $affectedRows;
 	}
