@@ -177,13 +177,14 @@ class SDN {
 			$sdnEntryId = $sdnEntry['uid'];
 
 			// Parse the main SDN entries
-			$entry = [];
-			$entry['uid']		= Arr::get($sdnEntry, 'uid', '');
-			$entry['firstName']	= Arr::get($sdnEntry, 'firstName', '');
-			$entry['lastName']	= Arr::get($sdnEntry, 'lastName', '');
-			$entry['title']		= Arr::get($sdnEntry, 'title', '');
-			$entry['sdnType']	= Arr::get($sdnEntry, 'sdnType', '');
-			$entry['remarks']	= Arr::get($sdnEntry, 'remarks', '');
+			$entry = [
+				'uid'		=> isset($sdnEntry['uid']) ? $sdnEntry['uid'] : '',
+				'firstName'	=> isset($sdnEntry['firstName']) ? $sdnEntry['firstName'] : '',
+				'lastName'	=> isset($sdnEntry['lastName']) ? $sdnEntry['lastName'] : '',
+				'title'		=> isset($sdnEntry['title']) ? $sdnEntry['title'] : '',
+				'sdnType'	=> isset($sdnEntry['sdnType']) ? $sdnEntry['sdnType'] : '',
+				'remarks'	=> isset($sdnEntry['remarks']) ? $sdnEntry['remarks'] : '',
+			];
 
 			// Add the main SDN Entry
 			$this->normalizedData['sdn_entries'][] = $entry;
@@ -253,7 +254,8 @@ class SDN {
 			// Parse vessel info
 			if ( isset($sdnEntry['vesselInfo']) )
 			{
-				$this->normalizedData['sdn_vessel_info'][] = Arr::get($this->parseVesselInfo($sdnEntry['vesselInfo'], $sdnEntryId), 0);
+				$info = isset($this->parseVesselInfo($sdnEntry['vesselInfo'], $sdnEntryId)[0]) ? $this->parseVesselInfo($sdnEntry['vesselInfo'], $sdnEntryId)[0] : null;
+				$this->normalizedData['sdn_vessel_info'][] = $info;
 			}
 
 		} // End loop
@@ -396,7 +398,6 @@ class SDN {
 		if ( PHP_SAPI === 'cli' )
 		{
 			echo "| - Saving table: {$table} ................ ";
-			ob_flush();
 		}
 
 		foreach ( $data as $row )
@@ -405,33 +406,29 @@ class SDN {
 
 			foreach ( $row as $key => &$column )
 			{
-
 				if ( $key == 'mainEntry' )
 				{
 					$column = ( $column === 'true' ) ? 1 : 0 ;
 				}
 				else
 				{
-					$column = Database::instance('exclusion_lists_staging')->escape( $column );
+					$column = app('db')->connection()->getPdo()->quote($column);
 				}
 			}
 
 
-			$keys = array_keys($row);
-			$keys = join("`, `", $keys);
+			$keys = join("`, `", array_keys($row));
 
-			$vals = array_values($row);
-			$vals = join(", ", $vals);
+			$vals = join(", ", array_values($row));
 
 			$query = sprintf($sql, $table, $keys, $vals);
 
-			DB::query(Database::INSERT, $query)->execute('exclusion_lists_staging');
+			app('db')->statement($query);
 		}
 
 		if ( PHP_SAPI === 'cli' )
 		{
 			echo " Saved!\n";
-			ob_flush();
 		}
 
 		// echo '<pre>';var_dump( $data );echo '</pre>';
