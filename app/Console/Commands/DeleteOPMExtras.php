@@ -81,7 +81,7 @@ SQL;
         $this->initLogger();
     }
 
-    protected function fire()
+    public function fire()
     {
         try{
             $this->logStdOut('Started deleting...');

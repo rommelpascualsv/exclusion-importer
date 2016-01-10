@@ -13,7 +13,7 @@ class ImportSam extends Command {
      *
      * @var string
      */
-    protected $name = 'sam:import';
+    protected $signature = 'sam:import {url}';
 
     /**
      * The console command description.
@@ -63,10 +63,10 @@ class ImportSam extends Command {
         $this->info('temp table ready!');
     }
 
-    protected function fire()
+    public function fire()
     {
-        $parsedUrl = parse_url($this->option('url'));
-        // TODO: replace DATAPATH with path to storage
+        $parsedUrl = parse_url($this->argument('url'));
+
         $filepath = tempnam(storage_path('app') . '/temp/', 'samdb');
 
         if (! $this->getFileFromSam($parsedUrl, $filepath)) {
@@ -130,6 +130,7 @@ class ImportSam extends Command {
             {
                 $rowData['hash'] = app('db')->raw("UNHEX('{$newHash}')");
                 $rowData['new_hash'] = app('db')->raw("UNHEX('{$newHash}')");
+                // can we just create it here?!?!
                 $this->toCreate[] = $rowData;
             }
             else
@@ -171,8 +172,10 @@ class ImportSam extends Command {
 
     private function getDBColumns()
     {
-        // TODO: this will probably break because of laravel returning objects
-        return array_column(app('db')->statement("SHOW COLUMNS FROM sam_records"), 'Field');
+        $columns = app('db')->select("SHOW COLUMNS FROM sam_records");
+        return array_map(function($column) {
+            return $column->Field;
+        }, $columns);
     }
 
     private function getCurrentRecords()
@@ -188,24 +191,8 @@ class ImportSam extends Command {
     private function createNewRecords($toInsert)
     {
         app('db')->transaction(function () use ($toInsert){
-            foreach ($toInsert as $record) {
-                $columns = array_keys($record);
-                $values = array_values($record);
-                $this->insertRecord($columns, $values);
-            }
+            app('db')->table('sam_records_temp')->insert($toInsert);
         });
-    }
-
-    /**
-     * @param $columns
-     * @param $values
-     */
-    protected function insertRecord($columns, $values)
-    {
-        // TODO: this no good
-        app('db')->table('sam_records_temp')
-              ->columns($columns)
-              ->values($values);
     }
 
     /**
@@ -258,7 +245,7 @@ class ImportSam extends Command {
     {
         $options = [
             'base_uri' => 'https://' . $parsedUrl['host'],
-            'curl' => [
+            'curl.options' => [
                 'ssl' => [
                     'verify_peer' => false,
                     'verify_peer_name' => false,

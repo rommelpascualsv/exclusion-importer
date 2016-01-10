@@ -10,7 +10,7 @@ class ImportSDN extends Command {
      *
      * @var string
      */
-    protected $name = 'import:sdn';
+    protected $signature = 'import:sdn';
 
     /**
      * The console command description.

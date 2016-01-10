@@ -60,8 +60,8 @@ class DeleteOIGDuplicates extends Command
             ->table('sam_records_temp')
             ->join('oig_records', function ($join) {
                 $join->on('oig_records.firstname', '=', 'sam_records_temp.First')
-                    ->andOn('oig_records.lastname', '=', 'sam_records_temp.Last')
-                    ->andOn('oig_records.excldate', '<=', 'sam_records_temp.Active_Date');
+                    ->on('oig_records.lastname', '=', 'sam_records_temp.Last')
+                    ->on('oig_records.excldate', '<=', 'sam_records_temp.Active_Date');
             })
             ->where('sam_records_temp.First', '!=', '')
             ->where('sam_records_temp.Last', '!=', '')
