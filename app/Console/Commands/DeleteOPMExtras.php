@@ -1,10 +1,15 @@
-<?php
+<?php namespace App\Console\Commands;
 
-class Task_DeleteOPMExtras extends Minion_Task
+use App\Common\Logger;
+use League\Flysystem\Adapter\Local;
+use League\Flysystem\Filesystem;
+use Illuminate\Console\Command;
+
+class DeleteOPMExtras extends Command
 {
 
     /**
-     * @var \Service\Logger\ExceptionLoggerInterface
+     * @var \App\Common\Logger\ExceptionLoggerInterface
      */
     protected $logger;
 
@@ -61,7 +66,7 @@ SQL;
         $this->initLogger();
     }
 
-    protected function _execute(array $params)
+    protected function fire()
     {
         try{
             $this->logStdOut('Started deleting...');
@@ -75,18 +80,16 @@ SQL;
 
     private function initLogger()
     {
-        global $container;
-        $this->logger = $container['logger.exceptions'];
+        $this->logger = new Logger\ExceptionLogger(new Filesystem(new Local(DATAPATH . 'logs/')));
     }
 
     private function deleteOPMExtras()
     {
-        $query = DB::query(Database::DELETE, DB::expr(self::DELETE_OPM_SQL));
-        return $query->execute('exclusion_lists_staging');
+        return app('db')->statement(self::DELETE_OPM_SQL);
     }
 
     private function logStdOut($string)
     {
-        log_stdout($string);
+        fwrite(STDOUT, sprintf('[ %s ] %s' . PHP_EOL, strftime('%Y-%m-%d %H:%M:%S'), $string));
     }
 }
