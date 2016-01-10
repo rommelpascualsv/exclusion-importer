@@ -79,7 +79,7 @@ class DeleteOIGDuplicates extends Command
 
     private function initLogger()
     {
-        $this->logger = new Logger\ExceptionLogger(new Filesystem(new Local(DATAPATH . 'logs/')));
+        $this->logger = new Logger\ExceptionLogger(new Filesystem(new Local(storage_path('app') . '/logs/')));
     }
 
     private function logStdOut($string)

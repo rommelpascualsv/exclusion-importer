@@ -52,7 +52,7 @@ class ImportSam extends Command {
     {
         $parsedUrl = parse_url($this->option('url'));
         // TODO: replace DATAPATH with path to storage
-        $filepath = tempnam(app('storage') . '/temp', 'samdb');
+        $filepath = tempnam(storage_path('app') . '/temp/', 'samdb');
 
         if (! $this->getFileFromSam($parsedUrl, $filepath)) {
             $this->error('Could not retrieve file from ' . $filepath);
