@@ -14,6 +14,10 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         '\App\Console\Commands\ImportSDN',
+        '\App\Console\Commands\ImportSam',
+        '\App\Console\Commands\DeleteIOGDuplicates',
+        '\App\Console\Commands\DeleteOPMExtras',
+        '\App\Console\Commands\MigrateSam',
     ];
 
     /**

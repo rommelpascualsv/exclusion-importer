@@ -8,6 +8,21 @@ use App\Common\Entity\SamHash;
 
 class ImportSam extends Command {
 
+    /**
+     * The console command name.
+     *
+     * @var string
+     */
+    protected $name = 'sam:import';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Import the most awesome SAM database.';
+
+
     protected static $columnMappings = [
         'State / Province' => 'State',
         'Zip Code' => 'Zip',

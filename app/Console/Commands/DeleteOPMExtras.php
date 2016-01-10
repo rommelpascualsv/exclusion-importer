@@ -9,6 +9,21 @@ class DeleteOPMExtras extends Command
 {
 
     /**
+     * The console command name.
+     *
+     * @var string
+     */
+    protected $name = 'sam:delete-opm';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Delete OPM extras in SAM database';
+
+
+    /**
      * @var \App\Common\Logger\ExceptionLoggerInterface
      */
     protected $logger;

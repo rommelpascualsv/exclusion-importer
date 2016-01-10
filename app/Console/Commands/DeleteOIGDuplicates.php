@@ -9,6 +9,20 @@ class DeleteOIGDuplicates extends Command
 {
 
     /**
+     * The console command name.
+     *
+     * @var string
+     */
+    protected $name = 'sam:delete-oig';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Delete IOG Dupes in the SAM database.';
+
+    /**
      * @var \App\Common\Logger\ExceptionLoggerInterface
      */
     protected $logger;

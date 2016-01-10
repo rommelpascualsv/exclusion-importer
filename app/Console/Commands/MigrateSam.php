@@ -9,6 +9,21 @@ class MigrateSam extends Command
 {
 
     /**
+     * The console command name.
+     *
+     * @var string
+     */
+    protected $name = 'sam:migrate';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Migrate the SAM database.';
+
+
+    /**
      * @var \App\Common\Logger\ExceptionLoggerInterface
      */
     protected $logger;
