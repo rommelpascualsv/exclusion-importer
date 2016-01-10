@@ -1,10 +1,15 @@
-<?php
+<?php namespace App\Console\Commands;
 
-class Task_DeleteOIGDuplicates extends Minion_Task
+use App\Common\Logger;
+use League\Flysystem\Adapter\Local;
+use League\Flysystem\Filesystem;
+use Illuminate\Console\Command;
+
+class DeleteOIGDuplicates extends Command
 {
 
     /**
-     * @var \Service\Logger\ExceptionLoggerInterface
+     * @var \App\Common\Logger\ExceptionLoggerInterface
      */
     protected $logger;
 
@@ -16,7 +21,7 @@ class Task_DeleteOIGDuplicates extends Minion_Task
         $this->initLogger();
     }
 
-    public function _execute(array $params)
+    public function fire()
     {
         $this->logStdOut('Starting...');
         try {
@@ -37,21 +42,19 @@ class Task_DeleteOIGDuplicates extends Minion_Task
 
     private function markOIGDuplicates()
     {
-        $query = DB::update()
-                   ->table(DB::expr('sam_records_temp
-					 JOIN oig_records
-					 ON
-					 oig_records.firstname = sam_records_temp.First
-					 AND oig_records.lastname = sam_records_temp.Last
-					 AND oig_records.excldate <= sam_records_temp.Active_Date'))
-                   ->set(array(
-                       'sam_records_temp.matching_OIG_hash' => DB::expr('oig_records.hash')
-                   ))
-                   ->where('sam_records_temp.First', '!=', '')
-                   ->where('sam_records_temp.Last', '!=', '')
-                   ->where('sam_records_temp.Excluding_Agency', '=', 'HHS');
-
-        $records_updated = $query->execute('exclusion_lists_staging');
+        $records_updated = app('db')
+            ->table('sam_records_temp')
+            ->join('oig_records', function ($join) {
+                $join->on('oig_records.firstname', '=', 'sam_records_temp.First')
+                    ->andOn('oig_records.lastname', '=', 'sam_records_temp.Last')
+                    ->andOn('oig_records.excldate', '<=', 'sam_records_temp.Active_Date');
+            })
+            ->where('sam_records_temp.First', '!=', '')
+            ->where('sam_records_temp.Last', '!=', '')
+            ->where('sam_records_temp.Excluding_Agency', '=', 'HHS')
+           ->update([
+               'sam_records_temp.matching_OIG_hash' => app('db')->raw('oig_records.hash')
+           ]);
 
         if ($records_updated == null) {
             throw new \Exception('No records updated');
@@ -63,25 +66,24 @@ class Task_DeleteOIGDuplicates extends Minion_Task
 
     private function removeOIGDuplicates()
     {
-        $total_records_deleted = DB::delete()
-                                   ->table('sam_records_temp')
-                                   ->where('matching_OIG_hash', '!=', DB::expr('UNHEX(\'00000000000000000000000000000000\')'))
-                                   ->execute('exclusion_lists_staging');
+        $total_records_deleted = app('db')
+            ->table('sam_records_temp')
+            ->where('matching_OIG_hash', '!=', app('db')->raw('UNHEX(\'00000000000000000000000000000000\')'))
+            ->delete();
 
         if ($total_records_deleted == null) {
-            throw new Exception('No records deleted!');
+            throw new \Exception('No records deleted!');
         }
         return $total_records_deleted;
     }
 
     private function initLogger()
     {
-        global $container;
-        $this->logger = $container['logger.exceptions'];
+        $this->logger = new Logger\ExceptionLogger(new Filesystem(new Local(DATAPATH . 'logs/')));
     }
 
     private function logStdOut($string)
     {
-        log_stdout($string);
+        fwrite(STDOUT, sprintf('[ %s ] %s' . PHP_EOL, strftime('%Y-%m-%d %H:%M:%S'), $string));
     }
 }
