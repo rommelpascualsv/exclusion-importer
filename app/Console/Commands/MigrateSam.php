@@ -1,10 +1,15 @@
-<?php
+<?php namespace App\Console\Commands;
 
-class Task_MigrateSam extends Minion_Task
+use App\Common\Logger;
+use League\Flysystem\Adapter\Local;
+use League\Flysystem\Filesystem;
+use Illuminate\Console\Command;
+
+class MigrateSam extends Command
 {
 
     /**
-     * @var \Service\Logger\ExceptionLoggerInterface
+     * @var \App\Common\Logger\ExceptionLoggerInterface
      */
     protected $logger;
 
@@ -36,7 +41,7 @@ SQL;
         $this->initLogger();
     }
 
-    protected function _execute(array $params)
+    protected function fire()
     {
         try {
             $this->logStdOut('Checking record data stats');
@@ -53,28 +58,21 @@ SQL;
 
     protected function moveTempToProd()
     {
-            DB::query(Database::UPDATE, DB::expr(sprintf(self::RENAME_TEMP_SQL, strftime('%Y%m%d_%H%M%S'))))
-              ->execute('exclusion_lists_staging');
+        app('db')->statement(app('db')->raw(sprintf(self::RENAME_TEMP_SQL, strftime('%Y%m%d_%H%M%S'))));
     }
 
     private function checkSamRecordStats()
     {
-        $totalRecordsInTempTable = DB::query(Database::SELECT, DB::expr("SELECT COUNT(id) AS 'COUNT' FROM sam_records_temp"))
-                                    ->execute('exclusion_lists_staging')
-                                    ->as_array()[0]['COUNT'];
+        $totalRecordsInTempTable = app('db')->table('sam_records_temp')->count();
 
-        $totalRecordsInOriginalTable = DB::query(Database::SELECT, DB::expr("SELECT COUNT(id) AS 'COUNT' FROM sam_records"))
-                                        ->execute('exclusion_lists_staging')
-                                        ->as_array()[0]['COUNT'];
+        $totalRecordsInOriginalTable = app('db')->table('sam_records')->count();
 
-        if (abs_diff(intval($totalRecordsInOriginalTable), intval($totalRecordsInTempTable)) > 800) {
+        if (abs(intval($totalRecordsInOriginalTable) - intval($totalRecordsInTempTable)) > 800) {
             $pattern = "There are %d new SAM records\nThere are %d original SAM records. Halting migration...";
             throw new \Exception(sprintf($pattern, $totalRecordsInTempTable, $totalRecordsInOriginalTable));
         }
 
-        $brokenHashCount = DB::query(Database::SELECT, DB::expr(self::BROKEN_HASHES_SQL))
-                            ->execute('exclusion_lists_staging')
-                            ->count();
+        $brokenHashCount = app('db')->statement(self::BROKEN_HASHES_SQL)->count();
 
         if (intval($brokenHashCount) / intval($totalRecordsInOriginalTable) > 0.05) {
             $pattern = "There are %d new/broken hashes in the database which is above the current normal threshold. Halting migration...";
@@ -85,12 +83,11 @@ SQL;
 
     private function initLogger()
     {
-        global $container;
-        $this->logger = $container['logger.exceptions'];
+        $this->logger = new Logger\ExceptionLogger(new Filesystem(new Local(DATAPATH . 'logs/')));
     }
 
     private function logStdOut($string)
     {
-        log_stdout($string);
+        fwrite(STDOUT, sprintf('[ %s ] %s' . PHP_EOL, strftime('%Y-%m-%d %H:%M:%S'), $string));
     }
 }
