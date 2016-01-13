@@ -5,28 +5,25 @@ $('.create-tables-btn').click(() =>{
     $.get("/import/createOldTables");
 });
 
-$('.start-btn').click((e) => {
-    const btn = e.target;
+$('.start-btn').click(function() {
+    const $btn = $(this);
 
-    const altUrl = $(btn).parents('tr').find('.url').html();
+    const altUrl = $btn.parents('tr').find('.url').html();
 
-    const a = new Importer(btn);
+    let url = $btn.data('action');
 
-    a.upload(altUrl);
-
-});
-
-class Importer {
-    constructor(btn) {
-        this.btn = $(btn);
+    if (altUrl) {
+        url += "?url=" + encodeURIComponent(altUrl);
     }
-    responseSuccess(data) {
 
+    $btn.html('Running..');
+
+    $.get(url, data => {
         if (!data.success) {
 
             let modal = $('#error-modal');
 
-            this.btn.removeClass('btn-default')
+            $btn.removeClass('btn-default')
                 .addClass('btn-danger')
                 .html('Error')
                 .attr('disabled', true);
@@ -37,35 +34,15 @@ class Importer {
             return;
         }
 
-        this.btn.removeClass('btn-default')
+        $btn.removeClass('btn-default')
             .addClass('btn-success')
             .html('Done!')
             .attr('disabled', true);
-    };
 
-    responseFail(response) {
-        this.btn.removeClass('btn-default')
+    }).fail(() => {
+        $btn.removeClass('btn-default')
             .addClass('btn-danger')
             .html('Error')
             .attr('disabled', true);
-    };
-
-    upload(appendedUrl) {
-
-        let url = this.btn.data('action');
-
-        if (appendedUrl) {
-            url += "?url=" + encodeURIComponent(appendedUrl);
-        }
-
-        this.btn.html('Running..');
-
-        $.get(url, data => {
-            this.responseSuccess(data);
-        }).fail(response => {
-            this.responseFail(response);
-        });
-
-    };
-}
-
+    });
+});
