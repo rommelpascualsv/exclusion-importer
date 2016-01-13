@@ -129,10 +129,9 @@ class ImportController extends BaseController
 
     public function import(Request $request, $listPrefix)
     {
-        $listImportManager = new Import\Manager($listPrefix);
+        $listObject = new Import\Lists\ExclusionList($listPrefix);
 
         try {
-            $listObject = $listImportManager->getList();
 
             if ($request->input('url')) {
                 $newUri = htmlspecialchars_decode($request->input('url'));
@@ -151,10 +150,7 @@ class ImportController extends BaseController
             ]);
         }
 
-
-        $exclusionsRetriever = $listImportManager->getRetriever();
-
-        $listObject = $exclusionsRetriever->retrieveData($listObject);
+        $listObject->loadData();
 
         $processingService = new ListProcessor($listObject);
 

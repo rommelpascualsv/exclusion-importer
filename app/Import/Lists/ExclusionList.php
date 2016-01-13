@@ -1,8 +1,25 @@
 <?php namespace App\Import\Lists;
 
+use App\Import\Service\DataCsvConverter;
+use App\Import\Service\Exclusions\CSVRetriever;
+use App\Import\Service\Exclusions\HTMLRetriever;
+use App\Import\Service\Exclusions\PDFRetriever;
+use App\Import\Service\File\CsvFileReader;
+use GuzzleHttp\Client;
+use Symfony\Component\DomCrawler\Crawler;
 
-abstract class ExclusionList
+class ExclusionList
 {
+
+	public function __construct($listPrefix)
+	{
+		$configs = config("import.$listPrefix");
+		foreach($configs as $key => $config)
+		{
+			$this->$key = $config;
+		}
+		$this->retriever = $this->getRetriever($this->retrieverType);
+	}
 
 	/**
 	 * Database table's prefix (e.g. {$dbPrefix}_records)
@@ -64,4 +81,35 @@ abstract class ExclusionList
 	public $requestOptions = [];
 
 	public $shouldHashListName = false;
+
+	public function loadData()
+	{
+		$this->data = $this->retriever->retrieveData($this);
+	}
+
+	private function getRetriever($retrieverType)
+	{
+		switch($retrieverType) {
+			case 'pdf':
+				return new PDFRetriever(new Client());
+
+				break;
+
+			case 'csv';
+				return new CSVRetriever(
+					new DataCsvConverter(new CsvFileReader()),
+					new Client()
+				);
+				break;
+
+			case 'html':
+				return new HTMLRetriever(
+					new Crawler(),
+					new DataCsvConverter(new CsvFileReader())
+				);
+
+				break;
+		}
+	}
+
 }

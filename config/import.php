@@ -13,8 +13,22 @@ return [
     ],
     'az1' => [
         'class' => 'Arizona',
-        'retriever' => 'csv',
-        'reader' => 'csv'
+        'retrieverType' => 'csv',
+        'reader' => 'csv',
+        'dbPrefix' => 'az1',
+        'uri' => 'https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/arizona/azlist.xlsx',
+        'retrieveOptions' => [
+            'headerRow' => 0,
+            'offset' => 1
+        ],
+        'fieldNames' => [
+            'first_name',
+            'middle',
+            'last_name_company_name',
+            'term_date',
+            'specialty',
+            'npi_number'
+        ]
     ],
     'ak1' => [
         'class' => 'Alaska',
