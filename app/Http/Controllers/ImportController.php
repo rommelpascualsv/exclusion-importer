@@ -2,6 +2,7 @@
 
 use App\Import;
 use App\Import\Service\ListProcessor;
+use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
 class ImportController extends BaseController
@@ -126,11 +127,30 @@ class ImportController extends BaseController
         return view('import')->with('exclusionLists', $exclusionLists);
     }
 
-    public function import($listPrefix)
+    public function import(Request $request, $listPrefix)
     {
         $listImportManager = new Import\Manager($listPrefix);
 
-        $listObject = $listImportManager->getList();
+        try {
+            $listObject = $listImportManager->getList();
+
+            if ($request->input('url')) {
+                $newUri = htmlspecialchars_decode($request->input('url'));
+
+                $listObject->uri = $newUri;
+
+                app('db')->table('exclusion_lists')->where('prefix', $listPrefix)
+                    ->update(['import_url' => $newUri]);
+            }
+        }
+        catch(\RuntimeException $e)
+        {
+            return response()->json([
+                'success'	=>	false,
+                'msg'		=>	$e->getMessage() . ': ' . $listPrefix
+            ]);
+        }
+
 
         $exclusionsRetriever = $listImportManager->getRetriever();
 

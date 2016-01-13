@@ -1,5 +1,5 @@
 import $ from 'jquery';
-require('bootstrap');
+import 'bootstrap';
 
 $('.create-tables-btn').click(() =>{
     $.get("/import/createOldTables");
@@ -55,7 +55,7 @@ class Importer {
         let url = this.btn.data('action');
 
         if (appendedUrl) {
-            url += "?url=" + encodeURIComponent(url);
+            url += "?url=" + encodeURIComponent(appendedUrl);
         }
 
         this.btn.html('Running..');
