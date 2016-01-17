@@ -7,9 +7,32 @@ return [
         'reader' => 'csv'
     ],
     'ar1' => [
-        'class' => 'Arkansas',
-        'retriever' => 'html',
-        'reader' => 'csv'
+        'dbPrefix' => 'ar1',
+        'type' => 'html',
+        'uri' => 'https://ardhs.sharepointsite.net/ExcludedProvidersList/Excluded%20Provider%20List.html',
+        'requestOptions' => [
+            'verify'  => false,
+            'headers' => [
+                'Content-Type' => 'text/html'
+            ]
+        ],
+        'fieldNames' => [
+            'Division',
+            'FacilityName',
+            'ProviderName',
+            'City',
+            'State',
+            'Zip'
+        ],
+        'hashColumns' => [],
+        'dateColumns' => [],
+        'retrieveOptions' => [
+            'htmlFilterElement' => 'table',
+            'rowElement'        => 'tr',
+            'columnElement'     => 'td',
+            'headerRow'         => 1,
+            'offset'            => 2
+        ],
     ],
     'az1' => [
         'class' => 'Arizona',
