@@ -403,9 +403,50 @@ return [
         ],
     ],
     'njcdr' => [
-        'class' => 'NewJersey',
-        'retriever' => 'csv',
-        'reader' => 'csv'
+        'dbPrefix' => 'njcdr',
+        'type' => 'csv',
+        'uri' => 'http://www.state.nj.us/treasury/debarment/files/Debarment.txt',
+        'fieldNames' => [
+            'firm_name',
+            'name',
+            'vendor_id',
+            'firm_street',
+            'firm_city',
+            'firm_state',
+            'firm_zip',
+            'firm_plus4',
+            'npi',
+            'street',
+            'city',
+            'state',
+            'zip',
+            'plus4',
+            'category',
+            'action',
+            'reason',
+            'debarring_dept',
+            'debarring_agency',
+            'effective_date',
+            'expiration_date',
+            'permanent_debarment'
+        ],
+        'hashColumns' => [
+            'firm_name',
+            'name',
+            'npi',
+            'effective_date',
+            'expiration_date',
+            'permanent_debarment'
+        ],
+        'dateColumns' => [
+            'effective_date'  => 19,
+            'expiration_date' => 20
+        ],
+        'retrieveOptions' => [
+            'headerRow' => 0,
+            'offset'    => 0
+        ],
+        'shouldHashListName' => true,
     ],
     'nyomig' => [
         'class' => 'NewYork',
