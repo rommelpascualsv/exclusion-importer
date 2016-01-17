@@ -449,9 +449,28 @@ return [
         'shouldHashListName' => true,
     ],
     'nyomig' => [
-        'class' => 'NewYork',
-        'retriever' => 'csv',
-        'reader' => 'csv'
+        'dbPrefix' => 'nyomig',
+        'type' => 'csv',
+        'uri' => 'http://www.omig.ny.gov/data/gensplistns.php',
+        'fieldNames' => [
+            'business',
+            'provider_number',
+            'npi',
+            'provtype',
+            'action_date',
+            'action_type'
+        ],
+        'hashColumns' => [
+            'business',
+            'provider_number',
+            'npi',
+            'action_date'
+        ],
+        'dateColumns' => [],
+        'retrieveOptions' => [
+            'headerRow' => 0,
+            'offset' => 1
+        ],
     ],
     'oh1' => [
         'class' => 'Ohio',
