@@ -328,9 +328,22 @@ return [
         ],
     ],
     'ma1' => [
-        'class' => 'Massachusetts',
-        'retriever' => 'csv',
-        'reader' => 'csv'
+        'dbPrefix' => 'ma1',
+        'type' => 'csv',
+        'uri' => 'http://www.mass.gov/eohhs/docs/masshealth/provlibrary/suspended-excluded-masshealth-providers.xls',
+        'fieldNames' => [
+            'provider_name',
+            'provider_type',
+            'npi',
+            'reason',
+            'effective_date'
+        ],
+        'hashColumns' => [],
+        'dateColumns' => [],
+        'retrieveOptions' => [
+            'headerRow' => 0,
+            'offset' => 1
+        ],
     ],
     'md1' => [
         'class' => 'Maryland',
