@@ -355,6 +355,30 @@ return [
         'retriever' => 'csv',
         'reader' => 'csv'
     ],
+    'mo1' => [
+        'dbPrefix' => 'mo1',
+        'type' => 'csv',
+        'uri' => '',
+        'fieldNames' => [
+            'termination_date',
+            'letter_date',
+            'provider_name',
+            'npi',
+            'provider_type',
+            'license_number',
+            'termination_reason'
+        ],
+        'hashColumns' => [
+            'provider_name',
+            'termination_date',
+            'npi'
+        ],
+        'dateColumns' => [
+            'termination_date' => 0,
+            'letter_date' => 1
+        ],
+        'retrieveOptions' => [],
+    ],
     'njcdr' => [
         'class' => 'NewJersey',
         'retriever' => 'csv',
