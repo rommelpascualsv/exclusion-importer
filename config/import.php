@@ -606,9 +606,41 @@ return [
         'reader' => 'csv'
     ],
     'wv2' => [
-        'class' => 'WestVirginia',
-        'retriever' => 'csv',
-        'reader' => 'csv'
+        'dbPrefix' => 'wv2',
+        'type' => 'csv',
+        'uri' => 'https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/west-virginia/wv2.xlsx',
+        'fieldNames' => [
+            'npi_number',
+            'full_name',
+            'first_name',
+            'middle_name',
+            'last_name',
+            'generation',
+            'credentials',
+            'provider_type',
+            'city',
+            'state',
+            'exclusion_date',
+            'reason_for_exclusion',
+            'reinstatement_date',
+            'reinstatement_reason'
+        ],
+        'hashColumns' => [
+            'npi_number',
+            'full_name',
+            'first_name',
+            'middle_name',
+            'last_name',
+            'exclusion_date',
+            'reinstatement_date',
+        ],
+        'dateColumns' => [
+            'exclusion_date' => 10,
+        ],
+        'retrieveOptions' => [
+            'headerRow' => 0,
+            'offset' => 1
+        ],
     ],
     'wy1' => [
         'class' => 'Wyoming',
