@@ -379,6 +379,29 @@ return [
         ],
         'retrieveOptions' => [],
     ],
+    'mt1' => [
+        'dbPrefix' => 'mt1',
+        'type' => 'csv',
+        'uri' => 'https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/montana/mt.xlsx',
+        'fieldNames' => [
+            'provider_name',
+            'provider_type',
+            'exclusion_termination_date',
+            'exclusion_termination_agency',
+        ],
+        'hashColumns' => [
+            'provider_name',
+            'provider_type',
+            'exclusion_termination_date'
+        ],
+        'dateColumns' => [
+            'exclusion_termination_date' => 2,
+        ],
+        'retrieveOptions' => [
+            'headerRow' => 0,
+            'offset' => 1
+        ],
+    ],
     'njcdr' => [
         'class' => 'NewJersey',
         'retriever' => 'csv',
