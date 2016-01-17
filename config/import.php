@@ -442,11 +442,6 @@ return [
         'retriever' => 'pdf',
         'reader' => 'csv'
     ],
-    'mo1' => [
-        'class'		=>	'Missouri',
-        'retriever'	=>	'csv',
-        'reader'	=>	'csv'
-    ],
     'nd1' => [
         'class' => 'NorthDakota',
         'retriever' => 'csv',
@@ -462,33 +457,8 @@ return [
         'retriever' => 'pdf',
         'reader' => 'csv'
     ],
-    'ks1' => [
-        'class' => 'Kansas',
-        'retriever' => 'csv',
-        'reader' => 'csv'
-    ],
-    'la1' => [
-        'class' => 'Louisiana',
-        'retriever' => 'csv',
-        'reader' => 'csv'
-    ],
-    'mt1' => [
-        'class' => 'Montana',
-        'retriever' => 'csv',
-        'reader' => 'csv'
-    ],
     'wv2' => [
         'class' => 'WestVirginia',
-        'retriever' => 'csv',
-        'reader' => 'csv'
-    ],
-    'ia1' => [
-        'class' => 'Iowa',
-        'retriever' => 'csv',
-        'reader' => 'csv'
-    ],
-    'ga1' => [
-        'class' => 'Georgia',
         'retriever' => 'csv',
         'reader' => 'csv'
     ],
