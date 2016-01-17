@@ -31,9 +31,32 @@ return [
         ]
     ],
     'ak1' => [
-        'class' => 'Alaska',
-        'retriever' => 'csv',
-        'reader' => 'csv'
+        'type' => 'csv',
+        'dbPrefix' => 'ak1',
+        'uri' => 'https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/alaska/aklist.xlsx',
+        'fieldNames' => [
+            'exclusion_date',
+            'last_name',
+            'first_name',
+            'middle_name',
+            'provider_type',
+            'exclusion_authority',
+            'exclusion_reason'
+        ],
+        'hashColumns' => [
+            'exclusion_date',
+            'last_name',
+            'first_name',
+            'middle_name',
+            'exclusion_authority',
+        ],
+        'dateColumns' => [
+            'exclusion_date' => 0
+        ],
+        'retrieveOptions' => [
+            'headerRow' => 0,
+            'offset' => 1
+        ],
     ],
     'ca1' => [
         'class' => 'California',
