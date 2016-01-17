@@ -543,6 +543,39 @@ return [
         'retriever' => 'csv',
         'reader' => 'csv'
     ],
+    'usdocdp' => [
+        'dbPrefix' => 'usdocdp',
+        'type' => 'csv',
+        'uri' => 'https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/usdocdp/DPL_2015-11-09.csv',
+        'fieldNames' => [
+            'name',
+            'street_address',
+            'city',
+            'state',
+            'country',
+            'postal_code',
+            'effective_date',
+            'expiration_date',
+            'last_update'
+        ],
+        'hashColumns' => [
+            'name',
+            'city',
+            'state',
+            'country',
+            'effective_date',
+            'expiration_date'
+        ],
+        'dateColumns' => [
+            'effective_date' => 6,
+            'expiration_date' => 7,
+            'last_update' => 8,
+        ],
+        'retrieveOptions' => [
+            'headRow' => 0,
+            'offset' => 1
+        ],
+    ],
     'wa1' => [
         'class' => 'Washington',
         'retriever' => 'pdf',
