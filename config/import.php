@@ -199,6 +199,32 @@ return [
         ],
         'shouldHashListName' => true
     ],
+    'ga1' => [
+        'dbPrefix' => 'ga1',
+        'type' => 'csv',
+        'uri' => 'https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/georgia/Georgia.xlsx',
+        'fieldNames' => [
+            'last_name',
+            'first_name',
+            'business_name',
+            'general',
+            'state',
+            'sanction_date'
+        ],
+        'hashColumns' => [
+            'last_name',
+            'first_name',
+            'business_name',
+            'sanction_date'
+        ],
+        'dateColumns' => [
+            'sanction_date' => 5
+        ],
+        'retrieveOptions' => [
+            'headerRow' => 0,
+            'offset' => 1
+        ],
+    ],
     'hi1' => [
         'class' => 'Hawaii',
         'retriever' => 'csv',
