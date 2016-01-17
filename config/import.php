@@ -82,9 +82,24 @@ return [
         ],
     ],
     'ca1' => [
-        'class' => 'California',
-        'retriever' => 'csv',
-        'reader' => 'csv'
+        'dbPrefix' => 'ca1',
+        'type' => 'csv',
+        'uri' => 'https://files.medi-cal.ca.gov/pubsdoco/Publications/masters-MTP/zOnlineOnly/susp100-49_z03/suspall_092015.xls',
+        'fieldNames' => [
+            'last_name',
+            'first_name',
+            'middle_name',
+            'aka_dba',
+            'addresses',
+            'provider_type',
+            'license_numbers',
+            'provider_numbers',
+            'date_of_suspension',
+            'active_period'
+        ],
+        'hashColumns' => [],
+        'dateColumns' => [],
+        'retrieveOptions' => [],
     ],
     'ct1' => [
         'class' => 'Connecticut',
