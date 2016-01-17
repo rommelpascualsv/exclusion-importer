@@ -292,6 +292,41 @@ return [
         'retriever' => 'csv',
         'reader' => 'csv'
     ],
+    'la1' => [
+        'dbPrefix' => 'la1',
+        'type' => 'csv',
+        'uri' => 'https://adverseactions.dhh.la.gov/SelSearch/GetCsv',
+        'fieldNames' => [
+            'first_name',
+            'last_or_entity_name',
+            'birthdate',
+            'affiliated_entity',
+            'title_or_type',
+            'npi',
+            'exclusion_reason',
+            'period_of_exclusion',
+            'effective_date',
+            'reinstate_date',
+            'state_zip'
+        ],
+        'hashColumns' => [
+            'first_name',
+            'last_or_entity_name',
+            'birthdate',
+            'affiliated_entity',
+            'npi',
+            'exclusion_reason',
+            'effective_date',
+        ],
+        'dateColumns' => [
+            'birthdate' => 2,
+            'effective_date' => 8,
+        ],
+        'retrieveOptions' => [
+            'headerRow' => 0,
+            'offset' => 2
+        ],
+    ],
     'ma1' => [
         'class' => 'Massachusetts',
         'retriever' => 'csv',
