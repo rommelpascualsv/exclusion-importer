@@ -260,6 +260,33 @@ return [
             'offset' => 1
         ],
     ],
+    'ks1' => [
+        'dbPrefix' => 'ks1',
+        'type' => 'csv',
+        'uri' => 'https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/kansas/ks.csv',
+        'fieldNames' => [
+            'termination_date',
+            'name',
+            'd_b_a',
+            'provider_type',
+            'kmap_provider_number',
+            'npi',
+            'comments'
+        ],
+        'hashColumns' => [
+            'termination_date',
+            'name',
+            'd_b_a',
+            'npi',
+        ],
+        'dateColumns' => [
+            'termination_date' => 0
+        ],
+        'retrieveOptions' => [
+            'headerRow' => 0,
+            'offset' => 1
+        ],
+    ],
     'ky1' => [
         'class' => 'Kentucky',
         'retriever' => 'csv',
