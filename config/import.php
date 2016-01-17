@@ -230,6 +230,36 @@ return [
         'retriever' => 'csv',
         'reader' => 'csv'
     ],
+    'ia1' => [
+        'dbPrefix' => 'ia1',
+        'type' => 'csv',
+        'uri' => 'https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/iowa/ia.csv',
+        'fieldNames' => [
+            'sanction_start_date',
+            'npi',
+            'individual_last_name',
+            'individual_first_name',
+            'entity_name',
+            'sanction',
+            'sanction_end_date'
+        ],
+        'hashColumns' => [
+            'sanction_start_date',
+            'npi',
+            'individual_last_name',
+            'individual_first_name',
+            'entity_name',
+            'sanction_end_date'
+        ],
+        'dateColumns' => [
+            'sanction_start_date' => 0,
+            'sanction_end_date' => 6
+        ],
+        'retrieveOptions' => [
+            'headerRow' => 0,
+            'offset' => 1
+        ],
+    ],
     'ky1' => [
         'class' => 'Kentucky',
         'retriever' => 'csv',
