@@ -136,6 +136,32 @@ return [
             'offset' => 1
         ],
     ],
+    'fdadl' => [
+        'dbPrefix' => 'fdadl',
+        'type' => 'csv',
+        'uri' => 'https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/fdadl/FDA+Debarment+List+(Drug+Product+Applications).csv',
+        'fieldNames' => [
+            'name',
+            'aka',
+            'effective_date',
+            'term_of_debarment',
+            'from_date',
+        ],
+        'hashColumns' => [
+            'name',
+            'aka',
+            'effective_date',
+            'term_of_debarment'
+        ],
+        'dateColumns' => [
+            'effective_date' => 2,
+            'from_date' => 4,
+        ],
+        'retrieveOptions' => [
+            'headRow' => 0,
+            'offset' => 1
+        ],
+    ],
     'hi1' => [
         'class' => 'Hawaii',
         'retriever' => 'csv',
