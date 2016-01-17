@@ -482,6 +482,37 @@ return [
         'retriever' => 'csv',
         'reader' => 'csv'
     ],
+    'phs' => [
+        'dbPrefix' => 'phs',
+        'type' => 'csv',
+        'uri' => 'https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/phs/PHS_2015-11-09.csv',
+        'fieldNames' => [
+            'last_name',
+            'first_name',
+            'middle_name',
+            'debarment_until',
+            'no_phs_advisory_until',
+            'certification_of_work_until',
+            'supervision_until',
+            'memo',
+        ],
+        'hashColumns' => [
+            'last_name',
+            'first_name',
+            'middle_name',
+            'debarment_until',
+        ],
+        'dateColumns' => [
+            "debarment_until" => 3,
+            "no_phs_advisory_until" => 4,
+            "certification_of_work_until" => 5,
+            "supervision_until" => 6,
+        ],
+        'retrieveOptions' => [
+            'headRow' => 0,
+            'offset' => 1
+        ],
+    ],
     'sc1' => [
         'class' => 'SouthCarolina',
         'retriever' => 'csv',
