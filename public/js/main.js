@@ -1,16 +1,13 @@
-import $ from 'jquery';
-import 'bootstrap';
-
-$('.create-tables-btn').click(() =>{
+$('.create-tables-btn').click(function() {
     $.get("/import/createOldTables");
 });
 
 $('.start-btn').click(function() {
-    const $btn = $(this);
+    var $btn = $(this);
 
-    const altUrl = $btn.parents('tr').find('.url').html();
+    var altUrl = $btn.parents('tr').find('.url').html();
 
-    let url = $btn.data('action');
+    var url = $btn.data('action');
 
     if (altUrl) {
         url += "?url=" + encodeURIComponent(altUrl);
@@ -18,10 +15,10 @@ $('.start-btn').click(function() {
 
     $btn.html('Running..');
 
-    $.get(url, data => {
+    $.get(url, function(data) {
         if (!data.success) {
 
-            let modal = $('#error-modal');
+            var modal = $('#error-modal');
 
             $btn.removeClass('btn-default')
                 .addClass('btn-danger')
@@ -39,7 +36,7 @@ $('.start-btn').click(function() {
             .html('Done!')
             .attr('disabled', true);
 
-    }).fail(() => {
+    }).fail(function() {
         $btn.removeClass('btn-default')
             .addClass('btn-danger')
             .html('Error')

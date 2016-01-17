@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>SLV - Utilities</title>
     <link rel="stylesheet" href="/css/app.css">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -80,6 +81,8 @@
         </div>
 
     </div><!-- /.container -->
-    <script src="/js/main.js" type="application/javascript"></script>
+    <script src="/js/jquery-1.12.0.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/main.js"></script>
 </body>
 </html>
