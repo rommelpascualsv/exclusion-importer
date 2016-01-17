@@ -106,6 +106,36 @@ return [
         'retriever' => 'html',
         'reader' => 'csv'
     ],
+    'fdac' => [
+        'dbPrefix' => 'fdac',
+        'type' => 'csv',
+        'uri' => 'https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/fda-clinical-investigators/FDA-Clinical+Investigators+-+Disqualification+Proceedings_110920150.csv',
+        'fieldNames' => [
+            'name',
+            'center',
+            'city',
+            'state',
+            'status',
+            'date_of_status',
+            'date_of_nidpoe_issued',
+            'date_of_nooh_issued',
+        ],
+        'hashColumns' => [
+            'name',
+            'center',
+            'status',
+            'date_of_status',
+        ],
+        'dateColumns' => [
+            "date_of_status" => 5,
+            "date_nidpoe_issued" => 6,
+            "date_nooh_issued" => 7
+        ],
+        'retrieveOptions' => [
+            'headRow' => 0,
+            'offset' => 1
+        ],
+    ],
     'hi1' => [
         'class' => 'Hawaii',
         'retriever' => 'csv',
