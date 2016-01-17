@@ -107,9 +107,33 @@ return [
         'reader' => 'csv'
     ],
     'dc1' => [
-        'class' => 'WashingtonDC',
-        'retriever' => 'csv',
-        'reader' => 'csv'
+        'dbPrefix' => 'dc1',
+        'type' => 'csv',
+        'uri' => 'https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/washington-dc/dc1.xlsx',
+        'fieldNames' => [
+            'company_name',
+            'first_name',
+            'middle_name',
+            'last_name',
+            'address',
+            'principals',
+            'action_date',
+            'termination_date'
+        ],
+        'hashColumns' => [
+            'company_name',
+            'first_name',
+            'middle_name',
+            'last_name',
+            'termination_date'
+        ],
+        'dateColumns' => [
+            'termination_date' => 7
+        ],
+        'retrieveOptions' => [
+            'headerRow' => 0,
+            'offset' => 1
+        ],
     ],
     'fdac' => [
         'dbPrefix' => 'fdac',
