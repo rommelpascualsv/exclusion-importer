@@ -1,6 +1,34 @@
 <?php
 
 return [
+    'ak1' => [
+        'type' => 'csv',
+        'dbPrefix' => 'ak1',
+        'uri' => 'https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/alaska/aklist.xlsx',
+        'fieldNames' => [
+            'exclusion_date',
+            'last_name',
+            'first_name',
+            'middle_name',
+            'provider_type',
+            'exclusion_authority',
+            'exclusion_reason'
+        ],
+        'hashColumns' => [
+            'exclusion_date',
+            'last_name',
+            'first_name',
+            'middle_name',
+            'exclusion_authority',
+        ],
+        'dateColumns' => [
+            'exclusion_date' => 0
+        ],
+        'retrieveOptions' => [
+            'headerRow' => 0,
+            'offset' => 1
+        ],
+    ],
     'al1' => [
         'class' => 'Alabama',
         'retriever' => 'csv',
@@ -53,34 +81,6 @@ return [
             'npi_number'
         ]
     ],
-    'ak1' => [
-        'type' => 'csv',
-        'dbPrefix' => 'ak1',
-        'uri' => 'https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/alaska/aklist.xlsx',
-        'fieldNames' => [
-            'exclusion_date',
-            'last_name',
-            'first_name',
-            'middle_name',
-            'provider_type',
-            'exclusion_authority',
-            'exclusion_reason'
-        ],
-        'hashColumns' => [
-            'exclusion_date',
-            'last_name',
-            'first_name',
-            'middle_name',
-            'exclusion_authority',
-        ],
-        'dateColumns' => [
-            'exclusion_date' => 0
-        ],
-        'retrieveOptions' => [
-            'headerRow' => 0,
-            'offset' => 1
-        ],
-    ],
     'ca1' => [
         'dbPrefix' => 'ca1',
         'type' => 'csv',
@@ -104,6 +104,11 @@ return [
     'ct1' => [
         'class' => 'Connecticut',
         'retriever' => 'html',
+        'reader' => 'csv'
+    ],
+    'dc1' => [
+        'class' => 'WashingtonDC',
+        'retriever' => 'csv',
         'reader' => 'csv'
     ],
     'fdac' => [
@@ -350,6 +355,11 @@ return [
         'retriever' => 'csv',
         'reader' => 'csv'
     ],
+    'me1' => [
+        'class' => 'Maine',
+        'retriever' => 'csv',
+        'reader' => 'csv'
+    ],
     'mi1' => [
         'class' => 'Michigan',
         'retriever' => 'csv',
@@ -379,6 +389,11 @@ return [
         ],
         'retrieveOptions' => [],
     ],
+    'ms1' => [
+        'class' => 'Mississippi',
+        'retriever' => 'pdf',
+        'reader' => 'csv'
+    ],
     'mt1' => [
         'dbPrefix' => 'mt1',
         'type' => 'csv',
@@ -401,6 +416,16 @@ return [
             'headerRow' => 0,
             'offset' => 1
         ],
+    ],
+    'nc1' => [
+        'class' => 'NorthCarolina',
+        'retriever' => 'csv',
+        'reader' => 'csv'
+    ],
+    'nd1' => [
+        'class' => 'NorthDakota',
+        'retriever' => 'csv',
+        'reader' => 'csv'
     ],
     'njcdr' => [
         'dbPrefix' => 'njcdr',
@@ -518,33 +543,8 @@ return [
         'retriever' => 'csv',
         'reader' => 'csv'
     ],
-    'dc1' => [
-        'class' => 'WashingtonDC',
-        'retriever' => 'csv',
-        'reader' => 'csv'
-    ],
     'wa1' => [
         'class' => 'Washington',
-        'retriever' => 'pdf',
-        'reader' => 'csv'
-    ],
-    'ms1' => [
-        'class' => 'Mississippi',
-        'retriever' => 'pdf',
-        'reader' => 'csv'
-    ],
-    'nd1' => [
-        'class' => 'NorthDakota',
-        'retriever' => 'csv',
-        'reader' => 'csv'
-    ],
-    'nc1' => [
-        'class' => 'NorthCarolina',
-        'retriever' => 'csv',
-        'reader' => 'csv'
-    ],
-    'wy1' => [
-        'class' => 'Wyoming',
         'retriever' => 'pdf',
         'reader' => 'csv'
     ],
@@ -553,9 +553,9 @@ return [
         'retriever' => 'csv',
         'reader' => 'csv'
     ],
-    'me1' => [
-        'class' => 'Maine',
-        'retriever' => 'csv',
+    'wy1' => [
+        'class' => 'Wyoming',
+        'retriever' => 'pdf',
         'reader' => 'csv'
-    ]
+    ],
 ];
