@@ -20,8 +20,6 @@ class Query {
 	 */
 	public static function get_by_uid( $uid ) {
 
-		$result_set = array();
-
 		$records = app('db')
 			->table(static::$table)
 			->where('uid', $uid);
@@ -32,8 +30,6 @@ class Query {
 		}
 
 		return static::_instantiate( $records[0] );
-
-
 	}
 
 	public static function getBySdnEntryId($sdn_entry_id ) {
