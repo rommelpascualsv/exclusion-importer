@@ -81,6 +81,8 @@ class Wyoming extends ExclusionList
         $valid = -1;
         $validRow = 0;
 
+        $columns = [];
+
         foreach ($rows as $row)
         {
             $valid++;

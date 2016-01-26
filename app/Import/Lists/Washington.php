@@ -81,6 +81,8 @@ class Washington extends ExclusionList
 
         $rows = explode($rowDelimiter, $regex10);
 
+        $columns = [];
+
         foreach ($rows as $row)
         {
             $rowArray = explode($columnDelimiter, $row);

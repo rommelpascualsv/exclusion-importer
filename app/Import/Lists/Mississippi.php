@@ -68,6 +68,8 @@ class Mississippi extends ExclusionList
 
         $dateRegex = '/\w+\s\d{1,2}\,\s\d{4}.+$/';
 
+        $columns = [];
+
         foreach ($rows as $row) {
 
             $rowArray = explode($columnDelimiter, $row);

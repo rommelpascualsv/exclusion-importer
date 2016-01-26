@@ -21,8 +21,6 @@
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="#">Update Exclusion Lists</a></li>
-                    <li><a href="#about">Monthly Reports</a></li>
-                    <li><a href="#contact">Contact</a></li>
                 </ul>
             </div><!--/.nav-collapse -->
         </div>

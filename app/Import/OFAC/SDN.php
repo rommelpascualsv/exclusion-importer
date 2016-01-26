@@ -391,7 +391,7 @@ class SDN {
 	 *
 	 * @param	string	$table
 	 * @param	array	$data
-	 * @return	Database_Result|int|mixed
+	 * @return	int|mixed
 	 */
 	protected function save($table, $data )
 	{
