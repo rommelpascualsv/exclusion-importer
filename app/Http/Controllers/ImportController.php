@@ -1,6 +1,8 @@
 <?php namespace App\Http\Controllers;
 
 use App\Import;
+use App\Import\Service\Exclusions\ListFactory;
+use App\Import\Service\Exclusions\RetrieverFactory;
 use App\Import\Service\ListProcessor;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller as BaseController;
@@ -129,10 +131,10 @@ class ImportController extends BaseController
 
     public function import(Request $request, $listPrefix)
     {
-        $listImportManager = new Import\Manager($listPrefix);
+        $listFactory = new ListFactory();
 
         try {
-            $listObject = $listImportManager->getList();
+            $listObject = $listFactory->make($listPrefix);
 
             if ($request->input('url')) {
                 $newUri = htmlspecialchars_decode($request->input('url'));
@@ -152,7 +154,19 @@ class ImportController extends BaseController
         }
 
 
-        $exclusionsRetriever = $listImportManager->getRetriever();
+        $retrieverFactory = new RetrieverFactory();
+
+        try{
+            $exclusionsRetriever = $retrieverFactory->make($listObject->type);
+        }
+        catch(\RuntimeException $e)
+        {
+            return response()->json([
+                'success'	=>	false,
+                'msg'		=>	$e->getMessage()
+            ]);
+        }
+
 
         $listObject = $exclusionsRetriever->retrieveData($listObject);
 
