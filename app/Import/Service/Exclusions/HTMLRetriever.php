@@ -51,9 +51,9 @@ class HTMLRetriever extends Retriever
 
         $table = $this->domCrawler->filter($list->retrieveOptions['htmlFilterElement']);
 
-        $columnsArray = $table->filter($list->retrieveOptions['rowElement'])->each(function (Crawler $node, $i) use ($list)
+        $columnsArray = $table->filter($list->retrieveOptions['rowElement'])->each(function (Crawler $node) use ($list)
         {
-            return $node->filter($list->retrieveOptions['columnElement'])->each(function (Crawler $node, $i)
+            return $node->filter($list->retrieveOptions['columnElement'])->each(function (Crawler $node)
             {
                 return $node->text();
             });
