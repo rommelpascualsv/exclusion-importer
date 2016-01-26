@@ -23,8 +23,6 @@ $app = new Laravel\Lumen\Application(
 
 // $app->withEloquent();
 
-$app->configure('import');
-
 /*
 |--------------------------------------------------------------------------
 | Register Container Bindings
