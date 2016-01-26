@@ -15,13 +15,13 @@ class Ohio extends ExclusionList
     public $type = 'xlsx';
 
 
-    public $retrieveOptions = array(
+    public $retrieveOptions = [
         'headerRow' => 0,
         'offset' => 1
-    );
+    ];
 
 
-    public $fieldNames = array(
+    public $fieldNames = [
         'last_name',
         'first_name',
         'organization_name',
@@ -38,7 +38,7 @@ class Ohio extends ExclusionList
         'date_added',
         'provider_type',
         'date_revised'
-    );
+    ];
 
     public $hashColumns = [
 

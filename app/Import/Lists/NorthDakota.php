@@ -24,16 +24,16 @@ class NorthDakota extends ExclusionList
     /**
      * @var array
      */
-    public $retrieveOptions = array(
+    public $retrieveOptions = [
         'headerRow' => 0,
         'offset' => 1
-    );
+    ];
 
 
     /**
      * @var array
      */
-    public $fieldNames = array(
+    public $fieldNames = [
         'provider_name',
         'provider_verification',
         'business_name_address',
@@ -45,7 +45,7 @@ class NorthDakota extends ExclusionList
         'exclusion_date',
         'exclusion_reason',
         'exclusion_reason_2',
-    );
+    ];
 
 
     /**

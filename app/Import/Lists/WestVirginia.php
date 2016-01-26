@@ -24,16 +24,16 @@ class WestVirginia extends ExclusionList
     /**
      * @var array
      */
-    public $retrieveOptions = array(
+    public $retrieveOptions = [
         'headerRow' => 0,
         'offset' => 1
-    );
+    ];
 
 
     /**
      * @var array
      */
-    public $fieldNames = array(
+    public $fieldNames = [
         'npi_number',
         'full_name',
         'first_name',
@@ -48,7 +48,7 @@ class WestVirginia extends ExclusionList
         'reason_for_exclusion',
         'reinstatement_date',
         'reinstatement_reason'
-    );
+    ];
 
 
     /**

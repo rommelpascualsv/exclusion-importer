@@ -59,10 +59,10 @@ class NewJersey extends ExclusionList
     /**
      * @var array
      */
-    public $retrieveOptions = array(
+    public $retrieveOptions = [
         'headerRow' => 0,
         'offset'    => 0
-    );
+    ];
 
     public $shouldHashListName = true;
 }

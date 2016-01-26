@@ -14,18 +14,18 @@ class Montana extends ExclusionList{
     public $type = 'xlsx';
 
 
-    public $retrieveOptions = array(
+    public $retrieveOptions = [
         'headerRow' => 0,
         'offset' => 1
-    );
+    ];
 
 
-    public $fieldNames = array(
+    public $fieldNames = [
         'provider_name',
         'provider_type',
         'exclusion_termination_date',
         'exclusion_termination_agency',
-    );
+    ];
 
     /**
      * @var array

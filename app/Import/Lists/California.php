@@ -10,7 +10,7 @@ class California extends ExclusionList
 
     public $type = 'xls';
 
-    public $fieldNames = array(
+    public $fieldNames = [
         'last_name',
         'first_name',
         'middle_name',
@@ -21,6 +21,6 @@ class California extends ExclusionList
         'provider_numbers',
         'date_of_suspension',
         'active_period'
-    );
+    ];
 
 }

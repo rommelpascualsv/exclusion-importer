@@ -15,13 +15,13 @@ class Kentucky extends ExclusionList
     public $type = 'xls';
 
 
-    public $retrieveOptions = array(
+    public $retrieveOptions = [
         'headerRow' => 0,
         'offset' => 1
-    );
+    ];
 
 
-    public $fieldNames = array(
+    public $fieldNames = [
         'first_name',
         'last_name_or_practice',
         'npi',
@@ -29,7 +29,7 @@ class Kentucky extends ExclusionList
         'effective_date',
         'reason_for_term',
         'timeframe_of_term'
-    );
+    ];
 
     /**
      * @var array

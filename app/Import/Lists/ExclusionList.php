@@ -23,19 +23,19 @@ abstract class ExclusionList
 	/**
 	 * @var	array
 	 */
-	public $retrieveOptions = array();
+	public $retrieveOptions = [];
 
 
 	/**
 	 * @var	array
 	 */
-	public $headerOptions = array();
+	public $headerOptions = [];
 
 
 	/**
 	 * @var	array
 	 */
-	public $data = array();
+	public $data = [];
 
 
 	/**

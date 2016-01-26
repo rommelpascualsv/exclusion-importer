@@ -24,16 +24,16 @@ class WashingtonDC extends ExclusionList
     /**
      * @var array
      */
-    public $retrieveOptions = array(
+    public $retrieveOptions = [
         'headerRow' => 0,
         'offset' => 1
-    );
+    ];
 
 
     /**
      * @var array
      */
-    public $fieldNames = array(
+    public $fieldNames = [
         'company_name',
         'first_name',
         'middle_name',
@@ -42,7 +42,7 @@ class WashingtonDC extends ExclusionList
         'principals',
         'action_date',
         'termination_date'
-    );
+    ];
 
 
     /**

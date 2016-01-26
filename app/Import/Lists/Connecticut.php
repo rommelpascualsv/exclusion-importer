@@ -10,16 +10,16 @@ class Connecticut extends ExclusionList
 
     public $type = 'html';
 
-    public $retrieveOptions = array(
+    public $retrieveOptions = [
         'htmlFilterElement' => 'div > center > table',
         'rowElement'        => 'tr',
         'columnElement'     => 'td',
         'headerRow'         => 1,
         'offset'            => 0
-    );
+    ];
 
 
-    public $fieldNames = array(
+    public $fieldNames = [
         'name',
         'business',
         'specialty',
@@ -27,7 +27,7 @@ class Connecticut extends ExclusionList
         'effective_date',
         'period',
         'action'
-    );
+    ];
 
 
     public $hashColumns = [

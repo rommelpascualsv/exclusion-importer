@@ -25,16 +25,16 @@ class Kansas extends ExclusionList
     /**
      * @var array
      */
-    public $retrieveOptions = array(
+    public $retrieveOptions = [
         'headerRow' => 0,
         'offset' => 1
-    );
+    ];
 
 
     /**
      * @var array
      */
-    public $fieldNames = array(
+    public $fieldNames = [
         'termination_date',
         'name',
         'd_b_a',
@@ -42,7 +42,7 @@ class Kansas extends ExclusionList
         'kmap_provider_number',
         'npi',
         'comments'
-    );
+    ];
 
 
     /**

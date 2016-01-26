@@ -10,19 +10,19 @@ class NewYork extends ExclusionList
 
 	public $type = 'txt';
 
-	public $retrieveOptions = array(
+	public $retrieveOptions = [
 		'headerRow' => 0,
 		'offset' => 1
-	);
+	];
 
-	public $fieldNames = array(
+	public $fieldNames = [
 		'business',
 		'provider_number',
 		'npi',
 		'provtype',
 		'action_date',
 		'action_type'
-	);
+	];
 
 	public $hashColumns = [
 		'business',

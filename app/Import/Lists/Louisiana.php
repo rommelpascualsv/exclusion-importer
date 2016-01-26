@@ -12,13 +12,13 @@ class Louisiana extends ExclusionList
     public $type = 'csv';
 
 
-    public $retrieveOptions = array(
+    public $retrieveOptions = [
         'headerRow' => 0,
         'offset' => 2
-    );
+    ];
 
 
-    public $fieldNames = array(
+    public $fieldNames = [
         'first_name',
         'last_or_entity_name',
         'birthdate',
@@ -30,7 +30,7 @@ class Louisiana extends ExclusionList
         'effective_date',
         'reinstate_date',
         'state_zip'
-    );
+    ];
 
     /**
      * @var array

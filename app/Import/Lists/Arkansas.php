@@ -17,21 +17,21 @@ class Arkansas extends ExclusionList
         ]
     ];
 
-    public $retrieveOptions = array(
+    public $retrieveOptions = [
         'htmlFilterElement' => 'table',
         'rowElement'        => 'tr',
         'columnElement'     => 'td',
         'headerRow'         => 1,
         'offset'            => 2
-    );
+    ];
 
-    public $fieldNames = array(
+    public $fieldNames = [
         'Division',
         'FacilityName',
         'ProviderName',
         'City',
         'State',
         'Zip'
-    );
+    ];
 
 }

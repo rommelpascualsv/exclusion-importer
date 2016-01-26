@@ -15,13 +15,13 @@ class Pennsylvania extends ExclusionList
     public $type = 'txt';
 
 
-    public $retrieveOptions = array(
+    public $retrieveOptions = [
         'headerRow' => 0,
         'offset' => 1
-    );
+    ];
 
 
-    public $fieldNames = array(
+    public $fieldNames = [
         'ProviderName',
         'LicenseNumber',
         'Status',
@@ -43,7 +43,7 @@ class Pennsylvania extends ExclusionList
         'NAM_BUSNS_MP',
         'IDN_NPI',
         //'TXT_CMT'
-    );
+    ];
 
     public $hashColumns = [
         'ProviderName',

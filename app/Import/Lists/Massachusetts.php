@@ -10,16 +10,16 @@ class Massachusetts extends ExclusionList
 
     public $type = 'xls';
 
-    public $retrieveOptions = array(
+    public $retrieveOptions = [
         'headerRow' => 0,
         'offset' => 1
-    );
+    ];
 
-    public $fieldNames = array(
+    public $fieldNames = [
         'provider_name',
         'provider_type',
         'npi',
         'reason',
         'effective_date'
-    );
+    ];
 }

@@ -12,12 +12,12 @@ class Maryland extends ExclusionList
 
     public $type = 'xls';
 
-    public $retrieveOptions = array(
+    public $retrieveOptions = [
         'headerRow' => 0,
         'offset' => 1
-    );
+    ];
 
-    public $fieldNames = array(
+    public $fieldNames = [
         'last_name',
         'first_name',
         'specialty',
@@ -25,7 +25,7 @@ class Maryland extends ExclusionList
         'sanction_date',
         'address',
         'city_state_zip',
-    );
+    ];
 
 
     public function __construct()

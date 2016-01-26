@@ -12,12 +12,12 @@ class Michigan extends ExclusionList
 
     public $type = 'xls';
 
-    public $retrieveOptions = array(
+    public $retrieveOptions = [
         'headerRow' => 1,
         'offset' => 2
-    );
+    ];
 
-    public $fieldNames = array(
+    public $fieldNames = [
         'entity_name',
         'last_name',
         'first_name',
@@ -29,5 +29,5 @@ class Michigan extends ExclusionList
         'sanction_date_1',
         'sanction_date_2',
         'reason'
-    );
+    ];
 }

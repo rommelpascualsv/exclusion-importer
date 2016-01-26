@@ -12,12 +12,12 @@ class Hawaii extends ExclusionList
 
     public $type = 'xls';
 
-    public $retrieveOptions = array(
+    public $retrieveOptions = [
         'headerRow' => 24,
         'offset' => 25
-    );
+    ];
 
-    public $fieldNames = array(
+    public $fieldNames = [
         'last_name_or_business',
         'first_name',
         'middle_initial',
@@ -25,7 +25,7 @@ class Hawaii extends ExclusionList
         'last_known_program_or_provider_type',
         'exclusion_date',
         'reinstatement_date'
-    );
+    ];
 
 
     public function __construct()

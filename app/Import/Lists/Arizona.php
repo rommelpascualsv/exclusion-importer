@@ -10,17 +10,17 @@ class Arizona extends ExclusionList
 
     public $type = 'xlsx';
 
-    public $retrieveOptions = array(
+    public $retrieveOptions = [
         'headerRow' => 0,
         'offset' => 1
-    );
+    ];
 
-    public $fieldNames = array(
+    public $fieldNames = [
         'first_name',
         'middle',
         'last_name_company_name',
         'term_date',
         'specialty',
         'npi_number'
-    );
+    ];
 }
