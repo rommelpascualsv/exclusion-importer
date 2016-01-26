@@ -13,6 +13,9 @@ class Tennessee extends ExclusionList
     public $uri = 'http://www.tn.gov/assets/entities/tenncare/attachments/terminatedproviderlist.pdf';
 
 
+    public $type = 'pdf';
+
+
     public $fieldNames = [
         'last_name',
         'first_name',

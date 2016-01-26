@@ -6,6 +6,8 @@ class Florida extends ExclusionList
 
     public $uri = 'https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/florida/FOReport.xls';
 
+    public $type = 'xls';
+
     public $retrieveOptions = [
         'headerRow' => 0,
         'offset' => 1

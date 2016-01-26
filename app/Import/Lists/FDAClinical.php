@@ -6,6 +6,8 @@ class FDAClinical extends ExclusionList {
 
     public $uri = 'https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/fda-clinical-investigators/FDA-Clinical+Investigators+-+Disqualification+Proceedings_110920150.csv';
 
+    public $type = 'csv';
+
     public $dateColumns = [
         "date_of_status" => 5,
         "date_nidpoe_issued" => 6,

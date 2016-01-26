@@ -12,6 +12,8 @@ class Pennsylvania extends ExclusionList
 
     public $uri = 'http://services.dpw.state.pa.us/dhs/medicheck.txt';
 
+    public $type = 'txt';
+
 
     public $retrieveOptions = array(
         'headerRow' => 0,

@@ -63,5 +63,22 @@ abstract class ExclusionList
 
 	public $requestOptions = [];
 
+
 	public $shouldHashListName = false;
+
+
+	public $type;
+
+
+	public function preProcess($data) {
+
+        return $data;
+	}
+
+
+	public function postProcess($data) {
+
+		return $data;
+	}
+
 }

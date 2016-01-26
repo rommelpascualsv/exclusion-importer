@@ -10,6 +10,9 @@ class Georgia extends ExclusionList
     public $uri = "https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/georgia/Georgia.xlsx";
 
 
+    public $type = 'xlsx';
+
+
     public $fieldNames = [
         'last_name',
         'first_name',

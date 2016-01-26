@@ -6,6 +6,8 @@ class PHS extends ExclusionList {
 
     public $uri = 'https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/phs/PHS_2015-11-09.csv';
 
+    public $type = 'csv';
+
     public $dateColumns = [
         "debarment_until" => 3,
         "no_phs_advisory_until" => 4,

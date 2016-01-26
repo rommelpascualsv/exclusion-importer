@@ -12,6 +12,9 @@ class Kentucky extends ExclusionList
     public $uri;
 
 
+    public $type = 'xls';
+
+
     public $retrieveOptions = array(
         'headerRow' => 0,
         'offset' => 1

@@ -17,6 +17,12 @@ class Kansas extends ExclusionList
 
 
     /**
+     * @var string
+     */
+    public $type = 'csv';
+
+
+    /**
      * @var array
      */
     public $retrieveOptions = array(

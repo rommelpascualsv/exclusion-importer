@@ -10,6 +10,8 @@ class NewJersey extends ExclusionList
 
     public $uri = 'http://www.state.nj.us/treasury/debarment/files/Debarment.txt';
 
+    public $type = 'txt';
+
     public $hashFields = [
         'firm_name',
         'name',

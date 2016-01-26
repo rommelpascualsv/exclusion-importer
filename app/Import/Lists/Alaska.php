@@ -10,6 +10,9 @@ class Alaska extends ExclusionList
     public $uri = "https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/alaska/aklist.xlsx";
 
 
+    public $type = 'xlsx';
+
+
     public $fieldNames = [
         'exclusion_date',
         'last_name',

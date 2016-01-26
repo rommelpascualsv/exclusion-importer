@@ -11,6 +11,9 @@ class Montana extends ExclusionList{
     public $uri = 'https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/montana/mt.xlsx';
 
 
+    public $type = 'xlsx';
+
+
     public $retrieveOptions = array(
         'headerRow' => 0,
         'offset' => 1

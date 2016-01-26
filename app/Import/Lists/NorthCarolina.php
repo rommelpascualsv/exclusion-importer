@@ -10,6 +10,9 @@ class NorthCarolina extends ExclusionList
 	public $uri = 'http://www2.ncdhhs.gov/dma/ProgramIntegrity/ProviderExclusionList_082615.xlsx';
 
 
+    public $type = 'xlsx';
+
+
     public $retrieveOptions = [
         'headerRow' => 1,
         'offset' => 1

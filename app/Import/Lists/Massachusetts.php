@@ -8,6 +8,8 @@ class Massachusetts extends ExclusionList
 
     public $uri = 'http://www.mass.gov/eohhs/docs/masshealth/provlibrary/suspended-excluded-masshealth-providers.xls';
 
+    public $type = 'xls';
+
     public $retrieveOptions = array(
         'headerRow' => 0,
         'offset' => 1

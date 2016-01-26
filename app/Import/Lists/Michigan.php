@@ -10,6 +10,8 @@ class Michigan extends ExclusionList
 
     public $uri = 'http://www.michigan.gov/documents/mdch/MI_Sanctioned_Provider_List_375503_7.xls';
 
+    public $type = 'xls';
+
     public $retrieveOptions = array(
         'headerRow' => 1,
         'offset' => 2

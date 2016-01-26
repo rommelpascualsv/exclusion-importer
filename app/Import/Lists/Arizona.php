@@ -8,6 +8,8 @@ class Arizona extends ExclusionList
 
     public $uri = "https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/arizona/azlist.xlsx";
 
+    public $type = 'xlsx';
+
     public $retrieveOptions = array(
         'headerRow' => 0,
         'offset' => 1

@@ -8,6 +8,8 @@ class Connecticut extends ExclusionList
 
     public $uri = 'http://www.ct.gov/dss/cwp/view.asp?a=2349&q=310706';
 
+    public $type = 'html';
+
     public $retrieveOptions = array(
         'htmlFilterElement' => 'div > center > table',
         'rowElement'        => 'tr',

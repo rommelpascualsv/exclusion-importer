@@ -12,6 +12,9 @@ class Ohio extends ExclusionList
     public $uri = 'http://medicaid.ohio.gov/Portals/0/Providers/Enrollment%20and%20Support/ExclusionSuspensionList.xlsx';
 
 
+    public $type = 'xlsx';
+
+
     public $retrieveOptions = array(
         'headerRow' => 0,
         'offset' => 1

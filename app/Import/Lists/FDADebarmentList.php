@@ -6,6 +6,8 @@ class FDADebarmentList extends ExclusionList {
 
     public $uri = 'https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/fdadl/FDA+Debarment+List+(Drug+Product+Applications).csv';
 
+    public $type = 'csv';
+
     public $dateColumns = [
         'effective_date' => 2,
         'from_date' => 4,

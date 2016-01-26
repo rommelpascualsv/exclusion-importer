@@ -10,6 +10,8 @@ class Hawaii extends ExclusionList
 
     public $uri;
 
+    public $type = 'xls';
+
     public $retrieveOptions = array(
         'headerRow' => 24,
         'offset' => 25

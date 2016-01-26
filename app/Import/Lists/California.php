@@ -8,6 +8,8 @@ class California extends ExclusionList
 
     public $uri = 'https://files.medi-cal.ca.gov/pubsdoco/Publications/masters-MTP/zOnlineOnly/susp100-49_z03/suspall_092015.xls';
 
+    public $type = 'xls';
+
     public $fieldNames = array(
         'last_name',
         'first_name',

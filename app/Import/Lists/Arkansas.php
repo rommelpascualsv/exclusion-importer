@@ -8,6 +8,8 @@ class Arkansas extends ExclusionList
 
     public $uri = 'https://ardhs.sharepointsite.net/ExcludedProvidersList/Excluded%20Provider%20List.html';
 
+    public $type = 'html';
+
     public $requestOptions = [
         'verify'  => false,
         'headers' => [

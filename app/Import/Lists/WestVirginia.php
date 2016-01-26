@@ -16,6 +16,12 @@ class WestVirginia extends ExclusionList
 
 
     /**
+     * @var string
+     */
+    public $type = 'xlsx';
+
+
+    /**
      * @var array
      */
     public $retrieveOptions = array(

@@ -10,6 +10,9 @@ class Missouri extends ExclusionList
 	public $uri = 'http://www.mmac.mo.gov/files/Sanction-List-10-15-upd.xls';
 
 
+	public $type = 'xls';
+
+
 	public $hashColumns = [
         'provider_name',
 		'termination_date',

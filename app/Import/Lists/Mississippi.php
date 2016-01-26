@@ -13,6 +13,9 @@ class Mississippi extends ExclusionList
     public $uri = "http://www.medicaid.ms.gov/wp-content/uploads/2014/03/SanctionedProviderList.pdf";
 
 
+    public $type = 'pdf';
+
+
     public $fieldNames = [
         'entity_1',
         'entity_2',

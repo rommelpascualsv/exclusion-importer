@@ -9,6 +9,9 @@ class Louisiana extends ExclusionList
     public $uri = 'https://adverseactions.dhh.la.gov/SelSearch/GetCsv';
 
 
+    public $type = 'csv';
+
+
     public $retrieveOptions = array(
         'headerRow' => 0,
         'offset' => 2

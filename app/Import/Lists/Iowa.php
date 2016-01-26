@@ -10,6 +10,9 @@ class Iowa extends ExclusionList
     public $uri = "https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/iowa/ia.csv";
 
 
+    public $type = 'csv';
+
+
     public $fieldNames = [
         'sanction_start_date',
         'npi',

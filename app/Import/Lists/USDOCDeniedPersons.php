@@ -7,6 +7,8 @@ class USDOCDeniedPersons extends ExclusionList {
 
     public $uri = 'https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/usdocdp/DPL_2015-11-09.csv';
 
+    public $type = 'csv';
+
     public $dateColumns = [
         'effective_date' => 6,
         'expiration_date' => 7,

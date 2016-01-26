@@ -10,6 +10,9 @@ class Maine extends ExclusionList
     public $uri = "https://mainecare.maine.gov/PrvExclRpt/November%202015/PI0008-PM_Monthly_Exclusion_Report%20(csv).csv";
 
 
+    public $type = 'csv';
+
+
     public $fieldNames = [
         'entity',
         'last_name',

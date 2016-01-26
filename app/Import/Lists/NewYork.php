@@ -8,6 +8,8 @@ class NewYork extends ExclusionList
 
 	public $uri = 'http://www.omig.ny.gov/data/gensplistns.php';
 
+	public $type = 'txt';
+
 	public $retrieveOptions = array(
 		'headerRow' => 0,
 		'offset' => 1

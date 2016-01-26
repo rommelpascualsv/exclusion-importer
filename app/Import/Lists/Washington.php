@@ -13,6 +13,9 @@ class Washington extends ExclusionList
     public $uri = "http://www.hca.wa.gov/medicaid/provider/documents/termination_exclusion.pdf";
 
 
+    public $type = 'pdf';
+
+
     public $fieldNames = [
         'last_name',
         'first_name',

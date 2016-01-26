@@ -10,7 +10,10 @@ class Wyoming extends ExclusionList
     public $pdfToText = "pdftotext -layout -nopgbrk";
 
 
-    public $uri = 'http://www.health.wyo.gov/Media.aspx?mediaId=17824';
+    public $uri = 'http://www.health.wyo.gov/Media.aspx?mediaId=18045';
+
+
+    public $type = 'pdf';
 
 
     public $fieldNames = [
@@ -68,10 +71,11 @@ class Wyoming extends ExclusionList
         $regex6 = preg_replace('/\n\n/', $rowDelimiter, $regex5);
         $regex7 = preg_replace('/\n/', $rowDelimiter, $regex6);
         $regex8 = preg_replace('/\s{2,}/', $columnDelimiter, $regex7);
+        $regex9 = str_replace('6/18/2009', '6/18/2009' . $rowDelimiter, $regex8);
+        $regex10 = str_replace('8/20/2015', '8/20/2015' . $rowDelimiter, $regex9);
 
 
-
-        $rows = explode($rowDelimiter, $regex8);
+        $rows = explode($rowDelimiter, $regex10);
 
 
         $valid = -1;
