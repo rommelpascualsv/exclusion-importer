@@ -23,13 +23,13 @@ class PDFRetriever extends Retriever
 
     public function retrieveData(ExclusionList $list)
     {
-        $folder = DATAPATH . $list->dbPrefix . '_files';
+        $folder = storage_path('app');
 
-        $this->httpClient->get($list->uri)
-            ->setResponseBody("{$folder}/{$list->dbPrefix}.pdf")
-            ->send();
+        $file = "{$folder}/{$list->dbPrefix}.pdf";
 
-        $contents = shell_exec($list->pdfToText . ' ' . DATAPATH . $list->dbPrefix . '_files/' . $list->dbPrefix . '.pdf -');
+        $this->httpClient->get($list->uri, ['sink' => $file]);
+
+        $contents = shell_exec($list->pdfToText . ' ' . $file . ' -');
 
         $list = $list->parse($contents);
 

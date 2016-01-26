@@ -5,3 +5,6 @@ sudo apt-get install -y wget curl git-core build-essential software-properties-c
 
 # gnumeric which includes ssconvert for converting excel to csv
 sudo apt-get install -y gnumeric
+
+# this package contains pdftotext
+sudo apt-get install poppler-utils
