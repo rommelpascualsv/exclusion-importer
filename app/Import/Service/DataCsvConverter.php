@@ -35,9 +35,7 @@ class DataCsvConverter
     {
         $fileName = $this->convertDataToCsvFile($data, $list->dbPrefix);
 
-        list($fileHeaders, $data) = $this->fileReader->readRecords($fileName, $list->retrieveOptions);
-
-        return $data;
+        return $this->fileReader->readRecords($fileName, $list->retrieveOptions);
     }
 
 

@@ -12,19 +12,11 @@ class CsvFileReader implements FileReader
     {
         $csvReader = Reader::createFromPath($fileName);
 
-        $headerRow = (isset($options['headerRow'])) ? $options['headerRow'] : 0;
-
-        $offset = isset($options['offset']) ? $options['offset'] : 1;
-
-        $headers = $csvReader->fetchOne($headerRow);
-
-        $csvReader->setOffset($offset);
+        $csvReader->setOffset(isset($options['offset']) ? $options['offset'] : 1);
 
         $records = $csvReader->fetchAll();
 
-        array_pop($records);
-
-        return [$headers, $records];
+        return array_slice($records, 0, count($records) - 1);
     }
 
 }
