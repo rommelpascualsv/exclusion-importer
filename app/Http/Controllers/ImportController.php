@@ -67,7 +67,8 @@ class ImportController extends BaseController
             'sdn_place_of_birth_list',
             'sdn_program_list',
             'sdn_vessel_info',
-            'cus_spectrum_debar_records'
+            'cus_spectrum_debar_records',
+            'usdosd',
         ];
         foreach ($lists as $list) {
             app('db')->statement('DROP TABLE IF EXISTS `' . $list . '_older`');
@@ -107,6 +108,7 @@ class ImportController extends BaseController
             'sc1' => 'South Carolina',
             'tn1' => 'Tennessee',
             'usdocdp' => 'US DoC Denied Persons List',
+            'usdosd' => 'US DoS Debarment List',
             'wa1' => 'Washington State',
             'wv2' => 'West Virginia',
             'wy1' => 'Wyoming',

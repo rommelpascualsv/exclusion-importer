@@ -2485,6 +2485,35 @@ DEFAULT CHARACTER SET=utf8 COLLATE=utf8_unicode_ci
 ;
 
 -- ----------------------------
+-- Table structure for usdosd_records
+-- ----------------------------
+DROP TABLE IF EXISTS `usdosd_records`;
+CREATE TABLE `usdosd_records` (
+  `id`            INT          NOT NULL AUTO_INCREMENT,
+  `full_name`     VARCHAR(100) NULL,
+  `aka_name`      VARCHAR(255) NULL,
+  `date_of_birth` VARCHAR(100) NULL,
+  `notice`        VARCHAR(100) NULL,
+  `notice_date`   DATE         NULL,
+  `hash`          BINARY(16)   NULL,
+  `date_modified` TIMESTAMP    NULL     DEFAULT CURRENT_TIMESTAMP,
+  `date_created`  TIMESTAMP    NULL     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+)
+  ENGINE = INNODB
+  DEFAULT CHARACTER SET = UTF8
+  COLLATE = UTF8_UNICODE_CI;
+
+
+
+INSERT INTO exclusion_lists
+(`id`, `prefix`, `accr`, `description`, `url`, `verify_email`, `columns`, `employee_title`, `vendor_title`, `import_url`)
+VALUES ('47', 'usdosd', 'US Dos DL', 'US Department of State Debar List',
+        'http://www.pmddtc.state.gov/compliance/debar_intro.html', '',
+        '{\"full_name\":\"Full Name\",\"aka_name\":\"AKA Names\",\"date_of_birth\":\"DOB\",\"notice\":\"Notice Date\",\"notice_date\":\"Notice Date\"}',
+        '[\"full_name\"]', '[\"full_name\"]', 'https://www.pmddtc.state.gov/compliance/documents/debar.xlsx');
+
+-- ----------------------------
 -- Indexes structure for table al1_records
 -- ----------------------------
 CREATE INDEX `provider` ON `al1_records`(`name_of_provider`) USING BTREE ;
