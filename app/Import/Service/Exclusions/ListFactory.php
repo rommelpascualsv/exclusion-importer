@@ -38,7 +38,8 @@ class ListFactory
         'fdac'    => 'FDAClinical',
         'phs'     => 'PHS',
         'usdocdp' => 'USDOCDeniedPersons',
-        'fdadl'   => 'FDADebarmentList'
+        'fdadl'   => 'FDADebarmentList',
+        'usdosd'   => 'USDosDebar',
     ];
 
     public function make($prefix) {
