@@ -55,12 +55,19 @@ class CSVRetriever extends Retriever
             $contents = file_get_contents($list->uri);
         }
 
-        $list->data = $this->dataConverter->convertData($list, $contents);
+        $filePath = storage_path('app') . '/' . $list->dbPrefix . '_temp.xls';
+        file_put_contents($filePath, $contents);
 
-        if (count($list->dateColumns) > 0)
-        {
-            $list->data = $this->convertDatesToMysql($list->data, $list->dateColumns);
-        }
+        $list->data = app('excel')
+            ->load($filePath)
+            ->setDateColumns(array_keys($list->dateColumns))
+            ->formatDates(true, 'Y-m-d')
+            ->all()
+            ->toArray();
+
+        echo '<pre>';
+        var_dump($list->data);
+        die;
 
         return $list;
     }

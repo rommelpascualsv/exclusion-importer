@@ -18,16 +18,13 @@ abstract class Retriever
     {
         return array_map(function($row) use ($dateColumns) {
 
-            foreach ($dateColumns as $index)
+            foreach ($dateColumns as $key => $index)
             {
-                if (strtotime($row[$index]))
-                {
-                    $date = new \DateTime($row[$index]);
-                    $row[$index] = $date->format('Y-m-d');
-                }
-                else
-                {
-                    $row[$index] = null;
+                try {
+                    $row[$key] = $row[$key]->format('Y-m-d');
+                } catch (\Exception $e) {
+                    var_dump($row);
+                    die;
                 }
             }
 

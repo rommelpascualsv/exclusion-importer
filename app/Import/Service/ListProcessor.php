@@ -44,7 +44,7 @@ class ListProcessor
             $this->exclusionList->data = $this->exclusionList->preProcess($this->exclusionList->data);
         }
 
-        $this->exclusionList->data = $this->convertToAssoc($this->exclusionList->data);
+//        $this->exclusionList->data = $this->convertToAssoc($this->exclusionList->data);
 
         $this->createNewTable();
 
