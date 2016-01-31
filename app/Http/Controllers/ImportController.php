@@ -109,6 +109,8 @@ class ImportController extends BaseController
             'tn1' => 'Tennessee',
             'usdocdp' => 'US DoC Denied Persons List',
             'usdosd' => 'US DoS Debarment List',
+            'unsancindividuals'  => 'UN Sanctions Individuals',
+            'unsancentities'     => 'UN Sanctions Entities',
             'wa1' => 'Washington State',
             'wv2' => 'West Virginia',
             'wy1' => 'Wyoming',

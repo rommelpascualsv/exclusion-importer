@@ -13,7 +13,8 @@ class RetrieverFactory
         'xls' => 'csv',
         'xlsx' => 'csv',
         'html' => 'html',
-        'pdf' => 'pdf'
+        'pdf' => 'pdf',
+        'xml'  => 'xml',
     ];
 
     public function make($type) {
@@ -47,6 +48,11 @@ class RetrieverFactory
                     new Crawler(),
                     new DataCsvConverter(new CsvFileReader())
                 );
+
+                break;
+
+            case 'xml':
+                return new XmlRetriever();
 
                 break;
         }

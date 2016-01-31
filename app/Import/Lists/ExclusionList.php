@@ -81,4 +81,10 @@ abstract class ExclusionList
 		return $data;
 	}
 
+
+	public $nodes = [];
+
+
+	public $nodeMap = [];
+
 }

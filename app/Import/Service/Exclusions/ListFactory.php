@@ -40,6 +40,8 @@ class ListFactory
         'usdocdp' => 'USDOCDeniedPersons',
         'fdadl'   => 'FDADebarmentList',
         'usdosd'   => 'USDosDebar',
+        'unsancindividuals' => 'UNSanctionsIndividuals',
+        'unsancentities'    => 'UnSanctionsEntities',
     ];
 
     public function make($prefix) {
