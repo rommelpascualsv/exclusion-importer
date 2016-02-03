@@ -68,7 +68,7 @@ class ImportController extends BaseController
             'sdn_program_list',
             'sdn_vessel_info',
             'cus_spectrum_debar_records',
-            'usdosd',
+            'usdosd_records',
         ];
         foreach ($lists as $list) {
             app('db')->statement('DROP TABLE IF EXISTS `' . $list . '_older`');
