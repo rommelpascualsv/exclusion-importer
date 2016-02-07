@@ -16,9 +16,9 @@ class Arizona extends ExclusionList
     ];
 
     public $fieldNames = [
-        'first_name',
-        'middle',
         'last_name_company_name',
+        'middle',
+        'first_name',
         'term_date',
         'specialty',
         'npi_number'
