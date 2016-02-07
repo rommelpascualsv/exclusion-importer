@@ -80,40 +80,41 @@ class ImportController extends BaseController
     public function index()
     {
         $lists = [
-            'az1' => 'Arizona',
-            'ak1' => 'Alaska',
-            'ar1' => 'Arkansas',
-            'ct1' => 'Connecticut',
+            'az1'                => 'Arizona',
+            'ak1'                => 'Alaska',
+            'ar1'                => 'Arkansas',
+            'ct1'                => 'Connecticut',
             'cus_spectrum_debar' => 'Custom Spectrum Debar List',
-            'dc1' => 'Washington Dc',
-            'fdac' => 'FDA Clinical Investigators',
-            'fdadl' => 'FDA Debarment List',
-            'fl2' => 'Florida',
-            'ga1' => 'Georgia',
-            'ia1' => 'Iowa',
-            'ks1' => 'Kansas',
-            'ky1' => 'Kentucky',
-            'la1' => 'Louisiana',
-            'me1' => 'Maine',
-            'mo1' => 'Missouri',
-            'ms1' => 'Mississippi',
-            'mt1' => 'Montana',
-            'nc1' => 'North Carolina',
-            'nd1' => 'North Dakota',
-            'njcdr' => 'New Jersey',
-            'nyomig' => 'New York',
-            'oh1' => 'Ohio',
-            'pa1' => 'Pennsylvania',
-            'phs' => 'NHH PHS',
-            'sc1' => 'South Carolina',
-            'tn1' => 'Tennessee',
-            'usdocdp' => 'US DoC Denied Persons List',
-            'usdosd' => 'US DoS Debarment List',
+            'dc1'                => 'Washington Dc',
+            'fdac'               => 'FDA Clinical Investigators',
+            'fdadl'              => 'FDA Debarment List',
+            'fl2'                => 'Florida',
+            'ga1'                => 'Georgia',
+            'ia1'                => 'Iowa',
+            'ks1'                => 'Kansas',
+            'ky1'                => 'Kentucky',
+            'la1'                => 'Louisiana',
+            'me1'                => 'Maine',
+            'mo1'                => 'Missouri',
+            'ms1'                => 'Mississippi',
+            'mt1'                => 'Montana',
+            'nc1'                => 'North Carolina',
+            'nd1'                => 'North Dakota',
+            'njcdr'              => 'New Jersey',
+            'nyomig'             => 'New York',
+            'oh1'                => 'Ohio',
+            'oig'                => 'OIG',
+            'pa1'                => 'Pennsylvania',
+            'phs'                => 'NHH PHS',
+            'sc1'                => 'South Carolina',
+            'tn1'                => 'Tennessee',
+            'usdocdp'            => 'US DoC Denied Persons List',
+            'usdosd'             => 'US DoS Debarment List',
             'unsancindividuals'  => 'UN Sanctions Individuals',
             'unsancentities'     => 'UN Sanctions Entities',
-            'wa1' => 'Washington State',
-            'wv2' => 'West Virginia',
-            'wy1' => 'Wyoming',
+            'wa1'                => 'Washington State',
+            'wv2'                => 'West Virginia',
+            'wy1'                => 'Wyoming',
         ];
 
         $states = app('db')->table('exclusion_lists')->select(
@@ -123,9 +124,8 @@ class ImportController extends BaseController
         )->whereIn('prefix', array_keys($lists))->get();
 
         $collection = [];
-        foreach($states as $state)
-        {
-            $collection[$state->prefix] = json_decode(json_encode($state),true);
+        foreach ($states as $state) {
+            $collection[$state->prefix] = json_decode(json_encode($state), true);
         }
 
         $exclusionLists = array_merge_recursive($lists, $collection);
@@ -135,6 +135,8 @@ class ImportController extends BaseController
 
     public function import(Request $request, $listPrefix)
     {
+        $this->initPhpSettings();
+
         $listFactory = new ListFactory();
 
         try {
@@ -148,26 +150,22 @@ class ImportController extends BaseController
                 app('db')->table('exclusion_lists')->where('prefix', $listPrefix)
                     ->update(['import_url' => $newUri]);
             }
-        }
-        catch(\RuntimeException $e)
-        {
+        } catch (\RuntimeException $e) {
             return response()->json([
-                'success'	=>	false,
-                'msg'		=>	$e->getMessage() . ': ' . $listPrefix
+                'success' => false,
+                'msg'     => $e->getMessage() . ': ' . $listPrefix
             ]);
         }
 
 
         $retrieverFactory = new RetrieverFactory();
 
-        try{
+        try {
             $exclusionsRetriever = $retrieverFactory->make($listObject->type);
-        }
-        catch(\RuntimeException $e)
-        {
+        } catch (\RuntimeException $e) {
             return response()->json([
-                'success'	=>	false,
-                'msg'		=>	$e->getMessage()
+                'success' => false,
+                'msg'     => $e->getMessage()
             ]);
         }
 
@@ -179,8 +177,14 @@ class ImportController extends BaseController
         $processingService->insertRecords();
 
         return response()->json([
-            'success'	=> true,
-            'msg'		=> ''
+            'success' => true,
+            'msg'     => ''
         ]);
+    }
+
+    private function initPhpSettings()
+    {
+        ini_set('memory_limit', '512M');
+        ini_set('max_execution_time', '120');
     }
 }

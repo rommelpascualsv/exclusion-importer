@@ -3,6 +3,7 @@
 use App\Import\Service\DataCsvConverter;
 use App\Import\Service\File\CsvFileReader;
 use GuzzleHttp\Client;
+use Maatwebsite\Excel\Excel;
 use Symfony\Component\DomCrawler\Crawler;
 
 class RetrieverFactory
@@ -10,8 +11,8 @@ class RetrieverFactory
     public $retrieverMappings = [
         'txt' => 'csv',
         'csv' => 'csv',
-        'xls' => 'csv',
-        'xlsx' => 'csv',
+        'xls' => 'excel',
+        'xlsx' => 'excel',
         'html' => 'html',
         'pdf' => 'pdf',
         'xml'  => 'xml',
@@ -38,6 +39,13 @@ class RetrieverFactory
 
             case 'csv';
                 return new CSVRetriever(
+                    new CsvFileReader(),
+                    new Client()
+                );
+                break;
+
+            case 'excel';
+                return new ExcelRetriever(
                     new DataCsvConverter(new CsvFileReader()),
                     new Client()
                 );

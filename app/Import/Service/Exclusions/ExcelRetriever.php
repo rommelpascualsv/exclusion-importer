@@ -1,38 +1,38 @@
 <?php namespace App\Import\Service\Exclusions;
 
-use App\Import\Service\File\CsvFileReader;
 use GuzzleHttp\Client;
 use App\Import\Lists\ExclusionList;
 use App\Import\Service\DataCsvConverter;
 
 /**
- * Class CSVRetriever
+ * Class ExcelRetriever
  * @package Import\Service\Exclusions
  */
-class CSVRetriever extends Retriever
+class ExcelRetriever extends Retriever
 {
+
+    /**
+     * @var \App\Import\Service\DataCsvConverter
+     */
+    protected $dataConverter;
+
 
 	/**
 	 * @var	\GuzzleHttp\Client	$httpClient
 	 */
 	protected $httpClient;
 
-    /**
-     * @var CsvFileReader
-     */
-    private $fileReader;
-
 
     /**
      * Constructor
      *
-     * @param   CsvFileReader $fileReader
+     * @param    DataCsvConverter $dataConverter
      * @param    Client $httpClient
      */
-    public function __construct(CsvFileReader $fileReader, Client $httpClient)
+	public function __construct(DataCsvConverter $dataConverter, Client $httpClient)
     {
+        $this->dataConverter = $dataConverter;
         $this->httpClient = $httpClient;
-        $this->fileReader = $fileReader;
     }
 
 
@@ -55,11 +55,7 @@ class CSVRetriever extends Retriever
             $contents = file_get_contents($list->uri);
         }
 
-        $filePath = storage_path('app') . '/' . $list->dbPrefix . '_temp.csv';
-
-        file_put_contents($filePath, $contents);
-
-        $list->data = $this->fileReader->readRecords($filePath, $list->retrieveOptions);
+        $list->data = $this->dataConverter->convertData($list, $contents);
 
         if (count($list->dateColumns) > 0)
         {

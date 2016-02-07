@@ -42,6 +42,7 @@ class ListFactory
         'usdosd'   => 'USDosDebar',
         'unsancindividuals' => 'UNSanctionsIndividuals',
         'unsancentities'    => 'UnSanctionsEntities',
+        'oig'    => 'OIG',
     ];
 
     public function make($prefix) {
