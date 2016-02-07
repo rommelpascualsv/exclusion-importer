@@ -2505,14 +2505,6 @@ CREATE TABLE `usdosd_records` (
   COLLATE = UTF8_UNICODE_CI;
 
 
-
-INSERT INTO exclusion_lists
-(`id`, `prefix`, `accr`, `description`, `url`, `verify_email`, `columns`, `employee_title`, `vendor_title`, `import_url`)
-VALUES ('47', 'usdosd', 'US Dos DL', 'US Department of State Debar List',
-        'http://www.pmddtc.state.gov/compliance/debar_intro.html', '',
-        '{\"full_name\":\"Full Name\",\"aka_name\":\"AKA Names\",\"date_of_birth\":\"DOB\",\"notice\":\"Notice Date\",\"notice_date\":\"Notice Date\"}',
-        '[\"full_name\"]', '[\"full_name\"]', 'https://www.pmddtc.state.gov/compliance/documents/debar.xlsx');
-
 -- ----------------------------
 -- Indexes structure for table al1_records
 -- ----------------------------
@@ -3049,5 +3041,85 @@ VALUES
   (45,'fdadl','FDA DL','FDA Debarment List (Drug Product Applications)','http://www.fda.gov/ICECI/EnforcementActions/FDADebarmentList/default.htm','','{\"name\":\"Name\",\"effective_date\":\"Effective Date\",\"term_of_debarment\":\"Term of Debarment\",\"from_date\":\"From Date\"}','[\"name\"]','[\"name\"]',NULL),
   (46,'cus_spectrum_debar','CUS SD','Custom Debar List','','','{\"name\":\"Name\",\"title\":\"Title\",\"ssn\":\"SSN\",\"tin\":\"TIN\",\"npi\":\"NPI\",\"date_of_birth\":\"Date of Birth\",\"street_address\":\"Street Address\",\"city\":\"City\",\"state\":\"State\",\"zip\":\"Zip\",\"debar_date\":\"Debar Date\",\"suspend_date\":\"Suspend Data\",\"debar_code\":\"Debar Code\"}','[\"name\"]','[\"name\"]',NULL);
 
+INSERT INTO exclusion_lists
+(`id`, `prefix`, `accr`, `description`, `url`, `verify_email`, `columns`, `employee_title`, `vendor_title`, `import_url`)
+VALUES ('47', 'usdosd', 'US Dos DL', 'US Department of State Debar List',
+        'http://www.pmddtc.state.gov/compliance/debar_intro.html', '',
+        '{\"full_name\":\"Full Name\",\"aka_name\":\"AKA Names\",\"date_of_birth\":\"DOB\",\"notice\":\"Notice Date\",\"notice_date\":\"Notice Date\"}',
+        '[\"full_name\"]', '[\"full_name\"]', 'https://www.pmddtc.state.gov/compliance/documents/debar.xlsx');
+
+
 /*!40000 ALTER TABLE `exclusion_lists` ENABLE KEYS */;
+
+# unsancindividuals_records table
+# ------------------------------------------------------------
+
+
+CREATE TABLE `unsancindividuals_records` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `dataid` VARCHAR(100) NULL,
+    `first_name` VARCHAR(100) NULL,
+    `second_name` VARCHAR(100) NULL,
+    `third_name` VARCHAR(100) NULL,
+    `fourth_name` VARCHAR(100) NULL,
+    `un_list_type` VARCHAR(45) NULL,
+    `reference_number` VARCHAR(45) NULL,
+    `listed_on` DATE NULL,
+    `nationality` VARCHAR(255) NULL,
+    `nationality2` VARCHAR(45) NULL,
+    `designation` TEXT NULL,
+    `last_updated` DATE NULL,
+    `alias` TEXT NULL,
+    `address` TEXT NULL,
+    `date_of_birth` VARCHAR(45) NULL,
+    `place_of_birth` VARCHAR(45) NULL,
+    `comments` TEXT NULL,
+    `hash` BINARY(16) NULL,
+    `date_created` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    `date_updated` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`)
+)  ENGINE=INNODB DEFAULT CHARACTER SET=UTF8 COLLATE = UTF8_UNICODE_CI;
+
+# unsancentities_records table
+# ------------------------------------------------------------
+
+  CREATE TABLE `unsancentities_records` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `dataid` VARCHAR(100) NULL,
+    `entity_name` VARCHAR(255) NULL,
+    `un_list_type` VARCHAR(45) NULL,
+    `reference_number` VARCHAR(45) NULL,
+    `listed_on` DATE NULL,
+    `submitted_on` DATE NULL,
+    `comments` TEXT NULL,
+    `entity_alias` TEXT NULL,
+    `entity_address` TEXT NULL,
+    `last_updated` DATE NULL,
+    `hash` BINARY(16) NULL,
+    `date_created` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    `date_updated` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`)
+)  ENGINE=INNODB DEFAULT CHARACTER SET=UTF8 COLLATE = UTF8_UNICODE_CI;
+
+LOCK TABLES `exclusion_lists` WRITE;
+/*!40000 ALTER TABLE `exclusion_lists` DISABLE KEYS */;
+
+INSERT INTO exclusion_lists
+(`id`, `prefix`, `accr`, `description`, `url`, `verify_email`, `columns`, `employee_title`, `vendor_title`, `import_url`)
+VALUES ('48', 'unsancindividuals', 'UN Sanc Individuals', 'UN Sanctions Individuals List',
+        'https://www.un.org/sc/suborg/en/sanctions/un-sc-consolidated-list', '',
+        '{"dataid":"Date Id","first_name":"First Name","second_name":"Second Name","third_name":"Third Name","fourth_name":"Fourth Name","un_list_type":"Un List Type","reference_number":"Ref. Nummber","listed_on":"Date Listed","nationality":"Nationality","nationality2":"Nationality 2","designation":"Designation","last_updated":"Date Last Updated","alias":"Alias","address":"Address","date_of_birth":"DOB","place_of_birth":"Place of Birth","comments":"Comments"}',
+        '["first_name","second_name"]', '["first_name","second_name"]', 'https://www.un.org/sc/suborg/sites/www.un.org.sc.suborg/files/consolidated.xml');
+
+
+INSERT INTO exclusion_lists
+(`id`, `prefix`, `accr`, `description`, `url`, `verify_email`, `columns`, `employee_title`, `vendor_title`, `import_url`)
+VALUES ('49', 'unsancentities', 'UN Sanc Entities', 'UN Sanctions Entities List',
+        'https://www.un.org/sc/suborg/en/sanctions/un-sc-consolidated-list', '',
+        '{"dataid":"Date Id","entity_name":"First Name","un_list_type":"Un List Type","reference_number":"Ref. Nummber","listed_on":"Date Listed","submitted_on":"Date Submitted","comments":"Comments","last_updated":"Date Last Updated","entity_alias":"Alias","entity_address":"Address"}',
+        '["entity_name"]', '["entity_name"]', 'https://www.un.org/sc/suborg/sites/www.un.org.sc.suborg/files/consolidated.xml');
+
+/*!40000 ALTER TABLE `exclusion_lists` ENABLE KEYS */;
+
+
 UNLOCK TABLES;
