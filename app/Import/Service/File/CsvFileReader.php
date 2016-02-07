@@ -14,9 +14,7 @@ class CsvFileReader implements FileReader
 
         $csvReader->setOffset(isset($options['offset']) ? $options['offset'] : 1);
 
-        $records = $csvReader->fetchAll();
-
-        return array_slice($records, 0, count($records) - 1);
+        return $csvReader->fetchAll();
     }
 
 }
