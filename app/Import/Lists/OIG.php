@@ -60,6 +60,8 @@ class OIG extends ExclusionList
         foreach ($records as &$record){
             $dob_parts = explode('/', $record[8]);
             $record[8] = ( count($dob_parts) == 3 ) ? '19' . $dob_parts[2] . '-' . $dob_parts[0] . '-' . $dob_parts[1] : null ;
+
+            $record[7] = $record[7] != '0000000000' ?: null;
         }
 
         return $records;

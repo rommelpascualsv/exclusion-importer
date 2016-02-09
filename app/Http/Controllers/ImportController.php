@@ -174,6 +174,8 @@ class ImportController extends BaseController
 
         $processingService = new ListProcessor($listObject);
 
+        unset($listObject);
+
         $processingService->insertRecords();
 
         return response()->json([

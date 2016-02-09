@@ -20,7 +20,7 @@ abstract class Retriever
 
             foreach ($dateColumns as $index)
             {
-                if (strtotime($row[$index]))
+                if (strtotime($row[$index]) AND $row[$index] != '0000000000')
                 {
                     $date = new \DateTime($row[$index]);
                     $row[$index] = $date->format('Y-m-d');

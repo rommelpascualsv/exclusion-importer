@@ -1,9 +1,8 @@
 <?php namespace App\Import\Service\Exclusions;
 
-use App\Import\Service\File\CsvFileReader;
 use GuzzleHttp\Client;
 use App\Import\Lists\ExclusionList;
-use App\Import\Service\DataCsvConverter;
+use App\Import\Service\File\CsvFileReader;
 
 /**
  * Class CSVRetriever
