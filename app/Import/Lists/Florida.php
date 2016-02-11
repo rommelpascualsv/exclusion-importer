@@ -1,5 +1,6 @@
 <?php namespace App\Import\Lists;
 
+
 class Florida extends ExclusionList
 {
     public $dbPrefix = 'fl2';
@@ -44,4 +45,9 @@ class Florida extends ExclusionList
     ];
 
     public $shouldHashListName = true;
+
+    public function postHook()
+    {
+        app('db')->statement("DELETE FROM fl2_records WHERE TRIM(`sanction_type`) NOT IN ('' , 'SUSPENSION', 'TERMINATION', 'NONE')");
+    }
 }
