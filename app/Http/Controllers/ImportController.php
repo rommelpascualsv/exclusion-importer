@@ -193,8 +193,8 @@ class ImportController extends BaseController
      */
     public function getSummary()
     {
-    	$files = File::all();
-    	 
+    	$files = app('db')->table('files')->get();
+    	
     	return view('summary', ['files' => $files]);
     }
     

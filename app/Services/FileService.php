@@ -3,9 +3,6 @@ namespace App\Services;
 
 use App\File;
 use App\Services\Contracts\FileServiceInterface;
-use App\Url;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Symfony\Component\DomCrawler\Crawler;
 use App\Import\Service\Exclusions\ListFactory;
 
@@ -23,8 +20,8 @@ class FileService implements FileServiceInterface
 	 */
 	public function isStateUpdateable($prefix)
 	{
-		$record = File::where('state_prefix',$prefix)->where('ready_for_update', 'Y')->get();
-    	
+		$record = app('db')->table('files')->where('state_prefix', $prefix)->where('ready_for_update', 'Y')->get();
+		
 		return count($record) === 1 ? true : false;
 	}
 	
@@ -36,35 +33,20 @@ class FileService implements FileServiceInterface
 	 */
 	public function refreshRecords()
 	{
-		echo 'inside refresh';
-		
 		$urls = $this->getUrls();
 		
 		// iterate import urls
 		foreach ($urls as $url)
 		{
-			
-			echo 'inside foreach';
-			
-			$import_url = $this->getRealUrl($url);
+			$import_url = $url->url;
 			
 			try 
 			{
-				
-				echo 'inside try';
-				
-				echo $import_url;
-				
 				if(!$this->isFileSupported($import_url))
 				{
-					
-					echo 'not supported';
-					
 					info('File type is not supported.');
 					return;
 				}
-				
-				echo 'after file supported';
 				
 				// get the blob value of import file
 				$blob = file_get_contents($import_url);
@@ -107,16 +89,13 @@ class FileService implements FileServiceInterface
 			return [$node->text() => $node->attr('href')];
 		});
 		
-		$this->dropUrlsTable();
-		
-		$this->createUrlsTable();
+		$this->clearUrlsTable();
 		
 		$this->populateUrlsTable($hrefs);
-		
 	}
 
 	/**
-	 * Retrieves an array of import urls saved in the URL table.
+	 * Retrieves an array of import urls saved in the Urls table.
 	 * 
 	 * @return array
 	 */
@@ -125,30 +104,29 @@ class FileService implements FileServiceInterface
 		// updates the urls table
 		//$this->updateUrls();
 		
-		// retrieves all urls
-		return Url::all();
+		return app('db')->table('urls')->get();
 	}
 	
 	/**
-	 * Checks if the state prefix already exists in File table.
+	 * Checks if the state prefix already exists in Files table.
 	 * 
 	 * @param string $prefix The state prefix
 	 * @return boolean
 	 */
 	private function isPrefixExists($prefix){
-		$urls = File::where('state_prefix',$prefix)->get();
-    	
-    	return count($prefix) > 0;
+		$files = app('db')->table('files')->where('state_prefix', $prefix)->get();
+		
+    	return count($files) > 0;
 	}
 	
 	/**
-	 * Retrieves the blob value from File table for a given state prefix.
+	 * Retrieves the blob value from Files table for a given state prefix.
 	 * 
 	 * @param string $prefix The state prefix
 	 * @return blob
 	 */
 	private function getBlobOfFile($prefix){
-		$files = File::where('state_prefix', $prefix)->get();
+		$files = app('db')->table('files')->where('state_prefix', $prefix)->get();
     	
     	return count($files) > 0 ? $files[0]->img_data : null;
 	}
@@ -162,14 +140,14 @@ class FileService implements FileServiceInterface
 	 * @return void
 	 */
 	private function insertFile($blob, $prefix, $url){
-		$file = new File;
-		$file->file_name = $this->getFileName($url);
-		$file->state_prefix = $prefix;
-		$file->img_data = $blob;
-		$file->ready_for_update = 'Y';
+		$file = [];
+		$file["file_name"] = $this->getFileName($url);
+		$file["state_prefix"] = $prefix;
+		$file["img_data"] = $blob;
+		$file["ready_for_update"] = 'Y';
 		
-		info('Saving '.$file->file_name.'...');
-		$file->save();
+		info('Saving '.$file['file_name'].'...');
+		app('db')->table('files')->insert($file);
 	}
 	
 	/**
@@ -180,9 +158,8 @@ class FileService implements FileServiceInterface
 	 * @return void
 	 */
 	private function updateBlob($blob, $prefix){
-		$affected = File::where('state_prefix', $prefix)
-		->update(['img_data' => $blob]);
-		
+		$affected = app('db')->table('files')->where('state_prefix', $prefix)->update(['img_data' => $blob, 'ready_for_update' => 'Y']);
+		//TODO check if update is correct
 		info($affected.' file/s updated');
 	}
 	
@@ -205,54 +182,28 @@ class FileService implements FileServiceInterface
 	 */
 	private function isFileSupported($url)
 	{
-		echo 'inside file supported';
-		
 		$filetypeArr = ['application/pdf','application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','text/plain','text/csv', 'text/html; charset=utf-8', 'text/html'];
 	
 		try
 		{
-			echo 'inside try ulit';
 			$arrHeaders = get_headers($url, 1);
-			echo 'after try ulit';
 		}
 		catch (\ErrorException $e)
 		{
-			echo 'catch';
 			throw new \ErrorException($e);
 		}
 	
-// 		print_r($arrHeaders);
-		print_r($arrHeaders['Content-Type']);
-		print_r(in_array($arrHeaders['Content-Type'], $filetypeArr));
 		return in_array($arrHeaders['Content-Type'], $filetypeArr);
 	}
 	
 	/**
-	 * Creates the URLS table
+	 * Clears the URLS table
 	 * 
 	 * @return void
 	 */
-	private function createUrlsTable()
+	private function clearUrlsTable()
 	{
-		Schema::create('urls', function (Blueprint $table) {
-			$table->increments('id');
-			$table->string('state_prefix');
-			$table->string('url');
-			$table->string('dynamic');
-			$table->timestamps();
-		});
-	}
-	
-	/**
-	 * Drops the URLS table
-	 * 
-	 * @return void
-	 */
-	private function dropUrlsTable()
-	{
-		
-// 		app('db')->statement('DROP TABLE IF EXISTS `urls`');
-		Schema::dropIfExists('urls');
+		app('db')->statement('TRUNCATE `urls`');
 	}
 	
 	/**
@@ -267,35 +218,17 @@ class FileService implements FileServiceInterface
 		
 		foreach ($hrefs as $href)
 		{
+			$urls = [];
 			foreach ($href as $k => $v)
 			{
-				$url = new Url();
-				$url->url = $v;
-				$url->state_prefix = array_search($k, $listFactory->listMappings); 
-				$url->dynamic = 'N'; //FIXME: set correct values here per prefix
+				$url = [];
+				$url["state_prefix"] = array_search($k, $listFactory->listMappings); 
+				$url["url"] = $v;
+				array_push($urls, $url);
 				info('Saving '.$k.'...');
-				$url->save();
 			}
 		}
-	}
-	
-	/**
-	 * Retrieves the specific url.
-	 * 
-	 * @param Url $url The eloquet Url object
-	 */
-	private function getRealUrl($url)
-	{
-		$import_url = $url->url;
-		
-		if ($url->dynamic === 'Y')
-		{
-			
-			$listFactory = new ListFactory();
-			$class = $listFactory->make($url->state_prefix);
-			$import_url = $class->uri;
-		}
-		
-		return $import_url;
+				
+		app('db')->table('urls')->insert($urls);
 	}
 }
