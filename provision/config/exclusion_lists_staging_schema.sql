@@ -3050,7 +3050,7 @@ VALUES ('47', 'usdosd', 'US Dos DL', 'US Department of State Debar List',
 
 
 /*!40000 ALTER TABLE `exclusion_lists` ENABLE KEYS */;
-
+UNLOCK TABLES;
 # unsancindividuals_records table
 # ------------------------------------------------------------
 
