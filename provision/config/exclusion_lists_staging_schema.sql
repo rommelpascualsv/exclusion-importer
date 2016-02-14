@@ -3136,3 +3136,23 @@ CREATE TABLE `fdac_records` (
   ENGINE = INNODB
   DEFAULT CHARACTER SET = UTF8
   COLLATE = UTF8_UNICODE_CI;
+
+  CREATE TABLE `phs_records` (
+  `id`                  INT          NOT NULL AUTO_INCREMENT,
+  `last_name` VARCHAR(100) NULL,
+  `first_name` VARCHAR(100) NULL,
+  `middle_name` VARCHAR(100) NULL,
+  `state` VARCHAR(50) NULL,
+  `status` VARCHAR(100) NULL,
+  `debarment_until` DATE NULL,
+  `no_phs_advisory_until` DATE NULL,
+  `certification_of_work_until` DATE NULL,
+  `supervision_until` DATE NULL,
+  `memo` VARCHAR(1000) NULL,
+  `hash` BINARY(16)   NULL,
+  `date_created` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+)
+  ENGINE = INNODB
+  DEFAULT CHARACTER SET = UTF8
+  COLLATE = UTF8_UNICODE_CI;
