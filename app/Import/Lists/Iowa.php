@@ -7,10 +7,10 @@ class Iowa extends ExclusionList
     public $dbPrefix = 'ia1';
 
 
-    public $uri = "https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/iowa/ia.csv";
+    public $uri = "https://dhs.iowa.gov/sites/default/files/2016-01-31.PI_.term-suspend-probation.zip";
 
 
-    public $type = 'csv';
+    public $type = 'zip';
 
 
     public $fieldNames = [
@@ -44,5 +44,22 @@ class Iowa extends ExclusionList
         'sanction_start_date' => 0,
         'sanction_end_date' => 6
     ];
+
+    public function preProcess($data)
+    {
+        foreach ($data as &$record){
+
+            $npi = explode(' ', $record[1]);
+
+            foreach ($npi as $key => $value){
+                //TODO: only keep valid NPI's
+            }
+
+            $npis[] = $npi;
+        }
+
+
+    dd($npis);
+    }
 
 }

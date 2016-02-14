@@ -15,6 +15,7 @@ class RetrieverFactory
         'html' => 'html',
         'pdf' => 'pdf',
         'xml'  => 'xml',
+        'zip'  => 'zip',
     ];
 
     public function make($type) {
@@ -38,6 +39,13 @@ class RetrieverFactory
 
             case 'csv';
                 return new CSVRetriever(
+                    new DataCsvConverter(new CsvFileReader()),
+                    new Client()
+                );
+                break;
+
+            case 'zip';
+                return new ZipFIleRetriever(
                     new DataCsvConverter(new CsvFileReader()),
                     new Client()
                 );
