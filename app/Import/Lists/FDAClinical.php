@@ -10,6 +10,8 @@ class FDAClinical extends ExclusionList
 
     public $type = 'xls';
 
+    public $shouldHashListName = true;
+
     public $dateColumns = [
         "date_of_status" => 5,
         "date_nidpoe_issued" => 6,

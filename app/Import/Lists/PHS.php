@@ -1,12 +1,16 @@
-<?php namespace App\Import\Lists;
+<?php
 
-class PHS extends ExclusionList {
+namespace App\Import\Lists;
 
+class PHS extends ExclusionList
+{
     public $dbPrefix = 'phs';
 
-    public $uri = 'https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/phs/PHS_2015-11-09.csv';
+    public $uri = 'http://ori.hhs.gov/ORI_PHS_alert.html';
 
-    public $type = 'csv';
+    public $type = 'html';
+
+    public $shouldHashListName = true;
 
     public $dateColumns = [
         "debarment_until" => 3,
@@ -16,8 +20,11 @@ class PHS extends ExclusionList {
     ];
 
     public $retrieveOptions = [
-        'headRow' => 0,
-        'offset' => 1
+        'htmlFilterElement' => 'table',
+        'rowElement'        => 'tr',
+        'columnElement'     => 'td',
+        'offset'            => 0,
+        'headerRow'         => 0
     ];
 
     public $fieldNames = [
@@ -38,4 +45,12 @@ class PHS extends ExclusionList {
         'debarment_until',
     ];
 
+    public function preProcess($data)
+    {
+        foreach ($data as &$record) {
+            array_splice($record, 7, 2);
+        }
+
+        return $data;
+    }
 }
