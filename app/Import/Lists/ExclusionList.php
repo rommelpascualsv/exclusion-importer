@@ -83,6 +83,9 @@ abstract class ExclusionList
 	}
 
 
+	public function postHook() {}
+
+
 	public $nodes = [];
 
 
