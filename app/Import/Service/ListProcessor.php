@@ -40,11 +40,11 @@ class ListProcessor
 	 */
 	public function insertRecords()
     {
-        if(method_exists($this->exclusionList, 'preProcess')){
-            $this->exclusionList->data = $this->exclusionList->preProcess($this->exclusionList->data);
-        }
+        $this->exclusionList->data = $this->exclusionList->preProcess($this->exclusionList->data);
 
         $this->exclusionList->data = $this->convertToAssoc($this->exclusionList->data);
+
+        $this->exclusionList->data = $this->exclusionList->postProcess($this->exclusionList->data);
 
         $this->createNewTable();
 
@@ -52,10 +52,7 @@ class ListProcessor
 
         $this->activateNewTable();
 
-        if (method_exists($this->exclusionList, 'postHook'))
-        {
-            $this->exclusionList->postHook();
-        }
+        $this->exclusionList->postHook();
     }
 
 
