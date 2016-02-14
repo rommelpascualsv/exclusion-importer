@@ -64,6 +64,7 @@ abstract class ExclusionList
 	public $requestOptions = [];
 
 
+	//if set to true in child class it protects getting matching hashes on different exclusion lists
 	public $shouldHashListName = false;
 
 

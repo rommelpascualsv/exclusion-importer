@@ -10,6 +10,8 @@ class FDADebarmentList extends ExclusionList
 
     public $type = 'html';
 
+    public $shouldHashListName = true;
+
     public $dateColumns = [
         'effective_date' => 1,//index number before adding in aka column
         'from_date'      => 3,//index number before adding in aka column
