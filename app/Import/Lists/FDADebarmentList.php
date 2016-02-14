@@ -42,7 +42,7 @@ class FDADebarmentList extends ExclusionList
 
     public function preProcess($data)
     {
-        $stringMapping = [
+        $replacableStrings = [
             '^'                            => ' Mandatory Debarment',
             '%'                            => ' Permissive Debarment',
             '*'                            => ' Hearing requested and denied',
@@ -63,13 +63,13 @@ class FDADebarmentList extends ExclusionList
         foreach ($data as $key => &$record) {
             $stringOfRecord = implode('~', $record);
 
-            $newString = str_replace(
-                array_keys($stringMapping),
-                array_values($stringMapping),
+            $newStringOfRecord = str_replace(
+                array_keys($replacableStrings),
+                array_values($replacableStrings),
                 $stringOfRecord
             );
 
-            $record = explode('~', $newString);
+            $record = explode('~', $newStringOfRecord);
 
             if (trim($record[0], chr(0xC2) . chr(0xA0)) == '') {
                 unset($data[$key]);
