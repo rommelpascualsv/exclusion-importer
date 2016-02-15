@@ -48,6 +48,8 @@ class Florida extends ExclusionList
 
     public function postHook()
     {
-        app('db')->statement("DELETE FROM fl2_records WHERE TRIM(`sanction_type`) NOT IN ('' , 'SUSPENSION', 'TERMINATION', 'NONE')");
+        app('db')->table('fl2_records')
+            ->whereNotIn(app('db')->raw('TRIM(`sanction_type`)'),['' , 'SUSPENSION', 'TERMINATION', 'NONE'])
+            ->delete();
     }
 }
