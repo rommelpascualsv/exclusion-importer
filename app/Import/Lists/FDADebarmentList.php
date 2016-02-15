@@ -71,7 +71,7 @@ class FDADebarmentList extends ExclusionList
 
             $record = explode('~', $newStringOfRecord);
 
-            if (trim($record[0], chr(0xC2) . chr(0xA0)) == '') {
+            if (trim($record[0], chr(0xC2).chr(0xA0)) == '') {
                 unset($data[$key]);
                 continue;
             }
