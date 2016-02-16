@@ -7,7 +7,7 @@ class Georgia extends ExclusionList
     public $dbPrefix = 'ga1';
 
 
-    public $uri = "https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/georgia/Georgia.xlsx";
+    public $uri = "https://dch.georgia.gov/sites/dch.georgia.gov/files/Georgia%20DCH%20OIG%20Medicaid%20Exclusions%20-02012016.xlsx";
 
 
     public $type = 'xlsx';
@@ -32,8 +32,8 @@ class Georgia extends ExclusionList
 
 
     public $retrieveOptions = [
-        'headerRow' => 0,
-        'offset' => 1
+        'headerRow' => 2,
+        'offset' => 3
     ];
 
 
