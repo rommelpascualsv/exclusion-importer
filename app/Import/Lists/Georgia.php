@@ -1,13 +1,15 @@
 <?php namespace App\Import\Lists;
 
 
+use Symfony\Component\DomCrawler\Crawler;
+
 class Georgia extends ExclusionList
 {
 
     public $dbPrefix = 'ga1';
 
 
-    public $uri = "https://dch.georgia.gov/sites/dch.georgia.gov/files/Georgia%20DCH%20OIG%20Medicaid%20Exclusions%20-02012016.xlsx";
+    public $uri;
 
 
     public $type = 'xlsx';
@@ -40,5 +42,21 @@ class Georgia extends ExclusionList
     public $dateColumns = [
         'sanction_date' => 5
     ];
+
+
+    public function __construct()
+    {
+        $this->getUri();
+    }
+
+
+    protected function getUri()
+    {
+        $crawler = new Crawler(file_get_contents('http://dch.georgia.gov/georgia-oig-exclusions-list'));
+
+        $link = $crawler->filter('#block-system-main > div > div > article > div:nth-child(2) > div > div > div > p:nth-child(6) > a')->attr('href');
+
+        $this->uri = 'https://dch.georgia.gov/' . $link;
+    }
 
 }
