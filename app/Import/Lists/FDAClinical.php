@@ -1,12 +1,16 @@
-<?php namespace App\Import\Lists;
+<?php namespace
 
-class FDAClinical extends ExclusionList {
-    
+App\Import\Lists;
+
+class FDAClinical extends ExclusionList
+{
     public $dbPrefix = 'fdac';
 
-    public $uri = 'https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/fda-clinical-investigators/FDA-Clinical+Investigators+-+Disqualification+Proceedings_110920150.csv';
+    public $uri = 'http://www.accessdata.fda.gov/scripts/SDA/sdExportData.cfm?sd=clinicalinvestigatorsdisqualificationproceedings&exportType=msexcel';
 
-    public $type = 'csv';
+    public $type = 'xls';
+
+    public $shouldHashListName = true;
 
     public $dateColumns = [
         "date_of_status" => 5,
@@ -32,8 +36,32 @@ class FDAClinical extends ExclusionList {
 
     public $hashColumns = [
         'name',
-        'center',
         'status',
         'date_of_status',
     ];
+
+
+    public function preProcess($data)
+    {
+        $removableSuffixes = [
+            ', MD',
+            ', DVM',
+            ', PhD',
+            ', DO',
+        ];
+
+        $removableSuffixesAsString = "/" . implode('|', $removableSuffixes) . "/";
+
+        foreach ($data as &$record) {
+            $record[0] = preg_replace_callback($removableSuffixesAsString, function () {
+                return '';
+            }, $record[0]);
+
+            $record[4] = preg_replace('/1/', '', $record[4]);
+
+            $record = array_slice($record, 0, 8);
+        }
+
+        return $data;
+    }
 }
