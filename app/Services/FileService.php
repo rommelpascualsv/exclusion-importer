@@ -2,9 +2,8 @@
 namespace App\Services;
 
 use App\File;
-use App\Services\Contracts\FileServiceInterface;
-use Symfony\Component\DomCrawler\Crawler;
 use App\Import\Service\Exclusions\ListFactory;
+use App\Services\Contracts\FileServiceInterface;
 
 /**
  * Service class that manages the files wherein it updates the database whenever there are 
@@ -14,9 +13,50 @@ use App\Import\Service\Exclusions\ListFactory;
 class FileService implements FileServiceInterface
 {
 	/**
+	 * Updates the url of the state whenever a url is specified in the exclusion importer page.
+	 *
+	 * @param string $statePrefix
+	 * @param string $stateUrl
+	 */
+	public function updateStateUrl($statePrefix, $stateUrl) {
+		app('db')->table('urls')->where('state_prefix', $statePrefix)->update(['url' => $stateUrl]);
+		info('Updated url for '.$statePrefix);
+	}
+	
+	/**
+	 * Retrieves the Url record from the URLS table for a given state prefix.
+	 *
+	 * @param string $prefix The state prefix
+	 *
+	 * @return url The Url record
+	 */
+	public function getUrl($prefix)
+	{
+		$record = app('db')->table('urls')->where('state_prefix', $prefix)->get();
+		
+		return $record;
+	}
+	
+	/**
+	 * Retrieves the File record in Files table for a given state prefix.
+	 *
+	 * @param string $prefix The state prefix
+	 *
+	 * @return file The file record
+	 */
+	public function getFile($prefix)
+	{
+		$record = app('db')->table('files')->where('state_prefix', $prefix)->get();
+		
+		return $record;
+	}
+	
+	/**
 	 * Checks if state prefix is updateable or not.
-	 * 
+	 *
 	 * @param sring $prefix The state prefix
+	 * 
+	 * @return boolean true if state is updateable otherwise false
 	 */
 	public function isStateUpdateable($prefix)
 	{

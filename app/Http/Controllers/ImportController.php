@@ -5,8 +5,8 @@ use App\Import\Service\Exclusions\RetrieverFactory;
 use App\Import\Service\ListProcessor;
 use App\Services\Contracts\FileServiceInterface;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Response;
 use Laravel\Lumen\Routing\Controller as BaseController;
+use App\Services\FileService;
 
 class ImportController extends BaseController
 {
@@ -138,16 +138,21 @@ class ImportController extends BaseController
     {
         $listFactory = new ListFactory();
 
+//         $fileService = app('App\Services\Contracts\FileServiceInterface');
+
+        $fileService = new FileService();
         try {
             $listObject = $listFactory->make($listPrefix);
 
             if ($request->input('url')) {
                 $newUri = htmlspecialchars_decode($request->input('url'));
 
+                $fileService->updateStateUrl($listPrefix, $newUri);
+                
                 $listObject->uri = $newUri;
 
-                app('db')->table('exclusion_lists')->where('prefix', $listPrefix)
-                    ->update(['import_url' => $newUri]);
+            } else {
+            	 $listObject->uri = $fileService->getUrl($listPrefix)[0]->url;
             }
         }
         catch(\RuntimeException $e)
@@ -159,6 +164,14 @@ class ImportController extends BaseController
         }
 
 
+        if (!$fileService->isStateUpdateable($listPrefix))
+        {
+        	return response()->json([
+                'success'	=>	false,
+                'msg'		=>	'State is already up-to-date.'
+            ]);
+        }
+        
         $retrieverFactory = new RetrieverFactory();
 
         try{
