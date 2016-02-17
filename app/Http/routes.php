@@ -18,7 +18,5 @@ $app->get('/', function () use ($app) {
 $app->get('import/createOldTables', 'ImportController@createOldTables');
 $app->get('import/{listPrefix}', 'ImportController@import');
 $app->get('import', 'ImportController@index');
-$app->get('urls', 'ImportController@updateUrls');
 $app->get('refresh', 'ImportController@refreshRecords');
 $app->get('summary', 'ImportController@getSummary');
-$app->get('download/{id}', 'ImportController@download');

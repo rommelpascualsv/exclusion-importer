@@ -1,13 +1,12 @@
 <?php namespace App\Http\Controllers;
 
-use App\Import;
 use App\Import\Service\Exclusions\ListFactory;
 use App\Import\Service\Exclusions\RetrieverFactory;
 use App\Import\Service\ListProcessor;
-use Illuminate\Http\Request;
-use Laravel\Lumen\Routing\Controller as BaseController;
-use Illuminate\Support\Facades\Response;
 use App\Services\Contracts\FileServiceInterface;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
+use Laravel\Lumen\Routing\Controller as BaseController;
 
 class ImportController extends BaseController
 {
@@ -211,27 +210,5 @@ class ImportController extends BaseController
     	$service->refreshRecords();
     
     	info("Refreshing records completed.");
-    }
-    
-    /**
-     * Downloads the file
-     *
-     * @param int $id The unique id of the record
-     */
-    public function download($id)
-    {
-    	$files = File::where('id',$id)->get();
-    	file_put_contents($files[0]->file_name, $files[0]->img_data);
-    	return Response::download($files[0]->file_name);
-    }
-    
-    /**
-     * Updates the Urls table from StreamLine Compliance page.
-     *
-     * @param FileServiceInterface $service
-     */
-    public function updateUrls(FileServiceInterface $service)
-    {
-    	$service->updateUrls();
     }
 }

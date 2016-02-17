@@ -76,34 +76,11 @@ class FileService implements FileServiceInterface
 	}
 	
 	/**
-	 * Updates the Urls table from StreamLine Compliance page.
-	 * 
-	 * {@inheritDoc}
-	 * @see \App\Services\Contracts\FileServiceInterface::updateUrls()
-	 */
-	public function updateUrls()
-	{
-		$crawler = new Crawler(file_get_contents('https://www.streamlineverify.com/compliance'));
-		
-		$hrefs = $crawler->filter('ul.sf-list li span a')->each(function ($node){
-			return [$node->text() => $node->attr('href')];
-		});
-		
-		$this->clearUrlsTable();
-		
-		$this->populateUrlsTable($hrefs);
-	}
-
-	/**
 	 * Retrieves an array of import urls saved in the Urls table.
 	 * 
 	 * @return array
 	 */
 	private function getUrls(){
-		
-		// updates the urls table
-		//$this->updateUrls();
-		
 		return app('db')->table('urls')->get();
 	}
 	
