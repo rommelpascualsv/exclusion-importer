@@ -2504,6 +2504,40 @@ CREATE TABLE `usdosd_records` (
   DEFAULT CHARACTER SET = UTF8
   COLLATE = UTF8_UNICODE_CI;
 
+-- ----------------------------
+-- Table structure for files
+-- ----------------------------  
+DROP TABLE IF EXISTS `files`;
+CREATE TABLE `files` (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT ,
+  `file_name`  varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL ,
+  `state_prefix`  varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL ,
+  `img_data`  longblob NULL DEFAULT NULL ,
+  ready_for_update`  varchar(2) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL ,
+  `date_created`  timestamp NULL DEFAULT CURRENT_TIMESTAMP ,
+  `date_modified`  timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ,
+  PRIMARY KEY (`id`)
+)
+  ENGINE = INNODB
+  DEFAULT CHARACTER SET = UTF8
+  COLLATE = UTF8_UNICODE_CI;
+
+-- ----------------------------
+-- Table structure for urls
+-- ---------------------------- 
+DROP TABLE IF EXISTS `urls`;
+CREATE TABLE `urls` (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT ,
+  `state_prefix`  varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL ,
+  `url`  varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL ,
+  `dynamic`  varchar(2) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL ,
+  `date_created`  timestamp NULL DEFAULT CURRENT_TIMESTAMP ,
+  `date_modified`  timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ,
+  PRIMARY KEY (`id`)
+)
+  ENGINE = INNODB
+  DEFAULT CHARACTER SET = UTF8
+  COLLATE = UTF8_UNICODE_CI;
 
 -- ----------------------------
 -- Indexes structure for table al1_records

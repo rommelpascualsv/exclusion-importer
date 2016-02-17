@@ -2,8 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
 /**
  * This File model maps to the files table.
  * @property int 		id
@@ -14,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property timestamp 	updated_at
  *
  */
-class File extends Model
+class File
 {
-    //
+	//
 }
