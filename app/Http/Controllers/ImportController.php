@@ -90,6 +90,7 @@ class ImportController extends BaseController
             'fdadl' => 'FDA Debarment List',
             'fl2' => 'Florida',
             'ga1' => 'Georgia',
+            'healthmil' => 'HealthMil',
             'ia1' => 'Iowa',
             'ks1' => 'Kansas',
             'ky1' => 'Kentucky',
