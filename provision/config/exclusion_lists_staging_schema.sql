@@ -2511,7 +2511,7 @@ DROP TABLE IF EXISTS `files`;
 CREATE TABLE `files` (
   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT ,
   `file_name`  varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL ,
-  `state_prefix`  varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL ,
+  `state_prefix`  varchar(30) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL ,
   `img_data`  longblob NULL DEFAULT NULL ,
   `ready_for_update`  varchar(2) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL ,
   `date_created`  timestamp NULL DEFAULT CURRENT_TIMESTAMP ,
@@ -2521,6 +2521,43 @@ CREATE TABLE `files` (
   ENGINE = INNODB
   DEFAULT CHARACTER SET = UTF8
   COLLATE = UTF8_UNICODE_CI;
+  
+INSERT INTO `files` (`id`, `file_name`, `state_prefix`, `ready_for_update`) 
+VALUES 
+('1', 'test.csv', 'az1', 'Y'),
+('2', 'test.csv', 'ak1', 'Y'),
+('3', 'test.csv', 'ar1', 'Y'),
+('4', 'test.csv', 'ct1', 'Y'),
+('5', 'test.csv', 'cus_spectrum_debar', 'Y'),
+('6', 'test.csv', 'dc1', 'Y'),
+('7', 'test.csv', 'fdac', 'Y'),
+('8', 'test.csv', 'fdadl', 'Y'),
+('9', 'test.csv', 'fl2', 'Y'),
+('10', 'test.csv', 'ga1', 'Y'),
+('11', 'test.csv', 'ia1', 'Y'),
+('12', 'test.csv', 'ks1', 'Y'),
+('13', 'test.csv', 'ky1', 'Y'),
+('14', 'test.csv', 'la1', 'Y'),
+('15', 'test.csv', 'me1', 'Y'),
+('16', 'test.csv', 'mo1', 'Y'),
+('17', 'test.csv', 'ms1', 'Y'),
+('18', 'test.csv', 'mt1', 'Y'),
+('19', 'test.csv', 'nc1', 'Y'),
+('20', 'test.csv', 'nd1', 'Y'),
+('21', 'test.csv', 'njcdr', 'Y'),
+('22', 'test.csv', 'nyomig', 'Y'),
+('23', 'test.csv', 'oh1', 'Y'),
+('24', 'test.csv', 'pa1', 'Y'),
+('25', 'test.csv', 'phs', 'Y'),
+('26', 'test.csv', 'sc1', 'Y'),
+('27', 'test.csv', 'tn1', 'Y'),
+('28', 'test.csv', 'usdocdp', 'Y'),
+('29', 'test.csv', 'usdosd', 'Y'),
+('30', 'test.csv', 'unsancindividuals', 'Y'),
+('31', 'test.csv', 'unsancentities', 'Y'),
+('32', 'test.csv', 'wa1', 'Y'),
+('33', 'test.csv', 'wv2', 'Y'),
+('34', 'test.csv', 'wy1', 'Y');
 
 -- ----------------------------
 -- Table structure for urls
@@ -2528,7 +2565,7 @@ CREATE TABLE `files` (
 DROP TABLE IF EXISTS `urls`;
 CREATE TABLE `urls` (
   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT ,
-  `state_prefix`  varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL ,
+  `state_prefix`  varchar(30) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL ,
   `url`  varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL ,
   `date_created`  timestamp NULL DEFAULT CURRENT_TIMESTAMP ,
   `date_modified`  timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ,
@@ -2537,6 +2574,43 @@ CREATE TABLE `urls` (
   ENGINE = INNODB
   DEFAULT CHARACTER SET = UTF8
   COLLATE = UTF8_UNICODE_CI;
+  
+INSERT INTO `urls` (`state_prefix`, `url`) 
+VALUES 
+('az1', 'www.google.com'),
+('ak1', 'www.google.com'),
+('ar1', 'www.google.com'),
+('ct1', 'www.google.com'),
+('cus_spectrum_debar', 'www.google.com'),
+('dc1', 'www.google.com'),
+('fdac', 'www.google.com'),
+('fdadl', 'www.google.com'),
+('fl2', 'www.google.com'),
+('ga1', 'www.google.com'),
+('ia1', 'www.google.com'),
+('ks1', 'www.google.com'),
+('ky1', 'www.google.com'),
+('la1', 'www.google.com'),
+('me1', 'www.google.com'),
+('mo1', 'www.google.com'),
+('ms1', 'www.google.com'),
+('mt1', 'www.google.com'),
+('nc1', 'www.google.com'),
+('nd1', 'www.google.com'),
+('njcdr', 'www.google.com'),
+('nyomig', 'www.google.com'),
+('oh1', 'www.google.com'),
+('pa1', 'www.google.com'),
+('phs', 'www.google.com'),
+('sc1', 'www.google.com'),
+('tn1', 'www.google.com'),
+('usdocdp', 'www.google.com'),
+('usdosd', 'www.google.com'),
+('unsancindividuals', 'www.google.com'),
+('unsancentities', 'www.google.com'),
+('wa1', 'www.google.com'),
+('wv2', 'www.google.com'),
+('wy1', 'www.google.com');
 
 -- ----------------------------
 -- Indexes structure for table al1_records
