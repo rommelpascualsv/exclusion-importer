@@ -31,7 +31,6 @@ SQL="${Q1}${Q2}"
 $MYSQL -uroot -proot -e "$SQL"
 
 $MYSQL -uroot -proot < /vagrant/provision/config/exclusion_lists_staging_schema.sql
-$MYSQL -uroot -proot < /vagrant/provision/config/file_comparator_staging_schema.sql
 $MYSQL -uroot -proot < /vagrant/provision/config/streamline_local_2015-12-29.sql
 
 sudo service mysql restart
