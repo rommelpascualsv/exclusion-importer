@@ -14,7 +14,9 @@ class Iowa extends ExclusionList
 
     public $uri = "https://dhs.iowa.gov/sites/default/files/2016-01-31.PI_.term-suspend-probation.zip";
 
+
     public $type = 'custom';
+
 
     public $shouldHashListName = true;
 
@@ -52,9 +54,11 @@ class Iowa extends ExclusionList
 
         $storagePath = storage_path('app') . '/' . $this->dbPrefix . '.zip';
 
-        //copy($this->uri, $storagePath);
+        copy($this->uri, $storagePath);
 
-        $files = new Filesystem(new ZipArchiveAdapter($storagePath));
+        $zipArchiveAdapter = new ZipArchiveAdapter($storagePath);
+
+        $files = new Filesystem($zipArchiveAdapter);
 
         foreach ($files->listContents() as $file) {
             if ($file['extension'] == 'xlsx') {
@@ -71,7 +75,7 @@ class Iowa extends ExclusionList
 
         $contents = file_get_contents('zip://' . $storagePath . '#' . $filePath);
 
-        $files->deleteDir($storagePath);
+        $zipArchiveAdapter->delete($storagePath);
 
         $dataConverter = new DataCsvConverter(new CsvFileReader);
 
@@ -82,6 +86,7 @@ class Iowa extends ExclusionList
         return $this->data;
 
     }
+
 
     private function convertDatesToMysql($data, $dateColumns)
     {
@@ -102,25 +107,17 @@ class Iowa extends ExclusionList
     }
 
 
-    public function preProcess($data)
-    {
-        foreach ($data as &$record) {
-            if (preg_match_all('/[1][0-9]{9}/', $record[1], $matches, PREG_PATTERN_ORDER)) {
-                $record[1] = implode(',', $matches[0]);
-            } else {
-                $record[1] = '';
-            }
-        }
-
-        return $data;
-    }
-
-
     public function postProcess($data)
     {
         return array_map(function ($record) {
             if ($record['entity_name'] == 'N/A') {
                 $record['entity_name'] = null;
+            }
+
+            if (preg_match_all('/[1][0-9]{9}/', $record['npi'], $matches, PREG_PATTERN_ORDER)) {
+                $record['npi'] = implode(',', $matches[0]);
+            } else {
+                $record['npi'] = '';
             }
 
             return $record;
