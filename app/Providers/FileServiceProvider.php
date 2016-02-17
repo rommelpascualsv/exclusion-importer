@@ -24,11 +24,6 @@ class FileServiceProvider extends ServiceProvider
      */
     public function register()
     {
-    	$this->app->singleton('App\Services\Contracts\FileServiceInterface', function($app)
-    	{
-    		return new FileService();
-    	});
-    	
-//     	$this->app->bind('App\Services\Contracts\FileServiceInterface', 'App\Services\FileService');
+    	$this->app->bind('App\Services\Contracts\FileServiceInterface', 'App\Services\FileService');
     }
 }

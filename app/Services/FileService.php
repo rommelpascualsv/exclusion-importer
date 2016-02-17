@@ -79,7 +79,6 @@ class FileService implements FileServiceInterface
 		foreach ($urls as $url)
 		{
 			$import_url = $url->url;
-			
 			try 
 			{
 				if(!$this->isFileSupported($import_url))
@@ -176,7 +175,7 @@ class FileService implements FileServiceInterface
 	 */
 	private function updateBlob($blob, $prefix){
 		$affected = app('db')->table('files')->where('state_prefix', $prefix)->update(['img_data' => $blob, 'ready_for_update' => 'Y']);
-		//TODO check if update is correct
+		
 		info($affected.' file/s updated');
 	}
 	
@@ -211,41 +210,5 @@ class FileService implements FileServiceInterface
 		}
 	
 		return in_array($arrHeaders['Content-Type'], $filetypeArr);
-	}
-	
-	/**
-	 * Clears the URLS table
-	 * 
-	 * @return void
-	 */
-	private function clearUrlsTable()
-	{
-		app('db')->statement('TRUNCATE `urls`');
-	}
-	
-	/**
-	 * Populates the URLS table
-	 * 
-	 * @param array $hrefs The array of map state-url values
-	 * @return void
-	 */
-	private function populateUrlsTable($hrefs)
-	{
-		$listFactory = new ListFactory();
-		
-		foreach ($hrefs as $href)
-		{
-			$urls = [];
-			foreach ($href as $k => $v)
-			{
-				$url = [];
-				$url["state_prefix"] = array_search($k, $listFactory->listMappings); 
-				$url["url"] = $v;
-				array_push($urls, $url);
-				info('Saving '.$k.'...');
-			}
-		}
-				
-		app('db')->table('urls')->insert($urls);
 	}
 }

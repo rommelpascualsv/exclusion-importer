@@ -6,12 +6,18 @@ use App\Import\Service\ListProcessor;
 use App\Services\Contracts\FileServiceInterface;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller as BaseController;
-use App\Services\FileService;
 
 class ImportController extends BaseController
 {
 
-    public function createOldTables()
+	protected $fileService;
+	
+	public function __construct(FileServiceInterface $fileService)
+    {
+        $this->fileService = $fileService;
+    }
+	
+	public function createOldTables()
     {
         $lists = [
             'ak1_records',
@@ -137,22 +143,19 @@ class ImportController extends BaseController
     public function import(Request $request, $listPrefix)
     {
         $listFactory = new ListFactory();
-
-//         $fileService = app('App\Services\Contracts\FileServiceInterface');
-
-        $fileService = new FileService();
+        
         try {
             $listObject = $listFactory->make($listPrefix);
 
             if ($request->input('url')) {
                 $newUri = htmlspecialchars_decode($request->input('url'));
 
-                $fileService->updateStateUrl($listPrefix, $newUri);
+                $this->fileService->updateStateUrl($listPrefix, $newUri);
                 
                 $listObject->uri = $newUri;
 
             } else {
-            	 $listObject->uri = $fileService->getUrl($listPrefix)[0]->url;
+            	 $listObject->uri = $this->fileService->getUrl($listPrefix)[0]->url;
             }
         }
         catch(\RuntimeException $e)
@@ -164,7 +167,7 @@ class ImportController extends BaseController
         }
 
 
-        if (!$fileService->isStateUpdateable($listPrefix))
+        if (empty($request->input('url')) && !$this->fileService->isStateUpdateable($listPrefix))
         {
         	return response()->json([
                 'success'	=>	false,
@@ -196,32 +199,5 @@ class ImportController extends BaseController
             'success'	=> true,
             'msg'		=> ''
         ]);
-    }
-    
-    /**
-     * Retrieves all files from Files table.
-     *
-     * @return array
-     */
-    public function getSummary()
-    {
-    	$files = app('db')->table('files')->get();
-    	
-    	return view('summary', ['files' => $files]);
-    }
-    
-    /**
-     * Refreshes the Files table
-     *
-     * @param FileServiceInterface $service The file service
-     * @return void
-     */
-    public function refreshRecords(FileServiceInterface $service)
-    {
-    	info("Refreshing records..........");
-    	 
-    	$service->refreshRecords();
-    
-    	info("Refreshing records completed.");
     }
 }
