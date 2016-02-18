@@ -92,6 +92,8 @@ abstract class ExclusionList
 	public $nodeMap = [];
 
 
-	public function customRetriever(){}
+	public function customRetriever(){
+		return $this->data;
+	}
 
 }

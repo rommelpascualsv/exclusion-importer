@@ -136,6 +136,8 @@ class ImportController extends BaseController
 
     public function import(Request $request, $listPrefix)
     {
+        $this->initPhpSettings();
+
         $listFactory = new ListFactory();
 
         try {
@@ -183,5 +185,11 @@ class ImportController extends BaseController
             'success'	=> true,
             'msg'		=> ''
         ]);
+    }
+
+    private function initPhpSettings()
+    {
+        ini_set('memory_limit', '512M');
+        ini_set('max_execution_time', '120');
     }
 }

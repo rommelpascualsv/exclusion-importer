@@ -1,9 +1,9 @@
 <?php namespace App\Import\Lists;
 
 
+use League\Flysystem\Filesystem;
 use App\Import\Service\DataCsvConverter;
 use App\Import\Service\File\CsvFileReader;
-use League\Flysystem\Filesystem;
 use League\Flysystem\ZipArchive\ZipArchiveAdapter;
 
 class Iowa extends ExclusionList
@@ -58,15 +58,15 @@ class Iowa extends ExclusionList
 
         $zipArchiveAdapter = new ZipArchiveAdapter($storagePath);
 
-        $files = new Filesystem($zipArchiveAdapter);
+        $zipDirectory = new Filesystem($zipArchiveAdapter);
 
-        foreach ($files->listContents() as $file) {
+        foreach ($zipDirectory->listContents() as $file) {
             if ($file['extension'] == 'xlsx') {
-
                 $filePath = $file['path'];
-
-                break;
+                continue;
             }
+
+            $zipDirectory->delete($file['path']);
         };
 
         if ($filePath == '') {
@@ -74,8 +74,6 @@ class Iowa extends ExclusionList
         }
 
         $contents = file_get_contents('zip://' . $storagePath . '#' . $filePath);
-
-        $zipArchiveAdapter->delete($storagePath);
 
         $dataConverter = new DataCsvConverter(new CsvFileReader);
 
