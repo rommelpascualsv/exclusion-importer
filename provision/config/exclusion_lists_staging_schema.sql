@@ -3169,5 +3169,5 @@ CREATE TABLE `fdac_records` (
 	CHANGE COLUMN `ReinstatedDate` `reinstated_date` DATE NULL DEFAULT NULL ,
 	CHANGE COLUMN `WebComments` `web_comments` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL
 	ADD COLUMN `occupation` VARCHAR(45) NOT NULL AFTER `MidInitial`,
-	ADD COLUMN `npi` INT(11) NULL DEFAULT NULL AFTER `LicenseNumber`,
+	ADD COLUMN `npi` VARCHAR(10) NULL DEFAULT NULL AFTER `LicenseNumber`,
 	ENGINE = INNODB
