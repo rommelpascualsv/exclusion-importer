@@ -3182,7 +3182,6 @@ CREATE TABLE `fdac_records` (
   PRIMARY KEY (`id`),
   KEY `lastname` (`lastname`) USING BTREE,
   KEY `upin` (`upin`) USING BTREE,
-  KEY `hash` (`hash`) USING BTREE,
   KEY `firstname` (`firstname`) USING BTREE,
   KEY `midname` (`midname`) USING BTREE,
   KEY `busname` (`busname`) USING BTREE,
@@ -3191,4 +3190,4 @@ CREATE TABLE `fdac_records` (
   KEY `excldate` (`excldate`) USING BTREE,
   KEY `npi` (`npi`) USING BTREE,
   KEY `hash` (`hash`) USING BTREE,
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
