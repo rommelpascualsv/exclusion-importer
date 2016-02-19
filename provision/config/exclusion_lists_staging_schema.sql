@@ -3156,3 +3156,18 @@ CREATE TABLE `fdac_records` (
   ENGINE = INNODB
   DEFAULT CHARACTER SET = UTF8
   COLLATE = UTF8_UNICODE_CI;
+
+
+  ALTER TABLE `tx1_records`
+  	CHANGE COLUMN `CompanyName` `company_name` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL ,
+	CHANGE COLUMN `LastName` `last_name` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL ,
+	CHANGE COLUMN `FirstName` `first_name` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL ,
+	CHANGE COLUMN `MidInitial` `mid_initial` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL ,
+	CHANGE COLUMN `LicenseNumber` `license_number` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL ,
+	CHANGE COLUMN `StartDate` `start_date` DATE NULL ,
+	CHANGE COLUMN `AddDate` `add_date` DATE NULL DEFAULT NULL ,
+	CHANGE COLUMN `ReinstatedDate` `reinstated_date` DATE NULL DEFAULT NULL ,
+	CHANGE COLUMN `WebComments` `web_comments` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL
+	ADD COLUMN `occupation` VARCHAR(45) NOT NULL AFTER `MidInitial`,
+	ADD COLUMN `npi` INT(11) NULL DEFAULT NULL AFTER `LicenseNumber`,
+	ENGINE = INNODB
