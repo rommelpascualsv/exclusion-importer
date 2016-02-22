@@ -7,6 +7,8 @@ class FileServiceTest extends \Codeception\TestCase\Test
     /**
      * @var \UnitTester
      */
+	protected $tester;
+	
     protected $fileService;
     
     protected function _before()
@@ -28,5 +30,16 @@ class FileServiceTest extends \Codeception\TestCase\Test
     	$url = $this->fileService->getUrl('az1');
     	$this->assertNotNull($url);
     	$this->assertEquals('www.google.com', $url[0]->url);
+    }
+    
+    public function testIsStateUpdateable(){
+    	$result = $this->fileService->isStateUpdateable('az1');
+    	$this->assertTrue($result);
+    }
+    
+    public function testUpdateStateUrl(){
+    	$result = $this->fileService->updateStateUrl('az1', 'www.yahoo.com');
+    	$this->assertEquals(1, $result);
+    	$this->tester->seeInDatabase('urls', array('state_prefix' => 'az1', 'url' => 'www.yahoo.com'));
     }
 }
