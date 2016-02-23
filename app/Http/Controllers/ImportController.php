@@ -171,9 +171,6 @@ class ImportController extends BaseController
             ]);
         }
 
-        if (method_exists($listObject, 'retrieveData')) {
-        }
-
         $processingService = new ListProcessor($listObject);
 
         $processingService->insertRecords();
