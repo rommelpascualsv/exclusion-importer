@@ -45,6 +45,10 @@ class ListFactory
         'healthmil'    => 'HealthMil',
     ];
 
+    /**
+     * @param $prefix
+     * @return \App\Import\Lists\ExclusionList
+     */
     public function make($prefix) {
         if (array_key_exists($prefix, $this->listMappings)) {
 

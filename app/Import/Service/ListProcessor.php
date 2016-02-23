@@ -40,16 +40,12 @@ class ListProcessor
 	 */
 	public function insertRecords()
     {
-        $this->exclusionList->data = $this->exclusionList->preProcess($this->exclusionList->data);
-
+        $this->exclusionList->preProcess();
         $this->exclusionList->data = $this->convertToAssoc($this->exclusionList->data);
-
-        $this->exclusionList->data = $this->exclusionList->postProcess($this->exclusionList->data);
+        $this->exclusionList->postProcess();
 
         $this->createNewTable();
-
         $this->populateNewTable();
-
         $this->activateNewTable();
 
         $this->exclusionList->postHook();

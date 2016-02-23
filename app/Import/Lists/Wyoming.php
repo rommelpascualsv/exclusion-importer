@@ -49,14 +49,18 @@ class Wyoming extends ExclusionList
         'exclusion_date' => 7
     ];
 
-
-    public function parse($text)
+    public function preProcess()
     {
+        $this->parse();
+        parent::preProcess();
+    }
 
+    protected function parse()
+    {
         $rowDelimiter = '^^^^^';
         $columnDelimiter = '~~~~~';
 
-        $cleandata = preg_replace('/Registered Professional Nurs RN24869/', 'Registered Professional Nurs   RN24869', $text);
+        $cleandata = preg_replace('/Registered Professional Nurs RN24869/', 'Registered Professional Nurs   RN24869', $this->data);
         $cleandata1 = preg_replace('/1129821 Denver/', '1129821   Denver', $cleandata);
         $cleandata2 = preg_replace('/Ambulance Company - Emer N\/A/', 'Ambulance Company - Emer   N/A', $cleandata1);
         $cleandata3 = preg_replace('/WY6604A/', 'WY6604A  N/A', $cleandata2);
@@ -127,8 +131,6 @@ class Wyoming extends ExclusionList
         }
 
         $this->data = $columns;
-
-        return $this;
     }
 
 }

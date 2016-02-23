@@ -45,12 +45,12 @@ class PHS extends ExclusionList
         'debarment_until',
     ];
 
-    public function preProcess($data)
+    public function preProcess()
     {
-        foreach ($data as &$record) {
+        parent::preProcess();
+        foreach ($this->data as &$record) {
             array_splice($record, 7, 2);
         }
-
-        return $data;
     }
+
 }

@@ -1,6 +1,8 @@
 <?php namespace App\Import\Lists;
 
 
+use App\Import\Service\Exclusions\RetrieverFactory;
+
 abstract class ExclusionList
 {
 
@@ -50,50 +52,61 @@ abstract class ExclusionList
 	 * @var	array
 	 */
 	public $hashColumns = [];
-
-
 	public $dateColumns = [];
-
-
 	public $fieldNames = [];
-
-
 	public $urlSuffix = '';
-
-
 	public $requestOptions = [];
-
 
 	//if set to true in child class it protects getting matching hashes on different exclusion lists
 	public $shouldHashListName = false;
-
-
 	public $type;
+    public $nodes = [];
+    public $nodeMap = [];
 
+    protected $retrieverFactory;
 
-	public function preProcess($data) {
+    public function __construct()
+    {
+        $this->retrieverFactory = new RetrieverFactory;
+    }
 
-        return $data;
+	public function retrieveData()
+    {
+		$retriever = $this->retrieverFactory->make($this->type);
+        $this->data = $retriever->retrieveData($this);
+
 	}
 
+    public function convertDatesToMysql($data, $dateColumns)
+    {
+        return array_map(function($row) use ($dateColumns) {
 
-	public function postProcess($data) {
+            foreach ($dateColumns as $index)
+            {
+                if (strtotime($row[$index]))
+                {
+                    $date = new \DateTime($row[$index]);
+                    $row[$index] = $date->format('Y-m-d');
+                }
+                else
+                {
+                    $row[$index] = null;
+                }
+            }
 
-		return $data;
-	}
+            return $row;
 
+        }, $data);
+    }
 
-	public function postHook() {}
+    public function preProcess()
+    {
+        if (count($this->dateColumns) > 0)
+        {
+            $this->data = $this->convertDatesToMysql($this->data, $this->dateColumns);
+        }
+    }
 
-
-	public $nodes = [];
-
-
-	public $nodeMap = [];
-
-
-	public function customRetriever(){
-		return $this->data;
-	}
-
+    public function postProcess() {}
+    public function postHook() {}
 }

@@ -47,8 +47,7 @@ class Iowa extends ExclusionList
         'sanction_end_date' => 6
     ];
 
-
-    public function customRetriever()
+    public function retrieveData()
     {
         $filePath = '';
 
@@ -80,9 +79,6 @@ class Iowa extends ExclusionList
         $this->data = $dataConverter->convertData($this, $contents);
 
         $this->data = $this->convertDatesToMysql($this->data, $this->dateColumns);
-
-        return $this->data;
-
     }
 
 
@@ -105,9 +101,9 @@ class Iowa extends ExclusionList
     }
 
 
-    public function postProcess($data)
+    public function postProcess()
     {
-        return array_map(function ($record) {
+        $this->data = array_map(function ($record) {
             if ($record['entity_name'] == 'N/A') {
                 $record['entity_name'] = null;
             }
@@ -120,6 +116,6 @@ class Iowa extends ExclusionList
 
             return $record;
 
-        }, $data);
+        }, $this->data);
     }
 }

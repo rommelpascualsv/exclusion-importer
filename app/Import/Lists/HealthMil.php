@@ -37,14 +37,12 @@ class HealthMil extends ExclusionList
 
     private $parser;
 
-
-    public function customRetriever()
+    public function retrieveData()
     {
         $this->parser = new HealthMilParser();
         $response = $this->parser->crawlFormPage();
         $response = $this->parser->getViewAllList($response);
         $items = $this->parser->getItems($response);
-
-        return $items;
+        $this->data = $items;
     }
 }

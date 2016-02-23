@@ -161,11 +161,8 @@ class ImportController extends BaseController
             ]);
         }
 
-
-        $retrieverFactory = new RetrieverFactory();
-
         try{
-            $exclusionsRetriever = $retrieverFactory->make($listObject->type);
+            $listObject->retrieveData();
         }
         catch(\RuntimeException $e)
         {
@@ -175,8 +172,8 @@ class ImportController extends BaseController
             ]);
         }
 
-
-        $listObject = $exclusionsRetriever->retrieveData($listObject);
+        if (method_exists($listObject, 'retrieveData')) {
+        }
 
         $processingService = new ListProcessor($listObject);
 

@@ -40,8 +40,9 @@ class FDADebarmentList extends ExclusionList
         'term_of_debarment'
     ];
 
-    public function preProcess($data)
+    public function preProcess()
     {
+        parent::preProcess();
         $replacableStrings = [
             '^'                            => ' Mandatory Debarment',
             '%'                            => ' Permissive Debarment',
@@ -60,7 +61,7 @@ class FDADebarmentList extends ExclusionList
 
         ];
 
-        foreach ($data as $key => &$record) {
+        foreach ($this->data as $key => &$record) {
             $stringOfRecord = implode('~', $record);
 
             $newStringOfRecord = str_replace(
@@ -72,7 +73,7 @@ class FDADebarmentList extends ExclusionList
             $record = explode('~', $newStringOfRecord);
 
             if (trim($record[0], chr(0xC2).chr(0xA0)) == '') {
-                unset($data[$key]);
+                unset($this->data[$key]);
                 continue;
             }
 
@@ -83,6 +84,6 @@ class FDADebarmentList extends ExclusionList
             array_pop($record);
         }
 
-        return $data;
+        return $this->data;
     }
 }

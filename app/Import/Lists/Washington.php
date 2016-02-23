@@ -37,7 +37,13 @@ class Washington extends ExclusionList
         'termination_date' => 5
     ];
 
-    public function parse($text)
+    public function preProcess()
+    {
+        $this->parse();
+        parent::preProcess();
+    }
+
+    protected function parse()
     {
         $addSpacesBeforeList = [
             'AP30004851',
@@ -65,7 +71,7 @@ class Washington extends ExclusionList
         $blankDelimiter = '';
         //$regex = preg_replace('/\n(\s)?\d{1,3}/', "\n", $text);
         //$regex1 = preg_replace('/A\s{1,}B\s{1,}C\s{1,}D\s{1,}E\s{1,}/', $blankDelimiter, $regex);
-        $regex1 = (preg_replace('/Plus[\s]+Medicaid\n/', $blankDelimiter, $text));
+        $regex1 = (preg_replace('/Plus[\s]+Medicaid\n/', $blankDelimiter, $this->data));
         $regex1A = str_replace('Mann, Michael DBA Wheelchairs', 'Mann DBA Wheelchairs Plus, Michael', $regex1);
         $regex1B= str_replace('Manditory Exclusion from', 'Manditory Exclusion from Medicaid ', $regex1A);
         $regex2 = (preg_replace('/Molnar, Laszlo/', $blankDelimiter, $regex1B));
@@ -99,7 +105,7 @@ class Washington extends ExclusionList
                 $entity = $rowArray; //get entity
                 unset($entity[3]); //remove blank column
                 array_splice($rowArray, 3, count($entity), $entity); //insert entity
-                //set FML names to balnk
+                //set FML names to blank
                 $rowArray[0] = '';
                 $rowArray[1] = '';
                 $rowArray[2] = '';
@@ -113,6 +119,5 @@ class Washington extends ExclusionList
                 unset($columns[$key]);
         }
         $this->data = $columns;
-        return $this;
     }
 }

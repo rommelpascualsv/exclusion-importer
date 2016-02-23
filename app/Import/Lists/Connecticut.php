@@ -45,8 +45,9 @@ class Connecticut extends ExclusionList
     public $shouldHashListName = true;
 
 
-    public function preProcess($data)
+    public function preProcess()
     {
+        parent::preProcess();
         array_walk_recursive($data, function (&$value) {
 
             if ($value == "N/A") {
@@ -55,7 +56,7 @@ class Connecticut extends ExclusionList
 
         });
 
-        return $data;
+        $this->data;
     }
 
 }

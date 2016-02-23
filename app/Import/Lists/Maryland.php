@@ -30,16 +30,16 @@ class Maryland extends ExclusionList
 
     public function __construct()
     {
-        $this->getUri();
+        parent::__construct();
+        $this->uri = $this->getUri();
     }
 
 
     protected function getUri()
     {
         $crawler = new Crawler(file_get_contents('https://mmcp.dhmh.maryland.gov/SitePages/Provider%20Information.aspx'));
-
         $link = $crawler->filter('#Column560 > div > h1 > div > ul:nth-child(11) > li:nth-child(4) > a')->attr('href');
 
-        $this->uri = $link;
+        return $link;
     }
 }
