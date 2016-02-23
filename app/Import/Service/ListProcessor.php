@@ -67,26 +67,18 @@ class ListProcessor
 	 */
 	private function populateNewTable()
     {
-		$records = $this->exclusionList->data;
+        $records = $this->exclusionList->data;
 
-        foreach ($records as &$record)
-        {
-			$hash = $this->getHash($record);
+        app('db')->transaction(function () use ($records) {
+            foreach ($records as &$record) {
+                $hash = $this->getHash($record);
+                $record['hash'] = hex2bin($hash);
+                app('db')->table($this->exclusionList->dbPrefix . '_records_new')
+                    ->insert($record);
+            }
+        });
 
-            // we can do this with db::raw if need be.
-            // i think this is cleaner, but we need to make sure it won't break the hashes.
-            $record['hash'] = hex2bin($hash);
-
-//            not sure what to do about this. why were we doing this?
-//            if (count($record) != count($headers))
-//            {
-//                $insert->values($record);
-//            }
-        }
-
-        return app('db')
-            ->table($this->exclusionList->dbPrefix . '_records_new')
-            ->insert($records);
+        app('db')->commit();
     }
 
 

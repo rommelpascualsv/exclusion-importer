@@ -80,10 +80,10 @@ class ImportController extends BaseController
     public function index()
     {
         $lists = [
-            'az1' => 'Arizona',
-            'ak1' => 'Alaska',
-            'ar1' => 'Arkansas',
-            'ct1' => 'Connecticut',
+            'az1'                => 'Arizona',
+            'ak1'                => 'Alaska',
+            'ar1'                => 'Arkansas',
+            'ct1'                => 'Connecticut',
             'cus_spectrum_debar' => 'Custom Spectrum Debar List',
             'dc1' => 'Washington Dc',
             'fdac' => 'FDA Clinical Investigators',
@@ -108,13 +108,14 @@ class ImportController extends BaseController
             'phs' => 'NHH PHS',
             'sc1' => 'South Carolina',
             'tn1' => 'Tennessee',
+            'tx1' => 'Texas',
             'usdocdp' => 'US DoC Denied Persons List',
             'usdosd' => 'US DoS Debarment List',
             'unsancindividuals'  => 'UN Sanctions Individuals',
             'unsancentities'     => 'UN Sanctions Entities',
-            'wa1' => 'Washington State',
-            'wv2' => 'West Virginia',
-            'wy1' => 'Wyoming',
+            'wa1'                => 'Washington State',
+            'wv2'                => 'West Virginia',
+            'wy1'                => 'Wyoming',
         ];
 
         $states = app('db')->table('exclusion_lists')->select(
