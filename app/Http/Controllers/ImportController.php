@@ -2,7 +2,6 @@
 
 use App\Import;
 use App\Import\Service\Exclusions\ListFactory;
-use App\Import\Service\Exclusions\RetrieverFactory;
 use App\Import\Service\ListProcessor;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller as BaseController;
@@ -91,7 +90,7 @@ class ImportController extends BaseController
             'fdadl' => 'FDA Debarment List',
             'fl2' => 'Florida',
             'ga1' => 'Georgia',
-            'healthmil' => 'HealthMil',
+            'healthmil' => 'TRICARE Sanctioned Providers',
             'ia1' => 'Iowa',
             'ks1' => 'Kansas',
             'ky1' => 'Kentucky',
