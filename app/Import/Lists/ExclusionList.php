@@ -99,6 +99,15 @@ abstract class ExclusionList
         }, $data);
     }
 
+    public function convertToAssoc()
+    {
+        $this->data = array_map(function($item) {
+
+            return array_combine($this->fieldNames, $item);
+
+        }, $this->data);
+    }
+
     public function preProcess()
     {
         if (count($this->dateColumns) > 0)

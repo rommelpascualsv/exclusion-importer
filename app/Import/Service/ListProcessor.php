@@ -41,7 +41,7 @@ class ListProcessor
 	public function insertRecords()
     {
         $this->exclusionList->preProcess();
-        $this->exclusionList->data = $this->convertToAssoc($this->exclusionList->data);
+        $this->exclusionList->convertToAssoc();
         $this->exclusionList->postProcess();
 
         $this->createNewTable();
@@ -144,12 +144,4 @@ class ListProcessor
     }
 
 
-    protected function convertToAssoc($data)
-    {
-        return array_map(function($item) {
-
-            return array_combine($this->exclusionList->fieldNames, $item);
-
-        }, $data);
-    }
 }
