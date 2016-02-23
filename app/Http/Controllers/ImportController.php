@@ -84,7 +84,7 @@ class ImportController extends BaseController
     {
         return view('import')->with('exclusionLists', $this->importService->getExclusionList());
     }
-
+    
     public function import(Request $request, $listPrefix)
     {
         return $this->importService->importFile($request, $listPrefix);
