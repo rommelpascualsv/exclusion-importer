@@ -2,7 +2,6 @@
 
 use App\Import;
 use App\Import\Service\Exclusions\ListFactory;
-use App\Import\Service\Exclusions\RetrieverFactory;
 use App\Import\Service\ListProcessor;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller as BaseController;
@@ -69,6 +68,7 @@ class ImportController extends BaseController
             'sdn_vessel_info',
             'cus_spectrum_debar_records',
             'usdosd_records',
+            'healthmil_records',
         ];
         foreach ($lists as $list) {
             app('db')->statement('DROP TABLE IF EXISTS `' . $list . '_older`');
@@ -85,31 +85,32 @@ class ImportController extends BaseController
             'ar1'                => 'Arkansas',
             'ct1'                => 'Connecticut',
             'cus_spectrum_debar' => 'Custom Spectrum Debar List',
-            'dc1'                => 'Washington Dc',
-            'fdac'               => 'FDA Clinical Investigators',
-            'fdadl'              => 'FDA Debarment List',
-            'fl2'                => 'Florida',
-            'ga1'                => 'Georgia',
-            'ia1'                => 'Iowa',
-            'ks1'                => 'Kansas',
-            'ky1'                => 'Kentucky',
-            'la1'                => 'Louisiana',
-            'me1'                => 'Maine',
-            'mo1'                => 'Missouri',
-            'ms1'                => 'Mississippi',
-            'mt1'                => 'Montana',
-            'nc1'                => 'North Carolina',
-            'nd1'                => 'North Dakota',
-            'njcdr'              => 'New Jersey',
-            'nyomig'             => 'New York',
-            'oh1'                => 'Ohio',
-            'pa1'                => 'Pennsylvania',
-            'phs'                => 'NHH PHS',
-            'sc1'                => 'South Carolina',
-            'tn1'                => 'Tennessee',
-            'tx1'                => 'Texas',
-            'usdocdp'            => 'US DoC Denied Persons List',
-            'usdosd'             => 'US DoS Debarment List',
+            'dc1' => 'Washington Dc',
+            'fdac' => 'FDA Clinical Investigators',
+            'fdadl' => 'FDA Debarment List',
+            'fl2' => 'Florida',
+            'ga1' => 'Georgia',
+            'healthmil' => 'TRICARE Sanctioned Providers',
+            'ia1' => 'Iowa',
+            'ks1' => 'Kansas',
+            'ky1' => 'Kentucky',
+            'la1' => 'Louisiana',
+            'me1' => 'Maine',
+            'mo1' => 'Missouri',
+            'ms1' => 'Mississippi',
+            'mt1' => 'Montana',
+            'nc1' => 'North Carolina',
+            'nd1' => 'North Dakota',
+            'njcdr' => 'New Jersey',
+            'nyomig' => 'New York',
+            'oh1' => 'Ohio',
+            'pa1' => 'Pennsylvania',
+            'phs' => 'NHH PHS',
+            'sc1' => 'South Carolina',
+            'tn1' => 'Tennessee',
+            'tx1' => 'Texas',
+            'usdocdp' => 'US DoC Denied Persons List',
+            'usdosd' => 'US DoS Debarment List',
             'unsancindividuals'  => 'UN Sanctions Individuals',
             'unsancentities'     => 'UN Sanctions Entities',
             'wa1'                => 'Washington State',
@@ -160,11 +161,8 @@ class ImportController extends BaseController
             ]);
         }
 
-
-        $retrieverFactory = new RetrieverFactory();
-
         try{
-            $exclusionsRetriever = $retrieverFactory->make($listObject->type);
+            $listObject->retrieveData();
         }
         catch(\RuntimeException $e)
         {
@@ -173,9 +171,6 @@ class ImportController extends BaseController
                 'msg'		=>	$e->getMessage()
             ]);
         }
-
-
-        $listObject = $exclusionsRetriever->retrieveData($listObject);
 
         $processingService = new ListProcessor($listObject);
 
@@ -186,7 +181,6 @@ class ImportController extends BaseController
             'msg'		=> ''
         ]);
     }
-
 
     private function initPhpSettings()
     {

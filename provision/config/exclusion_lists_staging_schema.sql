@@ -3157,9 +3157,32 @@ CREATE TABLE `fdac_records` (
   DEFAULT CHARACTER SET = UTF8
   COLLATE = UTF8_UNICODE_CI;
 
+  CREATE TABLE `healthmil_records` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `date_excluded` DATE NULL,
+    `term` VARCHAR(100) NULL,
+    `exclusion_end_date` DATE NULL,
+    `companies` VARCHAR(100) NULL,
+    `first_name` VARCHAR(50) NULL,
+    `middle_name` VARCHAR(50) NULL,
+    `last_name` VARCHAR(50) NULL,
+    `addresses` VARCHAR(1000) NULL,
+    `summary` TEXT NULL,
+    `hash` BINARY(16) NULL,
+    `date_created` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`)
+)  ENGINE=INNODB DEFAULT CHARACTER SET=UTF8 COLLATE = UTF8_UNICODE_CI;
+
+  INSERT INTO exclusion_lists
+  (`id`, `prefix`, `accr`, `description`, `url`, `verify_email`, `columns`, `employee_title`, `vendor_title`, `import_url`)
+  VALUES('50', 'healthmil', 'Health Mil', 'Military Health System',
+		  'http://www.health.mil/Military-Health-Topics/Access-Cost-Quality-and-Safety/Quality-And-Safety-of-Healthcare/Program-Integrity/Sanctioned-Providers', '',
+		  '{"date_excluded":"Date Excluded","term":"Term Of Exclusion","exclusion_end_date":"Exclusion End Date","companies":"Company Names","first_name":"First name","middle_name":"Middle Name","last_name":"Last Name","addresses":"Addresses","summary":"Summary"}',
+		   '["first_name","middle_name","last_name"]',
+		   '["company_name"]', '');
 
   ALTER TABLE `tx1_records`
-  	CHANGE COLUMN `CompanyName` `company_name` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL ,
+	CHANGE COLUMN `CompanyName` `company_name` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL ,
 	CHANGE COLUMN `LastName` `last_name` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL ,
 	CHANGE COLUMN `FirstName` `first_name` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL ,
 	CHANGE COLUMN `MidInitial` `mid_initial` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL ,
@@ -3170,4 +3193,4 @@ CREATE TABLE `fdac_records` (
 	CHANGE COLUMN `WebComments` `web_comments` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL
 	ADD COLUMN `occupation` VARCHAR(45) NOT NULL AFTER `MidInitial`,
 	ADD COLUMN `npi` VARCHAR(10) NULL DEFAULT NULL AFTER `LicenseNumber`,
-	ENGINE = INNODB
+	ENGINE = INNODB;
