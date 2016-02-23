@@ -74,12 +74,13 @@ class Maine extends ExclusionList
         'sanction_start_date' => 17
     ];
 
-    public function preProcess($data)
+    public function preProcess()
     {
+        parent::preProcess();
 
         $finalData = [];
 
-        foreach ($data as $values) {
+        foreach ($this->data as $values) {
 
             $arrayWithKeyNames = array_combine($this->originalFieldNames, $values);
 
@@ -104,7 +105,7 @@ class Maine extends ExclusionList
             $finalData[] = $arrayWithEntities;
         }
 
-        return $finalData;
+        $this->data = $finalData;
     }
 
 

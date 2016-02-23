@@ -2,7 +2,6 @@
 
 use App\Import;
 use App\Import\Service\Exclusions\ListFactory;
-use App\Import\Service\Exclusions\RetrieverFactory;
 use App\Import\Service\ListProcessor;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller as BaseController;
@@ -69,6 +68,7 @@ class ImportController extends BaseController
             'sdn_vessel_info',
             'cus_spectrum_debar_records',
             'usdosd_records',
+            'healthmil_records',
         ];
         foreach ($lists as $list) {
             app('db')->statement('DROP TABLE IF EXISTS `' . $list . '_older`');
@@ -90,6 +90,7 @@ class ImportController extends BaseController
             'fdadl' => 'FDA Debarment List',
             'fl2' => 'Florida',
             'ga1' => 'Georgia',
+            'healthmil' => 'TRICARE Sanctioned Providers',
             'ia1' => 'Iowa',
             'ks1' => 'Kansas',
             'ky1' => 'Kentucky',
@@ -135,6 +136,8 @@ class ImportController extends BaseController
 
     public function import(Request $request, $listPrefix)
     {
+        $this->initPhpSettings();
+
         $listFactory = new ListFactory();
 
         try {
@@ -157,11 +160,8 @@ class ImportController extends BaseController
             ]);
         }
 
-
-        $retrieverFactory = new RetrieverFactory();
-
         try{
-            $exclusionsRetriever = $retrieverFactory->make($listObject->type);
+            $listObject->retrieveData();
         }
         catch(\RuntimeException $e)
         {
@@ -171,9 +171,6 @@ class ImportController extends BaseController
             ]);
         }
 
-
-        $listObject = $exclusionsRetriever->retrieveData($listObject);
-
         $processingService = new ListProcessor($listObject);
 
         $processingService->insertRecords();
@@ -182,5 +179,11 @@ class ImportController extends BaseController
             'success'	=> true,
             'msg'		=> ''
         ]);
+    }
+
+    private function initPhpSettings()
+    {
+        ini_set('memory_limit', '512M');
+        ini_set('max_execution_time', '120');
     }
 }

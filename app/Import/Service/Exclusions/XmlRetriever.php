@@ -34,24 +34,20 @@ class XmlRetriever extends Retriever
         $body = $response->getBody()->getContents();
 
         $xml = simplexml_load_string($body);
-
+        $data = [];
         foreach ($xml->{$list->nodes['title']}->{$list->nodes['subject']} as $node) {
             $linesItem = [];
             foreach ($list->nodeMap as $line) {
                 $linesItem[] = (is_array($line)) ? $list->$line[0]($node) : $this->prepareItem($node->{$line});
             }
 
-            $list->data[] = $linesItem;
+            $data[] = $linesItem;
         }
 
         if ($list->retrieveOptions['headerRow'] == 1) {
-            array_shift( $list->data);
+            array_shift($data);
         }
 
-        if (count($list->dateColumns) > 0) {
-            $list->data = $this->convertDatesToMysql($list->data, $list->dateColumns);
-        }
-
-        return $list;
+        return $data;
     }
 }

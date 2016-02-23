@@ -51,13 +51,18 @@ class Tennessee extends ExclusionList
 
     public $shouldHashListName = true;
 
+    public function preProcess()
+    {
+        $this->parse();
+        parent::preProcess();
+    }
 
-    public function parse($text)
+    protected function parse()
     {
 
         $properSpacing = preg_replace_callback('/1\d{9}/', function ($item) {
             return $item[0] . '  ';
-        }, $text);
+        }, $this->data);
 
         $rowDelimiter = '^^^^^';
         $columnDelimiter = '~~~~~';
@@ -93,8 +98,6 @@ class Tennessee extends ExclusionList
         array_pop($columns);
 
         $this->data = $columns;
-
-        return $this;
     }
 
 }

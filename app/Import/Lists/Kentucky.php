@@ -52,7 +52,8 @@ class Kentucky extends ExclusionList
 
     public function __construct()
     {
-        $this->getUri();
+        parent::__construct();
+        $this->uri = $this->getUri();
     }
 
 
@@ -62,6 +63,6 @@ class Kentucky extends ExclusionList
 
         $link = $crawler->filter('#section1ContentPlaceholderControl > ul:nth-child(5) > li > a:nth-child(3)')->attr('href');
 
-        $this->uri = 'http://chfs.ky.gov' . $link;
+        return 'http://chfs.ky.gov' . $link;
     }
 }
