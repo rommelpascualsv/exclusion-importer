@@ -2,7 +2,6 @@
 namespace App\Services;
 
 use App\File;
-use App\Import\Service\Exclusions\ListFactory;
 use App\Services\Contracts\FileServiceInterface;
 
 /**
@@ -19,8 +18,10 @@ class FileService implements FileServiceInterface
 	 * @param string $stateUrl
 	 */
 	public function updateStateUrl($statePrefix, $stateUrl) {
-		app('db')->table('urls')->where('state_prefix', $statePrefix)->update(['url' => $stateUrl]);
-		info('Updated url for '.$statePrefix);
+		$result = app('db')->table('urls')->where('state_prefix', $statePrefix)->update(['url' => $stateUrl]);
+		info('Updated '.$result.' urls for '.$statePrefix);
+		
+		return $result;
 	}
 	
 	/**
