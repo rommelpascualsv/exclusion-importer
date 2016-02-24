@@ -1,9 +1,6 @@
 <?php namespace App\Http\Controllers;
 
 use App\Services\Contracts\ImportServiceInterface;
-use App\Import;
-use App\Import\Service\Exclusions\ListFactory;
-use App\Import\Service\ListProcessor;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
@@ -86,109 +83,14 @@ class ImportController extends BaseController
 
     public function index()
     {
-//         return view('import')->with('exclusionLists', $this->importService->getExclusionList());
-        $lists = [
-            'az1'                => 'Arizona',
-            'ak1'                => 'Alaska',
-            'ar1'                => 'Arkansas',
-            'ct1'                => 'Connecticut',
-            'cus_spectrum_debar' => 'Custom Spectrum Debar List',
-            'dc1' => 'Washington Dc',
-            'fdac' => 'FDA Clinical Investigators',
-            'fdadl' => 'FDA Debarment List',
-            'fl2' => 'Florida',
-            'ga1' => 'Georgia',
-            'healthmil' => 'TRICARE Sanctioned Providers',
-            'ia1' => 'Iowa',
-            'ks1' => 'Kansas',
-            'ky1' => 'Kentucky',
-            'la1' => 'Louisiana',
-            'me1' => 'Maine',
-            'mo1' => 'Missouri',
-            'ms1' => 'Mississippi',
-            'mt1' => 'Montana',
-            'nc1' => 'North Carolina',
-            'nd1' => 'North Dakota',
-            'njcdr' => 'New Jersey',
-            'nyomig' => 'New York',
-            'oh1' => 'Ohio',
-            'pa1' => 'Pennsylvania',
-            'phs' => 'NHH PHS',
-            'sc1' => 'South Carolina',
-            'tn1' => 'Tennessee',
-            'tx1' => 'Texas',
-            'usdocdp' => 'US DoC Denied Persons List',
-            'usdosd' => 'US DoS Debarment List',
-            'unsancindividuals'  => 'UN Sanctions Individuals',
-            'unsancentities'     => 'UN Sanctions Entities',
-            'wa1'                => 'Washington State',
-            'wv2'                => 'West Virginia',
-            'wy1'                => 'Wyoming',
-        ];
-
-        $states = app('db')->table('exclusion_lists')->select(
-            'prefix',
-            'accr',
-            'import_url'
-        )->whereIn('prefix', array_keys($lists))->get();
-
-        $collection = [];
-        foreach($states as $state)
-        {
-            $collection[$state->prefix] = json_decode(json_encode($state),true);
-        }
-
-        $exclusionLists = array_merge_recursive($lists, $collection);
-
-        return view('import')->with('exclusionLists', $exclusionLists);
+        return view('import')->with('exclusionLists', $this->importService->getExclusionList());
     }
     
     public function import(Request $request, $listPrefix)
     {
         $this->initPhpSettings();
-
-//         return $this->importService->importFile($request, $listPrefix);
-        $listFactory = new ListFactory();
-
-        try {
-            $listObject = $listFactory->make($listPrefix);
-
-            if ($request->input('url')) {
-                $newUri = htmlspecialchars_decode($request->input('url'));
-
-                $listObject->uri = $newUri;
-
-                app('db')->table('exclusion_lists')->where('prefix', $listPrefix)
-                    ->update(['import_url' => $newUri]);
-            }
-        }
-        catch(\RuntimeException $e)
-        {
-            return response()->json([
-                'success'	=>	false,
-                'msg'		=>	$e->getMessage() . ': ' . $listPrefix
-            ]);
-        }
-
-        try{
-            $listObject->retrieveData();
-        }
-        catch(\RuntimeException $e)
-        {
-            return response()->json([
-                'success'	=>	false,
-                'msg'		=>	$e->getMessage()
-            ]);
-        }
-
-        $processingService = new ListProcessor($listObject);
-
-        $processingService->insertRecords();
-
-        return response()->json([
-            'success'	=> true,
-            'msg'		=> ''
-        ]);
+        
+        return $this->importService->importFile($request, $listPrefix);
     }
 
     private function initPhpSettings()

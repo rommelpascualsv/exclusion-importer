@@ -1,12 +1,11 @@
 <?php
 namespace App\Services;
 
-use App\Services\Contracts\ImportServiceInterface;
-use Illuminate\Http\Request;
-use App\Services\Contracts\FileServiceInterface;
 use App\Import\Service\Exclusions\ListFactory;
 use App\Import\Service\ListProcessor;
-use App\Import\Service\Exclusions\RetrieverFactory;
+use App\Services\Contracts\FileServiceInterface;
+use App\Services\Contracts\ImportServiceInterface;
+use Illuminate\Http\Request;
 /**
  * Service class that handles the import related processes.
  *
@@ -66,24 +65,20 @@ class ImportService implements ImportServiceInterface
 			return $this->createResponse('State is already up-to-date.', false);
 		}
 		
-		// 3. Creates the corrsponding file retriever for the given type.
+		// 3. Retrieves data for a given file type
 		try{
-			$retrieverFactory = new RetrieverFactory();
-			$exclusionsRetriever = $retrieverFactory->make($listObject->type);
+			$listObject->retrieveData();
 		}
 		catch(\RuntimeException $e)
 		{
-			$this->createResponse($e->getMessage(), false);
+			return $this->createResponse($e->getMessage(), false);
 		}
 		
-		// 5. Retrieves data
-		$listObject = $exclusionsRetriever->retrieveData($listObject);
-		
-		// 6. Insert records to state table
+		// 4. Insert records to state table
 		$processingService = new ListProcessor($listObject);
 		$processingService->insertRecords();
 		
-		// 7. Return successful response
+		// 5. Return successful response
 		return $this->createResponse('', true);
 	}
 	
@@ -114,7 +109,7 @@ class ImportService implements ImportServiceInterface
 		}
 		catch(\RuntimeException $e)
 		{
-			throw new \RuntimeException($e->getMessage().': '.$listPrefix);
+			throw new \RuntimeException($e->getMessage () . ': ' . $listPrefix );
 		}
 		
 		return $listObject;
@@ -122,46 +117,47 @@ class ImportService implements ImportServiceInterface
 	
 	/**
 	 * Returns the supported state list.
-	 * 
+	 *
 	 * @return list The prefix-state list
 	 */
-	private function getSupportedStateList()
-	{
-		return [
-				'az1' => 'Arizona',
-				'ak1' => 'Alaska',
-				'ar1' => 'Arkansas',
-				'ct1' => 'Connecticut',
-				'cus_spectrum_debar' => 'Custom Spectrum Debar List',
-				'dc1' => 'Washington Dc',
-				'fdac' => 'FDA Clinical Investigators',
-				'fdadl' => 'FDA Debarment List',
-				'fl2' => 'Florida',
-				'ga1' => 'Georgia',
-				'ia1' => 'Iowa',
-				'ks1' => 'Kansas',
-				'ky1' => 'Kentucky',
-				'la1' => 'Louisiana',
-				'me1' => 'Maine',
-				'mo1' => 'Missouri',
-				'ms1' => 'Mississippi',
-				'mt1' => 'Montana',
-				'nc1' => 'North Carolina',
-				'nd1' => 'North Dakota',
-				'njcdr' => 'New Jersey',
-				'nyomig' => 'New York',
-				'oh1' => 'Ohio',
-				'pa1' => 'Pennsylvania',
-				'phs' => 'NHH PHS',
-				'sc1' => 'South Carolina',
-				'tn1' => 'Tennessee',
-				'usdocdp' => 'US DoC Denied Persons List',
-				'usdosd' => 'US DoS Debarment List',
-				'unsancindividuals'  => 'UN Sanctions Individuals',
-				'unsancentities'     => 'UN Sanctions Entities',
-				'wa1' => 'Washington State',
-				'wv2' => 'West Virginia',
-				'wy1' => 'Wyoming',
+	private function getSupportedStateList() {
+		return [ 
+			'az1' => 'Arizona',
+			'ak1' => 'Alaska',
+			'ar1' => 'Arkansas',
+			'ct1' => 'Connecticut',
+			'cus_spectrum_debar' => 'Custom Spectrum Debar List',
+			'dc1' => 'Washington Dc',
+			'fdac' => 'FDA Clinical Investigators',
+			'fdadl' => 'FDA Debarment List',
+			'fl2' => 'Florida',
+			'ga1' => 'Georgia',
+			'healthmil' => 'TRICARE Sanctioned Providers',
+			'ia1' => 'Iowa',
+			'ks1' => 'Kansas',
+			'ky1' => 'Kentucky',
+			'la1' => 'Louisiana',
+			'me1' => 'Maine',
+			'mo1' => 'Missouri',
+			'ms1' => 'Mississippi',
+			'mt1' => 'Montana',
+			'nc1' => 'North Carolina',
+			'nd1' => 'North Dakota',
+			'njcdr' => 'New Jersey',
+			'nyomig' => 'New York',
+			'oh1' => 'Ohio',
+			'pa1' => 'Pennsylvania',
+			'phs' => 'NHH PHS',
+			'sc1' => 'South Carolina',
+			'tn1' => 'Tennessee',
+			'tx1' => 'Texas',
+			'usdocdp' => 'US DoC Denied Persons List',
+			'usdosd' => 'US DoS Debarment List',
+			'unsancindividuals' => 'UN Sanctions Individuals',
+			'unsancentities' => 'UN Sanctions Entities',
+			'wa1' => 'Washington State',
+			'wv2' => 'West Virginia',
+			'wy1' => 'Wyoming' 
 		];
 	}
 	
