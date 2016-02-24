@@ -35,9 +35,10 @@ class USDosDebar extends ExclusionList
     public $shouldHashListName = true;
 
 
-    public function preProcess($records)
+    public function preProcess()
     {
-        foreach ($records as &$record) {
+        parent::preProcess();
+        foreach ($this->data as &$record) {
 
             if (preg_match('/\(.*\)/', $record[0], $matches)) {
 
@@ -59,7 +60,5 @@ class USDosDebar extends ExclusionList
             //remove last two records - as per specs
             array_splice($record, -2, 2);
         }
-
-        return $records;
     }
 }

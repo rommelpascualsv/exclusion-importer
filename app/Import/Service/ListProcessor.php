@@ -40,16 +40,12 @@ class ListProcessor
 	 */
 	public function insertRecords()
     {
-        $this->exclusionList->data = $this->exclusionList->preProcess($this->exclusionList->data);
-
-        $this->exclusionList->data = $this->convertToAssoc($this->exclusionList->data);
-
-        $this->exclusionList->data = $this->exclusionList->postProcess($this->exclusionList->data);
+        $this->exclusionList->preProcess();
+        $this->exclusionList->convertToAssoc();
+        $this->exclusionList->postProcess();
 
         $this->createNewTable();
-
         $this->populateNewTable();
-
         $this->activateNewTable();
 
         $this->exclusionList->postHook();
@@ -71,26 +67,18 @@ class ListProcessor
 	 */
 	private function populateNewTable()
     {
-		$records = $this->exclusionList->data;
+        $records = $this->exclusionList->data;
 
-        foreach ($records as &$record)
-        {
-			$hash = $this->getHash($record);
+        app('db')->transaction(function () use ($records) {
+            foreach ($records as &$record) {
+                $hash = $this->getHash($record);
+                $record['hash'] = hex2bin($hash);
+                app('db')->table($this->exclusionList->dbPrefix . '_records_new')
+                    ->insert($record);
+            }
+        });
 
-            // we can do this with db::raw if need be.
-            // i think this is cleaner, but we need to make sure it won't break the hashes.
-            $record['hash'] = hex2bin($hash);
-
-//            not sure what to do about this. why were we doing this?
-//            if (count($record) != count($headers))
-//            {
-//                $insert->values($record);
-//            }
-        }
-
-        return app('db')
-            ->table($this->exclusionList->dbPrefix . '_records_new')
-            ->insert($records);
+        app('db')->commit();
     }
 
 
@@ -148,12 +136,4 @@ class ListProcessor
     }
 
 
-    protected function convertToAssoc($data)
-    {
-        return array_map(function($item) {
-
-            return array_combine($this->exclusionList->fieldNames, $item);
-
-        }, $data);
-    }
 }

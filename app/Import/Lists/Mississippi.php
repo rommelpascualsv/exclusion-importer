@@ -46,14 +46,19 @@ class Mississippi extends ExclusionList
         'exclusion_from_date' => 5
     ];
 
+    public function preProcess()
+    {
+        $this->parse();
+        parent::preProcess();
+    }
 
-    public function parse($text)
+    protected function parse()
     {
         $rowDelimiter = '^^^^^';
         $columnDelimiter = '~~~~~';
         $blankStatement = '';
 
-        $sanitizedData = preg_replace('/\)\\nCassandra/', ")\n\nCassandra" , $text);
+        $sanitizedData = preg_replace('/\)\\nCassandra/', ")\n\nCassandra" , $this->data);
         $sanitizedData2 = preg_replace('/514 Woodrow Wilson Ave., Suite C/', "514 Woodrow Wilson Ave." , $sanitizedData);
 
         $regex = preg_replace('/[\s\S]+EXCLUSION PERIOD/', $blankStatement, $sanitizedData2);
@@ -117,8 +122,5 @@ class Mississippi extends ExclusionList
         }
 
         $this->data = $columns;
-
-        return $this;
     }
-
 }

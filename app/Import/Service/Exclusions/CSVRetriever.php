@@ -44,7 +44,6 @@ class CSVRetriever extends Retriever
      */
     public function retrieveData(ExclusionList $list)
     {
-
         if ($this->uriIsRemote($list->uri))
         {
             $response = $this->httpClient->get($list->uri);
@@ -55,14 +54,9 @@ class CSVRetriever extends Retriever
             $contents = file_get_contents($list->uri);
         }
 
-        $list->data = $this->dataConverter->convertData($list, $contents);
+        $data = $this->dataConverter->convertData($list, $contents);
 
-        if (count($list->dateColumns) > 0)
-        {
-            $list->data = $this->convertDatesToMysql($list->data, $list->dateColumns);
-        }
-
-        return $list;
+        return $data;
     }
 
 

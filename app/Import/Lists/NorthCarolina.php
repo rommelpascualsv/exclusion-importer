@@ -46,11 +46,12 @@ class NorthCarolina extends ExclusionList
         'date_excluded' => 9
     ];
 
-	public function preProcess($data)
+	public function preProcess()
     {
-        return array_map(function($row) {
+        parent::preProcess();
+        $this->data = array_map(function($row) {
             return array_slice($row, 0, -1);
-		}, $data);
+		}, $this->data);
     }
     
 }

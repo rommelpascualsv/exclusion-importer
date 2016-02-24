@@ -69,14 +69,7 @@ class HTMLRetriever extends Retriever
             array_shift($columnsArray);
         }
 
-        $list->data = $columnsArray;
-
-        if (count($list->dateColumns) > 0)
-        {
-            $list->data = $this->convertDatesToMysql($list->data, $list->dateColumns);
-        }
-
-        return $list;
+        return $columnsArray;
     }
 
 }

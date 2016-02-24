@@ -3096,9 +3096,6 @@ CREATE TABLE `exclusion_lists` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-LOCK TABLES `exclusion_lists` WRITE;
-/*!40000 ALTER TABLE `exclusion_lists` DISABLE KEYS */;
-
 INSERT INTO `exclusion_lists` (`id`, `prefix`, `accr`, `description`, `url`, `verify_email`, `columns`, `employee_title`, `vendor_title`, `import_url`)
 VALUES
   (1,'oig','Federal OIG','Office of the Inspector General','http://exclusions.oig.hhs.gov/','','{\"firstname\":\"First Name\",\"midname\":\"Middle Name\",\"lastname\":\"Last Name\",\"busname\":\"Business Name\",\"upin\":\"UPIN\",\"npi\":\"NPI\",\"dob\":\"Date Of Birth\",\"address\":\"Address\",\"city\":\"City\",\"state\":\"State\",\"zip\":\"Zip\",\"excldate\":\"OIG Excl. Date\",\"excltype\":\"OIG Offense\"}','[\"firstname\",\"lastname\"]','[\"entity\"]',NULL),
@@ -3124,7 +3121,7 @@ VALUES
   (21,'wy1','WY DOH','Wyoming Department of health','http://www.health.wyo.gov/healthcarefin/equalitycare/index.html','','{\"first_name\":\"First Name\",\"last_name\":\"Last Name\",\"business_name\":\"Bussiness Name\",\"provider_number\":\"Provider #\",\"provider_type\":\"Provider Type\",\"city\":\"City\",\"state\":\"State\",\"exclusion_date\":\"Exclusion Date\",\"additional_info_1\":\"Additional Info 1\",\"additional_info_2\":\"Additional Info 2\"}','[\"first_name\",\"last_name\"]','[\"business_name\"]',NULL),
   (22,'nv1','NV DHHS','Nevada Department of Health &amp; Humna Services','https://dhcfp.nv.gov/exclusions.htm','','{\"doing_business_as\":\"Doing business As\",\"legal_entity\":\"Legal Entity\",\"ownership_of_at_least_5_percent\":\"Persons with ownership of at least 5%\",\"medicaid_provider\":\"Medicaid Provider\",\"npi\":\"NPI #\",\"termination_date\":\"Termination Date\",\"sanction_tier\":\"Sanction Tier\",\"sanction_period\":\"Sanction Period\",\"reinstatement_date\":\"Reinstatement Date\"}','[\"legal_entity\"]','[\"doing_business_as\"]',NULL),
   (23,'ca1','CA Medi-Cal','California Department of Health Care Services, Medi-cal','http://files.medi-cal.ca.gov/pubsdoco/manual/man_query.asp?wSearch=%28%23filename+%2A_%2Az03%2A%2E%2A%29&wFLogo=Suspended+and+Ineligible+Provider+List&wFLogoH=32&wFLogoW=418&wAlt=Suspended+and+Ineligible+Provider+List&wPath=pubsdoco%2Fpublications%2Fmaste','','{\"provider\":\"Provider\",\"info\":\"Additional Entities\",\"addresses\":\"Address(es)\",\"npi_number\":\"NPI #\",\"additional_info\":\"Additional Info\"}','[\"provider\"]','[\"provider\"]',NULL),
-  (24,'hi1','Quest Hawai\'i','Department of Human Services Med Quest Division','http://www.med-quest.us/providers/ProviderExclusion_ReinstatementList.html','','{\"last_name_or_business\":\"Last Name / Company\",\"first_name\":\"First Name\",\"middle_initial\":\"Middle\",\"medicaid_provide_id_number\":\"NPI #\",\"last_known_program_or_provider_type\":\"Provider Type / Program\",\"exclusion_date\":\"Exclusion Date\",\"reinstatement_date\":\"Reinstatement Date\"}','[\"first_name\",\"last_name\"]','[\"entity\"]',NULL),
+  (24,'hi1','Quest Hawaii','Department of Human Services Med Quest Division','http://www.med-quest.us/providers/ProviderExclusion_ReinstatementList.html','','{\"last_name_or_business\":\"Last Name / Company\",\"first_name\":\"First Name\",\"middle_initial\":\"Middle\",\"medicaid_provide_id_number\":\"NPI #\",\"last_known_program_or_provider_type\":\"Provider Type / Program\",\"exclusion_date\":\"Exclusion Date\",\"reinstatement_date\":\"Reinstatement Date\"}','[\"first_name\",\"last_name\"]','[\"entity\"]',NULL),
   (25,'az1','AZ AHCCCS','Arizona Office of the Inspector General','http://www.azahcccs.gov/OIG/ExludedProviders.aspx','','{\"first_name\":\"First Name\",\"middle\":\"Middle\",\"last_name_company_name\":\"Last Name / Business\",\"term_date\":\"Term Date\",\"specialty\":\"Specialty Code\",\"npi_number\":\"NPI #\"}\n','[\"first_name\",\"last_name\"]','[\"entity\"]',NULL),
   (26,'tn1','TennCare','Tennesee State Medicaid Program','http://www.tn.gov/tenncare/terminated.shtml','','{\"last_name\":\"Last Name\",\"first_name\":\"First Name\",\"middle_name\":\"Middle Name\",\"npi\":\"NPI #\",\"begin_date\":\"Begin Date\",\"end_date\":\"End Date\",\"reason\":\"Reason\"}','[\"first_name\", \"last_name\"]','[\"first_name\", \"last_name\"]',NULL),
   (27,'mn1','Minnesota MHCP','Minnesota Department of Human Resources','http://www.dhs.state.mn.us/main/idcplg?IdcService=GET_DYNAMIC_CONVERSION&dID=161183&goback=%2Egde_83345_member_255294701','','{\"provider_type_description\":\"Provider Type\",\"sort_name\":\"Sort Name\",\"last_name\":\"Last Name\",\"first_name\":\"First Name\",\"middle_name\":\"Middle Name\",\"effective_date_of_exclusion\":\"Exclusion Start Date\",\"address_line1\":\"Address 1\",\"address_line2\":\"Address 2\",\"city\":\"City\",\"state\":\"State\",\"zip\":\"Zip\"}','[\"first_name\", \"last_name\"]','[\"sort_name\"]',NULL),
@@ -3146,17 +3143,8 @@ VALUES
   (43,'phs','NHH PHS','NHH PHS','https://ori.hhs.gov/phs-admin-action-bulletin-board','','{\"first_name\":\"First Name\",\"last_name\":\"Last Name\",\"middle_name\":\"Middle Name\",\"debarment_until\":\"Debarment Until\"}','[\"first_name\", \"last_name\"]','[\"name\"]',NULL),
   (44,'usdocdp','UDoC DP','US Department of Commerce, Bureau of Industry and Security, Denied Persons','http://www.bis.doc.gov/index.php/policy-guidance/lists-of-parties-of-concern/denied-persons-list','','{\"name\":\"Business Name\",\"street_address\":\"Address\",\"city\":\"City\",\"country\":\"Country\",\"effective_date\":\"Effective Date\",\"postal_code\":\"Postal Code\",\"expiration_data\":\"Expiration Date\",\"last_update\":\"Last Update\"}','[\"name\"]','[\"name\"]',NULL),
   (45,'fdadl','FDA DL','FDA Debarment List (Drug Product Applications)','http://www.fda.gov/ICECI/EnforcementActions/FDADebarmentList/default.htm','','{\"name\":\"Name\",\"effective_date\":\"Effective Date\",\"term_of_debarment\":\"Term of Debarment\",\"from_date\":\"From Date\"}','[\"name\"]','[\"name\"]',NULL),
-  (46,'cus_spectrum_debar','CUS SD','Custom Debar List','','','{\"name\":\"Name\",\"title\":\"Title\",\"ssn\":\"SSN\",\"tin\":\"TIN\",\"npi\":\"NPI\",\"date_of_birth\":\"Date of Birth\",\"street_address\":\"Street Address\",\"city\":\"City\",\"state\":\"State\",\"zip\":\"Zip\",\"debar_date\":\"Debar Date\",\"suspend_date\":\"Suspend Data\",\"debar_code\":\"Debar Code\"}','[\"name\"]','[\"name\"]',NULL);
-
-INSERT INTO exclusion_lists
-(`id`, `prefix`, `accr`, `description`, `url`, `verify_email`, `columns`, `employee_title`, `vendor_title`, `import_url`)
-VALUES ('47', 'usdosd', 'US Dos DL', 'US Department of State Debar List',
-        'http://www.pmddtc.state.gov/compliance/debar_intro.html', '',
-        '{\"full_name\":\"Full Name\",\"aka_name\":\"AKA Names\",\"date_of_birth\":\"DOB\",\"notice\":\"Notice Date\",\"notice_date\":\"Notice Date\"}',
-        '[\"full_name\"]', '[\"full_name\"]', 'https://www.pmddtc.state.gov/compliance/documents/debar.xlsx');
-
-
-/*!40000 ALTER TABLE `exclusion_lists` ENABLE KEYS */;
+  (46,'cus_spectrum_debar','CUS SD','Custom Debar List','','','{\"name\":\"Name\",\"title\":\"Title\",\"ssn\":\"SSN\",\"tin\":\"TIN\",\"npi\":\"NPI\",\"date_of_birth\":\"Date of Birth\",\"street_address\":\"Street Address\",\"city\":\"City\",\"state\":\"State\",\"zip\":\"Zip\",\"debar_date\":\"Debar Date\",\"suspend_date\":\"Suspend Data\",\"debar_code\":\"Debar Code\"}','[\"name\"]','[\"name\"]',NULL),
+  (47, 'usdosd', 'US Dos DL', 'US Department of State Debar List', 'http://www.pmddtc.state.gov/compliance/debar_intro.html', '', '{\"full_name\":\"Full Name\",\"aka_name\":\"AKA Names\",\"date_of_birth\":\"DOB\",\"notice\":\"Notice Date\",\"notice_date\":\"Notice Date\"}', '[\"full_name\"]', '[\"full_name\"]', 'https://www.pmddtc.state.gov/compliance/documents/debar.xlsx');
 UNLOCK TABLES;
 # unsancindividuals_records table
 # ------------------------------------------------------------
@@ -3208,9 +3196,6 @@ CREATE TABLE `unsancindividuals_records` (
     PRIMARY KEY (`id`)
 )  ENGINE=INNODB DEFAULT CHARACTER SET=UTF8 COLLATE = UTF8_UNICODE_CI;
 
-LOCK TABLES `exclusion_lists` WRITE;
-/*!40000 ALTER TABLE `exclusion_lists` DISABLE KEYS */;
-
 INSERT INTO exclusion_lists
 (`id`, `prefix`, `accr`, `description`, `url`, `verify_email`, `columns`, `employee_title`, `vendor_title`, `import_url`)
 VALUES ('48', 'unsancindividuals', 'UN Sanc Individuals', 'UN Sanctions Individuals List',
@@ -3226,7 +3211,93 @@ VALUES ('49', 'unsancentities', 'UN Sanc Entities', 'UN Sanctions Entities List'
         '{"dataid":"Date Id","entity_name":"First Name","un_list_type":"Un List Type","reference_number":"Ref. Nummber","listed_on":"Date Listed","submitted_on":"Date Submitted","comments":"Comments","last_updated":"Date Last Updated","entity_alias":"Alias","entity_address":"Address"}',
         '["entity_name"]', '["entity_name"]', 'https://www.un.org/sc/suborg/sites/www.un.org.sc.suborg/files/consolidated.xml');
 
-/*!40000 ALTER TABLE `exclusion_lists` ENABLE KEYS */;
+CREATE TABLE `fdac_records` (
+  `id`                  INT          NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(100) NULL,
+  `center` VARCHAR(50) NULL,
+  `city` VARCHAR(50) NULL,
+  `state` VARCHAR(50) NULL,
+  `status` VARCHAR(100) NULL,
+  `date_of_status` DATE NULL,
+  `date_of_nidpoe_issued` DATE NULL,
+  `date_of_nooh_issued` DATE NULL,
+  `hash` BINARY(16)   NULL,
+  `date_created` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+)
+  ENGINE = INNODB
+  DEFAULT CHARACTER SET = UTF8
+  COLLATE = UTF8_UNICODE_CI;
 
+  CREATE TABLE `fdadl_records` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(100) NULL,
+  `aka` VARCHAR(100) NULL,
+  `effective_date` DATE NULL,
+  `term_of_debarment` VARCHAR(100) NULL,
+  `from_date` DATE NULL,
+  `hash` BINARY(16)   NULL,
+  `date_created` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+)
+  ENGINE = INNODB
+  DEFAULT CHARACTER SET = UTF8
+  COLLATE = UTF8_UNICODE_CI;
 
-UNLOCK TABLES;
+  CREATE TABLE `phs_records` (
+  `id`                  INT          NOT NULL AUTO_INCREMENT,
+  `last_name` VARCHAR(100) NULL,
+  `first_name` VARCHAR(100) NULL,
+  `middle_name` VARCHAR(100) NULL,
+  `state` VARCHAR(50) NULL,
+  `status` VARCHAR(100) NULL,
+  `debarment_until` DATE NULL,
+  `no_phs_advisory_until` DATE NULL,
+  `certification_of_work_until` DATE NULL,
+  `supervision_until` DATE NULL,
+  `memo` VARCHAR(1000) NULL,
+  `hash` BINARY(16)   NULL,
+  `date_created` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+)
+  ENGINE = INNODB
+  DEFAULT CHARACTER SET = UTF8
+  COLLATE = UTF8_UNICODE_CI;
+
+  CREATE TABLE `healthmil_records` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `date_excluded` DATE NULL,
+    `term` VARCHAR(100) NULL,
+    `exclusion_end_date` DATE NULL,
+    `companies` VARCHAR(100) NULL,
+    `first_name` VARCHAR(50) NULL,
+    `middle_name` VARCHAR(50) NULL,
+    `last_name` VARCHAR(50) NULL,
+    `addresses` VARCHAR(1000) NULL,
+    `summary` TEXT NULL,
+    `hash` BINARY(16) NULL,
+    `date_created` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`)
+)  ENGINE=INNODB DEFAULT CHARACTER SET=UTF8 COLLATE = UTF8_UNICODE_CI;
+
+  INSERT INTO exclusion_lists
+  (`id`, `prefix`, `accr`, `description`, `url`, `verify_email`, `columns`, `employee_title`, `vendor_title`, `import_url`)
+  VALUES('50', 'healthmil', 'Health Mil', 'Military Health System',
+		  'http://www.health.mil/Military-Health-Topics/Access-Cost-Quality-and-Safety/Quality-And-Safety-of-Healthcare/Program-Integrity/Sanctioned-Providers', '',
+		  '{"date_excluded":"Date Excluded","term":"Term Of Exclusion","exclusion_end_date":"Exclusion End Date","companies":"Company Names","first_name":"First name","middle_name":"Middle Name","last_name":"Last Name","addresses":"Addresses","summary":"Summary"}',
+		   '["first_name","middle_name","last_name"]',
+		   '["company_name"]', '');
+
+  ALTER TABLE `tx1_records`
+    CHANGE COLUMN `CompanyName` `company_name` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL ,
+    CHANGE COLUMN `LastName` `last_name` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL ,
+    CHANGE COLUMN `FirstName` `first_name` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL ,
+    CHANGE COLUMN MidInitial `mid_initial` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL ,
+    CHANGE COLUMN `LicenseNumber` `license_number` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL ,
+    CHANGE COLUMN `StartDate` `start_date` DATE NULL ,
+    CHANGE COLUMN `AddDate` `add_date` DATE NULL DEFAULT NULL ,
+    CHANGE COLUMN `ReinstatedDate` `reinstated_date` DATE NULL DEFAULT NULL ,
+    CHANGE COLUMN `WebComments` `web_comments` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL,
+    ADD COLUMN `occupation` VARCHAR(45) NOT NULL AFTER `mid_initial`,
+    ADD COLUMN `npi` VARCHAR(10) NULL DEFAULT NULL AFTER `License_number`,
+    ENGINE = INNODB;

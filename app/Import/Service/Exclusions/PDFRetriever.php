@@ -31,14 +31,7 @@ class PDFRetriever extends Retriever
 
         $contents = shell_exec($list->pdfToText . ' ' . $file . ' -');
 
-        $list = $list->parse($contents);
-
-        if (count($list->dateColumns) > 0)
-        {
-            $list->data = $this->convertDatesToMysql($list->data, $list->dateColumns);
-        }
-
-        return $list;
+        return $contents;
     }
 
 }

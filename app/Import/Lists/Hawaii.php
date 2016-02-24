@@ -30,16 +30,16 @@ class Hawaii extends ExclusionList
 
     public function __construct()
     {
-        $this->getUri();
+        parent::__construct();
+        $this->uri = $this->getUri();
     }
 
 
     protected function getUri()
     {
         $crawler = new Crawler(file_get_contents('http://www.med-quest.us/providers/ProviderExclusion_ReinstatementList.html'));
-
         $link = $crawler->filter('tr th div ul.bodytext li:nth-child(2) a')->attr('href');
 
-        $this->uri = str_replace(' ', '%20', str_replace('..', 'http://www.med-quest.us', $link));
+        return str_replace(' ', '%20', str_replace('..', 'http://www.med-quest.us', $link));
     }
 }

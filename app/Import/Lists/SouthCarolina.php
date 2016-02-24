@@ -43,14 +43,12 @@ class SouthCarolina extends ExclusionList
     public $shouldHashListName = true;
 
 
-    public function postProcess($data)
+    public function postProcess()
     {
-        array_walk_recursive($data, function (&$value, $key) {
+        array_walk_recursive($this->data, function (&$value, $key) {
             if ($key === 'npi' && ! is_numeric($value)) {
                 $value = null;
             }
         });
-
-        return $data;
     }
 }

@@ -13,7 +13,9 @@
         "symfony/css-selector": "2.7.*",
         "symfony/dom-crawler": "2.7.*",
         "vlucas/phpdotenv": "~1.0",
-        "league/flysystem": "^1.0"
+        "league/flysystem": "^1.0",
+        "streamlineverify/svbot": "~0.4",
+        "league/flysystem-ziparchive": "^1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.0",
@@ -33,6 +35,15 @@
         ]
     },
     "config": {
-        "preferred-install": "dist"
-    }
+        "preferred-install": "dist",
+        "github-oauth": {
+            "github.com": "848f2429933e83bb54d53fc24ad9dd96b51b35ae"
+        }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/streamlineverify/svbot.git"
+        }
+    ]
 }
