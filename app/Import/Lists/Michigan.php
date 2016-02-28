@@ -9,6 +9,8 @@ class Michigan extends ExclusionList
 
     public $type = 'xls';
 
+    public $shouldHashListName = true;
+
     public $retrieveOptions = [
         'headerRow' => 1,
         'offset' => 2
@@ -36,12 +38,9 @@ class Michigan extends ExclusionList
         'last_name',
         'first_name',
         'middle_name',
-        'provider_category',
         'npi_number',
-        'city',
         'license_number',
         'sanction_date_1',
-        'sanction_date_2',
-        'reason'
+        'sanction_date_2'
     ];
 }
