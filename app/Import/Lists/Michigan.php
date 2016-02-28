@@ -1,8 +1,5 @@
 <?php namespace App\Import\Lists;
 
-
-//TODO: unset two "sanction source" columns before insert
-
 class Michigan extends ExclusionList
 {
 
@@ -18,6 +15,23 @@ class Michigan extends ExclusionList
     ];
 
     public $fieldNames = [
+        'entity_name',
+        'last_name',
+        'first_name',
+        'middle_name',
+        'provider_category',
+        'npi_number',
+        'city',
+        'license_number',
+        'sanction_date_1',
+        'sanction_source_1',
+        'sanction_date_2',
+        'sanction_source_2',
+        'reason'
+    ];
+
+
+    public $hashColumns = [
         'entity_name',
         'last_name',
         'first_name',
