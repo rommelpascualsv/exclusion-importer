@@ -3194,3 +3194,10 @@ CREATE TABLE `fdac_records` (
     ADD COLUMN `occupation` VARCHAR(45) NOT NULL AFTER `mid_initial`,
     ADD COLUMN `npi` VARCHAR(10) NULL DEFAULT NULL AFTER `License_number`,
     ENGINE = INNODB;
+
+    UPDATE `exclusion_lists_staging`.`exclusion_lists` SET `columns`='{\"entity_name\":\"Entity Name\",\"last_name\":\"Last Name\",\"first_name\":\"First Name\",\"middle_name\":\"Middle Name\",\"provider_category\":\"Provider Category\",\"npi_number\":\"NPI #\",\"city\":\"City\",\"license_number\":\"License #\",\"sanction_date_1\":\"Sanction Date #1\",\"sanction_source_1\":\"Sanction Source #1\",\"sanction_date_2\":\"Sanction Date #2\",\"sanction_source_2\":\"Sanction Source #2\",\"reason\":\"Reason\"}' WHERE `id`='15';
+
+	ALTER TABLE `mi1_records`
+	ADD COLUMN `sanction_source_1` VARCHAR(255) CHARACTER SET 'utf8' NULL DEFAULT NULL AFTER `sanction_date_1`,
+	ADD COLUMN `sanction_source_2` VARCHAR(255) CHARACTER SET 'utf8' NULL DEFAULT NULL AFTER `sanction_date_2`;
+
