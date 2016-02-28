@@ -3199,5 +3199,8 @@ CREATE TABLE `fdac_records` (
 
 	ALTER TABLE `mi1_records`
 	ADD COLUMN `sanction_source_1` VARCHAR(255) CHARACTER SET 'utf8' NULL DEFAULT NULL AFTER `sanction_date_1`,
-	ADD COLUMN `sanction_source_2` VARCHAR(255) CHARACTER SET 'utf8' NULL DEFAULT NULL AFTER `sanction_date_2`;
+	ADD COLUMN `sanction_source_2` VARCHAR(255) CHARACTER SET 'utf8' NULL DEFAULT NULL AFTER `sanction_date_2`,
+	CHANGE COLUMN `sanction_date_1` `sanction_date_1` DATE NULL DEFAULT NULL,
+	CHANGE COLUMN `sanction_date_2` `sanction_date_2` DATE NULL DEFAULT NULL;
+
 
