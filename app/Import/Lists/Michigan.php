@@ -32,7 +32,6 @@ class Michigan extends ExclusionList
         'reason'
     ];
 
-
     public $hashColumns = [
         'entity_name',
         'last_name',
@@ -42,5 +41,10 @@ class Michigan extends ExclusionList
         'license_number',
         'sanction_date_1',
         'sanction_date_2'
+    ];
+
+    public $dateColumns = [
+        'sanction_date_1' => 8,
+        'sanction_date_2' => 10
     ];
 }
