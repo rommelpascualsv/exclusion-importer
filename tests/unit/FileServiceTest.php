@@ -41,6 +41,18 @@ class FileServiceTest extends \Codeception\TestCase\Test
     }
     
     /**
+     * Test for the updateStateUrl method of FileService.
+     * State prefix and new url are passed as parameters.
+     *
+     * Asserts that the number of updated records is one.
+     * Asserts that the updated record is found in the database.
+     */
+    public function testUpdateStateUrl(){
+    	$result = $this->fileService->updateStateUrl('az1', 'www.yahoo.com');
+    	$this->tester->seeInDatabase('exclusion_lists', array('prefix' => 'az1', 'import_url' => 'www.yahoo.com'));
+    }
+    
+    /**
      * Test for the getUrl method of FileService.
      * State prefix is passed as parameter.
      * 
@@ -62,19 +74,6 @@ class FileServiceTest extends \Codeception\TestCase\Test
     public function testIsStateUpdateable(){
     	$result = $this->fileService->isStateUpdateable('az1');
     	$this->assertTrue($result);
-    }
-    
-    /**
-     * Test for the updateStateUrl method of FileService.
-     * State prefix and new url are passed as parameters.
-     * 
-     * Asserts that the number of updated records is one.
-     * Asserts that the updated record is found in the database.
-     */
-    public function testUpdateStateUrl(){
-    	$result = $this->fileService->updateStateUrl('az1', 'www.yahooo.com');
-    	$this->assertEquals(1, $result);
-    	$this->tester->seeInDatabase('exclusion_lists', array('prefix' => 'az1', 'import_url' => 'www.yahooo.com'));
     }
     
     public function testRefreshRecords(){
