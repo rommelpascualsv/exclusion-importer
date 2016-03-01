@@ -90,7 +90,7 @@ class ImportController extends BaseController
     {
         $this->initPhpSettings();
         
-        return $this->importService->importFile($request, $listPrefix);
+        return $this->importService->importFile($request->input('url'), $listPrefix);
     }
 
     private function initPhpSettings()

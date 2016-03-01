@@ -29,21 +29,21 @@ class ImportServiceTest extends \Codeception\TestCase\Test
      * Asserts not null for the list retrieved.
      * Asserts if accr is equal to expected accr.
      */
-//     public function testGetExclusionList()
-//     {
-//     	$list = $this->importService->getExclusionList();
+    public function testGetExclusionList()
+    {
+    	$list = $this->importService->getExclusionList();
     	
-//     	$this->assertNotNull($list);
+    	$this->assertNotNull($list);
     	
-//     	// checks for AZ1
-//     	$this->assertEquals('AZ AHCCCS', $list["az1"]["accr"]);
+    	// checks for AZ1
+    	$this->assertEquals('AZ AHCCCS', $list["az1"]["accr"]);
     	
-//     	// checks for NYOMIG
-//     	$this->assertEquals('NY OMIG', $list["nyomig"]["accr"]);
+    	// checks for NYOMIG
+    	$this->assertEquals('NY OMIG', $list["nyomig"]["accr"]);
     	
-//     	// IL1 should not be included
-//     	$this->assertFalse(array_key_exists('il1', $list));
-//     }
+    	// IL1 should not be included
+    	$this->assertFalse(array_key_exists('il1', $list));
+    }
     
     /**
      * Test for the importFile method of ImportService.
@@ -51,15 +51,14 @@ class ImportServiceTest extends \Codeception\TestCase\Test
      */
     public function testImportFile()
     {
+    	//TODO work in progress
+//     	$url = "http://www.omig.ny.gov/data/gensplistns.php";
     	
-    	$request = new Request();
-    	$request->input('url') = "http://www.omig.ny.gov/data/gensplistns.php";
+//     	$listPrefix = "nyomig";
     	
-    	$listPrefix = "nyomig";
-    	
-    	$response = $this->importService->importFile($request, $listPrefix);
+//     	$response = $this->importService->importFile($url, $listPrefix);
     	 
-    	$this->assertNotNull($response);
+//     	$this->assertNotNull($response);
     	
     }
 }

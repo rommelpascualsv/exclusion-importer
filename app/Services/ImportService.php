@@ -48,11 +48,11 @@ class ImportService implements ImportServiceInterface
 	 *
 	 * @return object The object containing the result of the operation
 	 */
-	public function importFile(Request $request, $listPrefix)
+	public function importFile($url, $listPrefix)
 	{
 		// 1. Retrieves the corresponding state object
 		try {
-			$listObject = $this->getStateObject($request, $listPrefix);
+			$listObject = $this->getStateObject($url, $listPrefix);
 		}
 		catch(\RuntimeException $e)
 		{
@@ -60,7 +60,7 @@ class ImportService implements ImportServiceInterface
 		}
 		
 		// 2. Checks if state is updateable
-		if (empty($request->input('url')) && !$this->fileService->isStateUpdateable($listPrefix))
+		if (empty($url) && !$this->fileService->isStateUpdateable($listPrefix))
 		{
 			return $this->createResponse('State is already up-to-date.', false);
 		}
@@ -91,15 +91,15 @@ class ImportService implements ImportServiceInterface
 	 * @return object The state object
 	 * @throws \RuntimeException
 	 */
-	private function getStateObject(Request $request, $listPrefix)
+	private function getStateObject($url, $listPrefix)
 	{
 		try {
 			$listFactory = new ListFactory();
 			$listObject = $listFactory->make($listPrefix);
 		
-			if ($request->input('url')) {
+			if ($url) {
 				
-				$newUri = htmlspecialchars_decode($request->input('url'));
+				$newUri = htmlspecialchars_decode($url);
 				$this->fileService->updateStateUrl($listPrefix, $newUri);
 				$listObject->uri = $newUri;
 			} else {
