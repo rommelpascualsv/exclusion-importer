@@ -18,7 +18,7 @@ class FileService implements FileServiceInterface
 	 * @param string $stateUrl
 	 */
 	public function updateStateUrl($statePrefix, $stateUrl) {
-		$result = app('db')->table('urls')->where('state_prefix', $statePrefix)->update(['url' => $stateUrl]);
+		$result = app('db')->table('exclusion_lists')->where('prefix', $statePrefix)->update(['import_url' => $stateUrl]);
 		info('Updated '.$result.' urls for '.$statePrefix);
 		
 		return $result;
@@ -33,7 +33,7 @@ class FileService implements FileServiceInterface
 	 */
 	public function getUrl($prefix)
 	{
-		$record = app('db')->table('urls')->where('state_prefix', $prefix)->get();
+		$record = app('db')->table('exclusion_lists')->where('prefix', $prefix)->get();
 		
 		return $record;
 	}
@@ -79,7 +79,7 @@ class FileService implements FileServiceInterface
 		// iterate import urls
 		foreach ($urls as $url)
 		{
-			$import_url = $url->url;
+			$import_url = $url->import_url;
 			try 
 			{
 				if(!$this->isFileSupported($import_url))
@@ -121,7 +121,7 @@ class FileService implements FileServiceInterface
 	 * @return array
 	 */
 	private function getUrls(){
-		return app('db')->table('urls')->get();
+		return app('db')->table('exclusion_lists')->get();
 	}
 	
 	/**

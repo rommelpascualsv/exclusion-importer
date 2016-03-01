@@ -49,8 +49,8 @@ class FileServiceTest extends \Codeception\TestCase\Test
      */
     public function testGetUrl(){
     	$url = $this->fileService->getUrl('az1');
-    	$this->assertNotNull($url);
-    	$this->assertEquals('www.google.com', $url[0]->url);
+    	//$this->assertNotNull($url);
+    	$this->assertEquals('www.yahoo.com', $url[0]->import_url);
     }
     
     /**
@@ -72,12 +72,12 @@ class FileServiceTest extends \Codeception\TestCase\Test
      * Asserts that the updated record is found in the database.
      */
     public function testUpdateStateUrl(){
-    	$result = $this->fileService->updateStateUrl('az1', 'www.yahoo.com');
+    	$result = $this->fileService->updateStateUrl('az1', 'www.yahooo.com');
     	$this->assertEquals(1, $result);
-    	$this->tester->seeInDatabase('urls', array('state_prefix' => 'az1', 'url' => 'www.yahoo.com'));
+    	$this->tester->seeInDatabase('exclusion_lists', array('prefix' => 'az1', 'import_url' => 'www.yahooo.com'));
     }
     
     public function testRefreshRecords(){
-    	
+    	$result = $this->fileService->refreshRecords();
     }
 }
