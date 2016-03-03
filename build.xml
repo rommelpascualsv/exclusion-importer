@@ -5,7 +5,7 @@
 	<property file="./build.properties" />
 
 	<taskdef name="codeception" classname="tests.tasks.RunCodeceptionTask" />
-	<taskdef name="update" classname="LiquibaseUpdateTask" />
+	<taskdef name="update" classname="LiquibaseTask" />
 	
 	<target name="test" depends="update">
 		<codeception type="unit" env="test" />
@@ -14,12 +14,16 @@
 	<target name="update"
 		description="Update database">
 		<update
+			command="update"
 			jar="${jar}"
 			classpathref="${classpathref}"
 			changelogFile="${changelogFile}"
 			username="${username}"
 			password="${password}"
-			url="${url}" />
+			url="${url}">
+			 
+			<parameter name='contexts' value='${contexts}' />
+		</update>
 	</target>
 	
 </project>
