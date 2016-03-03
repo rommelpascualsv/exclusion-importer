@@ -4291,4 +4291,5 @@
             <column name="upin"/>
         </createIndex>
     </changeSet>
+    <includeAll path="./etc/database/sql"/>
 </databaseChangeLog>
