@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="ExclusionImporter" default="codeception" basedir="."
+<project name="ExclusionImporter" default="test" basedir="."
 	description="Runs codeception tests">
 
 	<property file="./build.properties" />
