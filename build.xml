@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="ExclusionImporter" default="codeception" basedir="."
+	description="Runs codeception tests">
+
+	<property file="./build.properties" />
+
+	<taskdef name="codeception" classname="tests.tasks.RunCodeceptionTask" />
+	<taskdef name="update" classname="LiquibaseUpdateTask" />
+	
+	<target name="test" depends="update">
+		<codeception type="unit" env="test" />
+	</target>
+	
+	<target name="update"
+		description="Update database">
+		<update
+			jar="${jar}"
+			classpathref="${classpathref}"
+			changelogFile="${changelogFile}"
+			username="${username}"
+			password="${password}"
+			url="${url}" />
+	</target>
+	
+</project>
