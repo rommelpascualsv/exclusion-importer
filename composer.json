@@ -15,11 +15,13 @@
         "vlucas/phpdotenv": "~1.0",
         "league/flysystem": "^1.0",
         "streamlineverify/svbot": "~0.4",
-        "league/flysystem-ziparchive": "^1.0"
+        "league/flysystem-ziparchive": "^1.0",
+        "codeception/codeception":"*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.0",
-        "phpunit/phpunit": "~4.0"
+        "phpunit/phpunit": "~4.0",
+        "phing/phing": "2.*"
     },
     "autoload": {
         "psr-4": {
