@@ -61,7 +61,8 @@ class Pennsylvania extends ExclusionList
 
 
     public $dateColumns = [
-        'BeginDate' => 4,
-        'ListDate' => 7,
+        'BeginDate' => 3,
+        'EndDate' => 4,
+        'ListDate' => 6,
     ];
 }
