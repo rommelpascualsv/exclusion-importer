@@ -4291,5 +4291,15 @@
             <column name="upin"/>
         </createIndex>
     </changeSet>
-    <includeAll path="./etc/database/sql"/>
+    <changeSet author="sv" id="1456985528119-324" context="test">
+	   <sqlFile encoding="utf8"
+	           path="./sql/001_insert_files.sql"
+	           relativeToChangelogFile="true"/>
+	</changeSet>
+	<changeSet author="sv" id="1456985528119-325" context="test">
+	   <sqlFile encoding="utf8"
+	           path="./sql/002_insert_exclusion_lists.sql"
+	           relativeToChangelogFile="true"/>
+	</changeSet>
+    
 </databaseChangeLog>
