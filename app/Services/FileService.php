@@ -120,7 +120,7 @@ class FileService implements FileServiceInterface
 	 * 
 	 * @return array
 	 */
-	private function getUrls(){
+	protected function getUrls(){
 		return app('db')->table('exclusion_lists')->get();
 	}
 	
@@ -130,7 +130,7 @@ class FileService implements FileServiceInterface
 	 * @param string $prefix The state prefix
 	 * @return boolean
 	 */
-	private function isPrefixExists($prefix){
+	protected function isPrefixExists($prefix){
 		$files = app('db')->table('files')->where('state_prefix', $prefix)->get();
 		
     	return count($files) > 0;
@@ -142,7 +142,7 @@ class FileService implements FileServiceInterface
 	 * @param string $prefix The state prefix
 	 * @return blob
 	 */
-	private function getBlobOfFile($prefix){
+	protected function getBlobOfFile($prefix){
 		$files = app('db')->table('files')->where('state_prefix', $prefix)->get();
     	
     	return count($files) > 0 ? $files[0]->img_data : null;

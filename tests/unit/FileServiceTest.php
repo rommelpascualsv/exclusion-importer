@@ -15,12 +15,15 @@ class FileServiceTest extends \Codeception\TestCase\Test
 	
     protected $fileService;
     
+    protected $container;
+    
     /**
      * Instantiate the FileService.
      */
     protected function _before()
     {
     	$this->fileService = new FileService();
+    	$this->container = new Mockery\Container;
     }
 
     protected function _after()
@@ -61,7 +64,6 @@ class FileServiceTest extends \Codeception\TestCase\Test
      */
     public function testGetUrl(){
     	$url = $this->fileService->getUrl('az1');
-    	//$this->assertNotNull($url);
     	$this->assertEquals('www.yahoo.com', $url[0]->import_url);
     }
     
@@ -76,7 +78,78 @@ class FileServiceTest extends \Codeception\TestCase\Test
     	$this->assertTrue($result);
     }
     
-    public function testRefreshRecords(){
-    	$result = $this->fileService->refreshRecords();
+    /**
+     * Test for the refreshRecords method of FileService. 
+     */
+    public function testRefreshRecordsFileNotSupported(){
+//     	$result = $this->fileService->refreshRecords();
+    	
+    	$mock = $this->container->mock("App\Services\FileService[getUrls]");
+    	$mock = $mock->shouldAllowMockingProtectedMethods();
+    	
+    	$url = new stdClass();
+    	$url->state_prefix = "az1";
+    	$url->import_url = "http://yahoo.com";
+    	
+    	$mock->shouldReceive("getUrls")->andReturn(array($url));
+    	$mock->refreshRecords();
     }
+    
+    public function testRefreshRecordsPrefixExistsWillNotUpdate(){
+    	$mock = $this->container->mock("App\Services\FileService[getUrls, getBlobOfFile]");
+    	$mock = $mock->shouldAllowMockingProtectedMethods();
+    	 
+    	$url = new stdClass();
+    	$url->state_prefix = "wy1";
+    	$url->import_url = "http://www.health.wyo.gov/Media.aspx?mediaId=18045";
+    	 
+    	$mock->shouldReceive("getUrls")->andReturn(array($url));
+    	
+    	$blobImgData = file_get_contents($url->import_url);
+    	
+    	$mock->shouldReceive("getBlobOfFile")->andReturn($blobImgData);
+    	
+    	$mock->refreshRecords();
+    }
+    
+    public function testRefreshRecordsPrefixExistsWillUpdate(){
+    	$mock = $this->container->mock("App\Services\FileService[getUrls, getBlobOfFile]");
+    	$mock = $mock->shouldAllowMockingProtectedMethods();
+    
+    	$url = new stdClass();
+    	$url->state_prefix = "wy1";
+    	$url->import_url = "http://www.health.wyo.gov/Media.aspx?mediaId=18045";
+    
+    	$mock->shouldReceive("getUrls")->andReturn(array($url));
+    	 
+    	$otherImportUrl = "http://www.yahoo.com";
+    	$blobImgData = file_get_contents($otherImportUrl);
+    	 
+    	$mock->shouldReceive("getBlobOfFile")->andReturn($blobImgData);
+    	 
+    	$mock->refreshRecords();
+    	
+    	//TODO add assert
+    }
+    
+    public function testRefreshRecordsNoPrefixWillInsert(){
+    	$mock = $this->container->mock("App\Services\FileService[getUrls, getBlobOfFile, isPrefixExists]");
+    	$mock = $mock->shouldAllowMockingProtectedMethods();
+    
+    	$url = new stdClass();
+    	$url->state_prefix = "wy1";
+    	$url->import_url = "http://www.health.wyo.gov/Media.aspx?mediaId=18045";
+    
+    	$mock->shouldReceive("getUrls")->andReturn(array($url));
+    	 
+    	$blobImgData = file_get_contents($url->import_url);
+    	 
+    	$mock->shouldReceive("getBlobOfFile")->andReturn($blobImgData);
+    	$mock->shouldReceive("isPrefixExists")->andReturn(false);
+    	 
+    	$mock->refreshRecords();
+    	
+    	//TODO add assert
+    }
+    
 }
