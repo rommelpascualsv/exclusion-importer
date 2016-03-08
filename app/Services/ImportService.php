@@ -66,20 +66,39 @@ class ImportService implements ImportServiceInterface
 		}
 		
 		// 3. Retrieves data for a given file type
-		try{
-			$listObject->retrieveData();
-		}
-		catch(\RuntimeException $e)
-		{
-			return $this->createResponse($e->getMessage(), false);
-		}
+		$listObject->retrieveData();
 		
 		// 4. Insert records to state table
-		$processingService = new ListProcessor($listObject);
+		$processingService = $this->getListProcessor($listObject);
 		$processingService->insertRecords();
 		
 		// 5. Return successful response
 		return $this->createResponse('', true);
+	}
+	
+	/**
+	 * Returns the corresponding exclusion list object for a given state prefix.
+	 * 
+	 * @param string $listPrefix the state prefix
+	 * @return object The state-specific exclusion list object
+	 */
+	protected function getListObject($listPrefix)
+	{
+		$listFactory = new ListFactory();
+		$listObject = $listFactory->make($listPrefix);
+		
+		return $listObject;
+	}
+	
+	/**
+	 * Retrieves the corresponding list processor based on the passed object.
+	 * 
+	 * @param object $listObject the exclusion list object
+	 * @return object the list processor object
+	 */
+	protected function getListProcessor($listObject)
+	{
+		return new ListProcessor($listObject);
 	}
 	
 	/**
@@ -94,8 +113,7 @@ class ImportService implements ImportServiceInterface
 	private function getStateObject($url, $listPrefix)
 	{
 		try {
-			$listFactory = new ListFactory();
-			$listObject = $listFactory->make($listPrefix);
+			$listObject = $this->getListObject($listPrefix);
 		
 			if ($url) {
 				
