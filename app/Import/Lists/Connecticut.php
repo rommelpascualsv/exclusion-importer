@@ -48,15 +48,13 @@ class Connecticut extends ExclusionList
     public function preProcess()
     {
         parent::preProcess();
-        array_walk_recursive($data, function (&$value) {
+        array_walk_recursive($this->data, function (&$value) {
 
             if ($value == "N/A") {
                 $value = '';
             }
 
         });
-
-        $this->data;
     }
 
 }
