@@ -49,7 +49,7 @@ class FileService implements FileServiceInterface
 	{
 		$record = app('db')->table('files')->where('state_prefix', $prefix)->get();
 		
-		return $record;
+		return $record[0]->import_url;
 	}
 	
 	/**
@@ -61,9 +61,9 @@ class FileService implements FileServiceInterface
 	 */
 	public function isStateUpdateable($prefix)
 	{
-		$record = app('db')->table('files')->where('state_prefix', $prefix)->where('ready_for_update', 'Y')->get();
+		$record = app('db')->table('files')->where('state_prefix', $prefix)->get();
 		
-		return count($record) === 1 ? true : false;
+		return (count($record) === 0 || $record[0]->ready_for_update === 'Y') ? true : false;
 	}
 	
 	/**

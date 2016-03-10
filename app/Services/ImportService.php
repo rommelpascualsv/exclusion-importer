@@ -122,7 +122,7 @@ class ImportService implements ImportServiceInterface
 				$listObject->uri = $newUri;
 			} else {
 				
-				$listObject->uri = $this->fileService->getUrl($listPrefix)[0]->url;
+				$listObject->uri = $this->fileService->getUrl($listPrefix);
 			}
 		}
 		catch(\RuntimeException $e)
