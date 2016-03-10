@@ -82,7 +82,7 @@ class Iowa extends ExclusionList
     }
 
 
-    private function convertDatesToMysql($data, $dateColumns)
+    public function convertDatesToMysql($data, $dateColumns)
     {
         return array_map(function ($row) use ($dateColumns) {
 
