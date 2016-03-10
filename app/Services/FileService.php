@@ -35,7 +35,7 @@ class FileService implements FileServiceInterface
 	{
 		$record = app('db')->table('exclusion_lists')->where('prefix', $prefix)->get();
 		
-		return $record;
+		return $record[0]->import_url;
 	}
 	
 	/**
