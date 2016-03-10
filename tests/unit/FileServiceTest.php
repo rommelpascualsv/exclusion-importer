@@ -64,7 +64,7 @@ class FileServiceTest extends \Codeception\TestCase\Test
      */
     public function testGetUrl(){
     	$url = $this->fileService->getUrl('az1');
-    	$this->assertEquals('www.yahoo.com', $url[0]->import_url);
+    	$this->assertEquals('www.yahoo.com', $url);
     }
     
     /**
