@@ -3182,20 +3182,20 @@ CREATE TABLE `fdac_records` (
 		   '["company_name"]', '');
 
   ALTER TABLE `tx1_records`
-    CHANGE COLUMN `CompanyName` `company_name` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL ,
-    CHANGE COLUMN `LastName` `last_name` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL ,
-    CHANGE COLUMN `FirstName` `first_name` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL ,
-    CHANGE COLUMN MidInitial `mid_initial` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL ,
-    CHANGE COLUMN `LicenseNumber` `license_number` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL ,
+    CHANGE COLUMN `CompanyName` `company_name` VARCHAR(255) NOT NULL ,
+    CHANGE COLUMN `LastName` `last_name` VARCHAR(255) NOT NULL ,
+    CHANGE COLUMN `FirstName` `first_name` VARCHAR(255) NOT NULL ,
+    CHANGE COLUMN MidInitial `mid_initial` VARCHAR(255)  NOT NULL ,
+    CHANGE COLUMN `LicenseNumber` `license_number` VARCHAR(255)  NOT NULL ,
     CHANGE COLUMN `StartDate` `start_date` DATE NULL ,
     CHANGE COLUMN `AddDate` `add_date` DATE NULL DEFAULT NULL ,
     CHANGE COLUMN `ReinstatedDate` `reinstated_date` DATE NULL DEFAULT NULL ,
-    CHANGE COLUMN `WebComments` `web_comments` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL,
+    CHANGE COLUMN `WebComments` `web_comments` VARCHAR(255)  NOT NULL,
     ADD COLUMN `occupation` VARCHAR(45) NOT NULL AFTER `mid_initial`,
     ADD COLUMN `npi` VARCHAR(10) NULL DEFAULT NULL AFTER `License_number`,
-    ENGINE = INNODB;
+    ENGINE = INNODB DEFAULT CHARACTER SET=UTF8 COLLATE = UTF8_UNICODE_CI;
 
-    UPDATE `exclusion_lists_staging`.`exclusion_lists` SET `columns`='{\"entity_name\":\"Entity Name\",\"last_name\":\"Last Name\",\"first_name\":\"First Name\",\"middle_name\":\"Middle Name\",\"provider_category\":\"Provider Category\",\"npi_number\":\"NPI #\",\"city\":\"City\",\"license_number\":\"License #\",\"sanction_date_1\":\"Sanction Date #1\",\"sanction_source_1\":\"Sanction Source #1\",\"sanction_date_2\":\"Sanction Date #2\",\"sanction_source_2\":\"Sanction Source #2\",\"reason\":\"Reason\"}' WHERE `id`='15';
+  UPDATE `exclusion_lists` SET `columns`='{\"entity_name\":\"Entity Name\",\"last_name\":\"Last Name\",\"first_name\":\"First Name\",\"middle_name\":\"Middle Name\",\"provider_category\":\"Provider Category\",\"npi_number\":\"NPI #\",\"city\":\"City\",\"license_number\":\"License #\",\"sanction_date_1\":\"Sanction Date #1\",\"sanction_source_1\":\"Sanction Source #1\",\"sanction_date_2\":\"Sanction Date #2\",\"sanction_source_2\":\"Sanction Source #2\",\"reason\":\"Reason\"}' WHERE `id`='15';
 
 	ALTER TABLE `mi1_records`
 	ADD COLUMN `sanction_source_1` VARCHAR(255) CHARACTER SET 'utf8' NULL DEFAULT NULL AFTER `sanction_date_1`,
