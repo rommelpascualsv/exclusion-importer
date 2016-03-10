@@ -80,27 +80,7 @@ class Iowa extends ExclusionList
 
         $this->data = $this->convertDatesToMysql($this->data, $this->dateColumns);
     }
-
-
-    public function convertDatesToMysql($data, $dateColumns)
-    {
-        return array_map(function ($row) use ($dateColumns) {
-
-            foreach ($dateColumns as $index) {
-                if (strtotime($row[$index])) {
-                    $date = new \DateTime($row[$index]);
-                    $row[$index] = $date->format('Y-m-d');
-                } else {
-                    $row[$index] = null;
-                }
-            }
-
-            return $row;
-
-        }, $data);
-    }
-
-
+    
     public function postProcess()
     {
         $this->data = array_map(function ($record) {
