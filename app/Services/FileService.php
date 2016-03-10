@@ -49,7 +49,7 @@ class FileService implements FileServiceInterface
 	{
 		$record = app('db')->table('files')->where('state_prefix', $prefix)->get();
 		
-		return $record[0]->import_url;
+		return $record;
 	}
 	
 	/**
