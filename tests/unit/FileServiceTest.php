@@ -129,7 +129,7 @@ class FileServiceTest extends \Codeception\TestCase\Test
     	 
     	$mock->refreshRecords();
     	
-    	//TODO add assert
+    	$this->tester->seeInDatabase('files', array('state_prefix' => 'wy1'));
     }
     
     public function testRefreshRecordsNoPrefixWillInsert(){
@@ -149,7 +149,7 @@ class FileServiceTest extends \Codeception\TestCase\Test
     	 
     	$mock->refreshRecords();
     	
-    	//TODO add assert
+    	$this->tester->seeInDatabase('files', array('state_prefix' => 'wy1'));
     }
     
 }
