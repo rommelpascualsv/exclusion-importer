@@ -57,6 +57,7 @@
                     <th>List</th>
                     <th>URL</th>
                     <th>Update</th>
+                    <th>Ready For Update</th>
                 </tr>
                 <?php
                 foreach ($exclusionLists as $prefix => $info)
@@ -70,6 +71,7 @@
                                     class="start-btn btn btn-1g btn-default">Start
                             </button>
                         </td>
+                        <td><?= $info['ready_for_update'] === 'N' ? 'No' : 'Yes' ?></td>
                     </tr>
                     <?php
                 }

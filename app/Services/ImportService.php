@@ -21,9 +21,10 @@ class ImportService implements ImportServiceInterface
 		$lists = $this->getSupportedStateList();
 		
 		$states = app('db')->table('exclusion_lists')->
-			select('prefix', 'accr', 'import_url')->
-			whereIn('prefix', array_keys($lists))->get();
-
+			leftJoin('files', 'exclusion_lists.prefix', '=', 'files.state_prefix')->
+			select('exclusion_lists.prefix', 'exclusion_lists.accr', 'exclusion_lists.import_url', 'files.ready_for_update')->
+			whereIn('exclusion_lists.prefix', array_keys($lists))->get();
+		
 		$collection = [];
 		foreach($states as $state)
 		{
