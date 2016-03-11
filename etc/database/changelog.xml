@@ -524,6 +524,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="import_url" type="VARCHAR(500)"/>
+            <column name="auto_import" type="VARCHAR(2)"/>
         </createTable>
     </changeSet>
     <changeSet author="sv" id="1456985528119-19" context="test">

@@ -8,7 +8,7 @@ use Illuminate\Console\Command;
 /**
  * Command class that handles the refreshing of records in Files table.
  */
-class UpdateFile extends Command {
+class UpdateFiles extends Command {
 	/**
 	 * The name and signature of the console command.
 	 *

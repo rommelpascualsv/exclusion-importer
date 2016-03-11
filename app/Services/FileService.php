@@ -3,6 +3,7 @@ namespace App\Services;
 
 use App\File;
 use App\Services\Contracts\FileServiceInterface;
+use App\Services\Contracts\ImportServiceInterface;
 
 /**
  * Service class that manages the files wherein it updates the database whenever there are 
@@ -11,32 +12,12 @@ use App\Services\Contracts\FileServiceInterface;
  */
 class FileService implements FileServiceInterface
 {
-	/**
-	 * Updates the url of the state whenever a url is specified in the exclusion importer page.
-	 *
-	 * @param string $statePrefix
-	 * @param string $stateUrl
-	 */
-	public function updateStateUrl($statePrefix, $stateUrl) {
-		$result = app('db')->table('exclusion_lists')->where('prefix', $statePrefix)->update(['import_url' => $stateUrl]);
-		info('Updated '.$result.' urls for '.$statePrefix);
-		
-		return $result;
-	}
+	protected $importService;
 	
-	/**
-	 * Retrieves the Url record from the URLS table for a given state prefix.
-	 *
-	 * @param string $prefix The state prefix
-	 *
-	 * @return url The Url record
-	 */
-	public function getUrl($prefix)
+	public function __construct(ImportServiceInterface $importService)
 	{
-		$record = app('db')->table('exclusion_lists')->where('prefix', $prefix)->get();
-		
-		return $record[0]->import_url;
-	}
+		$this->importService = $importService;
+	}	
 	
 	/**
 	 * Retrieves the File record in Files table for a given state prefix.
@@ -53,17 +34,17 @@ class FileService implements FileServiceInterface
 	}
 	
 	/**
-	 * Checks if state prefix is updateable or not.
-	 *
-	 * @param sring $prefix The state prefix
-	 * 
-	 * @return boolean true if state is updateable otherwise false
-	 */
-	public function isStateUpdateable($prefix)
+	* Checks if state can be auto imported.
+	*
+	* @param sring $prefix The state prefix
+	*
+	* @return boolean true if state can be auto imported, otherwise false
+	*/
+	protected function isStateAutoImport($prefix)
 	{
-		$record = app('db')->table('files')->where('state_prefix', $prefix)->get();
-		
-		return (count($record) === 0 || $record[0]->ready_for_update === 'Y') ? true : false;
+		$record = app('db')->table('exclusion_lists')->where('prefix', $prefix)->get();
+	
+		return $record[0]->auto_import === 'Y' ? true : false;
 	}
 	
 	/**
@@ -82,28 +63,30 @@ class FileService implements FileServiceInterface
 			$import_url = $url->import_url;
 			try 
 			{
-				if(!$this->isFileSupported($import_url))
+				if (!$this->isFileSupported($import_url))
 				{
 					info('File type is not supported.');
-					return;
+					continue;
 				}
 				
 				// get the blob value of import file
 				$blob = file_get_contents($import_url);
 				
 				// checks if state prefix already exists in Files table
-				if ($this->isPrefixExists($url->state_prefix))
+				if ($this->isPrefixExists($url->prefix))
 				{
 					// compares the import file and the one saved in Files table
-					if ($blob !== $this->getBlobOfFile($url->state_prefix))
+					if ($blob !== $this->getBlobOfFile($url->prefix))
 					{
 						// updates the blob column in Files table if imported file is different
-						$this->updateBlob($blob, $url->state_prefix);
+						$this->updateBlob($blob, $url->prefix);
+						$this->importFile($import_url,  $url->prefix);
 					}
 				} else
 				{
 					// inserts a record in Files table if state prefix is not found
-					$this->insertFile($blob, $url->state_prefix, $import_url);
+					$this->insertFile($blob, $url->prefix, $import_url);
+					$this->importFile($import_url,  $url->prefix);
 				}
 			}
 			catch (\ErrorException $e)
@@ -112,6 +95,21 @@ class FileService implements FileServiceInterface
 				info($import_url. " Error occured while downloading file. Continuing to next url...");
 				continue;
 			}
+		}
+	}
+	
+	/**
+	 * 
+	 * 
+	 * @param unknown $url
+	 * @param unknown $prefix
+	 */
+	protected function importFile($url, $prefix)
+	{
+		if ($this->isStateAutoImport($prefix))
+		{
+			$this->importService->importFile($url, $prefix);
+			$this->updateReadyForUpdate($prefix, 'N');
 		}
 	}
 	
@@ -177,6 +175,19 @@ class FileService implements FileServiceInterface
 	private function updateBlob($blob, $prefix){
 		$affected = app('db')->table('files')->where('state_prefix', $prefix)->update(['img_data' => $blob, 'ready_for_update' => 'Y']);
 		
+		info($affected.' file/s updated');
+	}
+	
+	/**
+	 * Updates the ready_for_update flag in File table.
+	 *
+	 * @param string $prefix The state prefix
+	 * @param string $value The value to set for the flag
+	 * @return void
+	 */
+	private function updateReadyForUpdate($prefix, $value){
+		$affected = app('db')->table('files')->where('state_prefix', $prefix)->update(['ready_for_update' => $value]);
+	
 		info($affected.' file/s updated');
 	}
 	

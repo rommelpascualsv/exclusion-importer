@@ -3,7 +3,6 @@ namespace App\Services;
 
 use App\Import\Service\Exclusions\ListFactory;
 use App\Import\Service\ListProcessor;
-use App\Services\Contracts\FileServiceInterface;
 use App\Services\Contracts\ImportServiceInterface;
 use Illuminate\Http\Request;
 /**
@@ -12,13 +11,6 @@ use Illuminate\Http\Request;
  */
 class ImportService implements ImportServiceInterface
 {
-	protected $fileService;
-	
-	public function __construct(FileServiceInterface $fileService)
-	{
-		$this->fileService = $fileService;
-	}
-	
 	/**
 	 * Retrieves the exclusion list
 	 *
@@ -60,7 +52,7 @@ class ImportService implements ImportServiceInterface
 		}
 		
 		// 2. Checks if state is updateable
-		if (empty($url) && !$this->fileService->isStateUpdateable($listPrefix))
+		if (empty($url) && !$this->isStateUpdateable($listPrefix))
 		{
 			return $this->createResponse('State is already up-to-date.', false);
 		}
@@ -102,6 +94,47 @@ class ImportService implements ImportServiceInterface
 	}
 	
 	/**
+	 * Retrieves the Url record from the URLS table for a given state prefix.
+	 *
+	 * @param string $prefix The state prefix
+	 *
+	 * @return url The Url record
+	 */
+	protected function getUrl($prefix)
+	{
+		$record = app('db')->table('exclusion_lists')->where('prefix', $prefix)->get();
+	
+		return $record[0]->import_url;
+	}
+	
+	/**
+	 * Updates the url of the state whenever a url is specified in the exclusion importer page.
+	 *
+	 * @param string $statePrefix
+	 * @param string $stateUrl
+	 */
+	protected function updateStateUrl($statePrefix, $stateUrl) {
+		$result = app('db')->table('exclusion_lists')->where('prefix', $statePrefix)->update(['import_url' => $stateUrl]);
+		info('Updated '.$result.' urls for '.$statePrefix);
+	
+		return $result;
+	}
+	
+	/**
+	 * Checks if state prefix is updateable or not.
+	 *
+	 * @param sring $prefix The state prefix
+	 *
+	 * @return boolean true if state is updateable otherwise false
+	 */
+	protected function isStateUpdateable($prefix)
+	{
+		$record = app('db')->table('files')->where('state_prefix', $prefix)->get();
+	
+		return (count($record) === 0 || $record[0]->ready_for_update === 'Y') ? true : false;
+	}
+	
+	/**
 	 * Retrieves the corresponding state object for a given stte prefix.
 	 * 
 	 * @param Request $request
@@ -118,11 +151,11 @@ class ImportService implements ImportServiceInterface
 			if ($url) {
 				
 				$newUri = htmlspecialchars_decode($url);
-				$this->fileService->updateStateUrl($listPrefix, $newUri);
+				$this->updateStateUrl($listPrefix, $newUri);
 				$listObject->uri = $newUri;
 			} else {
 				
-				$listObject->uri = $this->fileService->getUrl($listPrefix);
+				$listObject->uri = $this->getUrl($listPrefix);
 			}
 		}
 		catch(\RuntimeException $e)
