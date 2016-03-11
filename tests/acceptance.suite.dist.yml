@@ -1,0 +1,22 @@
+# Codeception Test Suite Configuration
+#
+# Suite for acceptance tests.
+# Perform tests in browser using the WebDriver or PhpBrowser.
+# If you need both WebDriver and PHPBrowser tests - create a separate suite.
+
+class_name: AcceptanceTester
+modules:
+    enabled:
+        - PhpBrowser
+        - REST
+        - Asserts
+        - \Helper\Acceptance
+        - Db
+    depends:
+            REST: PhpBrowser
+    config:
+        PhpBrowser:
+            url: http://app.exclusions-import.dev:8088/import
+        REST:                                             
+              url: http://app.exclusions-import.dev:8088/import
+              depends: PhpBrowser                                     
