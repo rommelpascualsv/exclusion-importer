@@ -1,8 +1,5 @@
 <?php namespace App\Import\Lists;
 
-
-//TODO: unset two "sanction source" columns before insert
-
 class Michigan extends ExclusionList
 {
 
@@ -11,6 +8,8 @@ class Michigan extends ExclusionList
     public $uri = 'http://www.michigan.gov/documents/mdch/MI_Sanctioned_Provider_List_375503_7.xls';
 
     public $type = 'xls';
+
+    public $shouldHashListName = true;
 
     public $retrieveOptions = [
         'headerRow' => 1,
@@ -27,7 +26,25 @@ class Michigan extends ExclusionList
         'city',
         'license_number',
         'sanction_date_1',
+        'sanction_source_1',
         'sanction_date_2',
+        'sanction_source_2',
         'reason'
+    ];
+
+    public $hashColumns = [
+        'entity_name',
+        'last_name',
+        'first_name',
+        'middle_name',
+        'npi_number',
+        'license_number',
+        'sanction_date_1',
+        'sanction_date_2'
+    ];
+
+    public $dateColumns = [
+        'sanction_date_1' => 8,
+        'sanction_date_2' => 10
     ];
 }

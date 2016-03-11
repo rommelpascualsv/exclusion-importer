@@ -173,6 +173,8 @@ class ImportService implements ImportServiceInterface
 	 * @return list The prefix-state list
 	 */
 	private function getSupportedStateList() {
+		
+		
 		return [ 
 			'az1' => 'Arizona',
 			'ak1' => 'Alaska',
@@ -190,6 +192,7 @@ class ImportService implements ImportServiceInterface
 			'ky1' => 'Kentucky',
 			'la1' => 'Louisiana',
 			'me1' => 'Maine',
+			'mi1' => 'Michigan',
 			'mo1' => 'Missouri',
 			'ms1' => 'Mississippi',
 			'mt1' => 'Montana',

@@ -21,7 +21,8 @@
     "require-dev": {
         "fzaninotto/faker": "~1.0",
         "phpunit/phpunit": "~4.0",
-        "phing/phing": "2.*"
+        "phing/phing": "2.*",
+        "mockery/mockery": "dev-master"
     },
     "autoload": {
         "psr-4": {
