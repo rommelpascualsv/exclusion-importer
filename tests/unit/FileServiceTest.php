@@ -22,8 +22,9 @@ class FileServiceTest extends \Codeception\TestCase\Test
      */
     protected function _before()
     {
-    	$this->fileService = new FileService();
     	$this->container = new Mockery\Container;
+    	$service = $this->container->mock("App\Services\Contracts\ImportServiceInterface");
+    	$this->fileService = new FileService($service);
     }
 
     protected function _after()
@@ -44,51 +45,15 @@ class FileServiceTest extends \Codeception\TestCase\Test
     }
     
     /**
-     * Test for the updateStateUrl method of FileService.
-     * State prefix and new url are passed as parameters.
-     *
-     * Asserts that the number of updated records is one.
-     * Asserts that the updated record is found in the database.
-     */
-    public function testUpdateStateUrl(){
-    	$result = $this->fileService->updateStateUrl('az1', 'www.yahoo.com');
-    	$this->tester->seeInDatabase('exclusion_lists', array('prefix' => 'az1', 'import_url' => 'www.yahoo.com'));
-    }
-    
-    /**
-     * Test for the getUrl method of FileService.
-     * State prefix is passed as parameter.
-     * 
-     * Asserts not null for the url retrieved.
-     * Asserts that url is equal to expected url.
-     */
-    public function testGetUrl(){
-    	$url = $this->fileService->getUrl('az1');
-    	$this->assertEquals('www.yahoo.com', $url);
-    }
-    
-    /**
-     * Test for the isStateUpdateable method of FileService.
-     * State prefix is passed as parameter.
-     * 
-     * Asserts that state is updateable.
-     */
-    public function testIsStateUpdateable(){
-    	$result = $this->fileService->isStateUpdateable('az1');
-    	$this->assertTrue($result);
-    }
-    
-    /**
      * Test for the refreshRecords method of FileService. 
      */
     public function testRefreshRecordsFileNotSupported(){
-//     	$result = $this->fileService->refreshRecords();
-    	
-    	$mock = $this->container->mock("App\Services\FileService[getUrls]");
+    	$importService = $this->container->mock("App\Services\Contracts\ImportServiceInterface");
+    	$mock = $this->container->mock("App\Services\FileService[getUrls]", array($importService));
     	$mock = $mock->shouldAllowMockingProtectedMethods();
     	
     	$url = new stdClass();
-    	$url->state_prefix = "az1";
+    	$url->prefix = "az1";
     	$url->import_url = "http://yahoo.com";
     	
     	$mock->shouldReceive("getUrls")->andReturn(array($url));
@@ -96,11 +61,12 @@ class FileServiceTest extends \Codeception\TestCase\Test
     }
     
     public function testRefreshRecordsPrefixExistsWillNotUpdate(){
-    	$mock = $this->container->mock("App\Services\FileService[getUrls, getBlobOfFile]");
+    	$importService = $this->container->mock("App\Services\Contracts\ImportServiceInterface");
+    	$mock = $this->container->mock("App\Services\FileService[getUrls, getBlobOfFile]", array($importService));
     	$mock = $mock->shouldAllowMockingProtectedMethods();
     	 
     	$url = new stdClass();
-    	$url->state_prefix = "wy1";
+    	$url->prefix = "wy1";
     	$url->import_url = "http://www.health.wyo.gov/Media.aspx?mediaId=18045";
     	 
     	$mock->shouldReceive("getUrls")->andReturn(array($url));
@@ -113,11 +79,12 @@ class FileServiceTest extends \Codeception\TestCase\Test
     }
     
     public function testRefreshRecordsPrefixExistsWillUpdate(){
-    	$mock = $this->container->mock("App\Services\FileService[getUrls, getBlobOfFile]");
+    	$importService = $this->container->mock("App\Services\Contracts\ImportServiceInterface");
+    	$mock = $this->container->mock("App\Services\FileService[getUrls, getBlobOfFile]", array($importService));
     	$mock = $mock->shouldAllowMockingProtectedMethods();
     
     	$url = new stdClass();
-    	$url->state_prefix = "wy1";
+    	$url->prefix = "wy1";
     	$url->import_url = "http://www.health.wyo.gov/Media.aspx?mediaId=18045";
     
     	$mock->shouldReceive("getUrls")->andReturn(array($url));
@@ -133,11 +100,12 @@ class FileServiceTest extends \Codeception\TestCase\Test
     }
     
     public function testRefreshRecordsNoPrefixWillInsert(){
-    	$mock = $this->container->mock("App\Services\FileService[getUrls, getBlobOfFile, isPrefixExists]");
+    	$importService = $this->container->mock("App\Services\Contracts\ImportServiceInterface");
+    	$mock = $this->container->mock("App\Services\FileService[getUrls, getBlobOfFile, isPrefixExists]", array($importService));
     	$mock = $mock->shouldAllowMockingProtectedMethods();
     
     	$url = new stdClass();
-    	$url->state_prefix = "wy1";
+    	$url->prefix = "wy1";
     	$url->import_url = "http://www.health.wyo.gov/Media.aspx?mediaId=18045";
     
     	$mock->shouldReceive("getUrls")->andReturn(array($url));
