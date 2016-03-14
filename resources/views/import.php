@@ -59,17 +59,18 @@
                     <th>Update</th>
                     <th>Ready For Update</th>
                 </tr>
+                <form name="importForm" method="get">
                 <?php
                 foreach ($exclusionLists as $prefix => $info)
                 {
                     ?>
                     <tr>
                         <td><?= $info[0] ?></td>
-                        <td class="url" contenteditable="true"><?= $info['import_url'] ?></td>
                         <td>
-                            <button type="button" data-action="/import/<?= $info['prefix'] ?>"
-                                    class="start-btn btn btn-1g btn-default">Start
-                            </button>
+                        	<input class="url text_<?= $info['prefix'] ?>" type="text" name="text_<?= $info['prefix'] ?>" value="<?= $info['import_url'] ?>" />
+                        </td>
+                        <td>
+                        	<input type="button" value="Start" data-action="/import/<?= $info['prefix'] ?>" class="start-btn btn btn-1g btn-default" />
                         </td>
                         <td><?= $info['ready_for_update'] === 'N' ? 'No' : 'Yes' ?></td>
                     </tr>
@@ -77,6 +78,7 @@
                 }
 
                 ?>
+                </form>
             </table>
         </div>
 

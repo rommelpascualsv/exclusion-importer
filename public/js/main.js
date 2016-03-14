@@ -5,7 +5,9 @@ $('.create-tables-btn').click(function() {
 $('.start-btn').click(function() {
     var $btn = $(this);
 
-    var altUrl = $btn.parents('tr').find('.url').html();
+    var altUrl = $btn.parents('tr').children("td").children("input").val();
+    
+//    var altUrl = $btn.parents('tr').find('.url').html();
 
     var url = $btn.data('action');
 
@@ -13,7 +15,7 @@ $('.start-btn').click(function() {
         url += "?url=" + encodeURIComponent(altUrl);
     }
 
-    $btn.html('Running..');
+    $btn.attr('value', 'Running..');
 
     $.get(url, function(data) {
         if (!data.success) {
@@ -22,7 +24,7 @@ $('.start-btn').click(function() {
 
             $btn.removeClass('btn-default')
                 .addClass('btn-danger')
-                .html('Error')
+                .attr('value', 'Error')
                 .attr('disabled', true);
 
             modal.find('.modal-body').html(data.msg);
@@ -33,13 +35,13 @@ $('.start-btn').click(function() {
 
         $btn.removeClass('btn-default')
             .addClass('btn-success')
-            .html('Done!')
+            .attr('value', 'Done!')
             .attr('disabled', true);
 
     }).fail(function() {
         $btn.removeClass('btn-default')
             .addClass('btn-danger')
-            .html('Error')
+            .attr('value', 'Error')
             .attr('disabled', true);
     });
 });

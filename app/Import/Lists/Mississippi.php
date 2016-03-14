@@ -10,7 +10,7 @@ class Mississippi extends ExclusionList
     public $pdfToText = "pdftotext -layout -enc UTF-8";
 
 
-    public $uri = "http://www.medicaid.ms.gov/wp-content/uploads/2014/03/SanctionedProviderList.pdf";
+    public $uri = "https://www.medicaid.ms.gov/wp-content/uploads/2014/03/SanctionedProvidersList.pdf";
 
 
     public $type = 'pdf';
