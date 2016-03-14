@@ -2,58 +2,97 @@
 
 class ImportFileCest
 {
-    public function _before(AcceptanceTester $I)
+	public function _before(AcceptanceTester $I)
     {
-    	$I->amOnPage("/import");
+    	$I->amOnPage($this->getPath());
     	
     	$I->see("Update Exclusion Lists");
     	
-    	curl_setopt(curl_init(), CURLOPT_TIMEOUT, 0);
+    	curl_setopt(curl_init(), CURLOPT_TIMEOUT, 600);
     }
 
     public function _after(AcceptanceTester $I)
     {
-    	$I->truncateTable('nyomig_records');
+    	$I->truncateTable($this->getRecordsTableName());
     }
 
     // tests
     public function ImportFileUsingAnInvalidUrl(AcceptanceTester $I)
     {
-    	$I->truncateTable('nyomig_records');
+    	$I->truncateTable($this->getRecordsTableName());
     	 
     	$I->wantTo('Import file');
+    	
+    	$I->fillField("text_nyomig", $this->getInvalidUrl());
+    	 
+    	$url = $I->grabTextFrom("input.text_nyomig");
     
-    	$I->sendGet('http://app.exclusions-import.dev:8088/import/nyomig', [
-    			'url' => 'http://www.yahoo.com'
+    	$I->sendGet($this->getRestPath(), [
+    			'url' => $url
     	]);
     
-    	$I->seeTableHasNoRecords("nyomig_records");
+    	$I->seeTableHasNoRecords($this->getRecordsTableName());
+    	
+    	$I->seeImportUrlInDatabse($this->getPrefix(), $this->getInvalidUrl());
     }
     
     public function ImportFileUsingNewUrl(AcceptanceTester $I)
     {
-    	$I->truncateTable('nyomig_records');
+    	$I->truncateTable($this->getRecordsTableName());
     	 
     	$I->wantTo('Import file');
-    	 
-    	$I->sendGet('http://app.exclusions-import.dev:8088/import/nyomig', [
-    			'url' => 'http://www.omig.ny.gov/data/gensplistns.php'
+    	$I->fillField("text_nyomig", $this->getValidUrl());
+    	
+    	$url = $I->grabTextFrom("input.text_nyomig");
+    	
+    	$I->sendGet($this->getRestPath(), [
+    			'url' => $url
     	]);
-    	 
-    	$I->seeTableHasRecords("nyomig_records");
+    	
+    	$I->seeTableHasRecords($this->getRecordsTableName());
+    	
+    	$I->seeImportUrlInDatabse($this->getPrefix(), $this->getValidUrl());
     }
     
     public function ImportFileUsingDefaultUrl(AcceptanceTester $I)
     {
-    	$I->truncateTable('nyomig_records');
+    	$I->truncateTable($this->getRecordsTableName());
     	
     	$I->wantTo('Import file');
 
-		$I->sendGet('http://app.exclusions-import.dev:8088/import/nyomig', [
+		$I->sendGet($this->getRestPath(), [
     			'url' => ""
     	]);
 		
-		$I->seeTableHasRecords("nyomig_records");
+		$I->seeTableHasRecords($this->getRecordsTableName());
     }
-       
+    
+    private function getPath()
+    {
+    	return "/import";	
+    }
+    
+    private function getRecordsTableName()
+    {
+    	return "nyomig_records";
+    }
+    
+    private function getValidUrl()
+    {
+    	return "http://www.omig.ny.gov/data/gensplistns.php";
+    }
+    private function getInvalidUrl()
+    {
+    	return "www.yahoo.com";
+    }
+    
+    private function getPrefix()
+    {
+    	return "nyomig";
+    }
+    
+    private function getRestPath()
+    {
+    	return self::getPath()."/".self::getPrefix();
+    }
 }
