@@ -69,6 +69,8 @@ class FileService implements FileServiceInterface
 					continue;
 				}
 				
+				info("Trying: ".$import_url." for state: ".$url->prefix);
+				
 				// get the blob value of import file
 				$blob = file_get_contents($import_url);
 				
@@ -174,7 +176,7 @@ class FileService implements FileServiceInterface
 	private function updateBlob($blob, $prefix){
 		$affected = app('db')->table('files')->where('state_prefix', $prefix)->update(['img_data' => $blob, 'ready_for_update' => 'Y']);
 		
-		info($affected.' file/s updated');
+		info($affected.' blob updated for '.$prefix);
 	}
 	
 	/**
@@ -187,7 +189,7 @@ class FileService implements FileServiceInterface
 	private function updateReadyForUpdate($prefix, $value){
 		$affected = app('db')->table('files')->where('state_prefix', $prefix)->update(['ready_for_update' => $value]);
 	
-		info($affected.' file/s updated');
+		info($affected.' readyforupdate flag updated for '.$prefix);
 	}
 	
 	/**

@@ -116,7 +116,7 @@ class ImportService implements ImportServiceInterface
 	 */
 	protected function updateStateUrl($statePrefix, $stateUrl) {
 		$result = app('db')->table('exclusion_lists')->where('prefix', $statePrefix)->update(['import_url' => $stateUrl]);
-		info('Updated '.$result.' urls for '.$statePrefix);
+		info('Updated '.$result.' import_url for '.$statePrefix);
 	
 		return $result;
 	}
