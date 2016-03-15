@@ -11,10 +11,13 @@ class ImportServiceTest extends \Codeception\TestCase\Test
     protected $tester;
     
     protected $importService;
+    
+    protected $fileService;
 
     protected function _before()
     {
     	$this->container = new \Mockery\Container;
+    	$this->importService = new ImportService();
     }
 
     protected function _after()
@@ -30,11 +33,6 @@ class ImportServiceTest extends \Codeception\TestCase\Test
      */
     public function testGetExclusionList()
     {
-    	// mock service
-    	$service = $this->container->mock("App\Services\Contracts\FileServiceInterface");
-    	
-    	$this->importService = new ImportService($service);
-    	
     	$list = $this->importService->getExclusionList();
     	
     	$this->assertNotNull($list);
@@ -55,23 +53,20 @@ class ImportServiceTest extends \Codeception\TestCase\Test
      */
     public function testImportFileForExistingImportUrl()
     {
-    	// mock service
-    	$service = $this->container->mock("App\Services\Contracts\FileServiceInterface");
-    	
+    	// instantiate the ImportService
+    	$this->importService = $this->container->mock("App\Services\ImportService[getListObject,getListProcessor,getUrl,isStateUpdateable]");
+    	$this->importService = $this->importService->shouldAllowMockingProtectedMethods();
+    	 
     	// new Url object for mock return
     	$url = new Url();
     	$url->url = "http://www.omig.ny.gov/data/gensplistns.php";
     	
     	// mock getUrl method and return the Url object
-    	$service->shouldReceive('getUrl')->once()->andReturn([$url]);
+    	$this->importService->shouldReceive('getUrl')->once()->andReturn([$url]);
     	
     	// mock isStateUpdateable and return true
-    	$service->shouldReceive('isStateUpdateable')->once()->andReturn(true);
+    	$this->importService->shouldReceive('isStateUpdateable')->once()->andReturn(true);
     	
-    	// instantiate the ImportService
-    	$this->importService = $this->container->mock("App\Services\ImportService[getListObject,getListProcessor]", array($service));
-    	$this->importService = $this->importService->shouldAllowMockingProtectedMethods();
-    	 
     	// mock exclusion list object to bypass retrieveData function
     	$exclusionList = $this->container->mock("App\Import\Lists\ExclusionLists");
     	$exclusionList->shouldReceive("retrieveData")->once();
@@ -89,7 +84,6 @@ class ImportServiceTest extends \Codeception\TestCase\Test
     	
     	$this->assertNotNull($response);
     	$this->assertTrue($response->getData()->success);
-    	
     }
     
     /**
@@ -98,17 +92,8 @@ class ImportServiceTest extends \Codeception\TestCase\Test
      */
     public function testImportFileForNewImportUrl()
     {
-    	// mock service
-    	$service = $this->container->mock("App\Services\Contracts\FileServiceInterface");
-    	
-    	// mock updateStateUrl method
-    	$service->shouldReceive('updateStateUrl')->once();
-    	 
-    	// mock isStateUpdateable and return true
-    	$service->shouldReceive('isStateUpdateable')->never()->andReturn(true);
-    	 
     	// instantiate the ImportService
-    	$this->importService = $this->container->mock("App\Services\ImportService[getListObject,getListProcessor]", array($service));
+    	$this->importService = $this->container->mock("App\Services\ImportService[getListObject,getListProcessor]");
     	$this->importService = $this->importService->shouldAllowMockingProtectedMethods();
     	
     	// mock exclusion list object to bypass retrieveData function
@@ -128,7 +113,6 @@ class ImportServiceTest extends \Codeception\TestCase\Test
     	 
     	$this->assertNotNull($response);
     	$this->assertTrue($response->getData()->success);
-    	 
     }
     
     /**
@@ -137,15 +121,12 @@ class ImportServiceTest extends \Codeception\TestCase\Test
      */
     public function testImportFileForInvalidPrefix()
     {
-    	// mock service
-    	$service = $this->container->mock("App\Services\Contracts\FileServiceInterface");
-    
     	// new Url object for mock return
     	$url = new Url();
     	$url->url = "http://www.omig.ny.gov/data/gensplistns.php";
     
     	// instantiate the ImportService
-    	$this->importService = new ImportService($service);
+    	$this->importService = new ImportService();
     
     	$inputUrl = "";
     	$listPrefix = "invalidPrefix";
@@ -164,21 +145,19 @@ class ImportServiceTest extends \Codeception\TestCase\Test
     public function testImportFileWithStateUpdateableFalse()
     {
     	// mock service
-    	$service = $this->container->mock("App\Services\Contracts\FileServiceInterface");
-    
+    	$this->importService = $this->container->mock("App\Services\ImportService[getUrl, isStateUpdateable]");
+    	$this->importService = $this->importService->shouldAllowMockingProtectedMethods();
+    	
     	// new Url object for mock return
     	$url = new Url();
     	$url->url = "http://www.omig.ny.gov/data/gensplistns.php";
     	
     	// mock getUrl method and return the Url object
-    	$service->shouldReceive('getUrl')->once()->andReturn([$url]);
+    	$this->importService->shouldReceive('getUrl')->once()->andReturn([$url]);
     	
     	// mock isStateUpdateable and return true
-    	$service->shouldReceive('isStateUpdateable')->once()->andReturn(false);
+    	$this->importService->shouldReceive('isStateUpdateable')->once()->andReturn(false);
     	
-    	// instantiate the ImportService
-    	$this->importService = new ImportService($service);
-    
     	$inputUrl = "";
     	$listPrefix = "nyomig";
     
@@ -187,5 +166,52 @@ class ImportServiceTest extends \Codeception\TestCase\Test
     	$this->assertNotNull($response);
     	$this->assertFalse($response->getData()->success);
     	$this->assertEquals("State is already up-to-date.", $response->getData()->msg);
+    }
+    
+    /**
+     * Test for the updateStateUrl method of FileService.
+     * State prefix and new url are passed as parameters.
+     *
+     * Asserts that the number of updated records is one.
+     * Asserts that the updated record is found in the database.
+     */
+    public function testUpdateStateUrl(){
+    	$class = new ReflectionClass('App\Services\ImportService');
+    	$method = $class->getMethod('updateStateUrl');
+    	$method->setAccessible(true);
+    	$method->invokeArgs(new ImportService(), array('az1', 'www.yahoo.com'));
+    	
+    	$this->tester->seeInDatabase('exclusion_lists', array('prefix' => 'az1', 'import_url' => 'www.yahoo.com'));
+    }
+    
+    /**
+     * Test for the getUrl method of FileService.
+     * State prefix is passed as parameter.
+     *
+     * Asserts not null for the url retrieved.
+     * Asserts that url is equal to expected url.
+     */
+    public function testGetUrl(){
+    	$class = new ReflectionClass('App\Services\ImportService');
+    	$method = $class->getMethod('getUrl');
+    	$method->setAccessible(true);
+    	$url = $method->invokeArgs(new ImportService(), array('az1'));
+    	
+    	$this->assertEquals('www.yahoo.com', $url);
+    }
+    
+    /**
+     * Test for the isStateUpdateable method of FileService.
+     * State prefix is passed as parameter.
+     *
+     * Asserts that state is updateable.
+     */
+    public function testIsStateUpdateable(){
+    	$class = new ReflectionClass('App\Services\ImportService');
+    	$method = $class->getMethod('isStateUpdateable');
+    	$method->setAccessible(true);
+    	$result = $method->invokeArgs(new ImportService(), array('az1'));
+    	
+    	$this->assertTrue($result);
     }
 }
