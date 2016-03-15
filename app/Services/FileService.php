@@ -156,12 +156,11 @@ class FileService implements FileServiceInterface
 	 */
 	private function insertFile($blob, $prefix, $url){
 		$file = [];
-		$file["file_name"] = $this->getFileName($url);
 		$file["state_prefix"] = $prefix;
 		$file["img_data"] = $blob;
 		$file["ready_for_update"] = 'Y';
 		
-		info('Saving '.$file['file_name'].'...');
+		info('Saving file to table...');
 		app('db')->table('files')->insert($file);
 	}
 	
@@ -189,17 +188,6 @@ class FileService implements FileServiceInterface
 		$affected = app('db')->table('files')->where('state_prefix', $prefix)->update(['ready_for_update' => $value]);
 	
 		info($affected.' file/s updated');
-	}
-	
-	/**
-	 * Returns the filename of the url.
-	 *
-	 * @param string $url The import url
-	 * @return string
-	 */
-	private function getFileName($url)
-	{
-		return pathinfo($url, PATHINFO_FILENAME).'.'.pathinfo($url, PATHINFO_EXTENSION);
 	}
 	
 	/**

@@ -563,7 +563,6 @@
             <column autoIncrement="true" name="id" type="INT UNSIGNED">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="file_name" type="VARCHAR(100)"/>
             <column name="state_prefix" type="VARCHAR(30)"/>
             <column name="img_data" type="LONGBLOB"/>
             <column name="ready_for_update" type="VARCHAR(2)"/>

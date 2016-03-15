@@ -41,7 +41,6 @@ class FileServiceTest extends \Codeception\TestCase\Test
     public function testGetFile(){
     	$file = $this->fileService->getFile('ak1');
     	$this->assertNotNull($file);
-    	$this->assertEquals('test.csv', $file[0]->file_name);
     }
     
     /**
