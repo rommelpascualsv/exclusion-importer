@@ -69,27 +69,9 @@ class FileService implements FileServiceInterface
 					continue;
 				}
 				
-				info("Trying: ".$import_url." for state: ".$url->prefix);
-				
-				// get the blob value of import file
-				$blob = file_get_contents($import_url);
-				
-				// checks if state prefix already exists in Files table
-				if ($this->isPrefixExists($url->prefix))
+				$saved = $this->handleSaveFile($url->prefix, $import_url);
+				if ($saved)
 				{
-					// compares the import file and the one saved in Files table
-					if ($blob !== $this->getBlobOfFile($url->prefix))
-					{
-						// updates the blob column in Files table if imported file is different
-						$this->updateBlob($blob, $url->prefix);
-						// calls the import service if the auto_import column is set to Y
-						$this->importFile($import_url,  $url->prefix);
-					}
-				} else
-				{
-					// inserts a record in Files table if state prefix is not found
-					$this->insertFile($blob, $url->prefix);
-					// calls the import service if the auto_import column is set to Y
 					$this->importFile($import_url,  $url->prefix);
 				}
 			}
@@ -103,6 +85,39 @@ class FileService implements FileServiceInterface
 	}
 	
 	/**
+	 * Handles the insert/update if record in Files table.
+	 * 
+	 * @param string $prefix the state prefix
+	 * @param string $import_url the import url
+	 * @return boolean true if file was inserted/updated otherwise, false
+	 */
+	private function handleSaveFile($prefix, $import_url)
+	{
+
+		// get the blob value of import file
+		$blob = file_get_contents($import_url);
+		
+		// checks if state prefix already exists in Files table
+		if ($this->isPrefixExists($prefix))
+		{
+			// compares the import file and the one saved in Files table
+			if ($blob !== $this->getBlobOfFile($prefix))
+			{
+				// updates the blob column in Files table if imported file is different
+				$this->updateBlob($blob, $prefix);
+				return true;
+			}
+		} else
+		{
+			// inserts a record in Files table if state prefix is not found
+			$this->insertFile($blob, $prefix, $import_url);
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
 	 * 
 	 * 
 	 * @param unknown $url
@@ -113,7 +128,6 @@ class FileService implements FileServiceInterface
 		if ($this->isStateAutoImport($prefix))
 		{
 			$this->importService->importFile($url, $prefix);
-			$this->updateReadyForUpdate($prefix, 'N');
 		}
 	}
 	
@@ -155,9 +169,10 @@ class FileService implements FileServiceInterface
 	 * 
 	 * @param blob $blob The blob value of the import file
 	 * @param string $prefix The state prefix
+	 * @param string $url The import url
 	 * @return void
 	 */
-	private function insertFile($blob, $prefix){
+	private function insertFile($blob, $prefix, $url){
 		$file = [];
 		$file["state_prefix"] = $prefix;
 		$file["img_data"] = $blob;
@@ -177,20 +192,7 @@ class FileService implements FileServiceInterface
 	private function updateBlob($blob, $prefix){
 		$affected = app('db')->table('files')->where('state_prefix', $prefix)->update(['img_data' => $blob, 'ready_for_update' => 'Y']);
 		
-		info($affected.' blob updated for '.$prefix);
-	}
-	
-	/**
-	 * Updates the ready_for_update flag in File table.
-	 *
-	 * @param string $prefix The state prefix
-	 * @param string $value The value to set for the flag
-	 * @return void
-	 */
-	private function updateReadyForUpdate($prefix, $value){
-		$affected = app('db')->table('files')->where('state_prefix', $prefix)->update(['ready_for_update' => $value]);
-	
-		info($affected.' readyforupdate flag updated for '.$prefix);
+		info($affected.' file/s updated');
 	}
 	
 	/**

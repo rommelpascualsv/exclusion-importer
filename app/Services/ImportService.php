@@ -65,7 +65,10 @@ class ImportService implements ImportServiceInterface
 		$processingService = $this->getListProcessor($listObject);
 		$processingService->insertRecords();
 		
-		// 5. Return successful response
+		// 5. Update readyForUpdate flag
+		$this->updateReadyForUpdate($listPrefix, "N");
+		
+		// 6. Return successful response
 		return $this->createResponse('', true);
 	}
 	
@@ -116,7 +119,7 @@ class ImportService implements ImportServiceInterface
 	 */
 	protected function updateStateUrl($statePrefix, $stateUrl) {
 		$result = app('db')->table('exclusion_lists')->where('prefix', $statePrefix)->update(['import_url' => $stateUrl]);
-		info('Updated '.$result.' import_url for '.$statePrefix);
+		info('Updated '.$result.' urls for '.$statePrefix);
 	
 		return $result;
 	}
@@ -229,5 +232,18 @@ class ImportService implements ImportServiceInterface
 				'success' => $isSuccess,
 				'msg' => $message 
 		] );
+	}
+	
+	/**
+	 * Updates the ready_for_update flag in File table.
+	 *
+	 * @param string $prefix The state prefix
+	 * @param string $value The value to set for the flag
+	 * @return void
+	 */
+	private function updateReadyForUpdate($prefix, $value){
+		$affected = app('db')->table('files')->where('state_prefix', $prefix)->update(['ready_for_update' => $value]);
+	
+		info($affected.' file/s updated');
 	}
 }
