@@ -82,12 +82,14 @@ class FileService implements FileServiceInterface
 					{
 						// updates the blob column in Files table if imported file is different
 						$this->updateBlob($blob, $url->prefix);
+						// calls the import service if the auto_import column is set to Y
 						$this->importFile($import_url,  $url->prefix);
 					}
 				} else
 				{
 					// inserts a record in Files table if state prefix is not found
-					$this->insertFile($blob, $url->prefix, $import_url);
+					$this->insertFile($blob, $url->prefix);
+					// calls the import service if the auto_import column is set to Y
 					$this->importFile($import_url,  $url->prefix);
 				}
 			}
@@ -153,10 +155,9 @@ class FileService implements FileServiceInterface
 	 * 
 	 * @param blob $blob The blob value of the import file
 	 * @param string $prefix The state prefix
-	 * @param string $url The import url
 	 * @return void
 	 */
-	private function insertFile($blob, $prefix, $url){
+	private function insertFile($blob, $prefix){
 		$file = [];
 		$file["state_prefix"] = $prefix;
 		$file["img_data"] = $blob;
