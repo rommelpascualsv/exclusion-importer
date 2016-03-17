@@ -6,7 +6,7 @@ namespace Helper;
 
 class Acceptance extends \Codeception\Module
 {	
-	public function seeImportUrlInDatabse($prefix, $expectedUrl)
+	public function seeImportUrlInDatabase($prefix, $expectedUrl)
 	{
 		$db = $this->getModule('Db');
 		$actualUrl = $db->grabFromDatabase('exclusion_lists', 'import_url', array('prefix' => $prefix));
