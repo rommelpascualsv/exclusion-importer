@@ -6,8 +6,6 @@ $('.start-btn').click(function() {
     var $btn = $(this);
 
     var altUrl = $btn.parents('tr').children("td").children("input").val();
-    
-//    var altUrl = $btn.parents('tr').find('.url').html();
 
     var url = $btn.data('action');
 
@@ -29,7 +27,7 @@ $('.start-btn').click(function() {
 
             modal.find('.modal-body').html(data.msg);
             modal.modal();
-
+            
             return;
         }
 
@@ -37,6 +35,9 @@ $('.start-btn').click(function() {
             .addClass('btn-success')
             .attr('value', 'Done!')
             .attr('disabled', true);
+        
+        var readyForUpdate = $btn.parents('tr').children("td.readyForUpdate")[0];
+        readyForUpdate.innerHTML = "No";
 
     }).fail(function() {
         $btn.removeClass('btn-default')
@@ -45,3 +46,17 @@ $('.start-btn').click(function() {
             .attr('disabled', true);
     });
 });
+
+function toggleButton() {
+	var $txtFld = $(this);
+
+    var btn = $txtFld.parents('tr').children("td").children("input.start-btn");
+    
+    if ($txtFld.val() != "") {
+    	btn.attr('disabled', false);
+    } else {
+    	btn.attr('disabled', true);
+    }
+}
+$('.url').change(toggleButton);
+$('.url').keyup(toggleButton);

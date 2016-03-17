@@ -70,9 +70,12 @@
                         	<input class="url text_<?= $info['prefix'] ?>" type="text" name="text_<?= $info['prefix'] ?>" value="<?= $info['import_url'] ?>" />
                         </td>
                         <td>
-                        	<input type="button" value="Start" data-action="/import/<?= $info['prefix'] ?>" class="start-btn btn btn-1g btn-default" />
+                            <?php 
+                            	$disabled = empty($info['import_url']) ? "disabled" : "";
+							?>
+							<input <?= $disabled ?> type="button" value="Start" data-action="/import/<?= $info['prefix'] ?>" class="start-btn btn btn-1g btn-default" />
                         </td>
-                        <td><?= $info['ready_for_update'] === 'N' ? 'No' : 'Yes' ?></td>
+                        <td class="readyForUpdate"><?= $info['ready_for_update'] === 'N' ? 'No' : 'Yes' ?></td>
                     </tr>
                     <?php
                 }
