@@ -8,15 +8,17 @@ class Montana extends ExclusionList{
     public $dbPrefix = 'mt1';
 
 
-    public $uri = 'https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/montana/mt.xlsx';
+    public $uri = 'http://dphhs.mt.gov/MontanaHealthcarePrograms/TerminatedExcludedProviders.aspx';
 
 
-    public $type = 'xlsx';
-
+    public $type = 'html';
 
     public $retrieveOptions = [
-        'headerRow' => 0,
-        'offset' => 1
+    		'htmlFilterElement' => 'div > table',
+    		'rowElement'        => 'tr',
+    		'columnElement'     => 'td',
+    		'headerRow'         => 0,
+    		'offset'            => 0
     ];
 
 
