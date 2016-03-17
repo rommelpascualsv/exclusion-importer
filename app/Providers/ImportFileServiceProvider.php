@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
-class ImportServiceProvider extends ServiceProvider
+class ImportFileServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
@@ -23,6 +23,6 @@ class ImportServiceProvider extends ServiceProvider
      */
     public function register()
     {
-    	$this->app->bind('App\Services\Contracts\ImportServiceInterface', 'App\Services\ImportService');
+    	$this->app->bind('App\Services\Contracts\ImportFileServiceInterface', 'App\Services\ImportFileService');
     }
 }

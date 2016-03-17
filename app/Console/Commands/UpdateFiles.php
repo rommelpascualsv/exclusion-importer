@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Services\Contracts\FileServiceInterface;
+use App\Services\Contracts\ImportFileServiceInterface;
 use Illuminate\Console\Command;
 
 /**
@@ -37,7 +37,7 @@ class UpdateFiles extends Command {
 	 *
 	 * @return mixed
 	 */
-	public function handle(FileServiceInterface $fileService) {
-		$fileService->refreshRecords();
+	public function handle(ImportFileServiceInterface $importFileService) {
+		$importFileService->refreshRecords();
 	}
 }
