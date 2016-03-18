@@ -19,7 +19,7 @@ class ImportFileService implements ImportFileServiceInterface
 	 */
 	public function getExclusionList()
 	{
-		$lists = $this->getSupportedStateList();
+		$lists = $this->getActiveStateList();
 		
 		$states = app('db')->table('exclusion_lists')->
 			leftJoin('files', 'exclusion_lists.prefix', '=', 'files.state_prefix')->
@@ -176,47 +176,15 @@ class ImportFileService implements ImportFileServiceInterface
 	 *
 	 * @return list The prefix-state list
 	 */
-	private function getSupportedStateList() 
+	private function getActiveStateList() 
 	{
-		return [ 
-			'az1' => 'Arizona',
-			'ak1' => 'Alaska',
-			'ar1' => 'Arkansas',
-			'ct1' => 'Connecticut',
-			'cus_spectrum_debar' => 'Custom Spectrum Debar List',
-			'dc1' => 'Washington Dc',
-			'fdac' => 'FDA Clinical Investigators',
-			'fdadl' => 'FDA Debarment List',
-			'fl2' => 'Florida',
-			'ga1' => 'Georgia',
-			'healthmil' => 'TRICARE Sanctioned Providers',
-			'ia1' => 'Iowa',
-			'ks1' => 'Kansas',
-			'ky1' => 'Kentucky',
-			'la1' => 'Louisiana',
-			'me1' => 'Maine',
-			'mi1' => 'Michigan',
-			'mo1' => 'Missouri',
-			'ms1' => 'Mississippi',
-			'mt1' => 'Montana',
-			'nc1' => 'North Carolina',
-			'nd1' => 'North Dakota',
-			'njcdr' => 'New Jersey',
-			'nyomig' => 'New York',
-			'oh1' => 'Ohio',
-			'pa1' => 'Pennsylvania',
-			'phs' => 'NHH PHS',
-			'sc1' => 'South Carolina',
-			'tn1' => 'Tennessee',
-			'tx1' => 'Texas',
-			'usdocdp' => 'US DoC Denied Persons List',
-			'usdosd' => 'US DoS Debarment List',
-			'unsancindividuals' => 'UN Sanctions Individuals',
-			'unsancentities' => 'UN Sanctions Entities',
-			'wa1' => 'Washington State',
-			'wv2' => 'West Virginia',
-			'wy1' => 'Wyoming' 
-		];
+		$states = app('db')->table('exclusion_lists')->where('is_active', 1)->get();
+		
+		$collection = [];
+		foreach($states as $state) {
+			$collection[$state->prefix] = $state->description;
+		}
+		return $collection;
 	}
 	
 	/**
@@ -246,7 +214,7 @@ class ImportFileService implements ImportFileServiceInterface
 	{
 		$affected = app('db')->table('files')->where('state_prefix', $prefix)->update(['ready_for_update' => $value]);
 	
-		info($affected.' file/s updated');
+		info("Updating Ready For Update flag for... ".$prefix." ".$affected.' file/s updated');
 	}
 	
 	/**
@@ -277,12 +245,16 @@ class ImportFileService implements ImportFileServiceInterface
 		foreach ($urls as $url) {
 			$import_url = $url->import_url;
 			try {
+				
+				info("Refreshing... ".$url->prefix);
+				
 				if (!$this->isFileSupported($import_url)) {
 					info('File type is not supported.');
 					continue;
 				}
-	
+				
 				$saved = $this->saveFile($url->prefix, $import_url, 'Y');
+				
 				if ($saved) {
 					$this->autoImport($import_url,  $url->prefix);
 				}
@@ -305,8 +277,7 @@ class ImportFileService implements ImportFileServiceInterface
 	protected function isStateAutoImport($prefix)
 	{
 		$record = app('db')->table('exclusion_lists')->where('prefix', $prefix)->get();
-	
-		return $record[0]->auto_import === 'Y' ? true : false;
+		return $record[0]->is_auto_import == 1 ? true : false;
 	}
 	
 	/**
@@ -404,7 +375,7 @@ class ImportFileService implements ImportFileServiceInterface
 		$file["img_data"] = $blob;
 		$file["ready_for_update"] = 'Y';
 	
-		info('Saving file to table...');
+		info('Saving blob to FILES table...');
 		app('db')->table('files')->insert($file);
 	}
 	
@@ -418,7 +389,7 @@ class ImportFileService implements ImportFileServiceInterface
 	private function updateBlob($blob, $prefix){
 		$affected = app('db')->table('files')->where('state_prefix', $prefix)->update(['img_data' => $blob]);
 	
-		info($affected.' file/s updated');
+		info("Updating blob in Files table... ".$affected.' file/s updated');
 	}
 	
 	/**
