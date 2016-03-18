@@ -2510,7 +2510,6 @@ CREATE TABLE `usdosd_records` (
 DROP TABLE IF EXISTS `files`;
 CREATE TABLE `files` (
   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT ,
-  `file_name`  varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL ,
   `state_prefix`  varchar(30) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL ,
   `img_data`  longblob NULL DEFAULT NULL ,
   `ready_for_update`  varchar(2) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL ,
