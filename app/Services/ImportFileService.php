@@ -23,7 +23,7 @@ class ImportFileService implements ImportFileServiceInterface
 		
 		$states = app('db')->table('exclusion_lists')->
 			leftJoin('files', 'exclusion_lists.prefix', '=', 'files.state_prefix')->
-			select('exclusion_lists.prefix', 'exclusion_lists.accr', 'exclusion_lists.import_url', 'files.ready_for_update')->
+			select('exclusion_lists.prefix', 'exclusion_lists.accr', 'exclusion_lists.description', 'exclusion_lists.import_url', 'files.ready_for_update')->
 			whereIn('exclusion_lists.prefix', array_keys($lists))->get();
 		
 		$collection = [];
@@ -182,7 +182,7 @@ class ImportFileService implements ImportFileServiceInterface
 		
 		$collection = [];
 		foreach($states as $state) {
-			$collection[$state->prefix] = $state->description;
+			$collection[$state->prefix] = $state->accr;
 		}
 		return $collection;
 	}
