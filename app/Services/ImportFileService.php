@@ -13,18 +13,19 @@ use App\File;
 class ImportFileService implements ImportFileServiceInterface
 {
 	/**
-	 * Retrieves the exclusion list
+	 * Retrieves a list of active states to show in the import page.
 	 *
-	 * @return list The exclusion list
+	 * @return array - from the getActiveStateList method and records retrieved from the exclusion_lists and files tables
 	 */
 	public function getExclusionList()
 	{
 		$lists = $this->getActiveStateList();
 		
-		$states = app('db')->table('exclusion_lists')->
-			leftJoin('files', 'exclusion_lists.prefix', '=', 'files.state_prefix')->
-			select('exclusion_lists.prefix', 'exclusion_lists.accr', 'exclusion_lists.description', 'exclusion_lists.import_url', 'files.ready_for_update')->
-			whereIn('exclusion_lists.prefix', array_keys($lists))->get();
+		$states = app('db')->table('exclusion_lists')
+			->leftJoin('files', 'exclusion_lists.prefix', '=', 'files.state_prefix')
+			->select('exclusion_lists.prefix', 'exclusion_lists.accr', 'exclusion_lists.description', 'exclusion_lists.import_url', 'files.ready_for_update')
+			->whereIn('exclusion_lists.prefix', array_keys($lists))
+			->get();
 		
 		$collection = [];
 		foreach($states as $state) {
@@ -38,6 +39,7 @@ class ImportFileService implements ImportFileServiceInterface
 	 * Imports the downloaded file to database
 	 * @param $request The Request object from frontend
 	 * @param $listPrefix The state prefix
+	 * @param $shouldSaveFile boolean to determine if the record needs to be saved in files table
 	 *
 	 * @return object The object containing the result of the operation
 	 */
@@ -79,6 +81,7 @@ class ImportFileService implements ImportFileServiceInterface
 	 * Returns the corresponding exclusion list object for a given state prefix.
 	 * 
 	 * @param string $listPrefix the state prefix
+	 * 
 	 * @return object The state-specific exclusion list object
 	 */
 	protected function getListObject($listPrefix)
@@ -93,6 +96,7 @@ class ImportFileService implements ImportFileServiceInterface
 	 * Retrieves the corresponding list processor based on the passed object.
 	 * 
 	 * @param object $listObject the exclusion list object
+	 * 
 	 * @return object the list processor object
 	 */
 	protected function getListProcessor($listObject)
@@ -101,11 +105,11 @@ class ImportFileService implements ImportFileServiceInterface
 	}
 	
 	/**
-	 * Retrieves the Url record from the URLS table for a given state prefix.
+	 * Retrieves the import_url from the exclusion_lists table for a given state prefix.
 	 *
 	 * @param string $prefix The state prefix
 	 *
-	 * @return url The Url record
+	 * @return import_url
 	 */
 	protected function getUrl($prefix)
 	{
@@ -143,9 +147,9 @@ class ImportFileService implements ImportFileServiceInterface
 	}
 	
 	/**
-	 * Retrieves the corresponding state object for a given stte prefix.
+	 * Retrieves the corresponding state object for a given state prefix.
 	 * 
-	 * @param Request $request
+	 * @param string $url
 	 * @param string $listPrefix
 	 * 
 	 * @return object The state object
@@ -197,14 +201,14 @@ class ImportFileService implements ImportFileServiceInterface
 	 */
 	private function createResponse($message, $isSuccess) 
 	{
-		return response()->json ( [ 
+		return response()->json ([ 
 				'success' => $isSuccess,
 				'msg' => $message 
-		] );
+		]);
 	}
 	
 	/**
-	 * Updates the ready_for_update flag in File table.
+	 * Updates the ready_for_update flag in files table.
 	 *
 	 * @param string $prefix The state prefix
 	 * @param string $value The value to set for the flag
@@ -215,20 +219,6 @@ class ImportFileService implements ImportFileServiceInterface
 		$affected = app('db')->table('files')->where('state_prefix', $prefix)->update(['ready_for_update' => $value]);
 	
 		info("Updating Ready For Update flag for... ".$prefix." ".$affected.' file/s updated');
-	}
-	
-	/**
-	 * Retrieves the File record in Files table for a given state prefix.
-	 *
-	 * @param string $prefix The state prefix
-	 *
-	 * @return file The file record
-	 */
-	public function getFile($prefix)
-	{
-		$record = app('db')->table('files')->where('state_prefix', $prefix)->get();
-	
-		return $record;
 	}
 	
 	/**
@@ -281,7 +271,7 @@ class ImportFileService implements ImportFileServiceInterface
 	}
 	
 	/**
-	 *
+	 * If the state is auto import enabled, it will the import the record.
 	 *
 	 * @param unknown $url
 	 * @param unknown $prefix
@@ -295,7 +285,7 @@ class ImportFileService implements ImportFileServiceInterface
 	}
 	
 	/**
-	 * Retrieves an array of import urls saved in the Urls table.
+	 * Retrieves an array of import urls saved in the exclusion_lists table.
 	 *
 	 * @return array
 	 */
@@ -308,6 +298,7 @@ class ImportFileService implements ImportFileServiceInterface
 	 * Checks if the state prefix already exists in Files table.
 	 *
 	 * @param string $prefix The state prefix
+	 * 
 	 * @return boolean
 	 */
 	protected function isPrefixExists($prefix)
@@ -321,6 +312,7 @@ class ImportFileService implements ImportFileServiceInterface
 	 * Retrieves the blob value from Files table for a given state prefix.
 	 *
 	 * @param string $prefix The state prefix
+	 * 
 	 * @return blob
 	 */
 	protected function getBlobOfFile($prefix)
@@ -335,6 +327,7 @@ class ImportFileService implements ImportFileServiceInterface
 	 *
 	 * @param string $prefix the state prefix
 	 * @param string $import_url the import url
+	 * 
 	 * @return boolean true if file was inserted/updated otherwise, false
 	 */
 	private function saveFile($prefix, $import_url, $updateValue)
@@ -362,11 +355,12 @@ class ImportFileService implements ImportFileServiceInterface
 	}
 	
 	/**
-	 * Inserts a record to the File table.
+	 * Inserts a record to the files table.
 	 *
 	 * @param blob $blob The blob value of the import file
 	 * @param string $prefix The state prefix
 	 * @param string $url The import url
+	 * 
 	 * @return void
 	 */
 	private function insertFile($blob, $prefix, $url){
@@ -380,10 +374,11 @@ class ImportFileService implements ImportFileServiceInterface
 	}
 	
 	/**
-	 * Updates the blob data in File table for a given state prefix.
+	 * Updates the blob data in files table for a given state prefix.
 	 *
 	 * @param blob $blob The blob value of the import file
 	 * @param string $prefix The state prefix
+	 * 
 	 * @return void
 	 */
 	private function updateBlob($blob, $prefix){
@@ -396,6 +391,7 @@ class ImportFileService implements ImportFileServiceInterface
 	 * Checks if the import file is currently supported.
 	 *
 	 * @param string $url The import url
+	 * 
 	 * @return boolean
 	 */
 	private function isFileSupported($url)
