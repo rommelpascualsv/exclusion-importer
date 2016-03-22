@@ -1,4 +1,4 @@
-<?php namespace App\Import\Lists;
+<?php namespace app\Import\Lists;
 
 class Washington extends ExclusionList
 {
@@ -16,6 +16,7 @@ class Washington extends ExclusionList
         'middle_etc',
         'entity',
         'provider_license',
+        'npi_number',
         'termination_date',
         'termination_reason'
     ];
@@ -30,6 +31,7 @@ class Washington extends ExclusionList
         'first_name',
         'entity',
         'provider_license',
+        'npi_number',
         'termination_date'
     ];
 
@@ -43,8 +45,40 @@ class Washington extends ExclusionList
         parent::preProcess();
     }
 
+    private function parseName($name)
+    {
+        $names = [];
+        $completeName = explode(', ', $name);
+        $names[] = $completeName[0];
+
+        if (isset($completeName[1])) {
+            $firstMiddle = explode(' ', $completeName[1], 2);
+            $names = array_merge($names, $firstMiddle);
+        }
+
+        return $names;
+    }
+
+
     protected function parse()
     {
+        $data = [];
+        $basura = [];
+        $rows = preg_split('/(\r)?\n(\s+)?/', $this->data);
+        foreach ($rows as $key => $value) {
+            $row = str_getcsv($value);
+
+            if (strcmp(', ', $row[0]) > 0) {
+                $name = $this->parseName($string[0]);
+                $row[0] = '';
+                $row = array_merge($name, $row);
+                $data[] = $row;
+            } else {
+                $data[] = $row;
+            }
+        }
+        // print_r($basura);
+        // exit;
         $addSpacesBeforeList = [
             'AP30004851',
             'DE00005459',
@@ -79,7 +113,7 @@ class Washington extends ExclusionList
         $regex3 = preg_replace('/^[\s\S\w]+Action[\s]+Exclusion[\s]+/', $blankDelimiter, $regex2B);
         $regex4 = preg_replace('/\(ID Only\)\n/', '(ID Only)', $regex3);
         $regex5 = preg_replace('/[\s]+Our House Adult Family\n[\s]+Home\//', PHP_EOL . 'Our House Adult Family Home \ ', $regex4);
-        $cleanData = preg_replace_callback($addSpacesBeforeListAsString, function($match){
+        $cleanData = preg_replace_callback($addSpacesBeforeListAsString, function ($match) {
             return '   ' . $match[0];
         }, $regex5);
         $regex6 = preg_replace('/(\r)?\n(\s+)?/', $rowDelimiter, $cleanData);
@@ -87,21 +121,19 @@ class Washington extends ExclusionList
         $regex8 = preg_replace('/\s{10}E\s{10}/', $blankDelimiter, $regex7);
         $rows = explode($rowDelimiter, $regex8);
         $columns = [];
-        foreach ($rows as $row)
-        {
+        foreach ($rows as $row) {
             $rowArray = explode($columnDelimiter, $row);
             $firstMiddle = explode(', ', $rowArray[0], 2); //separate last name from rest of name
-            if (isset($firstMiddle[1]))
-            {
+            if (isset($firstMiddle[1])) {
                 $middle = explode(' ', $firstMiddle[1], 2); //separate first name
-                if ( ! isset($middle[1])) //add blank if no middle name so won't act like entity
+                if (! isset($middle[1])) { //add blank if no middle name so won't act like entity
                     $middle[1] = ' ';
+                }
                 array_splice($firstMiddle, 1, 2, $middle);
             }
             array_splice($rowArray, 0, 1, $firstMiddle);
             array_splice($rowArray, 3, 0, ''); //insert blank column for entities
-            if (count($rowArray) < 6)
-            {
+            if (count($rowArray) < 6) {
                 $entity = $rowArray; //get entity
                 unset($entity[3]); //remove blank column
                 array_splice($rowArray, 3, count($entity), $entity); //insert entity
@@ -113,11 +145,13 @@ class Washington extends ExclusionList
             $columns[] = $rowArray;
         }
         //check for empty arrays
-        foreach ($columns as $key => $value)
-        {
-            if ( ! array_filter($value))
+        foreach ($columns as $key => $value) {
+            if (! array_filter($value)) {
                 unset($columns[$key]);
+            }
         }
         $this->data = $columns;
+        print_r($columns);
+        exit;
     }
 }

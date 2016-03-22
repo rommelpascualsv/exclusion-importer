@@ -28,7 +28,7 @@ class PDFRetriever extends Retriever
         $file = "{$folder}/{$list->dbPrefix}.pdf";
 
         $this->httpClient->get($list->uri, ['sink' => $file]);
-
+ 
         $contents = shell_exec($list->pdfToText . ' ' . $file . ' -');
 
         return $contents;
