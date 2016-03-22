@@ -5,13 +5,15 @@ use App\Import\Service\Exclusions\ListFactory;
 use App\Import\Service\ListProcessor;
 use App\Services\Contracts\ImportFileServiceInterface;
 use Illuminate\Http\Request;
-use App\File;
+
 /**
  * Service class that handles the import related processes.
  *
  */
 class ImportFileService implements ImportFileServiceInterface
 {
+	use JsonResponse;
+	
 	/**
 	 * Retrieves a list of active states to show in the import page.
 	 *
@@ -192,22 +194,6 @@ class ImportFileService implements ImportFileServiceInterface
 	}
 	
 	/**
-	 * Returns the response object for the given parameters.
-	 * 
-	 * @param string $message
-	 * @param string $isSuccess
-	 * 
-	 * @return object The response object
-	 */
-	private function createResponse($message, $isSuccess) 
-	{
-		return response()->json ([ 
-				'success' => $isSuccess,
-				'msg' => $message 
-		]);
-	}
-	
-	/**
 	 * Updates the ready_for_update flag in files table.
 	 *
 	 * @param string $prefix The state prefix
@@ -363,7 +349,8 @@ class ImportFileService implements ImportFileServiceInterface
 	 * 
 	 * @return void
 	 */
-	private function insertFile($blob, $prefix, $url){
+	private function insertFile($blob, $prefix, $url)
+	{
 		$file = [];
 		$file["state_prefix"] = $prefix;
 		$file["img_data"] = $blob;
@@ -381,7 +368,8 @@ class ImportFileService implements ImportFileServiceInterface
 	 * 
 	 * @return void
 	 */
-	private function updateBlob($blob, $prefix){
+	private function updateBlob($blob, $prefix)
+	{
 		$affected = app('db')->table('files')->where('state_prefix', $prefix)->update(['img_data' => $blob]);
 	
 		info("Updating blob in Files table... ".$affected.' file/s updated');
