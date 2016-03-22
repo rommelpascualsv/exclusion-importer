@@ -100,6 +100,7 @@ class ImportController extends BaseController
             'mo1'                => 'Missouri',
             'ms1'                => 'Mississippi',
             'mt1'                => 'Montana',
+        	'ne1'				 => 'Nebraska',
             'nc1'                => 'North Carolina',
             'nd1'                => 'North Dakota',
             'njcdr'              => 'New Jersey',
