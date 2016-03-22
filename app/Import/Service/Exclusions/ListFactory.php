@@ -15,6 +15,7 @@ class ListFactory
         'ma1'               => 'Massachusetts',
         'md1'               => 'Maryland',
         'mi1'               => 'Michigan',
+    	'ne1'				=> 'Nebraska',	
         'njcdr'             => 'NewJersey',
         'nyomig'            => 'NewYork',
         'oh1'               => 'Ohio',
