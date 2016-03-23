@@ -5,6 +5,7 @@ use App\Import\Service\Exclusions\ListFactory;
 use App\Import\Service\ListProcessor;
 use App\Services\Contracts\ImportFileServiceInterface;
 use Illuminate\Http\Request;
+use App\Response\JsonResponse;
 
 /**
  * Service class that handles the import related processes.
