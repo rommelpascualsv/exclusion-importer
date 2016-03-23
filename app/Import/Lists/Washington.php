@@ -10,6 +10,10 @@ class Washington extends ExclusionList
 
     public $type = 'pdf';
 
+
+    /**
+     * @var field names
+     */
     public $fieldNames = [
         'last_name',
         'first_name',
@@ -21,9 +25,11 @@ class Washington extends ExclusionList
         'termination_reason'
     ];
 
-    public $retrieveOptions = [
-        'headerRow' => 0,
-        'offset'    => 1
+    /**
+     * @var row offset
+     */
+    private $retrieveOptions = [
+        'offset'    => 2
     ];
 
     public $hashColumns = [
@@ -35,27 +41,33 @@ class Washington extends ExclusionList
         'termination_date'
     ];
 
-    public $dateColumns = [
-        'termination_date' => 5
-    ];
-
+    /**
+     * @var institution special cases
+     */
     private $institutions = [
         'Wheelchairs Plus',
-        'Adult Family Home',
+        'AA Adult Family Home',
         'Our House Adult Family Home/',
         'Wheelchairs Plus',
         '/Fairwood Care'
     ];
 
-    private $bussiness;
+    private $business;
 
+    /**
+     * @inherit preProcess
+     */
     public function preProcess()
     {
         $this->parse();
         parent::preProcess();
     }
 
-    private function parseName($name)
+    /**
+     * @param string name
+     * @return array
+     */
+    private function parseName(string $name)
     {
         $names = [];
         if (strpos($name, ', ') !== false) {
@@ -81,14 +93,22 @@ class Washington extends ExclusionList
         return $names;
     }
 
-    private function parseBusiness($business)
+    /**
+     * @param string business
+     * @return array
+     */
+    private function parseBusiness(string $business)
     {
         $name = ['', '', ''];
-        $name[] = $bussiness;
+        $name[] = $business;
         return $name;
     }
 
-    private function override($value)
+    /**
+     * @param array data rows
+     * @return array
+     */
+    private function override(array $value)
     {
         $data = '';
         $institution = '';
@@ -105,6 +125,7 @@ class Washington extends ExclusionList
             if ($this->business) {
                 $institution = $this->parseName($value[0]);
                 $institution[3] = $this->business;
+                array_shift($value);
             } else {
                 $institution = $this->parseBusiness($value[0]);
                 array_shift($value);
@@ -116,29 +137,37 @@ class Washington extends ExclusionList
         return $data;
     }
 
+    /**
+     * @inherit parse
+     */
     protected function parse()
     {
         $data = [];
         $rows = preg_split('/(\r)?\n(\s+)?/', $this->data);
-        array_shift($rows);
-        array_shift($rows);
+
+        //row offset
+        for ($i=0; $i < $this->retrieveOptions['offset']; $i++) {
+            array_shift($rows);
+        }
 
         foreach ($rows as $key => $value) {
-            $this->bussiness = '';
+            $this->business = '';
             $value = preg_replace('/[\r\n]+/', ' ', $value);
             $value = preg_replace('!\s+!', ' ', $value);
             $row = str_getcsv($value);
 
             foreach ($this->institutions as $ins) {
                 if (strpos($row[0], $ins) !== false) {
-                    $row[0] = str_replace($ins, '', $row[0]);
-                    $this->bussiness = $ins;
+                    $row[0] = str_replace($ins, '', trim($row[0]));
+                    $this->business = str_replace('/', '', $ins);
                     break;
                 }
             }
 
             $data[] = $this->override($row);
         }
+
+        array_pop($data);
         print_r($data);
         exit;
         $this->data = $data;
