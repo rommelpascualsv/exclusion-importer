@@ -31,7 +31,6 @@ class Nebraska extends ExclusionList
     public $hashColumns = [
         'provider_name',
         'npi',
-        'provider_type',
     	'effective_date',
     ];
 
