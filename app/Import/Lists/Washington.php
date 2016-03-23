@@ -28,7 +28,7 @@ class Washington extends ExclusionList
     /**
      * @var row offset
      */
-    private $retrieveOptions = [
+    public $retrieveOptions = [
         'offset'    => 2
     ];
 
@@ -67,7 +67,7 @@ class Washington extends ExclusionList
      * @param string name
      * @return array
      */
-    private function parseName(string $name)
+    private function parseName($name)
     {
         $names = [];
         if (strpos($name, ', ') !== false) {
@@ -97,7 +97,7 @@ class Washington extends ExclusionList
      * @param string business
      * @return array
      */
-    private function parseBusiness(string $business)
+    private function parseBusiness($business)
     {
         $name = ['', '', ''];
         $name[] = $business;
@@ -129,7 +129,6 @@ class Washington extends ExclusionList
             } else {
                 $institution = $this->parseBusiness($value[0]);
                 array_shift($value);
-                array_shift($value);
             }
             $data = array_merge($institution, $value);
         }
@@ -155,6 +154,7 @@ class Washington extends ExclusionList
             $value = preg_replace('/[\r\n]+/', ' ', $value);
             $value = preg_replace('!\s+!', ' ', $value);
             $row = str_getcsv($value);
+            trim($row[0]);
 
             foreach ($this->institutions as $ins) {
                 if (strpos($row[0], $ins) !== false) {
@@ -168,8 +168,6 @@ class Washington extends ExclusionList
         }
 
         array_pop($data);
-        print_r($data);
-        exit;
         $this->data = $data;
     }
 }
