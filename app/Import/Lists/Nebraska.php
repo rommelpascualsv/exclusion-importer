@@ -71,7 +71,7 @@ class Nebraska extends ExclusionList
 			$columns = $this->applyOverrides($columns);
         	
 			// populate the array data
-        	array_push($data, $columns);
+        	$data[] = $columns;
         }
 
         $this->data = $data;
