@@ -32,6 +32,8 @@ class Nebraska extends ExclusionList
         'provider_name',
         'npi',
     	'effective_date',
+    	'term',
+    	'end_date'
     ];
 
 
