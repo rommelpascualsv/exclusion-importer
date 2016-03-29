@@ -137,7 +137,8 @@ class Washington extends ExclusionList
         }
 
         $names = explode(' ', $name);
-
+        $names[] = '';
+        
         return $names;
     }
 
