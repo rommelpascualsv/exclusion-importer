@@ -64,31 +64,79 @@ class Washington extends ExclusionList
     }
 
     /**
+     * @param string
+     * @return boolean
+     */
+    public function valueIsLastNameFirst($name)
+    {
+        return strpos($name, ', ') !== false;
+    }
+
+    /**
+     * @param string
+     * @return array
+     */
+    public function parseLastNameFirst($name)
+    {
+        $completeName = explode(', ', $name);
+        $names[] = $completeName[0];
+
+        if (isset($completeName[1])) {
+            $firstMiddle = explode(' ', $completeName[1], 2);
+
+            if (count($firstMiddle) == 1) {
+                $firstMiddle[] = '';
+            }
+
+            $names = array_merge($names, $firstMiddle);
+        }
+
+        return $names;
+    }
+
+    /**
+     * @param string
+     * @return array
+     */
+    public function textNewlineArray($string)
+    {
+        return preg_split('/(\r)?\n(\s+)?/', trim($string));
+    }
+
+    /**
+     * @param array $array, interger $offset
+     * @return array
+     */
+    public function arrayOffset(array $array, $offset)
+    {
+        return array_splice($array, $offset);
+    }
+
+    /**
+     * @param string csv
+     * @return array
+     */
+    public function csvArray($string)
+    {
+        $string = preg_replace('/[\r\n]+/', ' ', $string);
+        $string = preg_replace('!\s+!', ' ', $string);
+        $array = str_getcsv($string);
+        return array_map('trim', $array);
+    }
+
+    /**
      * @param string name
      * @return array
      */
     private function parseName($name)
     {
         $names = [];
-        if (strpos($name, ', ') !== false) {
-            $completeName = explode(', ', $name);
-            $names[] = $completeName[0];
 
-            if (isset($completeName[1])) {
-                $firstMiddle = explode(' ', $completeName[1], 2);
-
-                if (count($firstMiddle) == 1) {
-                    $firstMiddle[] = '';
-                }
-
-                $names = array_merge($names, $firstMiddle);
-            }
-        } else {
-            $names = explode(' ', $name);
-            $names[] = '';
+        if ($this->valueIsLastNameFirst($name)) {
+            return $this->parseLastNameFirst($name);
         }
 
-        $names[] = '';
+        $names = explode(' ', $name);
 
         return $names;
     }
@@ -111,29 +159,28 @@ class Washington extends ExclusionList
     private function override(array $value)
     {
         $data = '';
-        $institution = '';
 
-        if (strpos($value[0], ', ') !== false) {
+        //if combination of business and name
+        if ($this->business) {
             $name = $this->parseName($value[0]);
-            array_shift($value);
-            $row = array_merge($name, $value);
-            if ($this->business) {
-                $row[3] = $this->business;
-            }
-            $data = $row;
-        } else {
-            if ($this->business) {
-                $institution = $this->parseName($value[0]);
-                $institution[3] = $this->business;
-                array_shift($value);
-            } else {
-                $institution = $this->parseBusiness($value[0]);
-                array_shift($value);
-            }
-            $data = array_merge($institution, $value);
+            $name[] = $this->business;
+            $value = $this->arrayOffset($value, 1);
+            return array_merge($name, $value);
         }
 
-        return $data;
+        //if Name without business
+        if ($this->valueIsLastNameFirst($value[0])) {
+            $name = $this->parseName($value[0]);
+            $name[] = '';
+            $value = $this->arrayOffset($value, 1);
+            return array_merge($name, $value);
+        }
+
+        //if business w/o name
+        $name = $this->parseBusiness($value[0]);
+        $value = $this->arrayOffset($value, 1);
+
+        return array_merge($name, $value);
     }
 
     /**
@@ -142,23 +189,20 @@ class Washington extends ExclusionList
     protected function parse()
     {
         $data = [];
-        $rows = preg_split('/(\r)?\n(\s+)?/', $this->data);
+        $rows = $this->textNewlineArray($this->data);
 
-        //row offset
-        for ($i=0; $i < $this->retrieveOptions['offset']; $i++) {
-            array_shift($rows);
-        }
+        //array offset
+        $rows = $this->arrayOffset($rows, $this->retrieveOptions['offset']);
 
         foreach ($rows as $key => $value) {
             $this->business = '';
-            $value = preg_replace('/[\r\n]+/', ' ', $value);
-            $value = preg_replace('!\s+!', ' ', $value);
-            $row = str_getcsv($value);
-            trim($row[0]);
+            // convert csv string to array
+            $row = $this->csvArray($value);
 
+            // Check for combination of name and business
             foreach ($this->institutions as $ins) {
                 if (strpos($row[0], $ins) !== false) {
-                    $row[0] = str_replace($ins, '', trim($row[0]));
+                    $row[0] = str_replace($ins, '', $row[0]);
                     $this->business = str_replace('/', '', $ins);
                     break;
                 }
@@ -167,7 +211,6 @@ class Washington extends ExclusionList
             $data[] = $this->override($row);
         }
 
-        array_pop($data);
         $this->data = $data;
     }
 }
