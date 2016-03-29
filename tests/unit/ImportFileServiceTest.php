@@ -38,7 +38,8 @@ class ImportFileServiceTest extends \Codeception\TestCase\Test
      * Asserts not null for the file retrieved.
      * Asserts if filename is equal to expected name.
      */
-    public function testGetFile(){
+    public function testGetFile()
+    {
     	$file = $this->importFileService->getFile('ak1');
     	$this->assertNotNull($file);
     }
@@ -46,7 +47,8 @@ class ImportFileServiceTest extends \Codeception\TestCase\Test
     /**
      * Test for the refreshRecords method of ImportFileService. 
      */
-    public function testRefreshRecordsFileNotSupported(){
+    public function testRefreshRecordsFileNotSupported()
+    {
     	$mock = $this->container->mock("App\Services\ImportFileService[getUrls]");
     	$mock = $mock->shouldAllowMockingProtectedMethods();
     	
@@ -58,7 +60,8 @@ class ImportFileServiceTest extends \Codeception\TestCase\Test
     	$mock->refreshRecords();
     }
     
-    public function testRefreshRecordsPrefixExistsWillNotUpdate(){
+    public function testRefreshRecordsPrefixExistsWillNotUpdate()
+    {
     	$mock = $this->container->mock("App\Services\ImportFileService[getUrls, getBlobOfFile]");
     	$mock = $mock->shouldAllowMockingProtectedMethods();
     	 
@@ -75,7 +78,8 @@ class ImportFileServiceTest extends \Codeception\TestCase\Test
     	$mock->refreshRecords();
     }
     
-    public function testRefreshRecordsPrefixExistsWillUpdate(){
+    public function testRefreshRecordsPrefixExistsWillUpdate()
+    {
     	$mock = $this->container->mock("App\Services\ImportFileService[getUrls, getBlobOfFile]");
     	$mock = $mock->shouldAllowMockingProtectedMethods();
     
@@ -95,7 +99,8 @@ class ImportFileServiceTest extends \Codeception\TestCase\Test
     	$this->tester->seeInDatabase('files', array('state_prefix' => 'wy1'));
     }
     
-    public function testRefreshRecordsNoPrefixWillInsert(){
+    public function testRefreshRecordsNoPrefixWillInsert()
+    {
     	$mock = $this->container->mock("App\Services\ImportFileService[getUrls, getBlobOfFile, isPrefixExists]");
     	$mock = $mock->shouldAllowMockingProtectedMethods();
     
@@ -253,7 +258,8 @@ class ImportFileServiceTest extends \Codeception\TestCase\Test
      * Asserts that the number of updated records is one.
      * Asserts that the updated record is found in the database.
      */
-    public function testUpdateStateUrl(){
+    public function testUpdateStateUrl()
+    {
     	$class = new ReflectionClass('App\Services\ImportFileService');
     	$method = $class->getMethod('updateStateUrl');
     	$method->setAccessible(true);
@@ -269,7 +275,8 @@ class ImportFileServiceTest extends \Codeception\TestCase\Test
      * Asserts not null for the url retrieved.
      * Asserts that url is equal to expected url.
      */
-    public function testGetUrl(){
+    public function testGetUrl()
+    {
     	$class = new ReflectionClass('App\Services\ImportFileService');
     	$method = $class->getMethod('getUrl');
     	$method->setAccessible(true);
@@ -284,7 +291,8 @@ class ImportFileServiceTest extends \Codeception\TestCase\Test
      *
      * Asserts that state is updateable.
      */
-    public function testIsStateUpdateable(){
+    public function testIsStateUpdateable()
+    {
     	$class = new ReflectionClass('App\Services\ImportFileService');
     	$method = $class->getMethod('isStateUpdateable');
     	$method->setAccessible(true);

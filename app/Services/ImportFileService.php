@@ -112,7 +112,7 @@ class ImportFileService implements ImportFileServiceInterface
 	 *
 	 * @param string $prefix The state prefix
 	 *
-	 * @return import_url
+	 * @return string import_url
 	 */
 	protected function getUrl($prefix)
 	{
@@ -300,7 +300,7 @@ class ImportFileService implements ImportFileServiceInterface
 	 *
 	 * @param string $prefix The state prefix
 	 * 
-	 * @return blob
+	 * @return string The img_data of the state
 	 */
 	protected function getBlobOfFile($prefix)
 	{
@@ -344,7 +344,7 @@ class ImportFileService implements ImportFileServiceInterface
 	/**
 	 * Inserts a record to the files table.
 	 *
-	 * @param blob $blob The blob value of the import file
+	 * @param string $blob The blob value of the import file
 	 * @param string $prefix The state prefix
 	 * @param string $url The import url
 	 * 
@@ -364,7 +364,7 @@ class ImportFileService implements ImportFileServiceInterface
 	/**
 	 * Updates the blob data in files table for a given state prefix.
 	 *
-	 * @param blob $blob The blob value of the import file
+	 * @param string $blob The blob value of the import file
 	 * @param string $prefix The state prefix
 	 * 
 	 * @return void
