@@ -225,6 +225,12 @@ class ImportFileService implements ImportFileServiceInterface
 				
 				info("Refreshing... ".$url->prefix);
 				
+				//TODO check this - don't do anything if url is null or empty
+				if (empty($import_url)) {
+					info('Import url must not be null or empty.');
+					continue;
+				}
+				
 				if (!$this->isFileSupported($import_url)) {
 					info('File type is not supported.');
 					continue;
@@ -321,7 +327,7 @@ class ImportFileService implements ImportFileServiceInterface
 	{
 		// get the blob value of import file
 		$blob = file_get_contents($import_url);
-	
+		info("Saving... ".$prefix);
 		// checks if state prefix already exists in Files table
 		if ($this->isPrefixExists($prefix)) {
 			// compares the import file and the one saved in Files table
@@ -388,12 +394,18 @@ class ImportFileService implements ImportFileServiceInterface
 		$filetypeArr = ['application/pdf','application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','text/plain','text/csv', 'text/html; charset=utf-8', 'text/html'];
 	
 		try {
+			//TODO check this - we are only accepting urls for the scheduler?
+			if (!filter_var($url, FILTER_VALIDATE_URL)) {
+				info("This is not a valid url: ".$url);
+				return false;
+			}
 			$arrHeaders = get_headers($url, 1);
+			$arrHeadersCopy = array_change_key_case($arrHeaders, CASE_LOWER);
 		}
 		catch (\ErrorException $e) {
 			throw new \ErrorException($e);
 		}
 	
-		return in_array($arrHeaders['Content-Type'], $filetypeArr);
+		return in_array($arrHeadersCopy['content-type'], $filetypeArr);
 	}
 }
