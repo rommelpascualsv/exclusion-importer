@@ -104,15 +104,6 @@ class Washington extends ExclusionList
     }
 
     /**
-     * @param array $array, interger $offset
-     * @return array
-     */
-    public function arrayOffset(array $array, $offset)
-    {
-        return array_splice($array, $offset);
-    }
-
-    /**
      * @param string csv
      * @return array
      */
@@ -165,7 +156,7 @@ class Washington extends ExclusionList
         if ($this->business) {
             $name = $this->parseName($value[0]);
             $name[] = $this->business;
-            $value = $this->arrayOffset($value, 1);
+            $value = array_offset($value, 1);
             return array_merge($name, $value);
         }
 
@@ -173,13 +164,13 @@ class Washington extends ExclusionList
         if ($this->valueIsLastNameFirst($value[0])) {
             $name = $this->parseName($value[0]);
             $name[] = '';
-            $value = $this->arrayOffset($value, 1);
+            $value = array_offset($value, 1);
             return array_merge($name, $value);
         }
 
         //if business w/o name
         $name = $this->parseBusiness($value[0]);
-        $value = $this->arrayOffset($value, 1);
+        $value = array_offset($value, 1);
 
         return array_merge($name, $value);
     }
@@ -193,7 +184,7 @@ class Washington extends ExclusionList
         $rows = $this->textNewLineToArray($this->data);
 
         //array offset
-        $rows = $this->arrayOffset($rows, $this->retrieveOptions['offset']);
+        $rows = array_offset($rows, $this->retrieveOptions['offset']);
 
         foreach ($rows as $key => $value) {
             $this->business = '';
