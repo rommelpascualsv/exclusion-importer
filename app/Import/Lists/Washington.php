@@ -98,7 +98,7 @@ class Washington extends ExclusionList
      * @param string
      * @return array
      */
-    public function textNewlineArray($string)
+    public function textNewLineToArray($string)
     {
         return preg_split('/(\r)?\n(\s+)?/', trim($string));
     }
@@ -116,7 +116,7 @@ class Washington extends ExclusionList
      * @param string csv
      * @return array
      */
-    public function csvArray($string)
+    public function csvToArray($string)
     {
         $string = preg_replace('/[\r\n]+/', ' ', $string);
         $string = preg_replace('!\s+!', ' ', $string);
@@ -138,7 +138,7 @@ class Washington extends ExclusionList
 
         $names = explode(' ', $name);
         $names[] = '';
-        
+
         return $names;
     }
 
@@ -190,7 +190,7 @@ class Washington extends ExclusionList
     protected function parse()
     {
         $data = [];
-        $rows = $this->textNewlineArray($this->data);
+        $rows = $this->textNewLineToArray($this->data);
 
         //array offset
         $rows = $this->arrayOffset($rows, $this->retrieveOptions['offset']);
@@ -198,7 +198,7 @@ class Washington extends ExclusionList
         foreach ($rows as $key => $value) {
             $this->business = '';
             // convert csv string to array
-            $row = $this->csvArray($value);
+            $row = $this->csvToArray($value);
 
             // Check for combination of name and business
             foreach ($this->institutions as $ins) {
