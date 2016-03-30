@@ -34,7 +34,6 @@ class USDosDebar extends ExclusionList
 
     public $shouldHashListName = true;
 
-
     public function preProcess()
     {
         parent::preProcess();

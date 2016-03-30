@@ -3,8 +3,8 @@
 use App\Import\OFAC\SDN;
 use Illuminate\Console\Command;
 
-class ImportSDN extends Command {
-
+class ImportSDN extends Command 
+{
     /**
      * The console command name.
      *
@@ -53,5 +53,4 @@ class ImportSDN extends Command {
 
         $this->info('done!');
     }
-
 }

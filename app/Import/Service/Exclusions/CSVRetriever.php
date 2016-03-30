@@ -10,18 +10,15 @@ use App\Import\Service\DataCsvConverter;
  */
 class CSVRetriever extends Retriever
 {
-
     /**
      * @var \App\Import\Service\DataCsvConverter
      */
     protected $dataConverter;
 
-
 	/**
 	 * @var	\GuzzleHttp\Client	$httpClient
 	 */
 	protected $httpClient;
-
 
     /**
      * Constructor
@@ -35,7 +32,6 @@ class CSVRetriever extends Retriever
         $this->httpClient = $httpClient;
     }
 
-
     /**
 	 * Retrieve the data from a remote source
 	 *
@@ -44,13 +40,11 @@ class CSVRetriever extends Retriever
      */
     public function retrieveData(ExclusionList $list)
     {
-        if ($this->uriIsRemote($list->uri))
-        {
+        if ($this->uriIsRemote($list->uri)) {
             $response = $this->httpClient->get($list->uri);
             $contents = $response->getBody();
         }
-        else
-        {
+        else {
             $contents = file_get_contents($list->uri);
         }
 
@@ -58,7 +52,6 @@ class CSVRetriever extends Retriever
 
         return $data;
     }
-
 
     /**
      * @param $uri
@@ -68,5 +61,4 @@ class CSVRetriever extends Retriever
     {
         return filter_var($uri, FILTER_VALIDATE_URL);
     }
-
 }

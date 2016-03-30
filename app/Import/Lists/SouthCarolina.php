@@ -2,15 +2,11 @@
 
 class SouthCarolina extends ExclusionList
 {
-
     public $dbPrefix = 'sc1';
-
 
     public $uri = 'https://www.scdhhs.gov/sites/default/files/Exclusion%20Provider%20List%20for%20DHHS%20Website_14.xls';
 
-
     public $type = 'xls';
-
 
     public $retrieveOptions = [
         'headerRow' => 2,
@@ -41,7 +37,6 @@ class SouthCarolina extends ExclusionList
     ];
 
     public $shouldHashListName = true;
-
 
     public function postProcess()
     {

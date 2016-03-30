@@ -1,6 +1,5 @@
 <?php namespace App\Import\Service\Exclusions;
 
-
 use GuzzleHttp\Client;
 use App\Import\Lists\ExclusionList;
 use App\Import\Service\DataCsvConverter;
@@ -8,18 +7,15 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class HTMLRetriever extends Retriever
 {
-
     /**
      * @var \App\Import\Service\DataCsvConverter
      */
     protected $dataConverter;
 
-
     /**
      * @var \Symfony\Component\DomCrawler\Crawler
      */
     protected $domCrawler;
-
 
     /**
      * @param Crawler $domCrawler
@@ -30,7 +26,6 @@ class HTMLRetriever extends Retriever
         $this->domCrawler = $domCrawler;
         $this->dataConverter = $dataConverter;
     }
-
 
     /**
      * @param ExclusionList $list
@@ -59,9 +54,8 @@ class HTMLRetriever extends Retriever
             });
         });
 
-        foreach ($columnsArray as $key => $value)
-        {
-            if ( ! array_filter($value))
+        foreach ($columnsArray as $key => $value) {
+            if (! array_filter($value))
                 unset($columnsArray[$key]);
         }
 
@@ -71,5 +65,4 @@ class HTMLRetriever extends Retriever
 
         return $columnsArray;
     }
-
 }

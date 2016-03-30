@@ -6,15 +6,11 @@ class Texas extends ExclusionList
 {
     public $dbPrefix = 'tx1';
 
-
     public $uri = '/vagrant/storage/app/tx1.xls';
-
 
     public $type = 'xls';
 
-
     public $shouldHashListName = true;
-
 
     public $fieldNames = [
         'company_name',
@@ -30,7 +26,6 @@ class Texas extends ExclusionList
         'web_comments'
     ];
 
-
     public $hashColumns = [
         'company_name',
         'last_name',
@@ -41,17 +36,14 @@ class Texas extends ExclusionList
         'reinstated_date'
     ];
 
-
     public $retrieveOptions = [
         'headerRow' => 0,
         'offset' => 1
     ];
-
 
     public $dateColumns = [
         'start_date' => 7,
         'add_date' => 8,
         'reinstated_date' => 9,
     ];
-
 }

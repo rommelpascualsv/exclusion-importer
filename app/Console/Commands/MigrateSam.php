@@ -7,7 +7,6 @@ use Illuminate\Console\Command;
 
 class MigrateSam extends Command
 {
-
     /**
      * The console command name.
      *

@@ -1,6 +1,5 @@
 <?php namespace App\Import\Lists;
 
-
 use League\Flysystem\Filesystem;
 use App\Import\Service\DataCsvConverter;
 use App\Import\Service\File\CsvFileReader;
@@ -8,18 +7,13 @@ use League\Flysystem\ZipArchive\ZipArchiveAdapter;
 
 class Iowa extends ExclusionList
 {
-
     public $dbPrefix = 'ia1';
-
 
     public $uri = "https://dhs.iowa.gov/sites/default/files/2016-01-31.PI_.term-suspend-probation.zip";
 
-
     public $type = 'custom';
 
-
     public $shouldHashListName = true;
-
 
     public $fieldNames = [
         'sanction_start_date',
@@ -31,7 +25,6 @@ class Iowa extends ExclusionList
         'sanction_end_date'
     ];
 
-
     public $hashColumns = [
         'sanction_start_date',
         'npi',
@@ -40,7 +33,6 @@ class Iowa extends ExclusionList
         'entity_name',
         'sanction_end_date'
     ];
-
 
     public $dateColumns = [
         'sanction_start_date' => 0,

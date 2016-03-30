@@ -1,18 +1,15 @@
 <?php namespace App\Import\Lists;
 
-
 use App\Import\Service\Exclusions\RetrieverFactory;
 
 abstract class ExclusionList
 {
-
 	/**
 	 * Database table's prefix (e.g. {$dbPrefix}_records)
 	 *
 	 * @var	string
 	 */
 	public $dbPrefix;
-
 
 	/**
 	 * File's public uri
@@ -21,30 +18,25 @@ abstract class ExclusionList
 	 */
 	public $uri;
 
-
 	/**
 	 * @var	array
 	 */
 	public $retrieveOptions = [];
-
 
 	/**
 	 * @var	array
 	 */
 	public $headerOptions = [];
 
-
 	/**
 	 * @var	array
 	 */
 	public $data = [];
 
-
 	/**
 	 * @var
 	 */
 	public $fileHeaders;
-
 
 	/**
 	 * Columns to create a hash from
@@ -81,15 +73,12 @@ abstract class ExclusionList
     {
         return array_map(function($row) use ($dateColumns) {
 
-            foreach ($dateColumns as $index)
-            {
-                if (strtotime($row[$index]))
-                {
+            foreach ($dateColumns as $index) {
+                if (strtotime($row[$index])) {
                     $date = new \DateTime($row[$index]);
                     $row[$index] = $date->format('Y-m-d');
                 }
-                else
-                {
+                else {
                     $row[$index] = null;
                 }
             }
@@ -110,8 +99,7 @@ abstract class ExclusionList
 
     public function preProcess()
     {
-        if (count($this->dateColumns) > 0)
-        {
+        if (count($this->dateColumns) > 0) {
             $this->data = $this->convertDatesToMysql($this->data, $this->dateColumns);
         }
     }

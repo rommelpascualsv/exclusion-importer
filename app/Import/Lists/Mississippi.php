@@ -1,20 +1,14 @@
 <?php namespace App\Import\Lists;
 
-
 class Mississippi extends ExclusionList
 {
-
     public $dbPrefix = 'ms1';
-
 
     public $pdfToText = "pdftotext -layout -enc UTF-8";
 
-
     public $uri = "https://www.medicaid.ms.gov/wp-content/uploads/2014/03/SanctionedProvidersList.pdf";
 
-
     public $type = 'pdf';
-
 
     public $fieldNames = [
         'entity_1',
@@ -26,7 +20,6 @@ class Mississippi extends ExclusionList
         'exclusion_to_date'
     ];
 
-
     public $hashColumns = [
         'entity_1',
         'entity_2',
@@ -35,12 +28,10 @@ class Mississippi extends ExclusionList
         'exclusion_from_date',
     ];
 
-
     public $retrieveOptions = [
         'headerRow' => 0,
         'offset' => 1
     ];
-
 
     public $dateColumns = [
         'exclusion_from_date' => 5
@@ -92,7 +83,6 @@ class Mississippi extends ExclusionList
             }
 
             if (count($rowArray) < 7) {
-
                 array_splice($rowArray, 1, 0, '');//blank entity 2 column if none available
             }
 
@@ -101,11 +91,8 @@ class Mississippi extends ExclusionList
             if (array_key_exists(4, $rowArray))
                 $rowArray[4] = preg_replace($anotherRegex, '', $rowArray[4]);
 
-            if (array_key_exists(2, $rowArray))
-            {
-                if (preg_match('/Ste/', $rowArray[2]) || preg_match('/STE/', $rowArray[2]) || preg_match('/Suite/', $rowArray[2]))
-                {
-
+            if (array_key_exists(2, $rowArray)) {
+                if (preg_match('/Ste/', $rowArray[2]) || preg_match('/STE/', $rowArray[2]) || preg_match('/Suite/', $rowArray[2])) {
                     $address1 = $rowArray[1];
                     $rowArray[2] = $address1 . ' ' . $rowArray[2];
                     $rowArray[1] = '';
@@ -116,7 +103,6 @@ class Mississippi extends ExclusionList
         }
 
         foreach ($columns as $key => $value) {
-
             if (!array_filter($value))
                 unset($columns[$key]);
         }

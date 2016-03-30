@@ -1,23 +1,17 @@
 <?php namespace App\Import\Lists;
 
-
 class NorthCarolina extends ExclusionList
 {
-
     public $dbPrefix = 'nc1';
-
 
 	public $uri = 'http://www2.ncdhhs.gov/dma/ProgramIntegrity/ProviderExclusionList_082615.xlsx';
 
-
     public $type = 'xlsx';
-
 
     public $retrieveOptions = [
         'headerRow' => 1,
         'offset' => 1
     ];
-
 
     public $fieldNames = [
         'npi',
@@ -33,14 +27,12 @@ class NorthCarolina extends ExclusionList
         'exclusion_reason'
     ];
 
-
     public $hashColumns = [
         'first_name',
         'last_name',
         'npi',
         'date_excluded'
     ];
-
 
     public $dateColumns = [
         'date_excluded' => 9
@@ -53,5 +45,4 @@ class NorthCarolina extends ExclusionList
             return array_slice($row, 0, -1);
 		}, $this->data);
     }
-    
 }

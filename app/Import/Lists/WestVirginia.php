@@ -2,24 +2,20 @@
 
 class WestVirginia extends ExclusionList
 {
-
     /**
      * @var string
      */
     public $dbPrefix = 'wv2';
-
 
     /**
      * @var string
      */
     public $uri = 'https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/west-virginia/wv2.xlsx';
 
-
     /**
      * @var string
      */
     public $type = 'xlsx';
-
 
     /**
      * @var array
@@ -28,7 +24,6 @@ class WestVirginia extends ExclusionList
         'headerRow' => 0,
         'offset' => 1
     ];
-
 
     /**
      * @var array
@@ -50,7 +45,6 @@ class WestVirginia extends ExclusionList
         'reinstatement_reason'
     ];
 
-
     /**
      * @var array
      */
@@ -63,7 +57,6 @@ class WestVirginia extends ExclusionList
         'exclusion_date',
         'reinstatement_date',
     ];
-
 
     /**
      * @var array
