@@ -15,8 +15,8 @@
 		description="Update database">
 		<update
 			command="update"
-			jar="${jar}"
-			classpathref="${classpathref}"
+			jar="${liquibase.jar}"
+			classpathref="${mysql.driver}"
 			changelogFile="${changelogFile}"
 			username="${username}"
 			password="${password}"
