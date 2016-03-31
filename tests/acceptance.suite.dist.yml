@@ -16,7 +16,7 @@ modules:
             REST: PhpBrowser
     config:
         PhpBrowser:
-            url: http://app.exclusions-import.dev:8088/import
+            url: http://app.exclusions-import.dev:8088
         REST:                                             
-              url: http://app.exclusions-import.dev:8088/import
+              url: http://app.exclusions-import.dev:8088
               depends: PhpBrowser                                     
