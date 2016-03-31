@@ -18,6 +18,22 @@ class Kernel extends ConsoleKernel
         '\App\Console\Commands\DeleteOIGDuplicates',
         '\App\Console\Commands\DeleteOPMExtras',
         '\App\Console\Commands\MigrateSam',
+
+        'App\Console\Commands\Nppes\Seed',
+        'App\Console\Commands\Nppes\Update',
+        'App\Console\Commands\Nppes\Deactivate',
+
+        'App\Console\Commands\Taxonomy\Seed',
+        'App\Console\Commands\Taxonomy\Clear',
+
+        'App\Console\Commands\Njna\Seed',
+        'App\Console\Commands\Njna\Clear',
+
+        'App\Console\Commands\NJCredential\Seed',
+        'App\Console\Commands\NJCredential\Update',
+
+        'App\Console\Commands\MICna\Seed',
+        'App\Console\Commands\MICna\Clear',
     ];
 
     /**
