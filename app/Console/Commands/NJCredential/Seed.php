@@ -3,8 +3,8 @@
 use App\Console\Commands\BaseSeed;
 use App\Seeders\NJCredential\CreateSeeder;
 
-class Seed extends BaseSeed {
-
+class Seed extends BaseSeed 
+{
 	protected $name = 'njcredential:seed';
 
 	protected $description = 'Seed the NJ Credential Database in mongo nj_credential collection';
@@ -16,5 +16,4 @@ class Seed extends BaseSeed {
 		parent::__construct();
 		$this->seeder = $seeder;
 	}
-
 }

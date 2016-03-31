@@ -7,7 +7,6 @@ use MongoClient;
 
 class MongoServiceProvider extends ServiceProvider 
 {
-
 	public function register()
 	{
 		$this->app->bind('MongoDB', function() {

@@ -3,8 +3,8 @@
 use App\Console\Commands\BaseSeed;
 use App\Seeders\Nppes\UpdateSeeder;
 
-class Update extends BaseSeed {
-
+class Update extends BaseSeed 
+{
     protected $name = 'nppes:update';
 
     protected $description = 'Updates the nppes collection in Mongo with the file provided';

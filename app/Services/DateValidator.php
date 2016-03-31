@@ -1,7 +1,7 @@
 <?php namespace App\Services;
 
-class DateValidator {
-
+class DateValidator 
+{
 	public static function validateString($dateString)
 	{
     	$date = \DateTime::createFromFormat('m/d/Y', $dateString);

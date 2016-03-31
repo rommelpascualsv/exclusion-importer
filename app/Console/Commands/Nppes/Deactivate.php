@@ -3,8 +3,8 @@
 use App\Console\Commands\BaseSeed;
 use App\Seeders\Nppes\DeactivationSeeder;
 
-class Deactivate extends BaseSeed {
-
+class Deactivate extends BaseSeed 
+{
     protected $name = 'nppes:deactivate';
 
     protected $description = 'Update deactivation properties for Nppes records in mongo with the file provided';

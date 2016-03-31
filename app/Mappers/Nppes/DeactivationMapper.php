@@ -2,8 +2,8 @@
 
 use App\Mappers\Mapper;
 
-class DeactivationMapper extends Mapper {
-
+class DeactivationMapper extends Mapper 
+{
 	public function map($data)
 	{
 		$record = [];

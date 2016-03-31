@@ -5,8 +5,8 @@ use App\Seeders\SeederLog;
 use App\Repositories\NppesRepository;
 use App\Mappers\Nppes\DeactivationMapper;
 
-class DeactivationSeeder extends Seeder {
-
+class DeactivationSeeder extends Seeder 
+{
 	public function __construct(NppesRepository $nppesRepository, DeactivationMapper $deactivationMapper, SeederLog $logger)
 	{
 		$this->repository = $nppesRepository;

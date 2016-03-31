@@ -2,8 +2,8 @@
 
 use App\Mappers\Mapper;
 
-class EntryMapper extends Mapper {
-
+class EntryMapper extends Mapper 
+{
 	public function map($data)
 	{
 		$record = [];

@@ -5,8 +5,8 @@ use App\Seeders\Seeder;
 use App\Seeders\SeederLog;
 use App\Mappers\MICna\EntryMapper;
 
-class CreateSeeder extends Seeder {
-
+class CreateSeeder extends Seeder 
+{
 	public function __construct(MICnaRepository $micnaRepository, EntryMapper $entryMapper, SeederLog $logger)
 	{
 		$this->repository = $micnaRepository;

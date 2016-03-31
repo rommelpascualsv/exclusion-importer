@@ -1,7 +1,7 @@
 <?php namespace App\Mappers;
 
-abstract class Mapper {
-
+abstract class Mapper 
+{
 	abstract public function map($data);
 
 	protected function addProperties(&$target, $headers, $source)

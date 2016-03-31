@@ -3,8 +3,8 @@
 use App\Console\Commands\BaseClear;
 use App\Repositories\MICnaRepository;
 
-class Clear extends BaseClear {
-
+class Clear extends BaseClear 
+{
     protected $name = 'micna:clear';
 
     protected $description = 'Clears the Michigan Certified Nurse Aide collection in mongo';

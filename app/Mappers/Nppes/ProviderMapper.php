@@ -3,8 +3,8 @@
 use App\Mappers\Mapper;
 use App\Services\TaxonomyLookup;
 
-class ProviderMapper extends Mapper {
-
+class ProviderMapper extends Mapper 
+{
 	public function __construct(TaxonomyLookup $taxonomyLookup)
 	{
 		$this->taxonomyLookup = $taxonomyLookup;

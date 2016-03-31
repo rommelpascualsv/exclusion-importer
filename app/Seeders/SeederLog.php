@@ -3,8 +3,8 @@
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 
-class SeederLog {
-
+class SeederLog 
+{
 	protected $logger;
 
 	public function __construct()

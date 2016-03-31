@@ -5,8 +5,8 @@ use App\Seeders\SeederLog;
 use App\Repositories\NppesRepository;
 use App\Mappers\Nppes\ProviderMapper;
 
-class UpdateSeeder extends Seeder {
-
+class UpdateSeeder extends Seeder 
+{
 	public function __construct(NppesRepository $nppesRepository, ProviderMapper $providerMapper, SeederLog $logger)
 	{
 		$this->repository = $nppesRepository;

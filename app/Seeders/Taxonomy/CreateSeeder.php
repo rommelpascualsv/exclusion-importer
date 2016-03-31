@@ -5,8 +5,8 @@ use App\Seeders\SeederLog;
 use App\Repositories\TaxonomyRepository;
 use App\Mappers\Taxonomy\EntryMapper;
 
-class CreateSeeder extends Seeder  {
-
+class CreateSeeder extends Seeder 
+{
 	public function __construct(TaxonomyRepository $taxonomyRepository, EntryMapper $entryMapper, SeederLog $logger)
 	{
 		$this->repository = $taxonomyRepository;

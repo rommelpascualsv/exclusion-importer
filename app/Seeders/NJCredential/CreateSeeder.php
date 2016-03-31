@@ -5,8 +5,8 @@ use App\Repositories\NJCredentialRepository;
 use App\Seeders\Seeder;
 use App\Seeders\SeederLog;
 
-class CreateSeeder extends Seeder {
-
+class CreateSeeder extends Seeder 
+{
 	public function __construct(NJCredentialRepository $repository, EntryMapper $mapper, SeederLog $logger)
 	{
 		$this->repository = $repository;

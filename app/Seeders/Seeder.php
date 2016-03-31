@@ -3,8 +3,8 @@
 use League\Csv\Reader;
 use Carbon\Carbon;
 
-abstract class Seeder {
-
+abstract class Seeder 
+{
 	/**
 	 * @var \App\Repositories\Repository
 	 */

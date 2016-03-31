@@ -3,8 +3,8 @@
 use App\Console\Commands\BaseClear;
 use App\Repositories\TaxonomyRepository;
 
-class Clear extends BaseClear {
-
+class Clear extends BaseClear 
+{
     protected $name = 'taxonomy:clear';
 
     protected $description = 'Clears the taxonomy collection in mongo';

@@ -2,8 +2,8 @@
 
 use App\Repositories\TaxonomyRepository;
 
-class TaxonomyLookup {
-
+class TaxonomyLookup 
+{
 	protected $items;
 
 	public function __construct(TaxonomyRepository $taxonomyRepository)

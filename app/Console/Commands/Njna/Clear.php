@@ -3,8 +3,8 @@
 use App\Console\Commands\BaseClear;
 use App\Repositories\NjnaRepository;
 
-class Clear extends BaseClear {
-
+class Clear extends BaseClear 
+{
     protected $name = 'njna:clear';
 
     protected $description = 'Clears the New Jersey Nurse Aide collection in mongo';

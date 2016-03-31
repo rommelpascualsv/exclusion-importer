@@ -5,8 +5,8 @@ use App\Seeders\SeederLog;
 use App\Repositories\NjnaRepository;
 use App\Mappers\Njna\EntryMapper;
 
-class CreateSeeder extends Seeder {
-
+class CreateSeeder extends Seeder 
+{
 	public function __construct(NjnaRepository $njnaRepository, EntryMapper $entryMapper, SeederLog $logger)
 	{
 		$this->repository = $njnaRepository;

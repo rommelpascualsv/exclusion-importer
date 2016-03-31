@@ -3,8 +3,8 @@
 use App\Console\Commands\BaseSeed;
 use App\Seeders\Taxonomy\CreateSeeder;
 
-class Seed extends BaseSeed {
-
+class Seed extends BaseSeed 
+{
     protected $name = 'taxonomy:seed';
 
     protected $description = 'Seeds the taxonomy collection in mongo with the file provided';

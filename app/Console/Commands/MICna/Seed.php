@@ -3,8 +3,8 @@
 use App\Console\Commands\BaseSeed;
 use App\Seeders\MICna\CreateSeeder;
 
-class Seed extends BaseSeed {
-
+class Seed extends BaseSeed 
+{
     protected $name = 'micna:seed';
 
     protected $description = 'Seeds the Michigan Certified Nurse Aide collection in mongo with the file provided';
