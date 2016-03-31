@@ -1,7 +1,7 @@
 <?php namespace App\Import\OFAC\SDN;
 
-class CitizenshipList extends Query {
-
+class CitizenshipList extends Query 
+{
 	/**
 	 * @var		string		$table
 	 * @access	protected
@@ -37,6 +37,4 @@ class CitizenshipList extends Query {
 	 * @access	public
 	 */
 	public $mainEntry;
-
-
 }

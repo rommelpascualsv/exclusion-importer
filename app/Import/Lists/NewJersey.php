@@ -2,7 +2,6 @@
 
 class NewJersey extends ExclusionList
 {
-
     /**
      * @var string
      */
@@ -46,7 +45,6 @@ class NewJersey extends ExclusionList
         'permanent_debarment'
     ];
 
-
     /**
      * @var array
      */
@@ -54,7 +52,6 @@ class NewJersey extends ExclusionList
         'effective_date'  => 19,
         'expiration_date' => 20
     ];
-
 
     /**
      * @var array

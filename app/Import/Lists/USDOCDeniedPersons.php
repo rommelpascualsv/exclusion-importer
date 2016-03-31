@@ -1,8 +1,7 @@
 <?php namespace App\Import\Lists;
 
-
-class USDOCDeniedPersons extends ExclusionList {
-
+class USDOCDeniedPersons extends ExclusionList 
+{
     public $dbPrefix = 'usdocdp';
 
     public $uri = 'https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/usdocdp/DPL_2015-11-09.csv';
@@ -40,5 +39,4 @@ class USDOCDeniedPersons extends ExclusionList {
         'effective_date',
         'expiration_date'
     ];
-
 }

@@ -2,24 +2,20 @@
 
 class WashingtonDC extends ExclusionList
 {
-
     /**
      * @var string
      */
     public $dbPrefix = 'dc1';
-
 
     /**
      * @var string
      */
     public $uri = 'https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/washington-dc/dc1.xlsx';
 
-
     /**
      * @var string
      */
     public $type = 'xlsx';
-
 
     /**
      * @var array
@@ -28,7 +24,6 @@ class WashingtonDC extends ExclusionList
         'headerRow' => 0,
         'offset' => 1
     ];
-
 
     /**
      * @var array
@@ -44,7 +39,6 @@ class WashingtonDC extends ExclusionList
         'termination_date'
     ];
 
-
     /**
      * @var array
      */
@@ -56,13 +50,10 @@ class WashingtonDC extends ExclusionList
         'termination_date'
     ];
 
-
     /**
      * @var array
      */
     public $dateColumns = [
         'termination_date' => 7
     ];
-
-
 }

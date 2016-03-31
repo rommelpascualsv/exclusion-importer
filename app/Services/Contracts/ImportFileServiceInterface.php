@@ -8,7 +8,6 @@ namespace App\Services\Contracts;
  */
 interface ImportFileServiceInterface
 {
-
 	/**
 	 * Refreshes the records of Files table.
 	 * 
@@ -31,5 +30,4 @@ interface ImportFileServiceInterface
 	 * @return object The object containing the result of the operation
 	 */
 	public function importFile($url, $listPrefix, $shouldSaveFile);
-	
 }

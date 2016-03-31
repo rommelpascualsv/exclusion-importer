@@ -1,15 +1,10 @@
 <?php namespace App\Import\Lists;
 
-
-class Montana extends ExclusionList{
-
-
-
+class Montana extends ExclusionList
+{
     public $dbPrefix = 'mt1';
 
-
     public $uri = 'http://dphhs.mt.gov/MontanaHealthcarePrograms/TerminatedExcludedProviders.aspx';
-
 
     public $type = 'html';
 
@@ -20,7 +15,6 @@ class Montana extends ExclusionList{
     		'headerRow'         => 0,
     		'offset'            => 0
     ];
-
 
     public $fieldNames = [
         'provider_name',
@@ -38,12 +32,10 @@ class Montana extends ExclusionList{
         'exclusion_termination_date'
     ];
 
-
     /**
      * @var array
      */
     public $dateColumns = [
         'exclusion_termination_date' => 2,
     ];
-
 }

@@ -4,12 +4,10 @@ use App\Import\Lists\ExclusionList;
 
 class ListProcessor
 {
-
 	/**
 	 * @var	ExclusionList	$exclusionList
 	 */
 	protected $exclusionList;
-
 
 	/**
 	 * Constructor
@@ -34,7 +32,6 @@ class ListProcessor
 			throw new \InvalidArgumentException('The exclusion list contains no data');
     }
 
-
 	/**
 	 * Insert ALL THE THINGS!
 	 */
@@ -51,7 +48,6 @@ class ListProcessor
         $this->exclusionList->postHook();
     }
 
-
 	/**
 	 * CREATE a new table temporarily to store the new inserts
 	 */
@@ -60,7 +56,6 @@ class ListProcessor
         app('db')->statement('DROP TABLE IF EXISTS `' . $this->exclusionList->dbPrefix . '_records_new`');
         app('db')->statement('CREATE TABLE  `' . $this->exclusionList->dbPrefix . '_records_new` LIKE `' . $this->exclusionList->dbPrefix . '_records`');
     }
-
 
 	/**
 	 * INSERT data into the temporary table
@@ -81,7 +76,6 @@ class ListProcessor
         app('db')->commit();
     }
 
-
 	/**
 	 * DROP the currently active table
 	 * RENAME the temporary table to replace the dropped one
@@ -98,7 +92,6 @@ class ListProcessor
         app('db')->statement('DROP TABLE IF EXISTS `' . $this->exclusionList->dbPrefix . '_records_old`');
     }
 
-
     /**
      * Get a hash of a record
      *
@@ -107,17 +100,14 @@ class ListProcessor
      */
     protected function getHash(array $record)
     {
-        if (empty($this->exclusionList->hashColumns))
-        {
+        if (empty($this->exclusionList->hashColumns)) {
             $this->exclusionList->hashColumns = $this->exclusionList->fieldNames;
         }
 
         $hashData = [];
 
-        foreach ($record as $key => $value)
-        {
-            if (in_array($key, $this->exclusionList->hashColumns))
-            {
+        foreach ($record as $key => $value) {
+            if (in_array($key, $this->exclusionList->hashColumns)) {
                 $hashData[] = $value;
             }
         }
@@ -126,7 +116,6 @@ class ListProcessor
 
         //adds the exclusion list prefix to the hash to avoid having identical hashes in different lists
         if ($this->exclusionList->shouldHashListName) {
-
             $listName = trim(strtoupper($this->exclusionList->dbPrefix));
 
             $string .= $listName;
@@ -134,6 +123,4 @@ class ListProcessor
 
         return md5($string);
     }
-
-
 }

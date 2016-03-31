@@ -7,7 +7,6 @@ use Illuminate\Console\Command;
 
 class DeleteOPMExtras extends Command
 {
-
     /**
      * The console command name.
      *
@@ -21,7 +20,6 @@ class DeleteOPMExtras extends Command
      * @var string
      */
     protected $description = 'Delete OPM extras in SAM database';
-
 
     /**
      * @var \App\Common\Logger\ExceptionLoggerInterface
@@ -83,7 +81,7 @@ SQL;
 
     public function fire()
     {
-        try{
+        try {
             $this->logStdOut('Started deleting...');
             $totalDeleted = $this->deleteOPMExtras();
             $this->logStdOut('Total Deleted: ' . $totalDeleted);

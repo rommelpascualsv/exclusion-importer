@@ -1,25 +1,19 @@
 <?php namespace App\Import\Lists;
 
-
 use Symfony\Component\DomCrawler\Crawler;
 
 class Kentucky extends ExclusionList
 {
-
     public $dbPrefix = 'ky1';
-
 
     public $uri;
 
-
     public $type = 'xls';
-
 
     public $retrieveOptions = [
         'headerRow' => 0,
         'offset' => 1
     ];
-
 
     public $fieldNames = [
         'first_name',
@@ -41,7 +35,6 @@ class Kentucky extends ExclusionList
         'effective_date',
     ];
 
-
     /**
      * @var array
      */
@@ -49,13 +42,11 @@ class Kentucky extends ExclusionList
         'effective_date' => 4
     ];
 
-
     public function __construct()
     {
         parent::__construct();
         $this->uri = $this->getUri();
     }
-
 
     protected function getUri()
     {

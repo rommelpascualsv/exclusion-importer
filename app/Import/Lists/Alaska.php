@@ -1,17 +1,12 @@
 <?php namespace App\Import\Lists;
 
-
 class Alaska extends ExclusionList
 {
-
     public $dbPrefix = 'ak1';
-
 
     public $uri = "https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/alaska/aklist.xlsx";
 
-
     public $type = 'xlsx';
-
 
     public $fieldNames = [
         'exclusion_date',
@@ -23,7 +18,6 @@ class Alaska extends ExclusionList
         'exclusion_reason'
     ];
 
-
     public $hashColumns = [
         'exclusion_date',
         'last_name',
@@ -32,12 +26,10 @@ class Alaska extends ExclusionList
         'exclusion_authority',
     ];
 
-
     public $retrieveOptions = [
         'headerRow' => 0,
         'offset' => 1
     ];
-
 
     public $dateColumns = [
         'exclusion_date' => 0
