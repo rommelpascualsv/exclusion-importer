@@ -8,14 +8,6 @@ echo "deb http://repo.mongodb.org/apt/ubuntu "$(lsb_release -sc)"/mongodb-org/3.
 sudo apt-get update
 sudo apt-get install -y mongodb-org
 
-
-# Configure Nginx
-cp /vagrant/provision/config/nginx_vhost /etc/nginx/sites-available/nginx_vhost > /dev/null
-ln -s /etc/nginx/sites-available/nginx_vhost /etc/nginx/sites-enabled/
-rm -rf /etc/nginx/sites-available/default
-service nginx restart > /dev/null
-
-
 # Set Memory Limit
 echo "memory_limit = 1G" > /etc/php5/mods-available/memory_limit.ini
 ln -s /etc/php5/mods-available/memory_limit.ini /etc/php5/cli/conf.d/10-memory_limit.ini
