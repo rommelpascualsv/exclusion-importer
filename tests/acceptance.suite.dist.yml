@@ -19,4 +19,4 @@ modules:
             url: http://app.exclusions-import.dev:8088
         REST:                                             
               url: http://app.exclusions-import.dev:8088
-              depends: PhpBrowser                                     
+              depends: PhpBrowser
