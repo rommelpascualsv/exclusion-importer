@@ -15,10 +15,3 @@ wget https://github.com/liquibase/liquibase/releases/download/liquibase-parent-3
 sudo mkdir /usr/local/liquibase
 sudo unzip -o liquibase-3.4.2-bin -d /usr/local/liquibase
 sudo chmod +x /usr/local/liquibase
-
-#install pear
-sudo apt-get install php-pear
-
-#install phing
-sudo pear channel-discover pear.phing.info
-sudo pear install --alldeps phing/phing
