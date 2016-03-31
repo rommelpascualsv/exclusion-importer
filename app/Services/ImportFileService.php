@@ -220,7 +220,7 @@ class ImportFileService implements ImportFileServiceInterface
 			$import_url = $url->import_url;
 			try {
 				
-				info("Refreshing... " . $url->prefix);
+				info("Trying to refresh records for... " . $url->prefix);
 				
 				if (empty($import_url)) {
 					info("Import url must not be null or empty.");
@@ -269,7 +269,7 @@ class ImportFileService implements ImportFileServiceInterface
 	{
 		if ($this->isStateAutoImport($prefix)) {
 			//pass false to indicate that there's no need to save the blob to the files table as it was already saved before this
-			info("Auto importing " . $prefix);
+			info("Auto importing... " . $prefix);
 			$this->importFile($url, $prefix, false);
 		}
 	}
@@ -360,7 +360,7 @@ class ImportFileService implements ImportFileServiceInterface
 		$file["img_data"] = $blob;
 		$file["ready_for_update"] = 'Y';
 	
-		info("Saving blob to files table...");
+		info("Saving blob of " . $prefix . "to files table...");
 		app('db')->table('files')->insert($file);
 	}
 	
@@ -376,7 +376,7 @@ class ImportFileService implements ImportFileServiceInterface
 	{
 		$affected = app('db')->table('files')->where('state_prefix', $prefix)->update(['img_data' => $blob]);
 	
-		info("Updating blob in Files table... " . $affected . " file(s) updated");
+		info("Updating blob of " . $prefix . "in Files table... " . $affected . " file(s) updated");
 	}
 	
 	/**
