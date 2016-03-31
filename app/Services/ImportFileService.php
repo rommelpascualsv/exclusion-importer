@@ -50,9 +50,11 @@ class ImportFileService implements ImportFileServiceInterface
 	{
 		// 1. Retrieves the corresponding state object
 		try {
+			info("Trying to import file for " . $listPrefix);
 			$listObject = $this->getStateObject($url, $listPrefix);
 		}
 		catch(\RuntimeException $e) {
+			info("Encountered an error while trying to import " . $listPrefix . ": " . $e->getMessage());
 			return $this->createResponse($e->getMessage(), false);
 		}
 		
@@ -130,7 +132,7 @@ class ImportFileService implements ImportFileServiceInterface
 	protected function updateStateUrl($statePrefix, $stateUrl) 
 	{
 		$result = app('db')->table('exclusion_lists')->where('prefix', $statePrefix)->update(['import_url' => $stateUrl]);
-		info('Updated '.$result.' urls for '.$statePrefix);
+		info("Updated " . $result . " urls for " . $statePrefix);
 	
 		return $result;
 	}
@@ -160,21 +162,16 @@ class ImportFileService implements ImportFileServiceInterface
 	 */
 	private function getStateObject($url, $listPrefix)
 	{
-		try {
-			$listObject = $this->getListObject($listPrefix);
-		
-			if ($url) {
-				$newUri = htmlspecialchars_decode($url);
-				$this->updateStateUrl($listPrefix, $newUri);
-				$listObject->uri = $newUri;
-			} else {
-				$listObject->uri = $this->getUrl($listPrefix);
-			}
+		$listObject = $this->getListObject($listPrefix);
+	
+		if ($url) {
+			$newUri = htmlspecialchars_decode($url);
+			$this->updateStateUrl($listPrefix, $newUri);
+			$listObject->uri = $newUri;
+		} else {
+			$listObject->uri = $this->getUrl($listPrefix);
 		}
-		catch(\RuntimeException $e) {
-			throw new \RuntimeException($e->getMessage () . ': ' . $listPrefix );
-		}
-		
+	
 		return $listObject;
 	}
 	
@@ -205,7 +202,7 @@ class ImportFileService implements ImportFileServiceInterface
 	{
 		$affected = app('db')->table('files')->where('state_prefix', $prefix)->update(['ready_for_update' => $value]);
 	
-		info("Updating Ready For Update flag for... ".$prefix." ".$affected.' file/s updated');
+		info("Updating Ready For Update flag for... " . $prefix . " " . $affected . " file(s) updated");
 	}
 	
 	/**
@@ -223,16 +220,15 @@ class ImportFileService implements ImportFileServiceInterface
 			$import_url = $url->import_url;
 			try {
 				
-				info("Refreshing... ".$url->prefix);
+				info("Trying to refresh records for... " . $url->prefix);
 				
-				//TODO check this - don't do anything if url is null or empty
 				if (empty($import_url)) {
-					info('Import url must not be null or empty.');
+					info("Import url must not be null or empty.");
 					continue;
 				}
 				
 				if (!$this->isFileSupported($import_url)) {
-					info('File type is not supported.');
+					info("File type is not supported for " . $url->prefix . ": " . $import_url);
 					continue;
 				}
 				
@@ -244,7 +240,7 @@ class ImportFileService implements ImportFileServiceInterface
 			}
 			catch (\ErrorException $e) {
 				error_log($e->getMessage());
-				info($import_url. " Error occured while downloading file. Continuing to next url...");
+				info($import_url . " Error occured while downloading file. Continuing to next url...");
 				continue;
 			}
 		}
@@ -273,6 +269,7 @@ class ImportFileService implements ImportFileServiceInterface
 	{
 		if ($this->isStateAutoImport($prefix)) {
 			//pass false to indicate that there's no need to save the blob to the files table as it was already saved before this
+			info("Auto importing... " . $prefix);
 			$this->importFile($url, $prefix, false);
 		}
 	}
@@ -327,7 +324,7 @@ class ImportFileService implements ImportFileServiceInterface
 	{
 		// get the blob value of import file
 		$blob = file_get_contents($import_url);
-		info("Saving... ".$prefix);
+		info("Saving... " . $prefix);
 		// checks if state prefix already exists in Files table
 		if ($this->isPrefixExists($prefix)) {
 			// compares the import file and the one saved in Files table
@@ -363,7 +360,7 @@ class ImportFileService implements ImportFileServiceInterface
 		$file["img_data"] = $blob;
 		$file["ready_for_update"] = 'Y';
 	
-		info('Saving blob to FILES table...');
+		info("Saving blob of " . $prefix . "to files table...");
 		app('db')->table('files')->insert($file);
 	}
 	
@@ -379,7 +376,7 @@ class ImportFileService implements ImportFileServiceInterface
 	{
 		$affected = app('db')->table('files')->where('state_prefix', $prefix)->update(['img_data' => $blob]);
 	
-		info("Updating blob in Files table... ".$affected.' file/s updated');
+		info("Updating blob of " . $prefix . "in Files table... " . $affected . " file(s) updated");
 	}
 	
 	/**
@@ -394,9 +391,8 @@ class ImportFileService implements ImportFileServiceInterface
 		$filetypeArr = ['application/pdf','application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','text/plain','text/csv', 'text/html; charset=utf-8', 'text/html'];
 	
 		try {
-			//TODO check this - we are only accepting urls for the scheduler?
 			if (!filter_var($url, FILTER_VALIDATE_URL)) {
-				info("This is not a valid url: ".$url);
+				info("This is not a valid url: " . $url);
 				return false;
 			}
 			$arrHeaders = get_headers($url, 1);
