@@ -12,7 +12,10 @@ class ImportFileServiceTest extends \Codeception\TestCase\Test
      * @var \UnitTester
      */
 	protected $tester;
-	
+
+    /**
+     * @var ImportFileService;
+     */
     protected $importFileService;
     
     protected $container;
@@ -22,8 +25,9 @@ class ImportFileServiceTest extends \Codeception\TestCase\Test
      */
     protected function _before()
     {
-    	$this->container = new Mockery\Container;
-    	$this->importFileService = new ImportFileService();
+
+        $this->container = new Mockery\Container;
+        $this->importFileService = new ImportFileService();
     }
 
     protected function _after()
@@ -32,26 +36,12 @@ class ImportFileServiceTest extends \Codeception\TestCase\Test
     }
 
     /**
-     * Test for the getFile method of ImportFileService.
-     * State prefix is passed as parameter. 
-     * 
-     * Asserts not null for the file retrieved.
-     * Asserts if filename is equal to expected name.
-     */
-    public function testGetFile()
-    {
-    	$file = $this->importFileService->getFile('ak1');
-    	$this->assertNotNull($file);
-    }
-    
-    /**
      * Test for the refreshRecords method of ImportFileService. 
      */
     public function testRefreshRecordsFileNotSupported()
     {
-    	$mock = $this->container->mock("App\Services\ImportFileService[getUrls]");
+    	$mock = $this->container->mock("App\\Services\\ImportFileService[getUrls]");
     	$mock = $mock->shouldAllowMockingProtectedMethods();
-    	
     	$url = new stdClass();
     	$url->prefix = "az1";
     	$url->import_url = "http://yahoo.com";
@@ -62,7 +52,7 @@ class ImportFileServiceTest extends \Codeception\TestCase\Test
     
     public function testRefreshRecordsPrefixExistsWillNotUpdate()
     {
-    	$mock = $this->container->mock("App\Services\ImportFileService[getUrls, getBlobOfFile]");
+    	$mock = $this->container->mock("App\\Services\\ImportFileService[getUrls, getBlobOfFile]");
     	$mock = $mock->shouldAllowMockingProtectedMethods();
     	 
     	$url = new stdClass();
@@ -80,7 +70,7 @@ class ImportFileServiceTest extends \Codeception\TestCase\Test
     
     public function testRefreshRecordsPrefixExistsWillUpdate()
     {
-    	$mock = $this->container->mock("App\Services\ImportFileService[getUrls, getBlobOfFile]");
+    	$mock = $this->container->mock("App\\Services\\ImportFileService[getUrls, getBlobOfFile]");
     	$mock = $mock->shouldAllowMockingProtectedMethods();
     
     	$url = new stdClass();
@@ -101,7 +91,7 @@ class ImportFileServiceTest extends \Codeception\TestCase\Test
     
     public function testRefreshRecordsNoPrefixWillInsert()
     {
-    	$mock = $this->container->mock("App\Services\ImportFileService[getUrls, getBlobOfFile, isPrefixExists]");
+    	$mock = $this->container->mock("App\\Services\\ImportFileService[getUrls, getBlobOfFile, isPrefixExists]");
     	$mock = $mock->shouldAllowMockingProtectedMethods();
     
     	$url = new stdClass();
@@ -137,9 +127,6 @@ class ImportFileServiceTest extends \Codeception\TestCase\Test
     	 
     	// checks for NYOMIG
     	$this->assertEquals('NY OMIG', $list["nyomig"]["accr"]);
-    	 
-    	// IL1 should not be included
-    	$this->assertFalse(array_key_exists('il1', $list));
     }
     
     /**
@@ -149,7 +136,7 @@ class ImportFileServiceTest extends \Codeception\TestCase\Test
     public function testImportFileForExistingImportUrl()
     {
     	// instantiate the ImportFileService
-    	$this->importFileService = $this->container->mock("App\Services\ImportFileService[getListObject,getListProcessor,getUrl,isStateUpdateable]");
+    	$this->importFileService = $this->container->mock("App\\Services\\ImportFileService[getListObject,getListProcessor,getUrl,isStateUpdateable]");
     	$this->importFileService = $this->importFileService->shouldAllowMockingProtectedMethods();
     
     	// mock getUrl method and return the Url
@@ -159,12 +146,12 @@ class ImportFileServiceTest extends \Codeception\TestCase\Test
     	$this->importFileService->shouldReceive('isStateUpdateable')->once()->andReturn(true);
     	 
     	// mock exclusion list object to bypass retrieveData function
-    	$exclusionList = $this->container->mock("App\Import\Lists\ExclusionLists");
+    	$exclusionList = $this->container->mock("App\\Import\\Lists\\ExclusionLists");
     	$exclusionList->shouldReceive("retrieveData")->once();
     	$this->importFileService->shouldReceive("getListObject")->andReturn($exclusionList);
     
     	// mock list processor to bypass insertRecords function
-    	$listProcessor = $this->container->mock("App\Import\Service\ListProcessor");
+    	$listProcessor = $this->container->mock("App\\Import\\Service\\ListProcessor");
     	$listProcessor->shouldReceive("insertRecords")->once();
     	$this->importFileService->shouldReceive("getListProcessor")->andReturn($listProcessor);
     	 
@@ -184,16 +171,16 @@ class ImportFileServiceTest extends \Codeception\TestCase\Test
     public function testImportFileForNewImportUrl()
     {
     	// instantiate the ImportFileService
-    	$this->importFileService = $this->container->mock("App\Services\ImportFileService[getListObject,getListProcessor]");
+    	$this->importFileService = $this->container->mock("App\\Services\\ImportFileService[getListObject,getListProcessor]");
     	$this->importFileService = $this->importFileService->shouldAllowMockingProtectedMethods();
     	 
     	// mock exclusion list object to bypass retrieveData function
-    	$exclusionList = $this->container->mock("App\Import\Lists\ExclusionLists");
+    	$exclusionList = $this->container->mock("App\\Import\\Lists\\ExclusionLists");
     	$exclusionList->shouldReceive("retrieveData")->once();
     	$this->importFileService->shouldReceive("getListObject")->andReturn($exclusionList);
     	 
     	// mock list processor to bypass insertRecords function
-    	$listProcessor = $this->container->mock("App\Import\Service\ListProcessor");
+    	$listProcessor = $this->container->mock("App\\Import\\Service\\ListProcessor");
     	$listProcessor->shouldReceive("insertRecords")->once();
     	$this->importFileService->shouldReceive("getListProcessor")->andReturn($listProcessor);
     
@@ -222,7 +209,7 @@ class ImportFileServiceTest extends \Codeception\TestCase\Test
     	 
     	$this->assertNotNull($response);
     	$this->assertFalse($response->getData()->success);
-    	$this->assertEquals("Unsupported Exclusion List prefix: invalidPrefix", $response->getData()->msg);
+    	$this->assertEquals("Unsupported Exclusion List prefix", $response->getData()->message);
     }
     
     /**
@@ -232,7 +219,7 @@ class ImportFileServiceTest extends \Codeception\TestCase\Test
     public function testImportFileWithStateUpdateableFalse()
     {
     	// mock service
-    	$this->importFileService = $this->container->mock("App\Services\ImportFileService[getUrl, isStateUpdateable]");
+    	$this->importFileService = $this->container->mock("App\\Services\\ImportFileService[getUrl, isStateUpdateable]");
     	$this->importFileService = $this->importFileService->shouldAllowMockingProtectedMethods();
     	 
     	// mock getUrl method and return the Url
@@ -248,7 +235,7 @@ class ImportFileServiceTest extends \Codeception\TestCase\Test
     
     	$this->assertNotNull($response);
     	$this->assertFalse($response->getData()->success);
-    	$this->assertEquals("State is already up-to-date.", $response->getData()->msg);
+    	$this->assertEquals("State is already up-to-date.", $response->getData()->message);
     }
     
     /**

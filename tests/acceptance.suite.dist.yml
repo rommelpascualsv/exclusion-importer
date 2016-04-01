@@ -16,7 +16,11 @@ modules:
             REST: PhpBrowser
     config:
         PhpBrowser:
-            url: http://app.exclusions-import.dev:8088/import
+            url: http://app.exclusions-import.dev
+            curl:
+               CURLOPT_TIMEOUT: 60
         REST:                                             
-              url: http://app.exclusions-import.dev:8088/import
-              depends: PhpBrowser                                     
+              url: http://app.exclusions-import.dev
+              depends: PhpBrowser
+              curl:
+               CURLOPT_TIMEOUT: 60

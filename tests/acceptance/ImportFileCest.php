@@ -7,13 +7,11 @@ class ImportFileCest
     	$I->amOnPage($this->getPath());
     	
     	$I->see("Update Exclusion Lists");
-    	
-    	curl_setopt(curl_init(), CURLOPT_TIMEOUT, 600);
     }
 
     public function _after(AcceptanceTester $I)
     {
-    	$I->truncateTable($this->getRecordsTableName());
+        $I->truncateTable($this->getRecordsTableName());
     }
 
     // tests
@@ -26,14 +24,14 @@ class ImportFileCest
     	$I->fillField("text_nyomig", $this->getInvalidUrl());
     	 
     	$url = $I->grabTextFrom("input.text_nyomig");
-    
+
     	$I->sendGet($this->getRestPath(), [
     			'url' => $url
     	]);
-    
+
     	$I->seeTableHasNoRecords($this->getRecordsTableName());
     	
-    	$I->seeImportUrlInDatabse($this->getPrefix(), $this->getInvalidUrl());
+    	$I->seeImportUrlInDatabase($this->getPrefix(), $this->getInvalidUrl());
     }
     
     public function ImportFileUsingNewUrl(AcceptanceTester $I)
@@ -44,27 +42,14 @@ class ImportFileCest
     	$I->fillField("text_nyomig", $this->getValidUrl());
     	
     	$url = $I->grabTextFrom("input.text_nyomig");
-    	
+
     	$I->sendGet($this->getRestPath(), [
     			'url' => $url
     	]);
-    	
+
     	$I->seeTableHasRecords($this->getRecordsTableName());
     	
-    	$I->seeImportUrlInDatabse($this->getPrefix(), $this->getValidUrl());
-    }
-    
-    public function ImportFileUsingDefaultUrl(AcceptanceTester $I)
-    {
-    	$I->truncateTable($this->getRecordsTableName());
-    	
-    	$I->wantTo('Import file');
-
-		$I->sendGet($this->getRestPath(), [
-    			'url' => ""
-    	]);
-		
-		$I->seeTableHasRecords($this->getRecordsTableName());
+    	$I->seeImportUrlInDatabase($this->getPrefix(), $this->getValidUrl());
     }
     
     private function getPath()
@@ -93,6 +78,6 @@ class ImportFileCest
     
     private function getRestPath()
     {
-    	return self::getPath()."/".self::getPrefix();
+    	return $this->getPath() . "/" . $this->getPrefix();
     }
 }

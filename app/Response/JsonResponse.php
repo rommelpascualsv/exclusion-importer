@@ -6,8 +6,8 @@ trait JsonResponse
 	/**
 	 * Returns the response object for the given parameters.
 	 *
-	 * @param string $message
 	 * @param string $isSuccess
+	 * @param string $message
 	 *
 	 * @return object The response object
 	 */
@@ -15,7 +15,7 @@ trait JsonResponse
 	{
 		return response()->json([
 				'success' => $isSuccess,
-				'messsage' => $message
+				'message' => $message
 		]);
 	}
 }
