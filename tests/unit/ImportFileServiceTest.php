@@ -127,9 +127,6 @@ class ImportFileServiceTest extends \Codeception\TestCase\Test
     	 
     	// checks for NYOMIG
     	$this->assertEquals('NY OMIG', $list["nyomig"]["accr"]);
-    	 
-    	// IL1 should not be included
-    	$this->assertFalse(array_key_exists('il1', $list));
     }
     
     /**
@@ -212,7 +209,7 @@ class ImportFileServiceTest extends \Codeception\TestCase\Test
     	 
     	$this->assertNotNull($response);
     	$this->assertFalse($response->getData()->success);
-    	$this->assertEquals("Unsupported Exclusion List prefix: invalidPrefix", $response->getData()->msg);
+    	$this->assertEquals("Unsupported Exclusion List prefix", $response->getData()->message);
     }
     
     /**
@@ -238,7 +235,7 @@ class ImportFileServiceTest extends \Codeception\TestCase\Test
     
     	$this->assertNotNull($response);
     	$this->assertFalse($response->getData()->success);
-    	$this->assertEquals("State is already up-to-date.", $response->getData()->msg);
+    	$this->assertEquals("State is already up-to-date.", $response->getData()->message);
     }
     
     /**

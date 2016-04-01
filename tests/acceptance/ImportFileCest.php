@@ -7,8 +7,6 @@ class ImportFileCest
     	$I->amOnPage($this->getPath());
     	
     	$I->see("Update Exclusion Lists");
-    	
-    	curl_setopt(curl_init(), CURLOPT_TIMEOUT, 600);
     }
 
     public function _after(AcceptanceTester $I)
@@ -52,19 +50,6 @@ class ImportFileCest
     	$I->seeTableHasRecords($this->getRecordsTableName());
     	
     	$I->seeImportUrlInDatabase($this->getPrefix(), $this->getValidUrl());
-    }
-    
-    public function ImportFileUsingDefaultUrl(AcceptanceTester $I)
-    {
-    	$I->truncateTable($this->getRecordsTableName());
-    	
-    	$I->wantTo('Import file');
-
-		$I->sendGet($this->getRestPath(), [
-    			'url' => ""
-    	]);
-		
-		$I->seeTableHasRecords($this->getRecordsTableName());
     }
     
     private function getPath()

@@ -2,7 +2,6 @@
 class RunCodeceptionTask extends Task {
 	
 	protected $type = null;
-	protected $env = null;
 	
 	public function init() {
 		
@@ -13,17 +12,13 @@ class RunCodeceptionTask extends Task {
 		$outputAndErrors;
 		$return_value;
 		
-		exec("php codecept.phar run unit", $outputAndErrors, $return_value);
+		exec("php codecept.phar run ".$type, $outputAndErrors, $return_value);
 		
 		print_r(implode("\n", $outputAndErrors));
 	}
 	
 	public function setType($type) {
 		$this->type = $type;
-	}
-	
-	public function setEnv($env) {
-		$this->env = $env;
 	}
 }
 ?>
