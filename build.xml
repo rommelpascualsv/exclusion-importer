@@ -65,5 +65,4 @@
             <parameter name='contexts' value='test' />
         </update>
     </target>
-	
 </project>

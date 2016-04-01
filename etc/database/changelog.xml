@@ -4313,5 +4313,4 @@
             UPDATE `exclusion_lists` SET is_active = 0
        </rollback>                
     </changeSet>
-    
 </databaseChangeLog>
