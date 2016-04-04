@@ -1,9 +1,7 @@
 <?php namespace App\Import\Lists;
 
-
 class Connecticut extends ExclusionList
 {
-
     public $dbPrefix = 'ct1';
 
     public $uri = 'http://www.ct.gov/dss/cwp/view.asp?a=2349&q=310706';
@@ -18,7 +16,6 @@ class Connecticut extends ExclusionList
         'offset'            => 0
     ];
 
-
     public $fieldNames = [
         'name',
         'business',
@@ -28,7 +25,6 @@ class Connecticut extends ExclusionList
         'period',
         'action'
     ];
-
 
     public $hashColumns = [
         'name',
@@ -41,9 +37,7 @@ class Connecticut extends ExclusionList
         'effective_date' => 4
     ];
 
-
     public $shouldHashListName = true;
-
 
     public function preProcess()
     {
@@ -53,8 +47,6 @@ class Connecticut extends ExclusionList
             if ($value == "N/A") {
                 $value = '';
             }
-
         });
     }
-
 }

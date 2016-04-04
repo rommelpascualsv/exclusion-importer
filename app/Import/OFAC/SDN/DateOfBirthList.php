@@ -1,7 +1,7 @@
 <?php namespace App\Import\OFAC\SDN;
 
-class DateOfBirthList extends Query {
-
+class DateOfBirthList extends Query 
+{
 	/**
 	 * @var		string		$table
 	 * @access	protected

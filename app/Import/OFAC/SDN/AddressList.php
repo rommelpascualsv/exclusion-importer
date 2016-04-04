@@ -1,7 +1,7 @@
 <?php namespace App\Import\OFAC\SDN;
 
-class AddressList extends Query {
-
+class AddressList extends Query 
+{
 	/**
 	 * @var		string		$table
 	 * @access	protected
@@ -67,6 +67,4 @@ class AddressList extends Query {
 	 * @access	public
 	 */
 	public $country;
-
-
 }

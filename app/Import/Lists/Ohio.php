@@ -1,25 +1,19 @@
 <?php namespace App\Import\Lists;
 
-
 //TODO: unset two columns
 
 class Ohio extends ExclusionList
 {
-
     public $dbPrefix = 'oh1';
-
 
     public $uri = 'http://medicaid.ohio.gov/Portals/0/Providers/Enrollment%20and%20Support/ExclusionSuspensionList.xlsx';
 
-
     public $type = 'xlsx';
-
 
     public $retrieveOptions = [
         'headerRow' => 0,
         'offset' => 1
     ];
-
 
     public $fieldNames = [
         'last_name',

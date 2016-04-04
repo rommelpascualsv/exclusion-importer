@@ -3,15 +3,12 @@
 use App\Import\Lists\ExclusionList;
 use App\Import\Service\File\CsvFileReader;
 
-
 class DataCsvConverter
 {
-
     /**
      * @var	\App\Import\Service\File\FileReader	$fileReader
      */
     protected $fileReader;
-
 
     /**
      * Constructor
@@ -22,7 +19,6 @@ class DataCsvConverter
     {
         $this->fileReader = $fileReader;
     }
-
 
     /**
      * Fill the ExclusionList object's data property
@@ -37,7 +33,6 @@ class DataCsvConverter
 
         return $this->fileReader->readRecords($fileName, $list->retrieveOptions);
     }
-
 
     /**
      * Convert a file to csv
@@ -68,5 +63,4 @@ class DataCsvConverter
 
         return $newFilePath;
     }
-
 }

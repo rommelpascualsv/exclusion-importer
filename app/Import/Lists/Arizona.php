@@ -1,9 +1,7 @@
 <?php namespace App\Import\Lists;
 
-
 class Arizona extends ExclusionList
 {
-
     public $dbPrefix = 'az1';
 
     public $uri = "https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/arizona/azlist.xlsx";

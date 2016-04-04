@@ -2,7 +2,6 @@
 
 class Michigan extends ExclusionList
 {
-
     public $dbPrefix = 'mi1';
 
     public $uri = 'http://www.michigan.gov/documents/mdch/MI_Sanctioned_Provider_List_375503_7.xls';

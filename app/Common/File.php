@@ -4,8 +4,7 @@ class File extends \SplFileObject
 {
     public function csvlineIterator($total)
     {
-        for ($i = 0; $i < $total; $i++)
-        {
+        for ($i = 0; $i < $total; $i++) {
             if (empty($line = $this->fgetcsv())) {
                 continue;
             }
@@ -25,4 +24,4 @@ class File extends \SplFileObject
 
         return $lastLineNumber;
     }
-} 
+}

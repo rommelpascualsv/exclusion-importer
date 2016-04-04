@@ -1,7 +1,7 @@
 <?php namespace App\Import\OFAC\SDN;
 
-class ProgramList extends Query {
-
+class ProgramList extends Query 
+{
 	/**
 	 * @var		string		$table
 	 * @access	protected
@@ -25,5 +25,4 @@ class ProgramList extends Query {
 	 * @access	public
 	 */
 	public $program;
-
 }
