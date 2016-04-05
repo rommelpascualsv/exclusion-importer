@@ -4,3 +4,8 @@
 .env
 .idea
 .vagrant
+codeception.yml
+tests/_output/*
+tests/_support/_generated/*
+tests/**/*Tester.php
+tests/**/*suite.yml

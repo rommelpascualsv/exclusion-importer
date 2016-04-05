@@ -1,17 +1,12 @@
 <?php namespace App\Import\Lists;
 
-
 class Maine extends ExclusionList
 {
-
     public $dbPrefix = 'me1';
-
 
     public $uri = "https://mainecare.maine.gov/PrvExclRpt/November%202015/PI0008-PM_Monthly_Exclusion_Report%20(csv).csv";
 
-
     public $type = 'csv';
-
 
     public $fieldNames = [
         'entity',
@@ -45,14 +40,12 @@ class Maine extends ExclusionList
         'SanctionStartDate'
     ];
 
-
     public $deleteColumns = [
         'ReportNumber',
         'DateRun',
         'ReportName',
         'AsOfDate',
     ];
-
 
     public $hashColumns = [
         'entity',
@@ -62,7 +55,6 @@ class Maine extends ExclusionList
         'case_status',
         'sanction_start_date',
     ];
-
 
     public $retrieveOptions = [
         'headerRow' => 0,
@@ -171,5 +163,4 @@ class Maine extends ExclusionList
 
         return $akaName;
     }
-
 }

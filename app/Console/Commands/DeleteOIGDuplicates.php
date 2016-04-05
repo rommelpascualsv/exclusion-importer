@@ -7,7 +7,6 @@ use Illuminate\Console\Command;
 
 class DeleteOIGDuplicates extends Command
 {
-
     /**
      * The console command name.
      *
@@ -76,7 +75,6 @@ class DeleteOIGDuplicates extends Command
 
         return $records_updated;
     }
-
 
     private function removeOIGDuplicates()
     {

@@ -18,6 +18,7 @@ class Kernel extends ConsoleKernel
         '\App\Console\Commands\DeleteOIGDuplicates',
         '\App\Console\Commands\DeleteOPMExtras',
         '\App\Console\Commands\MigrateSam',
+    	'\App\Console\Commands\UpdateFiles'
     ];
 
     /**
@@ -28,6 +29,6 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        //
+        $schedule->command('updateFiles')->daily();
     }
 }

@@ -1,9 +1,7 @@
 <?php namespace App\Import\Lists;
 
-
 class NewYork extends ExclusionList
 {
-
 	public $dbPrefix = 'nyomig';
 
 	public $uri = 'http://www.omig.ny.gov/data/gensplistns.php';

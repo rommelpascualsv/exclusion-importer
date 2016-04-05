@@ -87,12 +87,10 @@ class Washington extends ExclusionList
         $regex8 = preg_replace('/\s{10}E\s{10}/', $blankDelimiter, $regex7);
         $rows = explode($rowDelimiter, $regex8);
         $columns = [];
-        foreach ($rows as $row)
-        {
+        foreach ($rows as $row) {
             $rowArray = explode($columnDelimiter, $row);
             $firstMiddle = explode(', ', $rowArray[0], 2); //separate last name from rest of name
-            if (isset($firstMiddle[1]))
-            {
+            if (isset($firstMiddle[1])) {
                 $middle = explode(' ', $firstMiddle[1], 2); //separate first name
                 if ( ! isset($middle[1])) //add blank if no middle name so won't act like entity
                     $middle[1] = ' ';
@@ -100,8 +98,7 @@ class Washington extends ExclusionList
             }
             array_splice($rowArray, 0, 1, $firstMiddle);
             array_splice($rowArray, 3, 0, ''); //insert blank column for entities
-            if (count($rowArray) < 6)
-            {
+            if (count($rowArray) < 6) {
                 $entity = $rowArray; //get entity
                 unset($entity[3]); //remove blank column
                 array_splice($rowArray, 3, count($entity), $entity); //insert entity
@@ -113,8 +110,7 @@ class Washington extends ExclusionList
             $columns[] = $rowArray;
         }
         //check for empty arrays
-        foreach ($columns as $key => $value)
-        {
+        foreach ($columns as $key => $value) {
             if ( ! array_filter($value))
                 unset($columns[$key]);
         }

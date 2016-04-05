@@ -5,7 +5,6 @@ use GuzzleHttp\Client;
 
 class PDFRetriever extends Retriever
 {
-
     /**
      * @param \GuzzleHttp\Client $httpClient
      */
@@ -14,12 +13,10 @@ class PDFRetriever extends Retriever
         $this->httpClient = $httpClient;
     }
 
-
     /**
      * @var    \GuzzleHttp\client $httpClient
      */
     protected $httpClient;
-
 
     public function retrieveData(ExclusionList $list)
     {
@@ -38,5 +35,4 @@ class PDFRetriever extends Retriever
 
         return $contents;
     }
-
 }

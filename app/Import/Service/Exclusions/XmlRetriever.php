@@ -16,7 +16,6 @@ class XmlRetriever extends Retriever
         return $item;
     }
 
-
     /**
      * Retrieve the data and fill the passed object's data property
      *

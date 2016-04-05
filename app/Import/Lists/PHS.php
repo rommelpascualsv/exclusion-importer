@@ -52,5 +52,4 @@ class PHS extends ExclusionList
             array_splice($record, 7, 2);
         }
     }
-
 }
