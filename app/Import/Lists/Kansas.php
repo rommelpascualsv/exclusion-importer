@@ -1,26 +1,21 @@
 <?php namespace App\Import\Lists;
 
-
 class Kansas extends ExclusionList
 {
-
     /**
      * @var string
      */
     public $dbPrefix = 'ks1';
-
 
     /**
      * @var string
      */
     public $uri = 'https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/kansas/ks.csv';
 
-
     /**
      * @var string
      */
     public $type = 'csv';
-
 
     /**
      * @var array
@@ -29,7 +24,6 @@ class Kansas extends ExclusionList
         'headerRow' => 0,
         'offset' => 1
     ];
-
 
     /**
      * @var array
@@ -44,7 +38,6 @@ class Kansas extends ExclusionList
         'comments'
     ];
 
-
     /**
      * @var array
      */
@@ -54,7 +47,6 @@ class Kansas extends ExclusionList
         'd_b_a',
         'npi',
     ];
-
 
     /**
      * @var array

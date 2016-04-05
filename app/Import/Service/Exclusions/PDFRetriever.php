@@ -5,7 +5,6 @@ use GuzzleHttp\Client;
 
 class PDFRetriever extends Retriever
 {
-
     /**
      * @param \GuzzleHttp\Client $httpClient
      */
@@ -19,7 +18,6 @@ class PDFRetriever extends Retriever
      */
     protected $httpClient;
 
-
     public function retrieveData(ExclusionList $list)
     {
         $folder = storage_path('app');
@@ -28,12 +26,9 @@ class PDFRetriever extends Retriever
 
         $this->httpClient->get($list->uri, ['sink' => $file]);
 
-        if (strpos($list->pdfToText, "pdftotext") !== false) {
-            $contents = shell_exec($list->pdfToText . ' ' . $file . ' -');
-        } else {
-            $contents = shell_exec($list->pdfToText . ' ' . $file);
-        }
+        $contents = shell_exec($list->pdfToText . ' ' . $file . ' -');
 
         return $contents;
     }
 }
+

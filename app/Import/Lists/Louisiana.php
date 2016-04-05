@@ -1,22 +1,17 @@
 <?php namespace App\Import\Lists;
 
-
 class Louisiana extends ExclusionList
 {
     public $dbPrefix = 'la1';
 
-
     public $uri = 'https://adverseactions.dhh.la.gov/SelSearch/GetCsv';
 
-
     public $type = 'csv';
-
 
     public $retrieveOptions = [
         'headerRow' => 0,
         'offset' => 2
     ];
-
 
     public $fieldNames = [
         'first_name',
@@ -45,7 +40,6 @@ class Louisiana extends ExclusionList
         'effective_date',
     ];
 
-
     /**
      * @var array
      */
@@ -53,6 +47,4 @@ class Louisiana extends ExclusionList
 	    'birthdate' => 2,
         'effective_date' => 8,
     ];
-
-
 }

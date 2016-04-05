@@ -4,15 +4,12 @@ use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemInterface;
 use \Exception;
 
-
-class ExceptionLogger implements ExceptionLoggerInterface {
-
-
+class ExceptionLogger implements ExceptionLoggerInterface 
+{
     /**
      * @var \League\Flysystem\Filesystem  $filesystem
      */
     private $filesystem;
-
 
     /**
      * Constructor
@@ -23,7 +20,6 @@ class ExceptionLogger implements ExceptionLoggerInterface {
     {
         $this->filesystem = $filesystem;
     }
-
 
 	/**
 	 * Log a formatted exception message
@@ -48,7 +44,6 @@ class ExceptionLogger implements ExceptionLoggerInterface {
 		return $this->write($path, $message . PHP_EOL, true, $config);
 	}
 
-
 	/**
 	 * Log the exception with a stack trace
 	 *
@@ -68,7 +63,6 @@ class ExceptionLogger implements ExceptionLoggerInterface {
         return $this->write($path, $content, true, $config);
 	}
 
-
     /**
      * Write the exception data to the log file
      *
@@ -83,12 +77,10 @@ class ExceptionLogger implements ExceptionLoggerInterface {
 		if ( ! $append)
 			return $this->filesystem->put($path, $content, $config);
 
-		if ($this->filesystem->has($path))
-		{
+		if ($this->filesystem->has($path)) {
 			$content = $this->filesystem->read($path) . $content;
 		}
 
 		return $this->filesystem->put($path, $content, $config);
     }
-
 }

@@ -1,7 +1,7 @@
 <?php namespace App\Import\OFAC\SDN;
 
-class VesselInfo extends Query {
-
+class VesselInfo extends Query 
+{
 	/**
 	 * @var		string		$table
 	 * @access	protected
@@ -54,5 +54,4 @@ class VesselInfo extends Query {
 	 * @var		int		$grossRegisteredTonnage
 	 */
 	public $grossRegisteredTonnage;
-
 }

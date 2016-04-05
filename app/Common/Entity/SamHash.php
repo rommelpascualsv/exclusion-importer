@@ -1,19 +1,17 @@
 <?php namespace App\Common\Entity;
 
-class SamHash {
-
+class SamHash 
+{
 
 	/**
 	 * @var string	$hash
 	 */
 	private $hash;
 
-
 	/**
 	 * @var array
 	 */
 	private $hashFields = [ 'SAM_Number', 'Excluding_Agency', 'Active_Date' ];
-
 
 	/**
 	 * Constructor
@@ -46,7 +44,6 @@ class SamHash {
 		$this->hash = md5(strtolower($samNumber.$excludingAgency.$activeDate));
 	}
 
-
 	/**
 	 * toString Magic Method
 	 *
@@ -56,6 +53,4 @@ class SamHash {
 	{
 		return strtoupper($this->hash);
 	}
-
-
 }

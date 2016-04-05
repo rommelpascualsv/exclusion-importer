@@ -66,5 +66,4 @@ class CustomSpectrumDebar extends ExclusionList
             return $record;
         }, $this->data);
     }
-
 }

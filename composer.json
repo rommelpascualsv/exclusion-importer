@@ -15,12 +15,14 @@
         "vlucas/phpdotenv": "~1.0",
         "league/flysystem": "^1.0",
         "streamlineverify/svbot": "~0.4",
-        "streamlineverify/support": "^2.1",
-        "league/flysystem-ziparchive": "^1.0"
+        "league/flysystem-ziparchive": "^1.0",
+        "codeception/codeception":"*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.0",
-        "phpunit/phpunit": "~4.0"
+        "phpunit/phpunit": "~4.0",
+        "phing/phing": "2.*",
+        "mockery/mockery": "dev-master"
     },
     "autoload": {
         "psr-4": {
@@ -45,10 +47,7 @@
         {
             "type": "vcs",
             "url": "https://github.com/streamlineverify/svbot.git"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/streamlineverify/support.git"
         }
     ]
 }
+

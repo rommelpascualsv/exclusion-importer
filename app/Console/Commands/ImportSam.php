@@ -6,8 +6,8 @@ use GuzzleHttp\Client as HTTPClient;
 use App\Common\File;
 use App\Common\Entity\SamHash;
 
-class ImportSam extends Command {
-
+class ImportSam extends Command 
+{
     /**
      * The console command name.
      *
@@ -22,7 +22,6 @@ class ImportSam extends Command {
      */
     protected $description = 'Import the most awesome SAM database.';
 
-
     protected static $columnMappings = [
         'State / Province' => 'State',
         'Zip Code' => 'Zip',
@@ -34,8 +33,8 @@ class ImportSam extends Command {
         ['url' => null],
     ];
     protected $toCreate = [];
+    
     protected $columnsToImport;
-
 
     /**
      * Construct
@@ -104,8 +103,7 @@ class ImportSam extends Command {
         $skipped = 0;
         $total = 0;
         // Iterate csv
-        foreach ($file->csvlineIterator($totalLines) as $row)
-        {
+        foreach ($file->csvlineIterator($totalLines) as $row) {
             if (empty($row)) {
                 break;
             }
@@ -126,15 +124,13 @@ class ImportSam extends Command {
                 ? strftime('%Y-%m-%d', $unixActiveDate)
                 : NULL;
 
-            if (! array_key_exists(strtoupper($newHash), $currentRecords))
-            {
+            if (! array_key_exists(strtoupper($newHash), $currentRecords)) {
                 $rowData['hash'] = app('db')->raw("UNHEX('{$newHash}')");
                 $rowData['new_hash'] = app('db')->raw("UNHEX('{$newHash}')");
                 // can we just create it here?!?!
                 $this->toCreate[] = $rowData;
             }
-            else
-            {
+            else {
 				$activeRecordHashes[] = strtoupper($newHash);
 				if (! $rowData == $currentRecords[strtoupper($newHash)]) {
                     $affectedRows = $this->updateRecords($rowData, $newHash);
@@ -212,8 +208,7 @@ class ImportSam extends Command {
     private function mapColumns($array)
     {
         $columns = [];
-        foreach ($array as $key => $value)
-        {
+        foreach ($array as $key => $value) {
             if (in_array($column = $this->toSnakeCase($value), $this->columnsToImport)) {
                 $columns[$key] = $column;
                 continue;
