@@ -74,7 +74,6 @@ class UnSanctionsIndividuals extends ExclusionList
         'COMMENTS1'
     ];
 
-
     /**
      * Generate Nationality for Individual
      * @param $node SimpleXMLElement
@@ -92,7 +91,6 @@ class UnSanctionsIndividuals extends ExclusionList
 
         return implode('; ', $result);
     }
-
 
     /**
      * Generate Designation for Individual
@@ -112,7 +110,6 @@ class UnSanctionsIndividuals extends ExclusionList
         return implode('; ', $result);
     }
 
-
     /**
      * Generate Alias for Individual
      * @param $node SimpleXMLElement
@@ -130,7 +127,6 @@ class UnSanctionsIndividuals extends ExclusionList
 
         return implode('; ', $result);
     }
-
 
     /**
      * Generate Address for Individual
@@ -169,7 +165,6 @@ class UnSanctionsIndividuals extends ExclusionList
         return implode('; ', $result);
     }
 
-
     /**
      * Generate Date of Birth for Individual
      * @param $node SimpleXMLElement
@@ -198,7 +193,6 @@ class UnSanctionsIndividuals extends ExclusionList
 
         return implode('; ', $result);
     }
-
 
     /**
      * Generate Place of Birth for Individual
@@ -230,7 +224,6 @@ class UnSanctionsIndividuals extends ExclusionList
 
         return implode('; ', $result);
     }
-
 
     private function prepareItem($item)
     {

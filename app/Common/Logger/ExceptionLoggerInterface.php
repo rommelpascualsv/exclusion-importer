@@ -1,7 +1,7 @@
 <?php namespace App\Common\Logger;
 
-interface ExceptionLoggerInterface {
-
+interface ExceptionLoggerInterface 
+{
     /**
      * Write the exception data to the log file
      *
@@ -13,7 +13,6 @@ interface ExceptionLoggerInterface {
      */
     function logMessage(\Exception $e, $path);
 
-
     /**
      * Log the exception with a stack trace
      *
@@ -22,6 +21,4 @@ interface ExceptionLoggerInterface {
      * @return	bool
      */
     function logStackTrace(\Exception $e, $path);
-
-
 }

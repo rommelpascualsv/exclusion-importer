@@ -2,24 +2,20 @@
 
 class NorthDakota extends ExclusionList
 {
-
     /**
      * @var string
      */
     public $dbPrefix = 'nd1';
-
 
     /**
      * @var string
      */
     public $uri = 'http://www.nd.gov/dhs/services/medicalserv/medicaid/docs/pro-exclusion-list.xlsx';
 
-
     /**
      * @var string
      */
     public $type = 'xlsx';
-
 
     /**
      * @var array
@@ -28,7 +24,6 @@ class NorthDakota extends ExclusionList
         'headerRow' => 0,
         'offset' => 1
     ];
-
 
     /**
      * @var array
@@ -47,7 +42,6 @@ class NorthDakota extends ExclusionList
         'exclusion_reason_2',
     ];
 
-
     /**
      * @var array
      */
@@ -60,12 +54,10 @@ class NorthDakota extends ExclusionList
         'exclusion_date'
     ];
 
-
     /**
      * @var array
      */
     public $dateColumns = [];
-
 
     public function postHook()
     {
@@ -74,12 +66,10 @@ class NorthDakota extends ExclusionList
             ->select('id', 'business_name_address')
             ->get();
 
-        foreach ($results as $key => $value)
-        {
+        foreach ($results as $key => $value) {
             preg_match('/^(?!N\/A)[\D]+/', $value->business_name_address, $match);
 
-            if ( ! empty($match))
-            {
+            if ( ! empty($match)) {
                 app('db')
                     ->table($this->dbPrefix . '_records')
                     ->where('id', $value->id)

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="ExclusionImporter" default="init" basedir="."
+	description="Runs codeception tests">
+
+	<property file="./build.properties" />
+
+	<taskdef name="codeception" classname="tests.tasks.RunCodeceptionTask" />
+	<taskdef name="update" classname="LiquibaseTask" />
+	<taskdef name="tag" classname="LiquibaseTagTask" />
+    <taskdef name="rollback" classname="LiquibaseRollbackTask" />
+	
+	<!-- initialize the database -->
+    <target name="init">
+        
+        <update
+            command="update"
+            jar="${liquibase.jar}"
+            classpathref="${mysql.driver}"
+            changelogFile="${changelogFile}"
+            username="${username}"
+            password="${password}"
+            url="${url}">
+             
+            <parameter name='contexts' value='prod' />
+        </update>
+    </target>
+	
+    <!-- run all tests -->
+    <target name="test" depends="loadTestData">
+        <!-- run codeception tests. "type" value can be "unit", "functional", "acceptance" or "" (blank means all types)-->
+        <codeception type="" />
+        
+        <echo msg="${line.separator}" />
+        
+        <rollback
+            rollbackTag="checkpoint"
+            jar="${liquibase.jar}"
+            classpathref="${mysql.driver}"
+            changelogFile="${changelogFile}"
+            username="${username}"
+            password="${password}"
+            url="${url}" />
+    </target>
+	
+    <target name="loadTestData"
+        description="Load test data into database">
+        <tag
+            tag="checkpoint"
+            jar="${liquibase.jar}"
+            classpathref="${mysql.driver}"
+            changelogFile="${changelogFile}"
+            username="${username}"
+            password="${password}"
+            url="${url}" />
+            
+        <update
+            command="update"
+            jar="${liquibase.jar}"
+            classpathref="${mysql.driver}"
+            changelogFile="${changelogFile}"
+            username="${username}"
+            password="${password}"
+            url="${url}">
+             
+            <parameter name='contexts' value='test' />
+        </update>
+    </target>
+</project>

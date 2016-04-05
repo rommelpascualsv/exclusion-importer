@@ -1,18 +1,16 @@
 <?php namespace App\Common\Entity;
 
-
 /**
  * Class NPI
  * @package SLV\Common\Entities
  */
-class NPI {
-
+class NPI 
+{
 
 	/**
 	 * @var	string	$value
 	 */
 	private $value;
-
 
 	/**
 	 * @param	string	$npi
@@ -31,4 +29,3 @@ class NPI {
 		return (string) $this->value;
 	}
 }
-  

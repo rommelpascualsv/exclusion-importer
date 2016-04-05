@@ -18,7 +18,8 @@ class RetrieverFactory
         'custom'  => 'custom',
     ];
 
-    public function make($type) {
+    public function make($type) 
+    {
         if (array_key_exists($type, $this->retrieverMappings)) {
 
             $retrieverType =  $this->retrieverMappings[$type];
@@ -63,5 +64,4 @@ class RetrieverFactory
                 break;
         }
     }
-
 }

@@ -1,9 +1,7 @@
 <?php namespace App\Import\Lists;
 
-
 class Massachusetts extends ExclusionList
 {
-
     public $dbPrefix = 'ma1';
 
     public $uri = 'http://www.mass.gov/eohhs/docs/masshealth/provlibrary/suspended-excluded-masshealth-providers.xls';

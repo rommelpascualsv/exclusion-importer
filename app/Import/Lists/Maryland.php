@@ -1,11 +1,9 @@
 <?php namespace App\Import\Lists;
 
-
 use Symfony\Component\DomCrawler\Crawler;
 
 class Maryland extends ExclusionList
 {
-
     public $dbPrefix = 'md1';
 
     public $uri;
@@ -27,13 +25,11 @@ class Maryland extends ExclusionList
         'city_state_zip',
     ];
 
-
     public function __construct()
     {
         parent::__construct();
         $this->uri = $this->getUri();
     }
-
 
     protected function getUri()
     {

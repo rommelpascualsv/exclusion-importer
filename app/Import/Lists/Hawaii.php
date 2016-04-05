@@ -1,11 +1,9 @@
 <?php namespace App\Import\Lists;
 
-
 use Symfony\Component\DomCrawler\Crawler;
 
 class Hawaii extends ExclusionList
 {
-
     public $dbPrefix = 'hi1';
 
     public $uri;
@@ -27,13 +25,11 @@ class Hawaii extends ExclusionList
         'reinstatement_date'
     ];
 
-
     public function __construct()
     {
         parent::__construct();
         $this->uri = $this->getUri();
     }
-
 
     protected function getUri()
     {

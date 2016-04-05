@@ -1,20 +1,14 @@
 <?php namespace App\Import\Lists;
 
-
 class Tennessee extends ExclusionList
 {
-
     public $dbPrefix = 'tn1';
-
 
     public $pdfToText = "pdftotext -layout ";
 
-
     public $uri = 'http://www.tn.gov/assets/entities/tenncare/attachments/terminatedproviderlist.pdf';
 
-
     public $type = 'pdf';
-
 
     public $fieldNames = [
         'last_name',
@@ -26,12 +20,10 @@ class Tennessee extends ExclusionList
         'end_date'
     ];
 
-
     public $retrieveOptions = [
         'headerRow' => 1,
         'offset'    => 0
     ];
-
 
     public $hashColumns = [
         'last_name',
@@ -42,12 +34,10 @@ class Tennessee extends ExclusionList
         'end_date'
     ];
 
-
     public $dateColumns = [
         'begin_date' => 4,
         'end_date'   => 6
     ];
-
 
     public $shouldHashListName = true;
 
@@ -59,7 +49,6 @@ class Tennessee extends ExclusionList
 
     protected function parse()
     {
-
         $properSpacing = preg_replace_callback('/1\d{9}/', function ($item) {
             return $item[0] . '  ';
         }, $this->data);
@@ -90,14 +79,11 @@ class Tennessee extends ExclusionList
                 array_push($rowArray, '');
             }
 
-
             $columns[] = $rowArray;
-
         }
 
         array_pop($columns);
 
         $this->data = $columns;
     }
-
 }
