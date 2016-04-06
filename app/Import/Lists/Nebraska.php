@@ -68,42 +68,10 @@ class Nebraska extends ExclusionList
         	//remove date_added column
 			array_shift($columns);
 			
-			// manual overrides to fix the pdf table issues
-			$columns = $this->applyOverrides($columns);
-        	
 			// populate the array data
         	$data[] = $columns;
         }
 
         $this->data = $data;
-    }
-    
-    /**
-     * Applies all the specific overrides that are needed to fix the records before inserting in the database.
-     * 
-     * @param array $columns the column array
-     * @return array the column array
-     */
-    private function applyOverrides($columns) {
-    	
-    	$columns = $this->addMissingNpiValue($columns);
-    	
-    	return $columns;
-    }
-    
-    /**
-     * Add the missing NPI value to a given row
-     * 
-     * @param array $columns the column array
-     * @return array the column array
-     */
-    private function addMissingNpiValue($columns) {
-    	
-    	if ($columns[0] === "Paul, Ashley") {
-    		array_splice($columns, 1, 0, "Atypical Provider Type-NPI Not\rIssued");
-    		array_pop($columns);
-    	}
-    	
-    	return $columns;
     }
 }
