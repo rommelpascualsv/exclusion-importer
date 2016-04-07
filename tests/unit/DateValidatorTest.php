@@ -2,7 +2,8 @@
 
 use App\Services\DateValidator;
 
-class DateValidatorTest extends TestCase {
+class DateValidatorTest extends TestCase 
+{
 
     public function test_valid_date_string_returns_true()
     {

@@ -2,8 +2,8 @@
 
 use App\Repositories\NppesRepository;
 
-class NppesUpdateTest extends MongoTestCase {
-
+class NppesUpdateTest extends MongoTestCase 
+{
 	public function test_nppes_record_updates_record_database()
 	{
 		$repository = $this->app->make(NppesRepository::class);

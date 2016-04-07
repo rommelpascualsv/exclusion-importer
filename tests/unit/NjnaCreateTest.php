@@ -2,8 +2,8 @@
 
 use App\Repositories\NjnaRepository;
 
-class NjnaCreateTest extends MongoTestCase {
-
+class NjnaCreateTest extends MongoTestCase 
+{
 	public function test_njna_record_creates_record_in_database()
 	{
 		$repository = $this->app->make(NjnaRepository::class);
