@@ -16,7 +16,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.provider :virtualbox do |vb|
 
-    vb.name = "exclusions-import"
+    vb.name = "external-data-manager"
     vb.customize ["modifyvm", :id, "--memory", 2048]
     vb.customize ["guestproperty", "set", :id, "/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold", 10000]
 
@@ -26,5 +26,7 @@ Vagrant.configure(2) do |config|
   config.vm.provision "shell", path: 'provision/nginx.sh'
   config.vm.provision "shell", path: 'provision/php.sh'
   config.vm.provision "shell", path: 'provision/mysql.sh'
+  config.vm.provision "shell", path: 'provision/liquibase.sh'
+  config.vm.provision "shell", path: 'provision/phing.sh'
   config.vm.provision "shell", path: 'provision/provision.sh'
 end

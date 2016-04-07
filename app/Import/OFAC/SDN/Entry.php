@@ -1,7 +1,7 @@
 <?php namespace App\Import\OFAC\SDN;
 
-class Entry extends Query {
-
+class Entry extends Query 
+{
 	/**
 	 * The table that stores the main OFAC SDN Entries
 	 *
@@ -137,8 +137,7 @@ class Entry extends Query {
 	 */
 	public function load_entry()
 	{
-		if ( $this->uid == NULL )
-		{
+		if ( $this->uid == NULL ) {
 			return $this;
 		}
 
@@ -161,15 +160,10 @@ class Entry extends Query {
 		$this->placeOfBirthList = PlaceOfBirthList::getBySdnEntryId( $sdnEntryId );
 
 		$this->vesselInfo = VesselInfo::getBySdnEntryId( $sdnEntryId );
-
-
 	}
 
 	public static function getBySdnEntryId($sdnEntryId)
 	{
 		return NULL;
 	}
-
-
-
 }

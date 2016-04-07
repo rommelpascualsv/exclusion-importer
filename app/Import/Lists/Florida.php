@@ -1,6 +1,5 @@
 <?php namespace App\Import\Lists;
 
-
 class Florida extends ExclusionList
 {
     public $dbPrefix = 'fl2';

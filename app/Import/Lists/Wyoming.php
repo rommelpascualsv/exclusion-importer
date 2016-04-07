@@ -1,20 +1,14 @@
 <?php namespace App\Import\Lists;
 
-
 class Wyoming extends ExclusionList
 {
-
     public $dbPrefix = 'wy1';
-
 
     public $pdfToText = "pdftotext -layout -nopgbrk";
 
-
     public $uri = 'http://www.health.wyo.gov/Media.aspx?mediaId=18045';
 
-
     public $type = 'pdf';
-
 
     public $fieldNames = [
         'last_name',
@@ -29,12 +23,10 @@ class Wyoming extends ExclusionList
         'additional_info_2'
     ];
 
-
     public $retrieveOptions = [
         'headerRow' => 0,
         'offset'    => 1
     ];
-
 
     public $hashColumns = [
         'last_name',
@@ -43,7 +35,6 @@ class Wyoming extends ExclusionList
         'provider_number',
         'exclusion_date'
     ];
-
 
     public $dateColumns = [
         'exclusion_date' => 7
@@ -78,44 +69,40 @@ class Wyoming extends ExclusionList
         $regex9 = str_replace('6/18/2009', '6/18/2009' . $rowDelimiter, $regex8);
         $regex10 = str_replace('8/20/2015', '8/20/2015' . $rowDelimiter, $regex9);
 
-
         $rows = explode($rowDelimiter, $regex10);
-
 
         $valid = -1;
         $validRow = 0;
 
         $columns = [];
 
-        foreach ($rows as $row)
-        {
+        foreach ($rows as $row) {
             $valid++;
 
             $rowArray = explode($columnDelimiter, $row);
             array_shift($rowArray);
 
-            if (count($rowArray) == 7){
+            if (count($rowArray) == 7) {
                 array_splice($rowArray, 2, 0, '');
             }
-            if (count($rowArray) == 6){
+            if (count($rowArray) == 6) {
                 array_splice($rowArray, 0, 0, '');
                 array_splice($rowArray, 0, 0, '');
             }
-            if (count($rowArray) == 9){
+            if (count($rowArray) == 9) {
                 array_splice($rowArray, 8, 0, '');
             }
 
-            if (count($rowArray) == 8){
+            if (count($rowArray) == 8) {
                 array_splice($rowArray, 8, 0, '');
                 array_splice($rowArray, 8, 0, '');
             }
 
-            if (count($rowArray) == 3){
+            if (count($rowArray) == 3) {
                 array_push($rowArray, '', '', '', '', '', '', '');
             }
 
-            if (count($rowArray) < 4)
-            {
+            if (count($rowArray) < 4) {
                 $valid--;
                 //$columns[$validRow] = array_merge($columns[$validRow],$rowArray);
                 array_splice($columns[$validRow], 8, count($rowArray),$rowArray);
@@ -124,13 +111,9 @@ class Wyoming extends ExclusionList
 
             $validRow = $valid;
 
-
-
             $columns[] = $rowArray;
-
         }
 
         $this->data = $columns;
     }
-
 }

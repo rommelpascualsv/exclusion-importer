@@ -1,7 +1,7 @@
 <?php namespace App\Import\OFAC\SDN;
 
-class IDList extends Query {
-
+class IDList extends Query 
+{
 	/**
 	 * @var		string		$table
 	 * @access	protected

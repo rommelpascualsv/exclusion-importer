@@ -56,7 +56,6 @@ class UnSanctionsEntities extends ExclusionList
         ['generateEntityAddress'],
     ];
 
-
     /**
      * Generate Alias for Entity
      * @param $node SimpleXMLElement
@@ -74,7 +73,6 @@ class UnSanctionsEntities extends ExclusionList
 
         return implode('; ', $result);
     }
-
 
     /**
      * Generate Address for Entity
@@ -112,7 +110,6 @@ class UnSanctionsEntities extends ExclusionList
 
         return implode('; ', $result);
     }
-
 
     private function prepareItem($item)
     {
