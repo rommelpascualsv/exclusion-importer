@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use App\Repositories\MICnaRepository;
+use Laravel\Lumen\Routing\Controller as BaseController;
 
 class MICnaController extends BaseController
 {

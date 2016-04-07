@@ -21,8 +21,8 @@ $app->get('import/{listPrefix}', 'ImportController@import');
 $app->get('import', 'ImportController@index');
 
 # veritas routes
-$app->get('nppes/{id}', 'App\Http\Controllers\NppesController@getNppesRecord');
-$app->get('njna/{id}', 'App\Http\Controllers\NjnaController@getNjnaRecord');
-$app->get('nj-credential/{id}', 'App\Http\Controllers\NJCredentialController@getNJCredentialRecord');
-$app->get('mi-cna/{id}', 'App\Http\Controllers\MICnaController@getMICnaRecord');
+$app->get('nppes/{id}', 'NppesController@getNppesRecord');
+$app->get('njna/{id}', 'NjnaController@getNjnaRecord');
+$app->get('nj-credential/{id}', 'NJCredentialController@getNJCredentialRecord');
+$app->get('mi-cna/{id}', 'MICnaController@getMICnaRecord');
 

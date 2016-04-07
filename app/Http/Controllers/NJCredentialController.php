@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use App\Repositories\NJCredentialRepository;
+use Laravel\Lumen\Routing\Controller as BaseController;
 
 class NJCredentialController extends BaseController
 {

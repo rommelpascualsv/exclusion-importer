@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use App\Repositories\NppesRepository;
+use Laravel\Lumen\Routing\Controller as BaseController;
 
 class NppesController extends BaseController
 {

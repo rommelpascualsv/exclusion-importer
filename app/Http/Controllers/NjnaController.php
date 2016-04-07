@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use App\Repositories\NjnaRepository;
+use Laravel\Lumen\Routing\Controller as BaseController;
 
 class NjnaController extends BaseController
 {
