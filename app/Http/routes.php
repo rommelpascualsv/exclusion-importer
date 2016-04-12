@@ -18,3 +18,5 @@ $app->get('/', function () use ($app) {
 $app->get('import/createOldTables', 'ImportController@createOldTables');
 $app->get('import/{listPrefix}', 'ImportController@import');
 $app->get('import', 'ImportController@index');
+
+$app->get('scrape/test', 'ScrapeController@test');

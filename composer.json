@@ -16,7 +16,8 @@
         "league/flysystem": "^1.0",
         "streamlineverify/svbot": "~0.4",
         "league/flysystem-ziparchive": "^1.0",
-        "codeception/codeception":"*"
+        "codeception/codeception":"*",
+        "fabpot/goutte": "^3.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.0",
