@@ -20,7 +20,7 @@ class Washington extends ExclusionList
         'middle_etc',
         'entity',
         'provider_license',
-        'npi_number',
+        'npi',
         'termination_date',
         'termination_reason'
     ];
@@ -37,7 +37,7 @@ class Washington extends ExclusionList
         'first_name',
         'entity',
         'provider_license',
-        'npi_number',
+        'npi',
         'termination_date'
     ];
 
