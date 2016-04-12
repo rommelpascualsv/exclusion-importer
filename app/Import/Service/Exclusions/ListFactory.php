@@ -41,7 +41,7 @@ class ListFactory
         'usdocdp'           => 'USDOCDeniedPersons',
         'fdadl'             => 'FDADebarmentList',
         'usdosd'            => 'USDosDebar',
-        'unsancindividuals' => 'UNSanctionsIndividuals',
+        'unsancindividuals' => 'UnSanctionsIndividuals',
         'unsancentities'    => 'UnSanctionsEntities',
         'healthmil'    => 'HealthMil',
     ];
