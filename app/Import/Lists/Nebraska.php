@@ -97,8 +97,7 @@ class Nebraska extends ExclusionList
      */
     private function clearInvalidNpiValue($columns)
     {
-    	if (!is_numeric($columns[1]))
-    	{
+    	if (!is_numeric($columns[1])) {
     		$columns[1] = null; 
     	}
     		
