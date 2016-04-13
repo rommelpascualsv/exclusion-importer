@@ -68,10 +68,40 @@ class Nebraska extends ExclusionList
         	//remove date_added column
 			array_shift($columns);
 			
+			// applies specific overrides
+			$columns = $this->applyOverrides($columns);
+			
 			// populate the array data
         	$data[] = $columns;
         }
 
         $this->data = $data;
+    }
+    
+    /**
+     * Applies the specific overrides to correct the data
+     * @param array $columns the column array
+     * @return array $columns the column array
+     */
+    private function applyOverrides($columns)
+    {
+    	$columns = $this->clearInvalidNpiValue($columns);
+    	
+    	return $columns;
+    }
+    
+    /**
+     * Clears the invalid npi value from the record.
+     * @param array $columns the column array
+     * @return array $columns the column array
+     */
+    private function clearInvalidNpiValue($columns)
+    {
+    	if (!is_numeric($columns[1]))
+    	{
+    		$columns[1] = null; 
+    	}
+    		
+    	return $columns;
     }
 }
