@@ -9,7 +9,13 @@ class ScrapeController extends BaseController
 {
 	public function test()
 	{
-		$crawler = ConnecticutCrawler::create();
+		ini_set('max_execution_time', 99999);
+		
+		$crawler = ConnecticutCrawler::create(
+			storage_path('app'),
+			'Certified_Public_Accountant_Certificate.csv'
+		);
+		
 		$crawler->downloadFile();
 	}
 }

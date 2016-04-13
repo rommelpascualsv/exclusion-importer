@@ -125,7 +125,7 @@ class ConnecticutCrawler
 	{	
 		$this->client->request('GET', $this->getDownloadUrl($rosterID));
 		
-		return $this->client->getResponse();
+		return $this->client->getResponse()->getContent();
 	}
 	
 	/**
