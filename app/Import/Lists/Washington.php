@@ -155,6 +155,8 @@ class Washington extends ExclusionList
     private function override(array $value)
     {
         $data = '';
+        
+        $value = $this->clearInvalidNpiValue($value);
 
         //if combination of business and name
         if ($this->business) {
@@ -208,5 +210,19 @@ class Washington extends ExclusionList
         }
 
         $this->data = $data;
+    }
+    
+    /**
+     * Clears the invalid npi value from the record.
+     * @param array $columns the column array
+     * @return array $columns the column array
+     */
+    private function clearInvalidNpiValue($columns)
+    {
+    	if (!is_numeric($columns[2])) {
+    		$columns[2] = null; 
+    	}
+    		
+    	return $columns;
     }
 }
