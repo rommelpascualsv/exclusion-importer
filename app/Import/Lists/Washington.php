@@ -219,10 +219,15 @@ class Washington extends ExclusionList
      */
     private function clearInvalidNpiValue($columns)
     {
-    	if (!is_numeric($columns[2])) {
-    		$columns[2] = null; 
-    	}
-    		
+    	// split multiple npi numbers
+    	$npiArr = explode(" ", $columns[2]);
+    	
+    	// get the last npi number 
+    	$npi = array_pop($npiArr);
+    	
+    	// clear invalid npi value
+    	$columns[2] = !is_numeric($npi) ? null : $npi;
+    	
     	return $columns;
     }
 }
