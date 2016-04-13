@@ -49,7 +49,17 @@ class ConnecticutCrawler
 		$this->downloadPath = $downloadPath;
 		$this->downloadFileName = $downloadFileName;
 	}
-
+	
+	/**
+	 * Get client
+	 * 
+	 * @return Client
+	 */
+	public function getClient()
+	{
+		return $this->client;
+	}
+	
 	/**
 	 * Get download file path
 	 * @return string
@@ -140,7 +150,11 @@ class ConnecticutCrawler
 	 */
 	public static function create($downloadPath, $downloadFileName)
 	{
-		return new static(new Client(), $downloadPath, $downloadFileName);
+		$client = new Client([
+			'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
+		]);
+		
+		return new static($client, $downloadPath, $downloadFileName);
 	}
 	
 	/**
