@@ -79,7 +79,7 @@ class ImportController extends BaseController
             app('db')->statement('CREATE TABLE  `' . $list . '_older` LIKE `' . $list . '`');
             app('db')->statement('INSERT  INTO `' . $list . '_older` SELECT * FROM `' . $list . '`');
         }
-    }
+	}
 
     public function index()
     {

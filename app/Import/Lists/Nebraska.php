@@ -31,8 +31,9 @@ class Nebraska extends ExclusionList
     public $hashColumns = [
         'provider_name',
         'npi',
-        'provider_type',
     	'effective_date',
+    	'term',
+    	'end_date'
     ];
 
 
@@ -67,42 +68,39 @@ class Nebraska extends ExclusionList
         	//remove date_added column
 			array_shift($columns);
 			
-			// manual overrides to fix the pdf table issues
+			// applies specific overrides
 			$columns = $this->applyOverrides($columns);
-        	
+			
 			// populate the array data
-        	array_push($data, $columns);
+        	$data[] = $columns;
         }
 
         $this->data = $data;
     }
     
     /**
-     * Applies all the specific overrides that are needed to fix the records before inserting in the database.
-     * 
+     * Applies the specific overrides to correct the data
      * @param array $columns the column array
-     * @return array the column array
+     * @return array $columns the column array
      */
-    private function applyOverrides($columns) {
-    	
-    	$columns = $this->addMissingNpiValue($columns);
+    private function applyOverrides($columns)
+    {
+    	$columns = $this->clearInvalidNpiValue($columns);
     	
     	return $columns;
     }
     
     /**
-     * Add the missing NPI value to a given row
-     * 
+     * Clears the invalid npi value from the record.
      * @param array $columns the column array
-     * @return array the column array
+     * @return array $columns the column array
      */
-    private function addMissingNpiValue($columns) {
-    	
-    	if ($columns[0] === "Paul, Ashley") {
-    		array_splice($columns, 1, 0, "Atypical Provider Type-NPI Not\rIssued");
-    		array_pop($columns);
+    private function clearInvalidNpiValue($columns)
+    {
+    	if (!is_numeric($columns[1])) {
+    		$columns[1] = null; 
     	}
-    	
+    		
     	return $columns;
     }
 }
