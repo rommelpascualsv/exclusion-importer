@@ -31,4 +31,3 @@ class PDFRetriever extends Retriever
         return $contents;
     }
 }
-
