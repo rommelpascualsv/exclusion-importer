@@ -51,7 +51,7 @@ class ListFactory
      * @param $prefix
      * @return \App\Import\Lists\ExclusionList
      */
-    public function make($prefix) 
+    public function make($prefix)
     {
         if (array_key_exists($prefix, $this->listMappings)) {
 

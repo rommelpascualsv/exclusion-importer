@@ -27,11 +27,10 @@ class PDFRetriever extends Retriever
         $this->httpClient->get($list->uri, ['sink' => $file]);
 
         if (strpos($list->pdfToText, "pdftotext") !== false) {
-        	$contents = shell_exec($list->pdfToText . ' ' . $file . ' -');
+            $contents = shell_exec($list->pdfToText . ' ' . $file . ' -');
         } else {
-        	$contents = shell_exec($list->pdfToText . ' ' . $file);
+            $contents = shell_exec($list->pdfToText . ' ' . $file);
         }
-        
 
         return $contents;
     }

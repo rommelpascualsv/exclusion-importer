@@ -6,14 +6,14 @@ use Laravel\Lumen\Routing\Controller as BaseController;
 
 class ImportController extends BaseController
 {
-	protected $importFileService;
-	
-	public function __construct(ImportFileServiceInterface $importFileService)
-	{
-		$this->importFileService = $importFileService;
-	}
-	
-	public function createOldTables()
+    protected $importFileService;
+    
+    public function __construct(ImportFileServiceInterface $importFileService)
+    {
+        $this->importFileService = $importFileService;
+    }
+    
+    public function createOldTables()
     {
         $lists = [
             'ak1_records',
