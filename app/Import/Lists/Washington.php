@@ -20,7 +20,7 @@ class Washington extends ExclusionList
         'middle_etc',
         'entity',
         'provider_license',
-        'npi_number',
+        'npi',
         'termination_date',
         'termination_reason'
     ];
@@ -37,7 +37,7 @@ class Washington extends ExclusionList
         'first_name',
         'entity',
         'provider_license',
-        'npi_number',
+        'npi',
         'termination_date'
     ];
 
@@ -155,6 +155,8 @@ class Washington extends ExclusionList
     private function override(array $value)
     {
         $data = '';
+        
+        $value = $this->clearInvalidNpiValue($value);
 
         //if combination of business and name
         if ($this->business) {
@@ -208,5 +210,24 @@ class Washington extends ExclusionList
         }
 
         $this->data = $data;
+    }
+    
+    /**
+     * Clears the invalid npi value from the record.
+     * @param array $columns the column array
+     * @return array $columns the column array
+     */
+    private function clearInvalidNpiValue($columns)
+    {
+    	// split multiple npi numbers
+    	$npiArr = explode(" ", $columns[2]);
+    	
+    	// get the last npi number 
+    	$npi = array_pop($npiArr);
+    	
+    	// clear invalid npi value
+    	$columns[2] = !is_numeric($npi) ? null : $npi;
+    	
+    	return $columns;
     }
 }
