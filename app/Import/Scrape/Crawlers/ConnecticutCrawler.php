@@ -4,6 +4,7 @@ namespace App\Import\Scrape\Crawlers;
 
 use Goutte\Client;
 use Symfony\Component\DomCrawler\Crawler;
+use App\Import\Scrape\Data\ConnecticutCategories;
 
 class ConnecticutCrawler
 {
@@ -38,16 +39,34 @@ class ConnecticutCrawler
 	protected static $downloadUriFormat = 'FileDownload.aspx?Idnt={rosterID}&Type=Comma';
 	
 	/**
+	 * @var array
+	 */
+	protected static $selectors = [
+			'download_options' => [
+					'download_button' => 'input[type="submit"][value="Download"]'
+			]
+	];
+	
+	/**
+	 * @var array
+	 */
+	protected static $xpath = [
+			'download_options' => [
+					'column' => '//td[text() = "%s"]'
+			]
+	];
+	
+	/**
 	 * Instantiate
 	 * @param Client $client
 	 * @param string $downloadPath
 	 * @param string $downloadFileName
 	 */
-	public function __construct(Client $client, $downloadPath, $downloadFileName)
+	public function __construct(Client $client, $downloadPath, array $options)
 	{
 		$this->client = $client;
 		$this->downloadPath = $downloadPath;
-		$this->downloadFileName = $downloadFileName;
+		$this->options = $options;
 	}
 	
 	/**
@@ -58,6 +77,15 @@ class ConnecticutCrawler
 	public function getClient()
 	{
 		return $this->client;
+	}
+	
+	/**
+	 * Get options
+	 * @return array
+	 */
+	public function getOptions()
+	{
+		return $this->options;
 	}
 	
 	/**
@@ -72,13 +100,24 @@ class ConnecticutCrawler
 	/**
 	 * Download file
 	 */
-	public function downloadFile()
+	public function downloadFiles()
 	{	
 		$mainCrawler = $this->getMainCrawler();
 		$downloadOptionsCrawler = $this->getDownloadOptionsCrawler($mainCrawler);
-		$rosterId = $this->getDownloadOptionsRosterId($downloadOptionsCrawler);
 		
-		$this->saveFile($this->getDownloadFileContent($rosterId));
+		$this->createDownloadPath();
+		
+		foreach ($this->options as $option) {
+			$rowCrawler = $downloadOptionsCrawler->filterXPath(
+				static::getXpath('download_options', 'column', $option['label'])
+			);
+			$rosterId = $rowCrawler->parents()
+				->filter(static::getSelector('download_options', 'download_button'))
+				->attr('rosteridnt');			
+			$fileContent = $this->getDownloadFileContent($rosterId);
+			
+			$this->saveDownloadFile($option['file_name'], $fileContent);
+		}
 	}
 	
 	/**
@@ -100,20 +139,13 @@ class ConnecticutCrawler
 	public function getDownloadOptionsCrawler(Crawler $crawler)
 	{
 		$form = $crawler->selectButton('Continue')->form();
-		$form['ctl00$MainContentPlaceHolder$ckbRoster0']->tick();
+		
+		foreach ($this->options as $data) {
+			$fieldName = $data['field_name'];
+			$form[$fieldName]->tick();
+		}
 		
 		return $this->client->submit($form);	
-	}
-	
-	/**
-	 * Get download page roster ID 
-	 * 
-	 * @param Crawler $crawler
-	 * @return string
-	 */
-	public function getDownloadOptionsRosterId(Crawler $crawler)
-	{
-		return $crawler->filter('input[type="submit"][value="Download"]')->attr('rosteridnt');
 	}
 	
 	/**
@@ -132,36 +164,55 @@ class ConnecticutCrawler
 	 * Save file
 	 * @param string $content 
 	 */
-	public function saveFile($content)
+	public function saveDownloadFile($fileName, $content)
+	{
+		file_put_contents(
+				$this->downloadPath . DIRECTORY_SEPARATOR . $fileName . '.csv',
+				$content
+		);
+	}
+	
+	/**
+	 * Create download path
+	 */
+	protected function createDownloadPath()
 	{
 		if (! is_dir($this->downloadPath)) {
 			mkdir($this->downloadPath, 0755, true);
 		}
-
-		file_put_contents($this->getDownloadFilePath(), $content);
 	}
 	
 	/**
 	 * Create
-	 *
 	 * @param string $downloadPath
-	 * @param string $downloadFileName
-	 * @return static
+	 * @param array $optionKeys
+	 * @return \App\Import\Scrape\Crawlers\ConnecticutCrawler
 	 */
-	public static function create($downloadPath, $downloadFileName)
+	public static function create($downloadPath, array $optionKeys)
 	{
 		$client = new Client([
 			'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
 		]);
+		$options = ConnecticutCategories::getOptions($optionKeys);
 		
-		return new static($client, $downloadPath, $downloadFileName);
+		return new static($client, $downloadPath, $options);
+	}
+	
+	/**
+	 * Get url
+	 * @param string $uri
+	 * @return string
+	 */
+	public static function getUrl($uri)
+	{
+		return static::$baseUrl . '/' . $uri;
 	}
 	
 	/**
 	 * Get main url
 	 * @return string
 	 */
-	protected static function getMainUrl()
+	public static function getMainUrl()
 	{
 		return static::getUrl(static::$mainUri);
 	}
@@ -171,7 +222,7 @@ class ConnecticutCrawler
 	 * @param string $rosterId
 	 * @return string
 	 */
-	protected static function getDownloadUrl($rosterId)
+	public static function getDownloadUrl($rosterId)
 	{
 		$uri = str_replace('{rosterID}', $rosterId, static::$downloadUriFormat);
 		
@@ -179,12 +230,30 @@ class ConnecticutCrawler
 	}
 	
 	/**
-	 * Get url
-	 * @param string $uri
+	 * Get selector
+	 * @param string $page
+	 * @param string $type
 	 * @return string
 	 */
-	protected static function getUrl($uri)
+	public static function getSelector($page, $type)
 	{
-		return static::$baseUrl . '/' . $uri;
+		return static::$selectors[$page][$type];
+	}
+	
+	/**
+	 * Get xpath
+	 * @param string $page
+	 * @param string $type
+	 * @param string|array $args
+	 */
+	public static function getXpath($page, $type, $args)
+	{
+		$xpath = static::$xpath[$page][$type];
+		
+		if (! is_array($args)) {
+			$args = [$args];
+		}
+		
+		return vsprintf($xpath, $args);
 	}
 }

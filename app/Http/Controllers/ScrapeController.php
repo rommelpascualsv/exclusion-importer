@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Import\Scrape\Crawlers\ConnecticutCrawler;
 use Laravel\Lumen\Routing\Controller as BaseController;
+use App\Import\Scrape\Data\ConnecticutCategories;
 
 class ScrapeController extends BaseController
 {
@@ -13,9 +14,14 @@ class ScrapeController extends BaseController
 		
 		$crawler = ConnecticutCrawler::create(
 			storage_path('app'),
-			'Certified_Public_Accountant_Certificate.csv'
+			[
+					ConnecticutCategories::OPT_ACCOUNTANT_CERTIFICATE,
+					ConnecticutCategories::OPT_ACCOUNTANT_FIRM_PERMIT,
+					ConnecticutCategories::OPT_ANIMAL_IMPORTERS,
+					ConnecticutCategories::OPT_AMBULATORY_SURGICAL_CENTER
+			]
 		);
 		
-		$crawler->downloadFile();
+		$crawler->downloadFiles();
 	}
 }
