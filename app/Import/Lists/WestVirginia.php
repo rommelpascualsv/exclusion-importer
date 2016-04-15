@@ -63,5 +63,6 @@ class WestVirginia extends ExclusionList
      */
     public $dateColumns = [
         'exclusion_date' => 10,
+    	'reinstatement_date' => 12
     ];
 }

@@ -30,4 +30,5 @@ Vagrant.configure(2) do |config|
   config.vm.provision "shell", path: 'provision/phing.sh'
   config.vm.provision "shell", path: 'provision/provision.sh'
   config.vm.provision "shell", path: 'provision/veritas.sh'
+
 end

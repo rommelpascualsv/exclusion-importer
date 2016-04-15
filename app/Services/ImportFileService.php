@@ -323,7 +323,8 @@ class ImportFileService implements ImportFileServiceInterface
 	private function saveFile($prefix, $import_url, $updateValue)
 	{
 		// get the blob value of import file
-		$blob = file_get_contents($import_url);
+		$blob = $this->getData($import_url);
+		
 		info("Saving... " . $prefix);
 		// checks if state prefix already exists in Files table
 		if ($this->isPrefixExists($prefix)) {
@@ -403,5 +404,24 @@ class ImportFileService implements ImportFileServiceInterface
 		}
 	
 		return in_array($arrHeadersCopy['content-type'], $filetypeArr);
+	}
+	
+	/**
+	 * Retrieves data from a given url
+	 *
+	 * @param string $url
+	 * @return mixed
+	 */
+	private function getData($url) {
+	
+		$ch = curl_init();
+		$timeout = 5;
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+		$data = curl_exec($ch);
+		curl_close($ch);
+	
+		return $data;
 	}
 }
