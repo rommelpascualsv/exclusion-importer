@@ -42,6 +42,9 @@ class ConnecticutCrawler
 	 * @var array
 	 */
 	protected static $selectors = [
+			'main' => [
+				'category_header' => '.collapsePanelHeader'
+			],
 			'download_options' => [
 					'download_button' => 'input[type="submit"][value="Download"]'
 			]
@@ -60,7 +63,7 @@ class ConnecticutCrawler
 	 * Instantiate
 	 * @param Client $client
 	 * @param string $downloadPath
-	 * @param string $downloadFileName
+	 * @param array $options
 	 */
 	public function __construct(Client $client, $downloadPath, array $options)
 	{

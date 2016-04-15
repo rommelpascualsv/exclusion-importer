@@ -18,6 +18,7 @@ class ConnecticutCategories
 	 */
 	protected static $categories = [
 			'accountancy' => [
+					'label' => 'Accountancy',
 					'options' => [
 							'certificate' => [
 									'label' => 'Certified Public Accountant Certificate',

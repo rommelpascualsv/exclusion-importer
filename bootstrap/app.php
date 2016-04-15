@@ -81,6 +81,8 @@ $app->singleton(
 // $app->register(App\Providers\AppServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 	$app->register(App\Providers\ImportFileServiceProvider::class);
+	$app->register(App\Providers\FilesystemServiceProvider::class);
+	$app->register(App\Providers\ScrapeServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------

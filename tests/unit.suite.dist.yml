@@ -7,3 +7,4 @@ modules:
     enabled:
         - Asserts
         - Db
+        - Lumen

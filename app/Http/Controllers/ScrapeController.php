@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Import\Scrape\Components\FilesystemInterface;
 use App\Import\Scrape\Crawlers\ConnecticutCrawler;
-use Laravel\Lumen\Routing\Controller as BaseController;
 use App\Import\Scrape\Data\ConnecticutCategories;
+use App\Import\Scrape\Data\Extractors\ConnecticutExtractor;
+use Laravel\Lumen\Routing\Controller as BaseController;
 
 class ScrapeController extends BaseController
 {
-	public function test()
+	public function test(FilesystemInterface $filesystem)
 	{
+		dd($filesystem);
 		ini_set('max_execution_time', 99999);
 		
 		$crawler = ConnecticutCrawler::create(
@@ -22,6 +25,16 @@ class ScrapeController extends BaseController
 			]
 		);
 		
-		$crawler->downloadFiles();
+		$crawler = ConnecticutCrawler::create(storage_path('app'), []);
+		
+		echo "\xC2";
+		exit;
+		dd($crawler);		
+		$extractor = new ConnecticutExtractor($crawler);
+		$extractor->saveCategories();
+		
+		
+		
+		/* $crawler->downloadFiles(); */
 	}
 }
