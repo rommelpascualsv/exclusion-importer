@@ -15,6 +15,14 @@ $app->get('/', function () use ($app) {
     return view('hello');
 });
 
+# exclusion_importer routes
 $app->get('import/createOldTables', 'ImportController@createOldTables');
 $app->get('import/{listPrefix}', 'ImportController@import');
 $app->get('import', 'ImportController@index');
+
+# veritas routes
+$app->get('nppes/{id}', 'NppesController@getNppesRecord');
+$app->get('njna/{id}', 'NjnaController@getNjnaRecord');
+$app->get('nj-credential/{id}', 'NJCredentialController@getNJCredentialRecord');
+$app->get('mi-cna/{id}', 'MICnaController@getMICnaRecord');
+
