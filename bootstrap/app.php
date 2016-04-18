@@ -19,6 +19,8 @@ $app = new Laravel\Lumen\Application(
     realpath(__DIR__.'/../')
 );
 
+$app->configure('scrape');
+
 // $app->withFacades();
 
 // $app->withEloquent();

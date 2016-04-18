@@ -152,7 +152,8 @@ class ConnecticutExtractor
 		
 		return [
 				'name' => $name,
-				'field_name' => $fieldName
+				'field_name' => $fieldName,
+				'file_name' => $this->getFileName($name)
 		];
 	}
 	
@@ -163,11 +164,31 @@ class ConnecticutExtractor
 	 */
 	protected function getKey($name)
 	{
-		return strtolower(preg_replace(
-				['/[^a-zA-Z0-9 ]/', '/ /', '/__/'], 
-				['', '_', '_'], 
-				$name
-		));
+		return strtolower($this->underscorify($name));
+	}
+	
+	/**
+	 * Get file name
+	 * @param string $name
+	 * @return string
+	 */
+	public function getFileName($name)
+	{
+		return $this->underscorify($name);
+	}
+	
+	/**
+	 * Underscorify text
+	 * @param string $text
+	 * @return string
+	 */
+	public function underscorify($text)
+	{
+		return preg_replace(
+				['/[^a-zA-Z0-9 ]/', '/ /', '/_{2,}/', '/^_|_$/'],
+				[' ', '_', '_', ''],
+				$text
+		);
 	}
 	
 	/**

@@ -2,39 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Import\Scrape\Components\FilesystemInterface;
-use App\Import\Scrape\Crawlers\ConnecticutCrawler;
-use App\Import\Scrape\Data\ConnecticutCategories;
-use App\Import\Scrape\Data\Extractors\ConnecticutExtractor;
+use Goutte\Client;
 use Laravel\Lumen\Routing\Controller as BaseController;
+use App\Import\Scrape\Scrapers\Connecticut\MainPage;
+use App\Import\Scrape\Scrapers\Connecticut\DownloadOptionsPage;
+use App\Import\Scrape\Scrapers\Connecticut\Data\CategoryCollection;
+use App\Import\Scrape\Scrapers\Connecticut\Data\OptionCollection;
+use App\Import\Scrape\Scrapers\Connecticut\CsvDownloader;
 
 class ScrapeController extends BaseController
 {
-	public function test(FilesystemInterface $filesystem)
+	public function test(CsvDownloader $a)
 	{
-		dd($filesystem);
-		ini_set('max_execution_time', 99999);
+		/* $a->download(); */
 		
-		$crawler = ConnecticutCrawler::create(
-			storage_path('app'),
-			[
-					ConnecticutCategories::OPT_ACCOUNTANT_CERTIFICATE,
-					ConnecticutCategories::OPT_ACCOUNTANT_FIRM_PERMIT,
-					ConnecticutCategories::OPT_ANIMAL_IMPORTERS,
-					ConnecticutCategories::OPT_AMBULATORY_SURGICAL_CENTER
-			]
-		);
+		/* $mainPage = MainPage::scrape($client);
+		$downloadOptionsPage = DownloadOptionsPage::scrape($mainPage, [
+				'ctl00$MainContentPlaceHolder$ckbRoster0',
+				'ctl00$MainContentPlaceHolder$ckbRoster4',
+				'ctl00$MainContentPlaceHolder$ckbRoster27'
+		]);
 		
-		$crawler = ConnecticutCrawler::create(storage_path('app'), []);
-		
-		echo "\xC2";
-		exit;
-		dd($crawler);		
-		$extractor = new ConnecticutExtractor($crawler);
-		$extractor->saveCategories();
-		
-		
-		
-		/* $crawler->downloadFiles(); */
+		echo $downloadOptionsPage->getCrawler()->html(); */
 	}
 }

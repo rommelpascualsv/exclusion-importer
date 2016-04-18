@@ -54,15 +54,18 @@ class ConnecticutExtractorTest extends \Codeception\TestCase\Test
     					'options' => [
 				    			'certified_public_accountant_certificate' => [
 				    					'name' => 'Certified Public Accountant Certificate',
-				    					'field_name' => 'ctl00$MainContentPlaceHolder$ckbRoster0'
+				    					'field_name' => 'ctl00$MainContentPlaceHolder$ckbRoster0',
+				    					'file_name' => 'Certified_Public_Accountant_Certificate'
 				    			],
 				    			'certified_public_accountant_firm_permit' => [
 				    					'name' => 'Certified Public Accountant Firm Permit',
-				    					'field_name' => 'ctl00$MainContentPlaceHolder$ckbRoster1'
+				    					'field_name' => 'ctl00$MainContentPlaceHolder$ckbRoster1',
+				    					'file_name' => 'Certified_Public_Accountant_Firm_Permit'
 				    			],
 				    			'certified_public_accountant_license' => [
 				    					'name' => 'Certified Public Accountant License',
-				    					'field_name' => 'ctl00$MainContentPlaceHolder$ckbRoster2'
+				    					'field_name' => 'ctl00$MainContentPlaceHolder$ckbRoster2',
+				    					'file_name' => 'Certified_Public_Accountant_License'
 				    			]
 				    	]
     			];

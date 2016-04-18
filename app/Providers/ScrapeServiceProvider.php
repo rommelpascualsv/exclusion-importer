@@ -11,6 +11,8 @@ use App\Import\Scrape\Components\TestFilesystem;
 use League\Flysystem\AdapterInterface;
 use App\Import\Scrape\Crawlers\ConnecticutCrawler;
 use Goutte\Client;
+use App\Import\Scrape\Scrapers\Connecticut\Data\CategoryCollection;
+use App\Import\Scrape\Scrapers\Connecticut\Data\OptionCollection;
 
 class ScrapeServiceProvider extends ServiceProvider
 {
@@ -22,7 +24,7 @@ class ScrapeServiceProvider extends ServiceProvider
     public function register()
     {
     	$this->registerGoutteClient();
-    	$this->registerCrawlers();
+    	$this->registerConnecticut();
     }
     
     /** 
@@ -33,7 +35,9 @@ class ScrapeServiceProvider extends ServiceProvider
     {
     	return [
     			Client::class,
-    			ConnecticutCrawler::class
+    			ConnecticutCrawler::class,
+    			CategoryCollection::class,
+    			OptionCollection::class
     	];
     }
     
@@ -52,7 +56,7 @@ class ScrapeServiceProvider extends ServiceProvider
     /**
      * Register Crawlers
      */
-    protected function registerCrawlers()
+    protected function registerConnecticut()
     {
     	$this->app->bind(ConnecticutCrawler::class, function() {
     		return new ConnecticutCrawler(
@@ -60,6 +64,21 @@ class ScrapeServiceProvider extends ServiceProvider
     				'',
     				[]
     		);
+    	});
+    	
+    	/* bind category collection */
+    	$this->app->singleton(CategoryCollection::class, function() {
+    		$jsonPath = config('scrape.import.connecticut_categories');
+    		$data = json_decode(file_get_contents($jsonPath), true);
+    		
+    		return new CategoryCollection($data);
+    	});
+    	
+    	$this->app->singleton(OptionCollection::class, function() {
+    		/** @var CategoryCollection $categoryCollection */
+    		$categoryCollection = $this->app->make(CategoryCollection::class);
+    		
+    		return $categoryCollection->getOptions(config('scrape.connecticut_categories'));
     	});
     }
 }
