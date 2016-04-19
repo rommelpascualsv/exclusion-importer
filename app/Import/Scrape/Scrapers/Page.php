@@ -62,6 +62,15 @@ class Page
 	}
 	
 	/**
+	 * Get request uri
+	 * @return string
+	 */
+	public function getRequestUri()
+	{		
+		return $this->client->getRequest()->getUri();
+	}
+	
+	/**
 	 * Get nodes by xpath
 	 * @param string $xpath
 	 * @param string $errorMessage

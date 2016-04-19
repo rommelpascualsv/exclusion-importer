@@ -2,17 +2,12 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use App\Import\Scrape\Components\FilesystemInterface;
-use League\Flysystem\Adapter\Local;
-use Laravel\Lumen\Application;
-use App\Import\Scrape\Components\Filesystem;
-use App\Import\Scrape\Components\TestFilesystem;
-use League\Flysystem\AdapterInterface;
 use App\Import\Scrape\Crawlers\ConnecticutCrawler;
-use Goutte\Client;
 use App\Import\Scrape\Scrapers\Connecticut\Data\CategoryCollection;
 use App\Import\Scrape\Scrapers\Connecticut\Data\OptionCollection;
+use Goutte\Client;
+use Illuminate\Support\ServiceProvider;
+use Laravel\Lumen\Application;
 
 class ScrapeServiceProvider extends ServiceProvider
 {

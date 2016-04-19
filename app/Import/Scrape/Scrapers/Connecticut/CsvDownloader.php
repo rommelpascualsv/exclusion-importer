@@ -2,12 +2,18 @@
 
 namespace App\Import\Scrape\Scrapers\Connecticut;
 
+use App\Import\Scrape\Components\FilesystemInterface;
+use App\Import\Scrape\Scrapers\Connecticut\Data\Option;
 use App\Import\Scrape\Scrapers\Connecticut\Data\OptionCollection;
 use Goutte\Client;
-use App\Import\Scrape\Components\FilesystemInterface;
 
 class CsvDownloader
-{
+{	
+	/**
+	 * @var string
+	 */
+	protected static $path = 'csv/connecticut';
+	
 	/**
 	 * @var Client
 	 */
@@ -23,6 +29,12 @@ class CsvDownloader
 	 */
 	protected $filesystem;
 	
+	/**
+	 * Instantiate
+	 * @param Client $client
+	 * @param OptionCollection $options
+	 * @param FilesystemInterface $filesystem
+	 */
 	public function __construct(
 			Client $client,
 			OptionCollection $options,
@@ -34,40 +46,77 @@ class CsvDownloader
 	}
 	
 	/**
-	 * Download csvs
+	 * Get options
+	 * @return OptionCollection
 	 */
-	public function download()
+	public function getOptions()
 	{
-		$mainPage = MainPage::scrape($this->client);
-		$downloadOptionsPage = DownloadOptionsPage::scrape($mainPage, $this->options);
-		$rosterIds = $this->getRosterIds($downloadOptionsPage);
-		
-		foreach ($this->options as $i => $option) {
-			$rosterId = $rosterIds[$i];
-			$csvPage = CsvPage::scrape($downloadOptionsPage, $rosterId);
-			
-			$this->filesystem->write(
-					'csv/connecticut/' . $option->getFileName() . '.csv',
-					$csvPage->getContent()
-			);
-		}	
+		return $this->options;
 	}
 	
 	/**
-	 * Get roster ids
-	 * @param DownloadOptionsPage $page
-	 * @return array
+	 * Scrape main page
+	 * @return MainPage
 	 */
-	protected function getRosterIds(DownloadOptionsPage $page)
+	public function scrapeMainPage()
 	{
-		$rosterIds = [];
+		return MainPage::scrape($this->client);
+	}
+	
+	/**
+	 * Scrape download options page
+	 * @param MainPage $page
+	 */
+	public function scrapeDownloadOptionsPage(MainPage $page)
+	{
+		return DownloadOptionsPage::scrape($page, $this->options);
+	}
+	
+	/**
+	 * Get roster ID
+	 * @param string $optionName
+	 * @param DownloadOptionsPage $downloadOptionsPage
+	 * @return string
+	 */
+	public function getRosterId($optionName, DownloadOptionsPage $page)
+	{
+		return $page->getRosterId($optionName);
+	}
+	
+	/**
+	 * Get download path
+	 * @return string
+	 */
+	public function getDownloadPath()
+	{
+		return $this->filesystem->getAdapter()->applyPathPrefix(static::$path);
+	}
+	
+	/**
+	 * Get file name
+	 * @param Option $option
+	 * @return string
+	 */
+	public function getFileName(Option $option)
+	{
+		return $option->getFileName() . '.csv';
+	}
+	
+	/**
+	 * Download file
+	 * @param array $data
+	 * @param DownloadOptionsPage $page
+	 * @return CsvPage
+	 */
+	public function downloadFile(array $data, DownloadOptionsPage $page)
+	{
+		$csvPage = CsvPage::scrape($page, $data['roster_id']);
 		
-		foreach ($this->options as $option) {
-			$rosterId = $page->getRosterId($option->getName());
-			
-			$rosterIds[] = $rosterId;
-		}
+		$this->filesystem->put(
+			static::$path . '/' . $data['file_name'],
+			$csvPage->getContent()
+		);
 		
-		return $rosterIds;
+		return $csvPage;
 	}
 }
