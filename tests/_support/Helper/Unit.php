@@ -16,4 +16,13 @@ class Unit extends \Codeception\Module
 	{
 		return $this->getModule('Lumen')->app;
 	}
+	
+	/**
+	 * Assert scrape file exist
+	 * @param string $file
+	 */
+	public function assertScrapeFileExist($file)
+	{
+		$this->assertFileExists(codecept_data_dir('scrape' . DIRECTORY_SEPARATOR .  $file));
+	}
 }

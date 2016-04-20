@@ -99,7 +99,7 @@ class CsvDownloader
 	 */
 	public function getFileName(Option $option)
 	{
-		return $option->getFileName() . '.csv';
+		return $option->getCategory()->getDir() . DIRECTORY_SEPARATOR . $option->getFileName() . '.csv';
 	}
 	
 	/**

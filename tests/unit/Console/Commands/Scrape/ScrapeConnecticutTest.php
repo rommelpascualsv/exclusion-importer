@@ -73,12 +73,10 @@ class ScrapeConnecticutTest extends \Codeception\TestCase\Test
     	
     	$this->runCommand();
     	
-    	$this->assertFilesDownloaded([
-    			'Paid_Solicitors.csv',
-    			'Public_Charity.csv',
-    			'Acupuncturist.csv',
-    			'Advanced_Practice_Registered_Nurse.csv'
-    	]);
+    	$this->tester->assertScrapeFileExist('csv/connecticut/charities/Paid_Solicitors.csv');
+    	$this->tester->assertScrapeFileExist('csv/connecticut/charities/Public_Charity.csv');
+    	$this->tester->assertScrapeFileExist('csv/connecticut/healthcare_practitioners/Acupuncturist.csv');
+    	$this->tester->assertScrapeFileExist('csv/connecticut/healthcare_practitioners/Advanced_Practice_Registered_Nurse.csv');
     }
     
     public function testHandleSkipMissingDownloadOptions()
@@ -94,10 +92,8 @@ class ScrapeConnecticutTest extends \Codeception\TestCase\Test
     	 
     	$this->runCommand();
     	 
-    	$this->assertFilesDownloaded([
-    			'Ambulatory_Surgical_Center.csv',
-    			'Acupuncturist.csv'
-    	]);
+    	$this->tester->assertScrapeFileExist('csv/connecticut/ambulatory_surgical_centers_recovery_care_centers/Ambulatory_Surgical_Center.csv');
+    	$this->tester->assertScrapeFileExist('csv/connecticut/healthcare_practitioners/Acupuncturist.csv');
     }
     
     protected function getCsvDownloader($options)
@@ -128,12 +124,5 @@ class ScrapeConnecticutTest extends \Codeception\TestCase\Test
     protected function runCommand()
     {
     	$this->command->run(new ArrayInput([]), new ConsoleOutput());
-    }
-    
-    protected function assertFilesDownloaded($files)
-    {
-    	foreach ($files as $file) {
-    		$this->assertFileExists(codecept_data_dir('scrape/csv/connecticut/' . $file));
-    	}
     }
 }
