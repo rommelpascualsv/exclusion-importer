@@ -46,4 +46,12 @@ class Minnesota extends ExclusionList
     public $dateColumns = [
        'effective_date_of_exclusion' => 5
     ];
+
+    public $hashFields = [
+        'last_name',
+        'first_name',
+        'middle_name',
+        'effective_date_of_exclusion',
+        'sort_name'
+    ];
 }
