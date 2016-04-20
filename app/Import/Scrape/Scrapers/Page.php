@@ -4,6 +4,7 @@ namespace App\Import\Scrape\Scrapers;
 
 use Goutte\Client;
 use Symfony\Component\DomCrawler\Crawler;
+use App\Exceptions\Scrape\ScrapeException;
 
 class Page
 {	
@@ -103,12 +104,14 @@ class Page
 	}
 	
 	/**
+	 * 
 	 * Get nodes
 	 * @param string $method
 	 * @param string $search
 	 * @param string $errorMessage
 	 * @param Crawler $crawler
-	 * @throws \Exception
+	 * @throws ScrapeException
+	 * @return Crawler
 	 */
 	protected function getNodes($method, $search, $errorMessage = '', Crawler $crawler = null)
 	{
@@ -120,7 +123,7 @@ class Page
 		$nodes = call_user_func([$crawler, $method], $search);
 		
 		if ($nodes->count() == 0) {
-			throw new \Exception($errorMessage);
+			throw new ScrapeException($errorMessage);
 		}
 		
 		return $nodes;

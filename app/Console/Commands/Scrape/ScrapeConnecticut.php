@@ -4,6 +4,7 @@ namespace App\Console\Commands\Scrape;
 
 use App\Import\Scrape\Scrapers\Connecticut\CsvDownloader;
 use Illuminate\Console\Command;
+use App\Exceptions\Scrape\ScrapeException;
 
 /**
  * Command class that handles the refreshing of records in Files table.
@@ -32,42 +33,46 @@ class ScrapeConnecticut extends Command
 	 */
 	public function handle(CsvDownloader $downloader)
 	{
-		$this->line('Crawling the Main Page...');
-		
-		$mainPage = $downloader->scrapeMainPage();
-		$this->info('Success (URL: ' . $mainPage->getRequestUri() . ')');
-		
-		$this->line('Submitting form to crawl the Download Options Page...');
-		
-		$downloadOptionsPage = $downloader->scrapeDownloadOptionsPage($mainPage);
-		$this->info('Success (URL: ' . $downloadOptionsPage->getRequestUri() . ')');
-		
-		$this->line('Extracting roster IDs...');
-		
-		$options = $downloader->getOptions();
-		$rosterIds = [];
-		
-		foreach ($options as $option) {
-			$optionName = $option->getName();
-			$rosterId = $downloader->getRosterId($optionName, $downloadOptionsPage);
-				
-			$rosterIds[] = $rosterId;
-				
-			$this->info('Got roster ID for ' . $optionName);
-		}
-		
-		$this->line('Downloading files to ' . $downloader->getDownloadPath() . '...');
-		
-		foreach ($options as $i => $option) {
-			$fileName = $downloader->getFileName($option);
+		try {
+			$this->line('Crawling the Main Page...');
 			
-			$csvPage = $downloader->downloadFile([
-					'roster_id' => $rosterIds[$i],
-					'file_name' => $fileName
-			], $downloadOptionsPage);
+			$mainPage = $downloader->scrapeMainPage();
+			$this->info('Success (URL: ' . $mainPage->getRequestUri() . ')');
 			
-		
-			$this->info('Downloaded ' . $fileName . ' from ' . $csvPage->getRequestUri());
+			$this->line('Submitting form to crawl the Download Options Page...');
+			
+			$downloadOptionsPage = $downloader->scrapeDownloadOptionsPage($mainPage);
+			$this->info('Success (URL: ' . $downloadOptionsPage->getRequestUri() . ')');
+			
+			$this->line('Extracting roster IDs...');
+			
+			$options = $downloader->getOptions();
+			$rosterIds = [];
+			
+			foreach ($options as $option) {
+				$optionName = $option->getName();
+				$rosterId = $downloader->getRosterId($optionName, $downloadOptionsPage);
+			
+				$rosterIds[] = $rosterId;
+			
+				$this->info('Got roster ID for ' . $optionName);
+			}
+			
+			$this->line('Downloading files to ' . $downloader->getDownloadPath() . '...');
+			
+			foreach ($options as $i => $option) {
+				$fileName = $downloader->getFileName($option);
+					
+				$csvPage = $downloader->downloadFile([
+						'roster_id' => $rosterIds[$i],
+						'file_name' => $fileName
+				], $downloadOptionsPage);
+					
+			
+				$this->info('Downloaded ' . $fileName . ' from ' . $csvPage->getRequestUri());
+			}
+		} catch (ScrapeException $e) {
+			$this->error($e->getMessage());
 		}
 	}
 }
