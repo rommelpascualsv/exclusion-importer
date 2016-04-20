@@ -54,4 +54,58 @@ class Minnesota extends ExclusionList
         'effective_date_of_exclusion',
         'sort_name'
     ];
+
+    /**
+     * @inherit preProcess
+     */
+    public function preProcess()
+    {
+        $this->parse();
+        parent::preProcess();
+    }
+
+    private function parseEntity(array $data)
+    {
+        $array = ['', '', ''];
+        $parseData = [];
+
+        foreach ($data as $key => $value) {
+            $parseData[] = $this->arrayInsert(2, $value, $array);
+        }
+
+        return $parseData;
+    }
+
+    private function parseIndividual(array $data)
+    {
+        $array = [''];
+        $parseData = [];
+
+        foreach ($data as $key => $value) {
+            $parseData[] = $this->arrayInsert(1, $value, $array);
+        }
+
+        return $parseData;
+    }
+
+    private function arrayInsert($pos, array $baseArray, array $arrayToInsert)
+    {
+        $head = array_slice($baseArray, 0, $pos);
+        $tail = array_slice($baseArray, $pos);
+
+        return array_merge($head, $arrayToInsert, $tail);
+    }
+
+    protected function parse()
+    {
+        $data = [];
+
+        if (count($this->data) > 8) {
+            $data = $this->parseIndividual($this->data);
+        } else {
+            $data = $this->parseEntity($this->data);
+        }
+
+        $this->data = $data;
+    }
 }
