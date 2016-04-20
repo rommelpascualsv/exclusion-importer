@@ -8,10 +8,13 @@ return [
 		],
 		
 		'connecticut_categories' => [
+				'ambulatory_surgical_centers_recovery_care_centers',
+		]
+		/* 'connecticut_categories' => [
 				'accountancy',
 				'healthcare_practitioners' => [
 						'acupuncturist',
 						'advanced_practice_registered_nurse'
 				]
-		]
+		] */
 ];

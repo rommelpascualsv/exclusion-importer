@@ -5,6 +5,7 @@ namespace App\Import\Scrape\Scrapers\Connecticut;
 use App\Import\Scrape\Scrapers\Page;
 use Goutte\Client;
 use App\Import\Scrape\Scrapers\Connecticut\Data\OptionCollection;
+use App\Exceptions\Scrape\Connecticut\DownloadOptionMissingException;
 
 class DownloadOptionsPage extends Page
 {		
@@ -29,10 +30,11 @@ class DownloadOptionsPage extends Page
 	 */
 	public function getRosterId($name)
 	{
-		$optionColNode = $this->getNodesByXpath(
-				'//td[text() = "' . $name . '"]',
-				$name . ' download option column cannot be found'
-		);
+		$optionColNode = $this->crawler->filterXPath('//td[text() = "' . $name . '"]');
+		
+		if ($optionColNode->count() == 0) {
+			throw new DownloadOptionMissingException($name . ' download option column cannot be found');
+		}
 		
 		$downloadButtonNode = $this->getNodesByCss(
 				'input[type="submit"][value="Download"]',

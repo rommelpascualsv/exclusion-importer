@@ -12,6 +12,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Input\ArrayInput;
 use Laravel\Lumen\Application;
+use Codeception\Lib\Console\Output;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 class ScrapeConnecticutTest extends \Codeception\TestCase\Test
 {
@@ -61,24 +63,40 @@ class ScrapeConnecticutTest extends \Codeception\TestCase\Test
     public function testHandle()
     {
     	$this->refreshDirectory();
-    	
-    	$csvDownloader = $this->getCsvDownloader([
+    	$this->setCsvDownloader([
     			'charities',
     			'healthcare_practitioners' => [
     					'acupuncturist',
     					'advanced_practice_registered_nurse'
     			]
     	]);
-    	$this->laravel->instance(CsvDownloader::class, $csvDownloader);
     	
-    	$this->command->run(new ArrayInput([]), new NullOutput());
-    	/* $this->command->handle($downloader); */
+    	$this->runCommand();
     	
     	$this->assertFilesDownloaded([
     			'Paid_Solicitors.csv',
     			'Public_Charity.csv',
     			'Acupuncturist.csv',
     			'Advanced_Practice_Registered_Nurse.csv'
+    	]);
+    }
+    
+    public function testHandleSkipMissingDownloadOptions()
+    {
+    	$this->refreshDirectory();
+    	 
+    	$this->setCsvDownloader([
+    			'ambulatory_surgical_centers_recovery_care_centers',
+    			'healthcare_practitioners' => [
+    				'acupuncturist'
+    			]
+    	]);
+    	 
+    	$this->runCommand();
+    	 
+    	$this->assertFilesDownloaded([
+    			'Ambulatory_Surgical_Center.csv',
+    			'Acupuncturist.csv'
     	]);
     }
     
@@ -92,12 +110,24 @@ class ScrapeConnecticutTest extends \Codeception\TestCase\Test
     	return new CsvDownloader($client, $categories->getOptions($options), $this->filesystem);
     }
     
+    protected function setCsvDownloader(array $options)
+    {
+    	$csvDownloader = $this->getCsvDownloader($options);
+    	
+    	$this->laravel->instance(CsvDownloader::class, $csvDownloader);
+    }
+    
     protected function refreshDirectory()
     {
     	$dir = 'csv/connecticut';
     	 
     	$this->filesystem->deleteDir($dir);
     	$this->filesystem->createDir($dir);
+    }
+    
+    protected function runCommand()
+    {
+    	$this->command->run(new ArrayInput([]), new ConsoleOutput());
     }
     
     protected function assertFilesDownloaded($files)

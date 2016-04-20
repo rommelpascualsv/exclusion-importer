@@ -8,3 +8,4 @@ modules:
         - Asserts
         - Db
         - Lumen
+        - \Helper\Unit
