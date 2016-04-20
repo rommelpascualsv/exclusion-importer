@@ -6,6 +6,7 @@ use App\Import\Scrape\Scrapers\Connecticut\CsvDownloader;
 use Illuminate\Console\Command;
 use App\Exceptions\Scrape\ScrapeException;
 use App\Exceptions\Scrape\Connecticut\DownloadOptionMissingException;
+use App\Import\Scrape\Scrapers\Connecticut\Data\Option;
 
 /**
  * Command class that handles the refreshing of records in Files table.
@@ -51,10 +52,10 @@ class ScrapeConnecticut extends Command
 			$existingOptions = [];
 			$rosterIds = [];
 			
+			/** @var Option $option */
 			foreach ($options as $option) {
 				try {
-					$optionName = $option->getName();
-					$rosterId = $downloader->getRosterId($optionName, $downloadOptionsPage);
+					$rosterId = $downloadOptionsPage->getRosterId($option);
 				} catch (DownloadOptionMissingException $e) {
 					$this->error($e->getMessage() . '. Proceeding to next option.');
 					
@@ -64,7 +65,7 @@ class ScrapeConnecticut extends Command
 				$existingOptions[] = $option;
 				$rosterIds[] = $rosterId;
 			
-				$this->info('Got roster ID for ' . $optionName);
+				$this->info('Got roster ID for ' . $option->getDescriptiveName());
 			}
 			
 			$this->line('Downloading files to ' . $downloader->getDownloadPath() . '...');

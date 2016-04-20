@@ -20,7 +20,7 @@ class Option
 	protected $fileName;
 	
 	/**
-	 * @var string
+	 * @var Category
 	 */
 	protected $category;
 	
@@ -29,9 +29,9 @@ class Option
 	 * @param string $name
 	 * @param string $fieldName
 	 * @param string $fileName
-	 * @param string $category
+	 * @param Category $category
 	 */
-	public function __construct($name, $fieldName, $fileName, $category)
+	public function __construct($name, $fieldName, $fileName, Category $category)
 	{
 		$this->name = $name;
 		$this->fieldName = $fieldName;
@@ -64,5 +64,23 @@ class Option
 	public function getFileName()
 	{
 		return $this->fileName;
+	}
+	
+	/**
+	 * Get category
+	 * @return Category
+	 */
+	public function getCategory()
+	{
+		return $this->category;
+	}
+	
+	/**
+	 * Get descriptive name
+	 * @return string
+	 */
+	public function getDescriptiveName()
+	{
+		return '['. $this->category->getName() .'] ' . $this->name;
 	}
 }

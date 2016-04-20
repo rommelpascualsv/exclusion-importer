@@ -47,56 +47,35 @@ class CategoryCollection
 	 */
 	public function getAllOptions($categoryKey)
 	{
-		$options = [];
-	
-		foreach ($this->getCategoryOptionsData($categoryKey) as $data) {
-			$options[] = $this->getOption($data, $categoryKey);
-		}
-	
-		return $options;
-	}
-	
-	/**
-	 * Get category options data
-	 * @param string $key
-	 * @return array
-	 */
-	public function getCategoryOptionsData($key)
-	{
-		return $this->data[$key]['options'];
+		return $this->getFilteredOptions(
+				$categoryKey,
+				array_keys($this->data[$categoryKey]['options'])
+		);
 	}
 	
 	/**
 	 * Get filtered options
 	 * @param string $categoryKey
-	 * @param string $optionKeys
+	 * @param array $optionKeys
 	 * @return Option[]
 	 */
-	public function getFilteredOptions($categoryKey, $optionKeys)
+	public function getFilteredOptions($categoryKey, array $optionKeys)
 	{
+		$categoryData = $this->data[$categoryKey];
+		$category = new Category($categoryData['name'], $categoryKey);
 		$options = [];
-		$optionsData = $this->getCategoryOptionsData($categoryKey);
 		
 		foreach ($optionKeys as $key) {
-			$options[] = $this->getOption($optionsData[$key], $categoryKey);
-		}
-		
-		return $options;
-	}
-	
-	/**
-	 * Get option
-	 * @param array $data
-	 * @param string $category
-	 * @return Option
-	 */
-	public function getOption(array $data, $category)
-	{
-		return new Option(
+			$data = $categoryData['options'][$key];
+			
+			$options[] = new Option(
 				$data['name'],
 				$data['field_name'],
 				$data['file_name'],
 				$category
-		);	
+			);
+		}
+		
+		return $options;
 	}
 }
