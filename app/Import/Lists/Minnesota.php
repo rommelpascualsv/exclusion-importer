@@ -67,25 +67,19 @@ class Minnesota extends ExclusionList
     private function parseEntity(array $data)
     {
         $array = ['', '', ''];
-        $parseData = [];
 
-        foreach ($data as $key => $value) {
-            $parseData[] = $this->arrayInsert(2, $value, $array);
-        }
-
-        return $parseData;
+        return array_map(function ($item) use ($array) {
+            return $this->arrayInsert(2, $item, $array);
+        }, $data);
     }
 
     private function parseIndividual(array $data)
     {
         $array = [''];
-        $parseData = [];
 
-        foreach ($data as $key => $value) {
-            $parseData[] = $this->arrayInsert(1, $value, $array);
-        }
-
-        return $parseData;
+        return array_map(function ($item) use ($array) {
+            return $this->arrayInsert(1, $item, $array);
+        }, $data);
     }
 
     private function arrayInsert($pos, array $baseArray, array $arrayToInsert)
@@ -99,13 +93,18 @@ class Minnesota extends ExclusionList
     protected function parse()
     {
         $data = [];
+        foreach ($this->data as $key => $value) {
 
-        if (count($this->data) > 8) {
-            $data = $this->parseIndividual($this->data);
-        } else {
-            $data = $this->parseEntity($this->data);
+            if (count($value[0]) === 8) {
+                $data = array_merge($data, $this->parseEntity($value));
+            }
+
+            if (count($value[0]) === 10) {
+                $data = array_merge($data, $this->parseIndividual($value));
+            }
+
         }
-
+        
         $this->data = $data;
     }
 }

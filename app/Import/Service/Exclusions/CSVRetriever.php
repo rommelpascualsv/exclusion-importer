@@ -15,10 +15,10 @@ class CSVRetriever extends Retriever
      */
     protected $dataConverter;
 
-	/**
-	 * @var	\GuzzleHttp\Client	$httpClient
-	 */
-	protected $httpClient;
+    /**
+     * @var \GuzzleHttp\Client  $httpClient
+     */
+    protected $httpClient;
 
     /**
      * Constructor
@@ -26,29 +26,42 @@ class CSVRetriever extends Retriever
      * @param    DataCsvConverter $dataConverter
      * @param    Client $httpClient
      */
-	public function __construct(DataCsvConverter $dataConverter, Client $httpClient)
+    public function __construct(DataCsvConverter $dataConverter, Client $httpClient)
     {
         $this->dataConverter = $dataConverter;
         $this->httpClient = $httpClient;
     }
 
     /**
-	 * Retrieve the data from a remote source
-	 *
-     * @param	ExclusionList	$list
-     * @return	ExclusionList
+     * Retrieve the data from a remote source
+     *
+     * @param   ExclusionList   $list
+     * @return  ExclusionList
      */
     public function retrieveData(ExclusionList $list)
     {
-        if ($this->uriIsRemote($list->uri)) {
-            $response = $this->httpClient->get($list->uri);
-            $contents = $response->getBody();
-        }
-        else {
-            $contents = file_get_contents($list->uri);
+        $data = [];
+        $url = explode(',', $list->uri);
+
+        $list->uri = array_map(function ($item) {
+            return trim($item);
+        }, $url);
+
+        foreach ($list->uri as $key => $value) {
+
+            if ($this->uriIsRemote($value)) {
+                $response = $this->httpClient->get($value);
+                $contents = $response->getBody();
+            } else {
+                $contents = file_get_contents($value);
+            }
+
+            $data[] = $this->dataConverter->convertData($list, $contents);
         }
 
-        $data = $this->dataConverter->convertData($list, $contents);
+        if (count($data) === 1) {
+            return $data[0];
+        }
 
         return $data;
     }
