@@ -3,16 +3,12 @@ namespace Console\Commands\Scrape;
 
 
 use App\Console\Commands\Scrape\ScrapeConnecticut;
-use App\Import\Scrape\Scrapers\Connecticut\CsvDownloader;
-use Goutte\Client;
-use App\Import\Scrape\Scrapers\Connecticut\Data\CategoryCollection;
 use App\Import\Scrape\Components\TestFilesystem;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Output\NullOutput;
-use Symfony\Component\Console\Input\ArrayInput;
+use App\Import\Scrape\Scrapers\Connecticut\CsvDownloader;
+use App\Import\Scrape\Scrapers\Connecticut\Data\CategoryCollection;
+use Goutte\Client;
 use Laravel\Lumen\Application;
-use Codeception\Lib\Console\Output;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 class ScrapeConnecticutTest extends \Codeception\TestCase\Test
@@ -73,11 +69,25 @@ class ScrapeConnecticutTest extends \Codeception\TestCase\Test
     	
     	$this->runCommand();
     	
-    	$this->tester->assertScrapeFileExist('csv/connecticut/charities/Paid_Solicitors.csv');
-    	$this->tester->assertScrapeFileExist('csv/connecticut/charities/Public_Charity.csv');
-    	$this->tester->assertScrapeFileExist('csv/connecticut/healthcare_practitioners/Acupuncturist.csv');
-    	$this->tester->assertScrapeFileExist('csv/connecticut/healthcare_practitioners/Advanced_Practice_Registered_Nurse.csv');
+    	$this->tester->assertScrapeFileExist('csv/connecticut/charities/paid_solicitors.csv');
+    	$this->tester->assertScrapeFileExist('csv/connecticut/charities/public_charity.csv');
+    	$this->tester->assertScrapeFileExist('csv/connecticut/healthcare_practitioners/acupuncturist.csv');
+    	$this->tester->assertScrapeFileExist('csv/connecticut/healthcare_practitioners/advanced_practice_registered_nurse.csv');
     }
+    
+    /* public function testHandleDlOneFile()
+    {
+    	$this->refreshDirectory();
+    	$this->setCsvDownloader([
+    			'healthcare_practitioners' => [
+    					'acupuncturist'
+    			]
+    	]);
+    	 
+    	$this->runCommand();
+
+    	$this->tester->assertScrapeFileExist('csv/connecticut/healthcare_practitioners/acupuncturist.csv');
+    } */
     
     public function testHandleSkipMissingDownloadOptions()
     {
@@ -92,8 +102,8 @@ class ScrapeConnecticutTest extends \Codeception\TestCase\Test
     	 
     	$this->runCommand();
     	 
-    	$this->tester->assertScrapeFileExist('csv/connecticut/ambulatory_surgical_centers_recovery_care_centers/Ambulatory_Surgical_Center.csv');
-    	$this->tester->assertScrapeFileExist('csv/connecticut/healthcare_practitioners/Acupuncturist.csv');
+    	$this->tester->assertScrapeFileExist('csv/connecticut/ambulatory_surgical_centers_recovery_care_centers/ambulatory_surgical_center.csv');
+    	$this->tester->assertScrapeFileExist('csv/connecticut/healthcare_practitioners/acupuncturist.csv');
     }
     
     protected function getCsvDownloader($options)

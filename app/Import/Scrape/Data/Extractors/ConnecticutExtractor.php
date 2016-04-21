@@ -153,7 +153,7 @@ class ConnecticutExtractor
 		return [
 				'name' => $name,
 				'field_name' => $fieldName,
-				'file_name' => $this->getFileName($name)
+				'file_name' => $this->getKey($name)
 		];
 	}
 	
