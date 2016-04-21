@@ -20,18 +20,33 @@ class PDFRetriever extends Retriever
 
     public function retrieveData(ExclusionList $list)
     {
-        $folder = storage_path('app');
+        $data = [];
+        $url = explode(',', $list->uri);
 
-        $file = "{$folder}/{$list->dbPrefix}.pdf";
+        $uri = array_map(function ($item) {
+            return trim($item);
+        }, $url);
 
-        $this->httpClient->get($list->uri, ['sink' => $file]);
+        foreach ($uri as $key => $value) {
+            $folder = storage_path('app');
 
-        if (strpos($list->pdfToText, "pdftotext") !== false) {
-            $contents = shell_exec($list->pdfToText . ' ' . $file . ' -');
-        } else {
-            $contents = shell_exec($list->pdfToText . ' ' . $file);
+            $file = "{$folder}/{$list->dbPrefix}-{$key}.pdf";
+
+            $this->httpClient->get($value, ['sink' => $file]);
+
+            if (strpos($list->pdfToText, "pdftotext") !== false) {
+                $contents = shell_exec($list->pdfToText . ' ' . $file . ' -');
+            } else {
+                $contents = shell_exec($list->pdfToText . ' ' . $file);
+            }
+
+            $data[] = $contents;
+        }
+        
+        if (count($data) === 1) {
+            return $data[0];
         }
 
-        return $contents;
+        return $data;
     }
 }

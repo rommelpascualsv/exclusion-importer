@@ -34,35 +34,49 @@ class HTMLRetriever extends Retriever
      */
     public function retrieveData(ExclusionList $list)
     {
-        $client = new Client([
-            'base_uri' => $list->uri
-        ]);
+        $data = [];
+        $url = explode(',', $list->uri);
 
-        $response = $client->request('GET', $list->urlSuffix, $list->requestOptions);
+        $uri = array_map(function ($item) {
+            return trim($item);
+        }, $url);
 
-        $body = $response->getBody()->getContents();
+        foreach ($uri as $key => $value) {
+            $client = new Client([
+                'base_uri' => $list->uri
+            ]);
 
-        $this->domCrawler->addHtmlContent($body);
+            $response = $client->request('GET', $list->urlSuffix, $list->requestOptions);
 
-        $table = $this->domCrawler->filter($list->retrieveOptions['htmlFilterElement']);
+            $body = $response->getBody()->getContents();
 
-        $columnsArray = $table->filter($list->retrieveOptions['rowElement'])->each(function (Crawler $node) use ($list)
-        {
-            return $node->filter($list->retrieveOptions['columnElement'])->each(function (Crawler $node)
-            {
-                return $node->text();
+            $this->domCrawler->addHtmlContent($body);
+
+            $table = $this->domCrawler->filter($list->retrieveOptions['htmlFilterElement']);
+
+            $columnsArray = $table->filter($list->retrieveOptions['rowElement'])->each(function (Crawler $node) use ($list) {
+                return $node->filter($list->retrieveOptions['columnElement'])->each(function (Crawler $node) {
+                    return $node->text();
+                });
             });
-        });
 
-        foreach ($columnsArray as $key => $value) {
-            if (! array_filter($value))
-                unset($columnsArray[$key]);
+            foreach ($columnsArray as $key => $value) {
+                if (! array_filter($value)) {
+                    unset($columnsArray[$key]);
+                }
+            }
+
+            if ($list->retrieveOptions['headerRow'] == 1) {
+                array_shift($columnsArray);
+            }
+
+            $data[] = $columnsArray;
         }
 
-        if ($list->retrieveOptions['headerRow'] == 1) {
-            array_shift($columnsArray);
+        if (count($data) === 1) {
+            return $data[0];
         }
 
-        return $columnsArray;
+        return $data;
     }
 }

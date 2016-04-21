@@ -43,11 +43,11 @@ class CSVRetriever extends Retriever
         $data = [];
         $url = explode(',', $list->uri);
 
-        $list->uri = array_map(function ($item) {
+        $uri = array_map(function ($item) {
             return trim($item);
         }, $url);
 
-        foreach ($list->uri as $key => $value) {
+        foreach ($uri as $key => $value) {
 
             if ($this->uriIsRemote($value)) {
                 $response = $this->httpClient->get($value);
