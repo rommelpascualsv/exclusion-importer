@@ -34,7 +34,7 @@ class ScrapeConnecticut extends Command
 	 * @return mixed
 	 */
 	public function handle(CsvDownloader $downloader)
-	{
+	{	
 		try {
 			$this->line('Crawling the Main Page...');
 			

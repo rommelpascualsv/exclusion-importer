@@ -44,6 +44,16 @@ class ConnecticutExtractorTest extends \Codeception\TestCase\Test
     	$this->assertArrayHasKey('youth_camp_licensing', $categories);
     }
     
+    public function testGetCategoriesDataSavesFirstDuplicate()
+    {
+    	$categoryHeadersCrawler = $this->getCategoryHeaderCrawlers();
+    	 
+    	$categories = $this->extractor->getCategoriesData($categoryHeadersCrawler);
+    	$optionFieldName = $categories['healthcare_practitioners']['options']['dietitian_nutritionist']['field_name'];
+    	
+    	$this->assertEquals('ctl00$MainContentPlaceHolder$ckbRoster109', $optionFieldName);
+    }
+    
     public function testGetCategoryData()
     {
     	$categoryHeaderCrawler = $this->getFirstCategoryHeaderCrawler();

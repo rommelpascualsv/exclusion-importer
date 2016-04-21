@@ -104,6 +104,15 @@ class Page
 	}
 	
 	/**
+	 * Get html
+	 * @return string
+	 */
+	public function getHtml()
+	{
+		return $this->crawler->html();
+	}
+	
+	/**
 	 * 
 	 * Get nodes
 	 * @param string $method

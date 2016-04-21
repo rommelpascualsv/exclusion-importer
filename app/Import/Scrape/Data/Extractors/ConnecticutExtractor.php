@@ -118,9 +118,11 @@ class ConnecticutExtractor
 		
 		$collapsePanelCrawler->filter('.collapsePanel > table')->each(function(Crawler $crawler) use (&$options, $i) {
 			$data = $this->getOptionData($crawler, $i);
-			
 			$key = $this->getKey($data['name']);
-			$options[$key] = $data;
+			
+			if (! array_key_exists($key, $options)) {
+				$options[$key] = $data;
+			}
 		});
 		
 		return $options;

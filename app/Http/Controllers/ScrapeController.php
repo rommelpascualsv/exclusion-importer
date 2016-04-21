@@ -12,8 +12,9 @@ use App\Import\Scrape\Scrapers\Connecticut\CsvDownloader;
 
 class ScrapeController extends BaseController
 {
-	public function test(CsvDownloader $a)
+	public function test(Client $goutte)
 	{
+		
 		/* $a->download(); */
 		
 		/* $mainPage = MainPage::scrape($client);

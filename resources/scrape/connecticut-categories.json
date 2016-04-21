@@ -629,7 +629,7 @@
             },
             "dietitian_nutritionist": {
                 "name": "Dietitian\/Nutritionist",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster110",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster109",
                 "file_name": "dietitian_nutritionist"
             },
             "genetic_counselor": {
@@ -1019,7 +1019,7 @@
             },
             "home_health_care_agencies": {
                 "name": "Home Health Care Agencies",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster181",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster180",
                 "file_name": "home_health_care_agencies"
             },
             "homemaker_home_health_care": {
@@ -1029,7 +1029,7 @@
             },
             "hospice_care": {
                 "name": "Hospice Care",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster184",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster183",
                 "file_name": "hospice_care"
             },
             "nursing_home_administrator": {

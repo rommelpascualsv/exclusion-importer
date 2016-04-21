@@ -6,6 +6,7 @@ use App\Import\Scrape\Components\FilesystemInterface;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Option;
 use App\Import\Scrape\Scrapers\Connecticut\Data\OptionCollection;
 use Goutte\Client;
+use App\Import\Scrape\Scrapers\Page;
 
 class CsvDownloader
 {	
@@ -43,6 +44,15 @@ class CsvDownloader
 		$this->client = $client;
 		$this->options = $options;
 		$this->filesystem = $filesystem;
+	}
+	
+	/**
+	 * Get client
+	 * @return Client
+	 */
+	public function getClient()
+	{
+		return $this->client;
 	}
 	
 	/**
@@ -118,5 +128,14 @@ class CsvDownloader
 		);
 		
 		return $csvPage;
+	}
+	
+	/**
+	 * Debug page html
+	 * @param Page $page
+	 */
+	public function debug(Page $page)
+	{
+		$this->filesystem->put(static::$path . '/debug.html', $page->getHtml());
 	}
 }
