@@ -41,7 +41,7 @@ class CSVRetriever extends Retriever
     public function retrieveData(ExclusionList $list)
     {
         if ($this->uriIsRemote($list->uri)) {
-            $response = $this->httpClient->get($list->uri);
+        	$response = $this->httpClient->get($list->uri, ['verify' => false]);
             $contents = $response->getBody();
         }
         else {
