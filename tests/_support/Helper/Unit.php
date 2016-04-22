@@ -18,6 +18,14 @@ class Unit extends \Codeception\Module
 	}
 	
 	/**
+	 * Make 
+	 */
+	public function lumenMake($class)
+	{
+		return $this->getLumenApp()->make($class);
+	}
+	
+	/**
 	 * Assert scrape file exist
 	 * @param string $file
 	 */

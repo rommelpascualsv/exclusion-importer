@@ -9,12 +9,14 @@ use App\Import\Scrape\Scrapers\Connecticut\DownloadOptionsPage;
 use App\Import\Scrape\Scrapers\Connecticut\Data\CategoryCollection;
 use App\Import\Scrape\Scrapers\Connecticut\Data\OptionCollection;
 use App\Import\Scrape\Scrapers\Connecticut\CsvDownloader;
+use App\Import\Scrape\Components\ScrapeFilesystemInterface;
 
 class ScrapeController extends BaseController
 {
-	public function test(Client $goutte)
+	public function test(ScrapeFilesystemInterface $a)
 	{
-		
+		/* dd($a); */
+		dd(app('scrape_test_filesystem'));
 		/* $a->download(); */
 		
 		/* $mainPage = MainPage::scrape($client);
