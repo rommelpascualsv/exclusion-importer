@@ -41,6 +41,7 @@ class CSVRetriever extends Retriever
     public function retrieveData(ExclusionList $list)
     {
         $data = [];
+        // Implement multiple file upload use comma searated
         $url = explode(',', $list->uri);
 
         $uri = array_map(function ($item) {
@@ -59,6 +60,7 @@ class CSVRetriever extends Retriever
             $data[] = $this->dataConverter->convertData($list, $contents);
         }
 
+        // If single item return array element
         if (count($data) === 1) {
             return $data[0];
         }

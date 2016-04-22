@@ -25,6 +25,7 @@ class XmlRetriever extends Retriever
     public function retrieveData(ExclusionList $list)
     {
         $datas = [];
+        // Implement multiple file upload use comma searated
         $url = explode(',', $list->uri);
 
         $uri = array_map(function ($item) {
@@ -58,6 +59,7 @@ class XmlRetriever extends Retriever
             $datas[] = $data;
         }
 
+        // If single item return array element
         if (count($datas) === 1) {
             return $datas[0];
         }

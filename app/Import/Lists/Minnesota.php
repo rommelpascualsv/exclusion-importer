@@ -43,6 +43,10 @@ class Minnesota extends ExclusionList
         'zip'
     ];
 
+    /**
+     * @var date columns
+     * @inherit preProcess
+     */
     public $dateColumns = [
        'effective_date_of_exclusion' => 5
     ];
@@ -64,6 +68,10 @@ class Minnesota extends ExclusionList
         parent::preProcess();
     }
 
+    /**
+     * @param array processed data
+     * @return array Parsed data for Entity
+     */
     private function parseEntity(array $data)
     {
         $array = ['', '', ''];
@@ -73,6 +81,10 @@ class Minnesota extends ExclusionList
         }, $data);
     }
 
+    /**
+     * @param array processed data
+     * @return array Parsed data for Individual
+     */
     private function parseIndividual(array $data)
     {
         $array = [''];
@@ -82,6 +94,11 @@ class Minnesota extends ExclusionList
         }, $data);
     }
 
+    /**
+     * Insert array within array
+     * @param array
+     * @return array
+     */
     private function arrayInsert($pos, array $baseArray, array $arrayToInsert)
     {
         $head = array_slice($baseArray, 0, $pos);
@@ -90,6 +107,10 @@ class Minnesota extends ExclusionList
         return array_merge($head, $arrayToInsert, $tail);
     }
 
+    /**
+     * Parse data if Entity or Individual
+     * @return void data method
+     */
     protected function parse()
     {
         $data = [];
