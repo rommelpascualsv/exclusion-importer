@@ -155,9 +155,6 @@ class Washington extends ExclusionList
     private function override(array $value)
     {
         $data = '';
-        
-        //make Npi single value
-        $value = $this->clearInvalidNpiValue($value);
 
         //if combination of business and name
         if ($this->business) {
@@ -207,7 +204,7 @@ class Washington extends ExclusionList
                 }
             }
 
-            $data[] = $this->override($row);
+            $data[] = $this->clearInvalidNpiValue($this->override($row));
         }
 
         $this->data = $data;
@@ -218,16 +215,16 @@ class Washington extends ExclusionList
      * @param array $columns the column array
      * @return array $columns the column array
      */
-    private function clearInvalidNpiValue($columns)
+    private function clearInvalidNpiValue(array $columns)
     {
         // split multiple npi numbers
-        $npiArr = explode(" ", $columns[2]);
+        $npiArr = explode(' ', preg_replace('!\s+!', ' ', $columns[5]));
         
         // get the last npi number
         $npi = array_pop($npiArr);
         
         // clear invalid npi value
-        $columns[2] = !is_numeric($npi) ? null : $npi;
+        $columns[5] = !is_numeric($npi) ? null : $npi;
         
         return $columns;
     }
