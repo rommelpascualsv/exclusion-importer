@@ -25,7 +25,7 @@ $('.start-btn').click(function() {
                 .attr('value', 'Error')
                 .attr('disabled', true);
 
-            modal.find('.modal-body').html(data.msg);
+            modal.find('.modal-body').html(data.message);
             modal.modal();
             
             return;
@@ -39,11 +39,6 @@ $('.start-btn').click(function() {
         var readyForUpdate = $btn.parents('tr').children("td.readyForUpdate")[0];
         readyForUpdate.innerHTML = "No";
 
-    }).fail(function() {
-        $btn.removeClass('btn-default')
-            .addClass('btn-danger')
-            .attr('value', 'Error')
-            .attr('disabled', true);
     });
 });
 
