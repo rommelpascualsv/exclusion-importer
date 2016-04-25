@@ -46,7 +46,6 @@ class FDADebarmentList extends ExclusionList
         $replacableStrings = [
             '^'                            => ' Mandatory Debarment',
             '%'                            => ' Permissive Debarment',
-            '*'                            => ' Hearing requested and denied',
             '#'                            => ' Acquiesced to Debarment',
             '+'                            => ' Special Termination of Debarment',
             '++'                           => ' Order to Withdraw Order of Debarment',
@@ -55,9 +54,12 @@ class FDADebarmentList extends ExclusionList
             'a.k.a.'                       => '~',
             'NMI'                          => '',
             'One person removed from list' => '',
-            '**'                           => '',
-            '***'                          => '',
             '****'                         => '',
+            '***'                          => '',
+            '**'                           => '',
+            '*'                            => ' Hearing requested and denied',
+        	'('                            => '',
+        	')'                            => '',
 
         ];
 
