@@ -52,6 +52,15 @@
             <column name="suspension_initiated_by" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="title" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="aka_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="provider_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>            
             <column name="hash" type="LONGBLOB">
                 <constraints nullable="false"/>
             </column>
@@ -72,6 +81,15 @@
             <column name="suspension_initiated_by" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="title" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="aka_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="provider_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>            
             <column name="hash" type="LONGBLOB">
                 <constraints nullable="false"/>
             </column>
