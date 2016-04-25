@@ -66,7 +66,9 @@ class CsvHeadersExtractor
 	public function extractHeaders($path)
 	{
 		$reader = Reader::createFromPath($path);
-		$headers = array_map('trim', $reader->fetchOne());
+		$headers = array_map(function($item) {
+			return strtolower(trim($item));
+		}, $reader->fetchOne());
 		$lastHeadersIndex = count($headers) - 1;
 		
 		/* remove leading empty values */

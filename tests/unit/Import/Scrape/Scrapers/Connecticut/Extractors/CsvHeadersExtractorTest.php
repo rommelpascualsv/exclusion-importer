@@ -37,15 +37,15 @@ class CsvHeadersExtractorTest extends \Codeception\TestCase\Test
     	$path = app('scrape_test_filesystem')->getPath('csv/extract_connecticut/ambulatory_surgical_centers_recovery_care_centers/ambulatory_surgical_center.csv');
     	$actual = $this->extractor->extractHeaders($path);
     	$expected = [
-    			'FACILITY NAME',
-    			'ADDRESS',
-    			'CITY',
-    			'STATE',
-    			'ZIP',
-    			'LICENSE NO.',
-    			'STATUS',
-    			'EFFECTIVE DATE',
-    			'EXPIRATION DATE'
+    			'facility name',
+    			'address',
+    			'city',
+    			'state',
+    			'zip',
+    			'license no.',
+    			'status',
+    			'effective date',
+    			'expiration date'
     	];
     	
     	$this->assertEquals($expected, $actual);
@@ -63,15 +63,15 @@ class CsvHeadersExtractorTest extends \Codeception\TestCase\Test
     	$expected = [
     			'ambulatory_surgical_centers_recovery_care_centers',
     			'ambulatory_surgical_center',
-    			'FACILITY NAME',
-    			'ADDRESS',
-    			'CITY',
-    			'STATE',
-    			'ZIP',
-    			'LICENSE NO.',
-    			'STATUS',
-    			'EFFECTIVE DATE',
-    			'EXPIRATION DATE'
+    			'facility name',
+    			'address',
+    			'city',
+    			'state',
+    			'zip',
+    			'license no.',
+    			'status',
+    			'effective date',
+    			'expiration date'
     	];
     	
     	$this->assertEquals($expected, $actual);
@@ -112,58 +112,58 @@ class CsvHeadersExtractorTest extends \Codeception\TestCase\Test
     			[
     					'ambulatory_surgical_centers_recovery_care_centers',
     					'ambulatory_surgical_center',
-    					'FACILITY NAME',
-    					'ADDRESS',
-    					'CITY',
-    					'STATE',
-    					'ZIP',
-    					'LICENSE NO.',
-    					'STATUS',
-    					'EFFECTIVE DATE',
-    					'EXPIRATION DATE'
+    					'facility name',
+    					'address',
+    					'city',
+    					'state',
+    					'zip',
+    					'license no.',
+    					'status',
+    					'effective date',
+    					'expiration date'
     			],
     			[
     					'child_day_care_licensing_program',
     					'child_day_care_centers_and_group_day_care_homes_closed_1_year',
-    					'Type',
-    					'Close Date',
-    					'License #',
-    					'Name',
-    					'Address',
-    					'City',
-    					'Zip',
-    					'Phone',
-    					'Legal Operator (LO)',
-    					'Address (LO)',
-    					'City (LO)',
-    					'Zip (LO)'
+    					'type',
+    					'close date',
+    					'license #',
+    					'name',
+    					'address',
+    					'city',
+    					'zip',
+    					'phone',
+    					'legal operator (lo)',
+    					'address (lo)',
+    					'city (lo)',
+    					'zip (lo)'
     			],
     			[
     					'child_day_care_licensing_program',
     					'family_day_care_homes_total_by_date_active',
-    					'License #',
-    					'Last Name',
-    					'First Name',
-    					'Address',
-    					'City',
-    					'Zip',
-    					'Phone',
-    					'Regular Capacity',
-    					'School Age Capacity',
-    					'Expiration Date'
+    					'license #',
+    					'last name',
+    					'first name',
+    					'address',
+    					'city',
+    					'zip',
+    					'phone',
+    					'regular capacity',
+    					'school age capacity',
+    					'expiration date'
     			],
     			[
     					'infirmaries_clinics',
     					'family_planning_clinics',
-    					'FACILITY NAME',
-    					'ADDRESS',
-    					'CITY',
-    					'STATE',
-    					'ZIP',
-    					'LICENSE NO.',
-    					'STATUS',
-    					'EFFECTIVE DATE',
-    					'EXPIRATION DATE'		
+    					'facility name',
+    					'address',
+    					'city',
+    					'state',
+    					'zip',
+    					'license no.',
+    					'status',
+    					'effective date',
+    					'expiration date'		
     			]
     	];
     	
