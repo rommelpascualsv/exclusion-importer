@@ -18,10 +18,12 @@ class HealthMilModel
 
     private $lastName;
 
+    private $title;
+    
     private $addresses;
 
     private $summary;
-
+    
     public function setDateExcluded($dateExcluded)
     {
         $date = new \DateTime($dateExcluded);
@@ -92,9 +94,12 @@ class HealthMilModel
     public function setNames($people)
     {
         // Ignore all commas after the first.
-        $value = explode(',', $people);
-        if (is_array($value) && isset($value[0])) {
-            $value = $value[0];
+        $name = explode(',', $people);
+        if (is_array($name) && isset($name[0])) {
+            $value = $name[0];
+            if (isset($name[1])) {
+            	$this->title = $name[1];
+            }
         }
 
         // Space separated first and middle and last name.
@@ -126,6 +131,11 @@ class HealthMilModel
                 break;
         }
     }
+    
+    public function getTitle()
+    {
+    	return $this->title;
+    }
 
     public function getFirstName()
     {
@@ -141,7 +151,7 @@ class HealthMilModel
     {
         return $this->lastName;
     }
-
+    
     public function toArray()
     {
         $reflectionClass = new \ReflectionClass(get_class($this));
