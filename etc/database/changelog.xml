@@ -741,6 +741,7 @@
             <column name="first_name" type="VARCHAR(50)"/>
             <column name="middle_name" type="VARCHAR(50)"/>
             <column name="last_name" type="VARCHAR(50)"/>
+            <column name="title" type="VARCHAR(50)"/>
             <column name="addresses" type="VARCHAR(1000)"/>
             <column name="summary" type="TEXT"/>
             <column name="hash" type="LONGBLOB"/>
@@ -855,10 +856,10 @@
                 <constraints nullable="false"/>
             </column>
             <column name="date_eligible_for_reinstatement" type="VARCHAR(255)">
-                <constraints nullable="true"/>
+                <constraints nullable="false"/>
             </column>
             <column name="date_reinstated" type="VARCHAR(255)">
-                <constraints nullable="true" />
+                <constraints nullable="false"/>
             </column>
             <column name="additional_information" type="VARCHAR(255)">
                 <constraints nullable="false"/>
@@ -881,10 +882,10 @@
                 <constraints nullable="false"/>
             </column>
             <column name="date_eligible_for_reinstatement" type="VARCHAR(255)">
-                <constraints nullable="true"/>
+                <constraints nullable="false"/>
             </column>
             <column name="date_reinstated" type="VARCHAR(255)">
-                <constraints nullable="true"/>
+                <constraints nullable="false"/>
             </column>
             <column name="additional_information" type="VARCHAR(255)">
                 <constraints nullable="false"/>
