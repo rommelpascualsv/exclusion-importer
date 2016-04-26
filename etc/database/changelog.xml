@@ -79,7 +79,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="suspension_initiated_by" type="VARCHAR(255)">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
             <column name="title" type="VARCHAR(255)">
                 <constraints nullable="false"/>
