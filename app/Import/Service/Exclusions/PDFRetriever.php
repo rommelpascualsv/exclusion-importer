@@ -31,9 +31,12 @@ class PDFRetriever extends Retriever
         foreach ($uri as $key => $value) {
             $folder = storage_path('app');
 
-            $file = "{$folder}/{$list->dbPrefix}-{$key}.pdf";
-
-            $this->httpClient->get($value, ['sink' => $file]);
+            if ($this->uriIsRemote($value)) {
+                $file = "{$folder}/{$list->dbPrefix}-{$key}.pdf";
+                $this->httpClient->get($value, ['sink' => $file]);
+            } else {
+                $file = $value;
+            }
 
             if (strpos($list->pdfToText, "pdftotext") !== false) {
                 $contents = shell_exec($list->pdfToText . ' ' . $file . ' -');
@@ -50,5 +53,14 @@ class PDFRetriever extends Retriever
         }
 
         return $data;
+    }
+
+    /**
+     * @param $uri
+     * @return mixed
+     */
+    private function uriIsRemote($uri)
+    {
+        return filter_var($uri, FILTER_VALIDATE_URL);
     }
 }
