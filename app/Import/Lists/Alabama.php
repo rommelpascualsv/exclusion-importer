@@ -310,7 +310,7 @@ class Alabama extends ExclusionList
     private function findTitle($name)
     {
         
-        $nameTokens = explode(',', $name);
+        $nameTokens = str_getcsv($name);
         $nameTokenCount = count($nameTokens);
         
         //Last token is assumed to contain the title string that we need to extract (this is applicable 99% of the time, see special case below)        
