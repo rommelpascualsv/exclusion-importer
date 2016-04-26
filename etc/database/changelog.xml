@@ -858,7 +858,7 @@
                 <constraints nullable="true"/>
             </column>
             <column name="date_reinstated" type="VARCHAR(255)">
-                <constraints nullable="true"/>
+                <constraints nullable="true" />
             </column>
             <column name="additional_information" type="VARCHAR(255)">
                 <constraints nullable="false"/>
