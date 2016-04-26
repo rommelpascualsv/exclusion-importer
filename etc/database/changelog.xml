@@ -856,10 +856,10 @@
                 <constraints nullable="false"/>
             </column>
             <column name="date_eligible_for_reinstatement" type="VARCHAR(255)">
-                <constraints nullable="false"/>
+                <constraints nullable="true"/>
             </column>
             <column name="date_reinstated" type="VARCHAR(255)">
-                <constraints nullable="false"/>
+                <constraints nullable="true"/>
             </column>
             <column name="additional_information" type="VARCHAR(255)">
                 <constraints nullable="false"/>
@@ -882,10 +882,10 @@
                 <constraints nullable="false"/>
             </column>
             <column name="date_eligible_for_reinstatement" type="VARCHAR(255)">
-                <constraints nullable="false"/>
+                <constraints nullable="true"/>
             </column>
             <column name="date_reinstated" type="VARCHAR(255)">
-                <constraints nullable="false"/>
+                <constraints nullable="true"/>
             </column>
             <column name="additional_information" type="VARCHAR(255)">
                 <constraints nullable="false"/>
