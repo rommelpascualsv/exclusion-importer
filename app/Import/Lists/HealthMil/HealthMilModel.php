@@ -23,7 +23,7 @@ class HealthMilModel
     private $addresses;
 
     private $summary;
-    
+
     public function setDateExcluded($dateExcluded)
     {
         $date = new \DateTime($dateExcluded);
@@ -151,7 +151,7 @@ class HealthMilModel
     {
         return $this->lastName;
     }
-    
+
     public function toArray()
     {
         $reflectionClass = new \ReflectionClass(get_class($this));
