@@ -15,6 +15,7 @@ class ListFactory
         'ma1'               => 'Massachusetts',
         'md1'               => 'Maryland',
         'mi1'               => 'Michigan',
+    	'ne1'				=> 'Nebraska',	
         'njcdr'             => 'NewJersey',
         'nyomig'            => 'NewYork',
         'oh1'               => 'Ohio',
@@ -41,7 +42,7 @@ class ListFactory
         'usdocdp'           => 'USDOCDeniedPersons',
         'fdadl'             => 'FDADebarmentList',
         'usdosd'            => 'USDosDebar',
-        'unsancindividuals' => 'UNSanctionsIndividuals',
+        'unsancindividuals' => 'UnSanctionsIndividuals',
         'unsancentities'    => 'UnSanctionsEntities',
         'healthmil'    => 'HealthMil',
     ];
@@ -50,7 +51,7 @@ class ListFactory
      * @param $prefix
      * @return \App\Import\Lists\ExclusionList
      */
-    public function make($prefix) 
+    public function make($prefix)
     {
         if (array_key_exists($prefix, $this->listMappings)) {
 
