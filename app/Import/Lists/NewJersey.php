@@ -62,4 +62,21 @@ class NewJersey extends ExclusionList
     ];
 
     public $shouldHashListName = true;
+
+    public function preProcess()
+    {
+        $this->parse();
+        parent::preProcess();
+    }
+
+    private function parse()
+    {
+        $rows = $this->data;
+
+        foreach ($rows as $key => $row) {
+            $rows[$key][1] = str_replace('_', '', $rows[$key][1]);
+        }
+
+        $this->data = $rows;
+    }
 }
