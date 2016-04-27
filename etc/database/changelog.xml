@@ -1845,6 +1845,9 @@
             <column name="npi" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="provider_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="termination_date" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
@@ -1854,9 +1857,8 @@
             <column name="sanction_period" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="reinstatement_date" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
+            <column name="sanction_period_end_date" type="VARCHAR(255)"/>
+            <column name="reinstatement_date" type="VARCHAR(255)" />
             <column name="hash" type="LONGBLOB">
                 <constraints nullable="false"/>
             </column>
@@ -1883,6 +1885,9 @@
             <column name="npi" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="provider_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="termination_date" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
@@ -1892,9 +1897,8 @@
             <column name="sanction_period" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="reinstatement_date" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
+            <column name="sanction_period_end_date" type="VARCHAR(255)"/>
+            <column name="reinstatement_date" type="VARCHAR(255)"/>
             <column name="hash" type="LONGBLOB">
                 <constraints nullable="false"/>
             </column>
