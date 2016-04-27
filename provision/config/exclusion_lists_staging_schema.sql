@@ -1323,6 +1323,7 @@ DROP TABLE IF EXISTS `ne1_records`;
 CREATE TABLE `ne1_records` (
 `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT ,
 `provider_name`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
+`npi`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
 `provider_type`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
 `termination_or_suspension`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
 `effective_date`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
@@ -1345,6 +1346,7 @@ DROP TABLE IF EXISTS `ne1_records_older`;
 CREATE TABLE `ne1_records_older` (
 `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT ,
 `provider_name`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
+`npi`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
 `provider_type`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
 `termination_or_suspension`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
 `effective_date`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
@@ -2339,6 +2341,7 @@ CREATE TABLE `wa1_records` (
 `middle_etc`  varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL ,
 `entity`  varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL ,
 `provider_license`  varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL ,
+`npi`  varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL ,
 `termination_date`  date NULL DEFAULT NULL ,
 `termination_reason`  varchar(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL ,
 `hash`  binary(16) NOT NULL ,
@@ -2362,6 +2365,7 @@ CREATE TABLE `wa1_records_older` (
 `middle_etc`  varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL ,
 `entity`  varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL ,
 `provider_license`  varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL ,
+`npi`  varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL ,
 `termination_date`  date NULL DEFAULT NULL ,
 `termination_reason`  varchar(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL ,
 `hash`  binary(16) NOT NULL ,
