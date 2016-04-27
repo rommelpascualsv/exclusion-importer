@@ -32,11 +32,11 @@ $MYSQL -uroot -proot -e "$SQL"
 
 sudo service mysql stop
 
-#.my.cnf contains overrides to default configs of mysql specified in /etc/mysql/my.cnf 
+# my.cnf contains overrides to default configs of mysql specified in /etc/mysql/my.cnf 
 cp /vagrant/provision/config/my.cnf /etc/mysql/conf.d
 
-#backup the current mysql logfiles just in case something goes wrong with resizing of log files
-#using the new setting in my.cnf
+# Backup the current mysql logfiles just in case something goes wrong with resizing of log files
+# using the new setting in my.cnf
 cp -r /var/lib/mysql/ib_logfile* /tmp
 
 sudo service mysql start

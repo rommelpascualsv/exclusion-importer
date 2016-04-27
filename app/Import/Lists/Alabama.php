@@ -169,7 +169,7 @@ class Alabama extends ExclusionList
         foreach ($rows as $row) {
         
             //Ignore blank lines
-            if (!trim(implode($row))) {
+            if (! trim(implode($row))) {
                 continue;
             }
         
@@ -194,7 +194,7 @@ class Alabama extends ExclusionList
                 $title = '';
                 
                 //Do not extract any titles for provider names indicating institutions
-                if (!$this->isInstitutionWithOwner($name)) {
+                if (! $this->isInstitutionWithOwner($name)) {
                     
                     $title = $this->findTitle($name);
 
@@ -238,7 +238,7 @@ class Alabama extends ExclusionList
      */
     private function isProviderType($row)
     {
-        return !empty($row[0]) && empty($row[1]) && empty($row[2]);
+        return ! empty(head($row)) && empty(next($row)) && empty(next($row));
     }
     
     /**
