@@ -6,14 +6,14 @@ use Laravel\Lumen\Routing\Controller as BaseController;
 
 class ImportController extends BaseController
 {
-	protected $importFileService;
-	
-	public function __construct(ImportFileServiceInterface $importFileService)
-	{
-		$this->importFileService = $importFileService;
-	}
-	
-	public function createOldTables()
+    protected $importFileService;
+    
+    public function __construct(ImportFileServiceInterface $importFileService)
+    {
+        $this->importFileService = $importFileService;
+    }
+    
+    public function createOldTables()
     {
         $lists = [
             'ak1_records',
@@ -79,7 +79,7 @@ class ImportController extends BaseController
             app('db')->statement('CREATE TABLE  `' . $list . '_older` LIKE `' . $list . '`');
             app('db')->statement('INSERT  INTO `' . $list . '_older` SELECT * FROM `' . $list . '`');
         }
-    }
+	}
 
     public function index()
     {
@@ -96,6 +96,6 @@ class ImportController extends BaseController
     private function initPhpSettings()
     {
         ini_set('memory_limit', '512M');
-        ini_set('max_execution_time', '120');
+        ini_set('max_execution_time', '300');
     }
 }
