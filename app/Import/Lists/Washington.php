@@ -4,25 +4,32 @@ class Washington extends ExclusionList
 {
     public $dbPrefix = 'wa1';
 
-    public $pdfToText = "pdftotext -layout -nopgbrk";
+    public $pdfToText = 'java -jar ../etc/tabula.jar -p all -u -g -r'; //'pdftotext -layout -nopgbrk';
 
-    public $uri = "http://www.hca.wa.gov/medicaid/provider/documents/termination_exclusion.pdf";
+    public $uri = 'http://www.hca.wa.gov/medicaid/provider/documents/termination_exclusion.pdf';
 
     public $type = 'pdf';
 
+
+    /**
+     * @var field names
+     */
     public $fieldNames = [
         'last_name',
         'first_name',
         'middle_etc',
         'entity',
         'provider_license',
+        'npi',
         'termination_date',
         'termination_reason'
     ];
 
+    /**
+     * @var row offset
+     */
     public $retrieveOptions = [
-        'headerRow' => 0,
-        'offset'    => 1
+        'offset'    => 2
     ];
 
     public $hashColumns = [
@@ -30,92 +37,198 @@ class Washington extends ExclusionList
         'first_name',
         'entity',
         'provider_license',
+        'npi',
         'termination_date'
     ];
 
-    public $dateColumns = [
-        'termination_date' => 5
+    /**
+     * @var institution special cases
+     */
+    private $institutions = [
+        'Wheelchairs Plus',
+        'AA Adult Family Home',
+        'Our House Adult Family Home/',
+        'Wheelchairs Plus',
+        '/Fairwood Care'
     ];
 
+    public $dateColumns = [
+       'termination_date' => 6
+    ];
+
+    private $business;
+
+    /**
+     * @inherit preProcess
+     */
     public function preProcess()
     {
         $this->parse();
         parent::preProcess();
     }
 
+    /**
+     * @param string
+     * @return boolean
+     */
+    public function valueIsLastNameFirst($name)
+    {
+        return strpos($name, ', ') !== false;
+    }
+
+    /**
+     * @param string
+     * @return array
+     */
+    public function parseLastNameFirst($name)
+    {
+        $completeName = explode(', ', $name);
+        $names[] = $completeName[0];
+
+        if (isset($completeName[1])) {
+            $firstMiddle = explode(' ', $completeName[1], 2);
+
+            if (count($firstMiddle) == 1) {
+                $firstMiddle[] = '';
+            }
+
+            $names = array_merge($names, $firstMiddle);
+        }
+
+        return $names;
+    }
+
+    /**
+     * @param string
+     * @return array
+     */
+    public function textNewLineToArray($string)
+    {
+        return preg_split('/(\r)?\n(\s+)?/', trim($string));
+    }
+
+    /**
+     * @param string csv
+     * @return array
+     */
+    public function csvToArray($string)
+    {
+        $string = preg_replace('/[\r\n]+/', ' ', $string);
+        $string = preg_replace('!\s+!', ' ', $string);
+        $array = str_getcsv($string);
+        return array_map('trim', $array);
+    }
+
+    /**
+     * @param string name
+     * @return array
+     */
+    private function parseName($name)
+    {
+        $names = [];
+
+        if ($this->valueIsLastNameFirst($name)) {
+            return $this->parseLastNameFirst($name);
+        }
+
+        $names = explode(' ', $name);
+        $names[] = '';
+
+        return $names;
+    }
+
+    /**
+     * @param string business
+     * @return array
+     */
+    private function parseBusiness($business)
+    {
+        $name = ['', '', ''];
+        $name[] = $business;
+        return $name;
+    }
+
+    /**
+     * @param array data rows
+     * @return array
+     */
+    private function override(array $value)
+    {
+        $data = '';
+        
+        //make Npi single value
+        $value = $this->clearInvalidNpiValue($value);
+
+        //if combination of business and name
+        if ($this->business) {
+            $name = $this->parseName($value[0]);
+            $name[] = $this->business;
+            $value = array_offset($value, 1);
+            return array_merge($name, $value);
+        }
+
+        //if Name without business
+        if ($this->valueIsLastNameFirst($value[0])) {
+            $name = $this->parseName($value[0]);
+            $name[] = '';
+            $value = array_offset($value, 1);
+            return array_merge($name, $value);
+        }
+
+        //if business w/o name
+        $name = $this->parseBusiness($value[0]);
+        $value = array_offset($value, 1);
+
+        return array_merge($name, $value);
+    }
+
+    /**
+     * @inherit parse
+     */
     protected function parse()
     {
-        $addSpacesBeforeList = [
-            'AP30004851',
-            'DE00005459',
-            'AP30001221',
-            'MD00015460',
-            'MDMD00037164',
-            'MD00037164',
-            'OP00000920',
-            'NC60405313',
-            'AP30003392',
-            'OP00000920',
-            'DE00004629',
-            'PH60179103',
-            'License ',
-            'OIG ',
-            'Terminate ',
-            'Inactive',
-            'NPI '
-        ];
+        $data = [];
+        $rows = $this->textNewLineToArray($this->data);
 
-        $addSpacesBeforeListAsString = "/" . implode('|', $addSpacesBeforeList) . "/";
-        $rowDelimiter = '^^^^^';
-        $columnDelimiter = '~~~~~';
-        $blankDelimiter = '';
-        //$regex = preg_replace('/\n(\s)?\d{1,3}/', "\n", $text);
-        //$regex1 = preg_replace('/A\s{1,}B\s{1,}C\s{1,}D\s{1,}E\s{1,}/', $blankDelimiter, $regex);
-        $regex1 = (preg_replace('/Plus[\s]+Medicaid\n/', $blankDelimiter, $this->data));
-        $regex1A = str_replace('Mann, Michael DBA Wheelchairs', 'Mann DBA Wheelchairs Plus, Michael', $regex1);
-        $regex1B= str_replace('Manditory Exclusion from', 'Manditory Exclusion from Medicaid ', $regex1A);
-        $regex2 = (preg_replace('/Molnar, Laszlo/', $blankDelimiter, $regex1B));
-        $regex2B= str_replace('AA Adult Family Home ', 'Molnar AA Adult Family Home, Laszlo ', $regex2);
-        $regex3 = preg_replace('/^[\s\S\w]+Action[\s]+Exclusion[\s]+/', $blankDelimiter, $regex2B);
-        $regex4 = preg_replace('/\(ID Only\)\n/', '(ID Only)', $regex3);
-        $regex5 = preg_replace('/[\s]+Our House Adult Family\n[\s]+Home\//', PHP_EOL . 'Our House Adult Family Home \ ', $regex4);
-        $cleanData = preg_replace_callback($addSpacesBeforeListAsString, function ($match) {
-            return '   ' . $match[0];
-        }, $regex5);
-        $regex6 = preg_replace('/(\r)?\n(\s+)?/', $rowDelimiter, $cleanData);
-        $regex7 = preg_replace('/\s{3,}/', $columnDelimiter, $regex6);
-        $regex8 = preg_replace('/\s{10}E\s{10}/', $blankDelimiter, $regex7);
-        $rows = explode($rowDelimiter, $regex8);
-        $columns = [];
-        foreach ($rows as $row) {
-            $rowArray = explode($columnDelimiter, $row);
-            $firstMiddle = explode(', ', $rowArray[0], 2); //separate last name from rest of name
-            if (isset($firstMiddle[1])) {
-                $middle = explode(' ', $firstMiddle[1], 2); //separate first name
-                if (! isset($middle[1])) { //add blank if no middle name so won't act like entity
-                    $middle[1] = ' ';
+        //array offset
+        $rows = array_offset($rows, $this->retrieveOptions['offset']);
+
+        foreach ($rows as $key => $value) {
+            $this->business = '';
+            // convert csv string to array
+            $row = $this->csvToArray($value);
+
+            // Check for combination of name and business
+            foreach ($this->institutions as $ins) {
+                if (strpos($row[0], $ins) !== false) {
+                    $row[0] = str_replace($ins, '', $row[0]);
+                    $this->business = str_replace('/', '', $ins);
+                    break;
                 }
-                array_splice($firstMiddle, 1, 2, $middle);
             }
-            array_splice($rowArray, 0, 1, $firstMiddle);
-            array_splice($rowArray, 3, 0, ''); //insert blank column for entities
-            if (count($rowArray) < 6) {
-                $entity = $rowArray; //get entity
-                unset($entity[3]); //remove blank column
-                array_splice($rowArray, 3, count($entity), $entity); //insert entity
-                //set FML names to blank
-                $rowArray[0] = '';
-                $rowArray[1] = '';
-                $rowArray[2] = '';
-            }
-            $columns[] = $rowArray;
+
+            $data[] = $this->override($row);
         }
-        //check for empty arrays
-        foreach ($columns as $key => $value) {
-            if (! array_filter($value)) {
-                unset($columns[$key]);
-            }
-        }
-        $this->data = $columns;
+
+        $this->data = $data;
+    }
+    
+    /**
+     * Clears the invalid npi value from the record.
+     * @param array $columns the column array
+     * @return array $columns the column array
+     */
+    private function clearInvalidNpiValue($columns)
+    {
+        // split multiple npi numbers
+        $npiArr = explode(" ", $columns[2]);
+        
+        // get the last npi number
+        $npi = array_pop($npiArr);
+        
+        // clear invalid npi value
+        $columns[2] = !is_numeric($npi) ? null : $npi;
+        
+        return $columns;
     }
 }
