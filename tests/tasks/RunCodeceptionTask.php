@@ -8,7 +8,7 @@ class RunCodeceptionTask extends Task
 		$outputAndErrors = "";
 		$return_value = "";
 		
-		exec("php codecept.phar run " . $type, $outputAndErrors, $return_value);
+		exec("vendor/bin/codecept run " . $this->type, $outputAndErrors, $return_value);
 		
 		print_r(implode("\n", $outputAndErrors));
 	}
