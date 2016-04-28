@@ -24,29 +24,46 @@ class XmlRetriever extends Retriever
      */
     public function retrieveData(ExclusionList $list)
     {
-        $client = new Client([
-            'base_uri' => $list->uri
-        ]);
+        $datas = [];
+        // Implement multiple file upload use comma searated
+        $url = explode(',', $list->uri);
 
-        $response = $client->request('GET', $list->urlSuffix, $list->requestOptions);
+        $uri = array_map(function ($item) {
+            return trim($item);
+        }, $url);
 
-        $body = $response->getBody()->getContents();
+        foreach ($uri as $key => $value) {
+            $client = new Client([
+                'base_uri' => $list->uri
+            ]);
 
-        $xml = simplexml_load_string($body);
-        $data = [];
-        foreach ($xml->{$list->nodes['title']}->{$list->nodes['subject']} as $node) {
-            $linesItem = [];
-            foreach ($list->nodeMap as $line) {
-                $linesItem[] = (is_array($line)) ? $list->$line[0]($node) : $this->prepareItem($node->{$line});
+            $response = $client->request('GET', $list->urlSuffix, $list->requestOptions);
+
+            $body = $response->getBody()->getContents();
+
+            $xml = simplexml_load_string($body);
+            $data = [];
+            foreach ($xml->{$list->nodes['title']}->{$list->nodes['subject']} as $node) {
+                $linesItem = [];
+                foreach ($list->nodeMap as $line) {
+                    $linesItem[] = (is_array($line)) ? $list->$line[0]($node) : $this->prepareItem($node->{$line});
+                }
+
+                $data[] = $linesItem;
             }
 
-            $data[] = $linesItem;
+            if ($list->retrieveOptions['headerRow'] == 1) {
+                array_shift($data);
+            }
+
+            $datas[] = $data;
         }
 
-        if ($list->retrieveOptions['headerRow'] == 1) {
-            array_shift($data);
+        // If single item return array element
+        if (count($datas) === 1) {
+            return $datas[0];
         }
 
-        return $data;
+        return $datas;
     }
 }
