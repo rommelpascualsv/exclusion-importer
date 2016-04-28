@@ -55,6 +55,9 @@ CREATE TABLE `al1_records` (
 `name_of_provider`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
 `suspension_effective_date`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
 `suspension_initiated_by`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
+`title`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
+`aka_name`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
+`provider_type`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
 `hash`  binary(16) NOT NULL ,
 `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
 PRIMARY KEY (`id`)
@@ -73,6 +76,9 @@ CREATE TABLE `al1_records_older` (
 `name_of_provider`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
 `suspension_effective_date`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
 `suspension_initiated_by`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
+`title`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
+`aka_name`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
+`provider_type`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
 `hash`  binary(16) NOT NULL ,
 `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
 PRIMARY KEY (`id`)

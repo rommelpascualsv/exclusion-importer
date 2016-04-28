@@ -19,7 +19,7 @@ sudo apt-get install -qq mysql-server-5.6
 # enable remote access
 # setting the mysql bind-address to allow connections from everywhere
 sed -i "s/bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/my.cnf
-
+ 
 # adding grant privileges to mysql root user from everywhere
 # thx to http://stackoverflow.com/questions/7528967/how-to-grant-mysql-privileges-in-a-bash-script for this
 MYSQL=`which mysql`
@@ -30,4 +30,13 @@ SQL="${Q1}${Q2}"
 
 $MYSQL -uroot -proot -e "$SQL"
 
-sudo service mysql restart
+sudo service mysql stop
+
+# my.cnf contains overrides to default configs of mysql specified in /etc/mysql/my.cnf 
+cp /vagrant/provision/config/my.cnf /etc/mysql/conf.d
+
+# Backup the current mysql logfiles just in case something goes wrong with resizing of log files
+# using the new setting in my.cnf
+cp -r /var/lib/mysql/ib_logfile* /tmp
+
+sudo service mysql start
