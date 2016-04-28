@@ -744,6 +744,7 @@
             <column name="first_name" type="VARCHAR(50)"/>
             <column name="middle_name" type="VARCHAR(50)"/>
             <column name="last_name" type="VARCHAR(50)"/>
+            <column name="title" type="VARCHAR(50)"/>
             <column name="addresses" type="VARCHAR(1000)"/>
             <column name="summary" type="TEXT"/>
             <column name="hash" type="LONGBLOB"/>
