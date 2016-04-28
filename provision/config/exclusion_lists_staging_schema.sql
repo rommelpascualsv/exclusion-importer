@@ -667,6 +667,7 @@ CREATE TABLE `il1_records` (
 `CITY`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
 `STATE`  char(2) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
 `ZIP_CODE`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
+`NEW_ADDITION`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
 `hash`  binary(16) NOT NULL ,
 `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
 PRIMARY KEY (`id`)
@@ -693,6 +694,7 @@ CREATE TABLE `il1_records_older` (
 `CITY`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
 `STATE`  char(2) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
 `ZIP_CODE`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
+`NEW_ADDITION`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
 `hash`  binary(16) NOT NULL ,
 `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
 PRIMARY KEY (`id`)

@@ -933,6 +933,9 @@
             <column name="ZIP_CODE" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="NEW_ADDITION" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="hash" type="LONGBLOB">
                 <constraints nullable="false"/>
             </column>
@@ -975,6 +978,9 @@
                 <constraints nullable="false"/>
             </column>
             <column name="ZIP_CODE" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NEW_ADDITION" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="hash" type="LONGBLOB">
