@@ -20,8 +20,12 @@ class Maine extends ExclusionList
     ];
 
     public $originalFieldNames = [
-        'textbox22',
-        'ProvFirstName',
+        'ReportNumber',
+        'DateRun',
+        'ReportName',
+        'AsOfDate',
+        'LastName',
+        'FirstName',
         'MiddleInitial',
         'AliasLastName1',
         'AliasFirstName1',
@@ -33,14 +37,14 @@ class Maine extends ExclusionList
         'AliasFirstName4',
         'ProvType',
         'CaseStatus',
-        'SancStateStart'
+        'SanctionStartDate'
     ];
 
     public $deleteColumns = [
-        'ItemHeading1',
-        'ItemValue1',
-        'ItemHeading',
-        'ItemValue',
+        'ReportNumber',
+        'DateRun',
+        'ReportName',
+        'AsOfDate',
     ];
 
     public $hashColumns = [
@@ -54,12 +58,12 @@ class Maine extends ExclusionList
 
     public $retrieveOptions = [
         'headerRow' => 0,
-        'offset' => 5
+        'offset' => 1
     ];
 
 
     public $dateColumns = [
-        'sanction_start_date' => 13
+        'sanction_start_date' => 17
     ];
 
     public function preProcess()
@@ -73,7 +77,7 @@ class Maine extends ExclusionList
             $arrayWithKeyNames = array_combine($this->originalFieldNames, $values);
 
             $filteredArray = $this->removeBadColumns($arrayWithKeyNames);
-            
+
             unset($arrayWithKeyNames);
 
             $arrayWithEntities = $this->moveEntitiesToNewColumn($filteredArray);
@@ -113,9 +117,9 @@ class Maine extends ExclusionList
      */
     protected function moveEntitiesToNewColumn($filteredArray)
     {
-        if (empty($filteredArray['ProvFirstName'])) {
-            $filteredArray['Entity'] = $filteredArray['textbox22'];
-            $filteredArray['textbox22'] = '';
+        if (empty($filteredArray['FirstName'])) {
+            $filteredArray['Entity'] = $filteredArray['LastName'];
+            $filteredArray['LastName'] = '';
         } else {
             $filteredArray['Entity'] = '';
         }
