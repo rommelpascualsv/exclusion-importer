@@ -618,8 +618,8 @@ CREATE TABLE `id1_records` (
 `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT ,
 `name`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
 `exclusion_start_date`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
-`date_eligible_for_reinstatement`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL ,
-`date_reinstated`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL,
+`date_eligible_for_reinstatement`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
+`date_reinstated`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
 `additional_information`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
 `hash`  binary(16) NOT NULL ,
 `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
@@ -638,8 +638,8 @@ CREATE TABLE `id1_records_older` (
 `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT ,
 `name`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
 `exclusion_start_date`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
-`date_eligible_for_reinstatement`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL ,
-`date_reinstated`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL ,
+`date_eligible_for_reinstatement`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
+`date_reinstated`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
 `additional_information`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
 `hash`  binary(16) NOT NULL ,
 `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
@@ -3224,5 +3224,4 @@ CREATE TABLE `fdac_records` (
 	ADD COLUMN `sanction_source_2` VARCHAR(255) CHARACTER SET 'utf8' NULL DEFAULT NULL AFTER `sanction_date_2`,
 	CHANGE COLUMN `sanction_date_1` `sanction_date_1` DATE NULL DEFAULT NULL,
 	CHANGE COLUMN `sanction_date_2` `sanction_date_2` DATE NULL DEFAULT NULL;
-
 

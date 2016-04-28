@@ -1,8 +1,4 @@
-<?php
-
-namespace App\Import\Lists;
-
-use Illuminate\Contracts\Queue\ShouldBeQueued;
+<?php namespace App\Import\Lists;
 
 class Idaho extends ExclusionList
 {
@@ -11,7 +7,7 @@ class Idaho extends ExclusionList
 
     public $uri = 'http://healthandwelfare.idaho.gov/Portals/0/Providers/Medicaid/ProviderExclusionList.pdf';
 
-    public $pdfToText = "java -jar ../etc/tabula.jar -p all -u -g -r";
+    public $pdfToText = "java -Dfile.encoding=utf-8 -jar ../etc/tabula.jar -p all -u -g -r";
 
     public $type = 'pdf';
 
@@ -56,15 +52,16 @@ class Idaho extends ExclusionList
         $data = [];
         
         for ($i = 0; $i < count($rows); $i++) {
-
-            $row = $rows[$i];
+            
+            //Remove any line breaks within the parsed row data text
+            $row = preg_replace('/\r\n?/', '', $rows[$i]);
             
             if (empty($row) || $this->isHeader($row)) {
                 continue;
             }
-        
+            
             $columns = str_getcsv($row);
-        
+            
             if ($this->isContinuationOfPreviousRow($columns)) {
                 //This happens when a supposedly single entry in the table gets broken
                 //to two rows in different pages because of page breaks. In this case,
@@ -86,6 +83,13 @@ class Idaho extends ExclusionList
         $this->data = $data;
     }
     
+    protected function valueForUnparsableDate($columnName, $columnValue, $row)
+    {
+        //Some values are not dates, like 'Indefinite', just return whatever 
+        //is specified in the read data as the value
+        return trim($columnValue);
+    }
+    
     /**
      * Returns true if the given row corresponds to a table header of the
      * exclusion list, false otherwise. 
@@ -94,7 +98,7 @@ class Idaho extends ExclusionList
      */
     private function isHeader($row)
     {
-        return array_search(str_replace("\r", "", $row), $this->tableHeaders) !== false;
+        return array_search(trim(str_replace("\r", "", $row)), $this->tableHeaders) !== false;
     }
     
     /**
@@ -121,7 +125,7 @@ class Idaho extends ExclusionList
     {
         //If there is no previous row, then we have nothing to merge the current
         //row to - just return the current row
-        if (!$previousRow) return str_getcsv($currentRow);
+        if (! $previousRow) return str_getcsv($currentRow);
         
         $previousColumns = str_getcsv($previousRow);
         $currentColumns = str_getcsv($currentRow);
