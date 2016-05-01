@@ -7,6 +7,7 @@ class Illinois extends ExclusionList
     public $uri = 'http://www.illinois.gov/hfs/oig/Documents/ILMedicaidSanctionsExcel20160421.xls';
     
     public $type = 'xls';    
+    
     public $hashColumns = [
         'il1_id',
         'ProvName',
