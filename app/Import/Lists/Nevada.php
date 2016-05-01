@@ -24,12 +24,10 @@ class Nevada extends ExclusionList
     	'reinstatement_date'
     ];
 
-
     public $retrieveOptions = [
         'headerRow' => 0,
         'offset'    => 1
     ];
-
     
     public $hashColumns = [
     	'doing_business_as',
@@ -74,10 +72,13 @@ class Nevada extends ExclusionList
 
     public function parse()
     {
-    	// removes all headers
+    	// remove all headers
     	$this->data = str_replace($this->headers, "", $this->data);
     	
-    	// corrects the converted data 
+    	// remove all page numbers
+    	$this->data = preg_replace('/"",,,,"Page \\d ",of \\d,,,,,/', "", $this->data);
+    	
+    	// correct the converted data 
     	$this->data = str_replace(array_keys($this->legalEntity), array_values($this->legalEntity), $this->data);
     	
     	// split into rows
@@ -87,7 +88,7 @@ class Nevada extends ExclusionList
         $mergeData = [];
         foreach ($rows as $key => $value) {
         	
-        	// do not include if row is empty
+        	// do not include if row is empty or contains page number
         	if (empty($value)) {
         		continue;
         	}
@@ -100,6 +101,7 @@ class Nevada extends ExclusionList
         		continue;
         	}
         	
+        	// combine rows that belongs together
         	if (!empty($mergeData)) {
         		$columns = $this->buildColumnsData($mergeData, $columns);
         	}
@@ -125,7 +127,8 @@ class Nevada extends ExclusionList
      * @param columns the current column records
      *
      */
-    private function buildColumnsData($mergeData, $columns) {
+    private function buildColumnsData($mergeData, $columns) 
+    {
     	
     	foreach ($mergeData as $k => $v) {
     		$columns[$k] = $v . " " . $columns[$k];
@@ -141,9 +144,10 @@ class Nevada extends ExclusionList
 	 * @param columns the current column records
 	 * 
 	 */
-	private function buildMergeData($mergeData, $columns) {
+	private function buildMergeData($mergeData, $columns) 
+	{
 		
-		if (empty($mergeData)) {
+		if (empty($mergeData) || empty(trim(implode('', $mergeData)))) {
 			$mergeData = $columns;
 		} else {
 			foreach ($columns as $k => $v) {
@@ -160,6 +164,22 @@ class Nevada extends ExclusionList
      */
     private function applyOverrides($columns)
     {
+    	$columns[4] = $this->handleNpiValues($columns[4]);
+    	
     	return $columns;
+    }
+    
+    /**
+     * Make a JSON array string representation for a given array
+     * 
+     * @param aray $values the array values
+     * @return string the JSON array string representation
+     */
+    private function handleNpiValues($values)
+    {
+    	if (empty($values)) {
+    		return $values;
+    	}
+    	return json_encode(explode(" ", $values));
     }
 }
