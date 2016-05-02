@@ -22,13 +22,40 @@ Vagrant.configure(2) do |config|
 
   end
 
-  config.vm.provision "shell", path: 'provision/base.sh'
-  config.vm.provision "shell", path: 'provision/nginx.sh'
-  config.vm.provision "shell", path: 'provision/php.sh'
-  config.vm.provision "shell", path: 'provision/mysql.sh'
-  config.vm.provision "shell", path: 'provision/liquibase.sh'
-  config.vm.provision "shell", path: 'provision/phing.sh'
-  config.vm.provision "shell", path: 'provision/provision.sh'
-  config.vm.provision "shell", path: 'provision/veritas.sh'
+  if Vagrant.has_plugin?("vagrant-omnibus")
+    config.omnibus.chef_version = 'latest'
+  end
 
+  config.berkshelf.enabled = true
+  
+  config.vm.provision :chef_solo do |chef|
+  
+    config.berkshelf.berksfile_path = 'provision/cookbook/Berksfile'
+    chef.cookbooks_path = 'provision/cookbook'
+  
+    chef.json = {
+      mysql: {
+        version: '5.6',
+        port: '3306',
+        bind_address: '0.0.0.0',
+        user: 'root',
+        password: 'root'
+      }
+    }
+
+    chef.run_list = [
+        'recipe[apt::default]',
+        'recipe[nginx::default]',
+        'recipe[php::default]',
+        'recipe[phing::default]',
+        'recipe[mongodb::10gen_repo]',
+        'recipe[cookbook::default]',
+        'recipe[cookbook::nginx]',
+        'recipe[cookbook::php]',
+        'recipe[cookbook::mysql]',
+        'recipe[cookbook::liquibase]',
+        'recipe[cookbook::provision]',
+        'recipe[cookbook::mongodb]'
+    ]
+  end
 end
