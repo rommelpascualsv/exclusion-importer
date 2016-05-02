@@ -41,6 +41,8 @@ class Kentucky extends ExclusionList
     public $dateColumns = [
         'effective_date' => 4
     ];
+    
+    public $npiColumn = 2;
 
     public function __construct()
     {
@@ -55,5 +57,18 @@ class Kentucky extends ExclusionList
         $link = $crawler->filter('#section1ContentPlaceholderControl > ul:nth-child(5) > li > a:nth-child(3)')->attr('href');
 
         return 'http://chfs.ky.gov' . $link;
+    }
+    
+    /**
+     * Retrieves the array string for a given space-delimeted value
+     *
+     * @param string $value the npi space-delimeted value
+     * @return array the array string npi values
+     */
+    protected function getNpiValues($value)
+    {
+    	$value = str_replace(";", "", $value);
+    	 
+    	return parent::getNpiValues($value);
     }
 }
