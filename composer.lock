@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d41573db152045b2a068ba1ab1860cac",
+    "hash": "9016b369f0ada6b476085c837faad73f",
     "content-hash": "f7020d8161a5ac73f7603c7e520bd00b",
     "packages": [
         {
             "name": "codeception/codeception",
-            "version": "2.1.7",
+            "version": "2.1.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/Codeception.git",
-                "reference": "65971b0dee4972710365b6102154cd412a9bf7b1"
+                "reference": "f3daa61f0f11c531b33eb3623ab0daa599d88a79"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/65971b0dee4972710365b6102154cd412a9bf7b1",
-                "reference": "65971b0dee4972710365b6102154cd412a9bf7b1",
+                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/f3daa61f0f11c531b33eb3623ab0daa599d88a79",
+                "reference": "f3daa61f0f11c531b33eb3623ab0daa599d88a79",
                 "shasum": ""
             },
             "require": {
@@ -86,7 +86,7 @@
                 "functional testing",
                 "unit testing"
             ],
-            "time": "2016-03-12 01:15:25"
+            "time": "2016-04-15 02:56:43"
         },
         {
             "name": "danielstjules/stringy",
@@ -3318,7 +3318,7 @@
             ],
             "description": "Helpers functions and classes",
             "support": {
-                "source": "https://github.com/streamlineverify/support/tree/v2.1.1",
+                "source": "https://github.com/streamlineverify/support/tree/v2.2",
                 "issues": "https://github.com/streamlineverify/support/issues"
             },
             "time": "2016-03-30 13:47:28"
@@ -4432,12 +4432,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/padraic/mockery.git",
-                "reference": "0b7e978fe5e1db01f799c73fbe32afeef001903b"
+                "reference": "60dcf1a0fe131a5c14350af07f7bc4ace02efbef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/padraic/mockery/zipball/0b7e978fe5e1db01f799c73fbe32afeef001903b",
-                "reference": "0b7e978fe5e1db01f799c73fbe32afeef001903b",
+                "url": "https://api.github.com/repos/padraic/mockery/zipball/60dcf1a0fe131a5c14350af07f7bc4ace02efbef",
+                "reference": "60dcf1a0fe131a5c14350af07f7bc4ace02efbef",
                 "shasum": ""
             },
             "require": {
@@ -4489,7 +4489,7 @@
                 "test double",
                 "testing"
             ],
-            "time": "2016-04-13 08:48:25"
+            "time": "2016-04-15 13:15:13"
         },
         {
             "name": "phing/phing",
