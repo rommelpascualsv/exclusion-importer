@@ -10,8 +10,8 @@ class MongoServiceProvider extends ServiceProvider
 	public function register()
 	{
 		$this->app->bind('MongoDB', function() {
-			$client = new MongoClient();
-			$db = getenv('DB_DATABASE');
+			$client = new MongoClient('mongodb://' . getenv('MONGODB_HOST') . ':' . getenv('MONGODB_PORT'));
+			$db = getenv('MONGODB_DATABASE');
 			return $client->selectDB($db);
 		});
 	}
