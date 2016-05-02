@@ -9,7 +9,7 @@ class Nevada extends ExclusionList
     public $uri = "http://dhcfp.nv.gov/uploadedFiles/dhcfpnvgov/content/Providers/PI/NevadaProviderExclusions.pdf";
     
     public $type = 'pdf';
-
+    
     public $fieldNames = [
     	'doing_business_as',
     	'legal_entity',
@@ -44,6 +44,8 @@ class Nevada extends ExclusionList
     	'sanction_period_end_date' => 9,
     	'reinstatement_date' => 10
     ];
+    
+    public $npiColumn = 4;
 
     /**
      * @var contains the headers of the pdf that should be excluded
@@ -109,9 +111,6 @@ class Nevada extends ExclusionList
         	// cleans the records 
         	$columns = array_map('trim', $columns);
         	
-			// applies specific overrides
-			$columns = $this->applyOverrides($columns);
-			
 			// populate the array data
         	$data[] = $columns;
         	$mergeData = [];
@@ -155,31 +154,5 @@ class Nevada extends ExclusionList
 			}
 		}
 		return $mergeData;
-    }
-
-    /**
-     * Applies the specific overrides to correct the data
-     * @param array $columns the column array
-     * @return array $columns the column array
-     */
-    private function applyOverrides($columns)
-    {
-    	$columns[4] = $this->handleNpiValues($columns[4]);
-    	
-    	return $columns;
-    }
-    
-    /**
-     * Make a JSON array string representation for a given array
-     * 
-     * @param aray $values the array values
-     * @return string the JSON array string representation
-     */
-    private function handleNpiValues($values)
-    {
-    	if (empty($values)) {
-    		return $values;
-    	}
-    	return json_encode(explode(" ", $values));
     }
 }
