@@ -116,7 +116,7 @@ abstract class ExclusionList
      */
     protected function getNpiValues($value)
     {
-    	return explode(" ", trim($value));
+    	return explode(" ", $value);
     }
     
     /**
@@ -127,7 +127,7 @@ abstract class ExclusionList
      */
     private function handleNpiValues($value)
     {
-    	$npi = $this->getNpiValues($value);
+    	$npi = $this->getNpiValues(trim($value));
     	
     	if (count($npi) == 1) {
     		return head($npi);

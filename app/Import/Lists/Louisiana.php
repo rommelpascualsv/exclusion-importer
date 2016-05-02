@@ -47,4 +47,22 @@ class Louisiana extends ExclusionList
 	    'birthdate' => 2,
         'effective_date' => 8,
     ];
+    
+    public $npiColumn = 5;
+    
+    /**
+     * Retrieves the array string for a given space-delimeted value
+     *
+     * @param string $value the npi space-delimeted value
+     * @return array the array string npi values
+     */
+    protected function getNpiValues($value)
+    {
+    	// set null if npi contains letters
+    	if (preg_match("/[A-Z]|[a-z]/", $value)) {
+    		$value = null;
+    	}
+    
+    	return parent::getNpiValues($value);
+    }
 }
