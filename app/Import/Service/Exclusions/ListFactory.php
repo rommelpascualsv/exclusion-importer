@@ -15,7 +15,7 @@ class ListFactory
         'ma1'               => 'Massachusetts',
         'md1'               => 'Maryland',
         'mi1'               => 'Michigan',
-    	'ne1'				=> 'Nebraska',	
+        'ne1'                => 'Nebraska',
         'njcdr'             => 'NewJersey',
         'nyomig'            => 'NewYork',
         'oh1'               => 'Ohio',
@@ -25,6 +25,7 @@ class ListFactory
         'wa1'               => 'Washington',
         'ms1'               => 'Mississippi',
         'mo1'               => 'Missouri',
+        'mn1'               => 'Minnesota',
         'nd1'               => 'NorthDakota',
         'nc1'               => 'NorthCarolina',
         'wy1'               => 'Wyoming',
@@ -55,7 +56,6 @@ class ListFactory
     public function make($prefix)
     {
         if (array_key_exists($prefix, $this->listMappings)) {
-
             $class = "App\\Import\\Lists\\{$this->listMappings[$prefix]}";
 
             return new $class;
