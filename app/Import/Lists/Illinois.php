@@ -35,4 +35,5 @@ class Illinois extends ExclusionList
         'NEW_ADDITION'
     ];
     
+    public $shouldHashListName = true;
 }
