@@ -116,7 +116,7 @@ abstract class ExclusionList
      */
     protected function getNpiValues($value)
     {
-    	return explode(" ", $value);
+    	return explode(" ", trim($value));
     }
     
     /**
