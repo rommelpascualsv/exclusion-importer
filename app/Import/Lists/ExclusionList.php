@@ -45,6 +45,7 @@ abstract class ExclusionList
      */
     public $hashColumns = [];
     public $dateColumns = [];
+    public $npiColumn = -1;
     public $fieldNames = [];
     public $urlSuffix = '';
     public $requestOptions = [];
@@ -68,38 +69,37 @@ abstract class ExclusionList
         $this->data = $retriever->retrieveData($this);
     }
 
-    public function convertDatesToMysql($data, $dateColumns)
+    public function convertDatesToMysql($row, $dateColumns)
     {
-        return array_map(function ($row) use ($dateColumns) {
+    	foreach ($dateColumns as $index) {
+    		if (strtotime($row[$index])) {
+    			$date = new \DateTime($row[$index]);
+    			$row[$index] = $date->format('Y-m-d');
+    		} else {
+    			$row[$index] = null;
+    		}
+    	}
 
-            foreach ($dateColumns as $index) {
-                if (strtotime($row[$index])) {
-                    $date = new \DateTime($row[$index]);
-                    $row[$index] = $date->format('Y-m-d');
-                } else {
-                    $row[$index] = null;
-                }
-            }
-
-            return $row;
-
-        }, $data);
-    }
-
-    public function convertToAssoc()
-    {
-        $this->data = array_map(function ($item) {
-            
-            return array_combine($this->fieldNames, $item);
-
-        }, $this->data);
+    	return $row;
     }
 
     public function preProcess()
     {
-        if (count($this->dateColumns) > 0) {
-            $this->data = $this->convertDatesToMysql($this->data, $this->dateColumns);
-        }
+    	$this->data = array_map(function ($row) {
+    	
+    		if (count($this->dateColumns) > 0) {
+    			$row = $this->convertDatesToMysql($row, $this->dateColumns);
+    		}
+    		
+    		if ($this->npiColumn != -1) {
+    			$row[$this->npiColumn] = $this->handleNpiValues($row[$this->npiColumn]);
+    		}
+    		
+    		$row = array_combine($this->fieldNames, $row);
+    		
+    		return $row;
+    	
+    	}, $this->data);
     }
 
     public function postProcess()
@@ -107,5 +107,21 @@ abstract class ExclusionList
     }
     public function postHook()
     {
+    }
+    
+    /**
+     * Make a JSON array string representation for a given array, otherwise return the single value
+     *
+     * @param array $values the array values
+     * @return string the JSON array string representation or the single value
+     */
+    private function handleNpiValues($values)
+    {
+    	$npi = explode(" ", $values);
+    	
+    	if (empty($values) || count($npi) <= 1) {
+    		return $values;
+    	}
+    	return json_encode($npi);
     }
 }
