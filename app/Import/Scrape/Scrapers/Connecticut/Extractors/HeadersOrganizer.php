@@ -4,7 +4,6 @@ namespace App\Import\Scrape\Scrapers\Connecticut\Extractors;
 
 
 use League\Csv\Writer;
-use App\Import\Scrape\Components\ScrapeFilesystemInterface;
 
 class HeadersOrganizer
 {

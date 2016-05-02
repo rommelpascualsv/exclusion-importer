@@ -6,6 +6,9 @@ class_name: UnitTester
 modules:
     enabled:
         - Asserts
-        - Db
         - Lumen
         - \Helper\Unit
+        - Db
+    config:
+        Lumen:
+            cleanup: true

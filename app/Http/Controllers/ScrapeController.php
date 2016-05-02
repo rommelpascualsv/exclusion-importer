@@ -2,21 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use Goutte\Client;
-use Laravel\Lumen\Routing\Controller as BaseController;
-use App\Import\Scrape\Scrapers\Connecticut\MainPage;
 use App\Import\Scrape\Scrapers\Connecticut\DownloadOptionsPage;
-use App\Import\Scrape\Scrapers\Connecticut\Data\CategoryCollection;
-use App\Import\Scrape\Scrapers\Connecticut\Data\OptionCollection;
-use App\Import\Scrape\Scrapers\Connecticut\CsvDownloader;
-use App\Import\Scrape\Components\ScrapeFilesystemInterface;
+use App\Import\Scrape\Scrapers\Connecticut\MainPage;
+use Goutte\Client;
+use Illuminate\Database\DatabaseManager;
+use Laravel\Lumen\Routing\Controller as BaseController;
+use Illuminate\Database\ConnectionInterface;
 
 class ScrapeController extends BaseController
 {
-	public function test(ScrapeFilesystemInterface $a)
+	public function test()
 	{
+		
 		/* dd($a); */
-		dd(app('scrape_test_filesystem'));
+		
 		/* $a->download(); */
 		
 		/* $mainPage = MainPage::scrape($client);
