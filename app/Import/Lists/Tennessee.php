@@ -62,7 +62,10 @@ class Tennessee extends ExclusionList
         $rows = explode($rowDelimiter, $columnSplit);
 
         foreach ($rows as $row) {
-
+			if ($row === reset($rows)) {
+				//skip first row - header
+				continue;
+			}
             $rowArray = explode($columnDelimiter, $row);
 
             if (count($rowArray) == 5 OR count($rowArray) == 6) {
