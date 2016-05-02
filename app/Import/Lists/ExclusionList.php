@@ -4,54 +4,54 @@ use App\Import\Service\Exclusions\RetrieverFactory;
 
 abstract class ExclusionList
 {
-	/**
-	 * Database table's prefix (e.g. {$dbPrefix}_records)
-	 *
-	 * @var	string
-	 */
-	public $dbPrefix;
+    /**
+     * Database table's prefix (e.g. {$dbPrefix}_records)
+     *
+     * @var string
+     */
+    public $dbPrefix;
 
-	/**
-	 * File's public uri
-	 *
-	 * @var	string
-	 */
-	public $uri;
+    /**
+     * File's public uri
+     *
+     * @var string
+     */
+    public $uri;
 
-	/**
-	 * @var	array
-	 */
-	public $retrieveOptions = [];
+    /**
+     * @var array
+     */
+    public $retrieveOptions = [];
 
-	/**
-	 * @var	array
-	 */
-	public $headerOptions = [];
+    /**
+     * @var array
+     */
+    public $headerOptions = [];
 
-	/**
-	 * @var	array
-	 */
-	public $data = [];
+    /**
+     * @var array
+     */
+    public $data = [];
 
-	/**
-	 * @var
-	 */
-	public $fileHeaders;
+    /**
+     * @var
+     */
+    public $fileHeaders;
 
-	/**
-	 * Columns to create a hash from
-	 *
-	 * @var	array
-	 */
-	public $hashColumns = [];
-	public $dateColumns = [];
-	public $fieldNames = [];
-	public $urlSuffix = '';
-	public $requestOptions = [];
+    /**
+     * Columns to create a hash from
+     *
+     * @var array
+     */
+    public $hashColumns = [];
+    public $dateColumns = [];
+    public $fieldNames = [];
+    public $urlSuffix = '';
+    public $requestOptions = [];
 
-	//if set to true in child class it protects getting matching hashes on different exclusion lists
-	public $shouldHashListName = false;
-	public $type;
+    //if set to true in child class it protects getting matching hashes on different exclusion lists
+    public $shouldHashListName = false;
+    public $type;
     public $nodes = [];
     public $nodeMap = [];
 
@@ -62,23 +62,21 @@ abstract class ExclusionList
         $this->retrieverFactory = new RetrieverFactory;
     }
 
-	public function retrieveData()
+    public function retrieveData()
     {
-		$retriever = $this->retrieverFactory->make($this->type);
+        $retriever = $this->retrieverFactory->make($this->type);
         $this->data = $retriever->retrieveData($this);
-
-	}
+    }
 
     public function convertDatesToMysql($data, $dateColumns)
     {
-        return array_map(function($row) use ($dateColumns) {
+        return array_map(function ($row) use ($dateColumns) {
 
             foreach ($dateColumns as $index) {
                 if (strtotime($row[$index])) {
                     $date = new \DateTime($row[$index]);
                     $row[$index] = $date->format('Y-m-d');
-                }
-                else {
+                } else {
                     $row[$index] = null;
                 }
             }
@@ -90,8 +88,8 @@ abstract class ExclusionList
 
     public function convertToAssoc()
     {
-        $this->data = array_map(function($item) {
-
+        $this->data = array_map(function ($item) {
+            
             return array_combine($this->fieldNames, $item);
 
         }, $this->data);
@@ -104,6 +102,10 @@ abstract class ExclusionList
         }
     }
 
-    public function postProcess() {}
-    public function postHook() {}
+    public function postProcess()
+    {
+    }
+    public function postHook()
+    {
+    }
 }
