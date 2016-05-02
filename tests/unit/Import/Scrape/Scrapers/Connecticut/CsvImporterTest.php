@@ -18,7 +18,7 @@ class CsvImporterTest extends \Codeception\TestCase\Test
     
     protected function _before()
 	{
-    	$this->db = app('db');
+    	$this->db = app('db')->connection();
     	$this->importer = new CsvImporter($this->db);
     }
 

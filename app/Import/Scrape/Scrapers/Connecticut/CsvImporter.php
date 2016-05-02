@@ -2,17 +2,16 @@
 
 namespace App\Import\Scrape\Scrapers\Connecticut;
 
-use Illuminate\Database\DatabaseManager;
-use Illuminate\Database\Connection;
+use Illuminate\Database\ConnectionInterface;
 
 class CsvImporter
 {
 	/**
-	 * @var DatabaseManager
+	 * @var ConnectionInterface
 	 */
 	protected $db;
 	
-	public function __construct(DatabaseManager $db)
+	public function __construct(ConnectionInterface $db)
 	{
 		$this->db = $db;
 	}
@@ -22,7 +21,7 @@ class CsvImporter
 	}
 	
 	public function dbInsertFacility($name, $timestamp)
-	{
+	{		
 		$this->db->table('ct_roster_facilities')->insert([
 				'name' => $name,
 				'created_at' => $timestamp,
