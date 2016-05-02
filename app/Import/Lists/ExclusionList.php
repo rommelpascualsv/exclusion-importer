@@ -96,7 +96,6 @@ abstract class ExclusionList
     		}
     		
     		$row = array_combine($this->fieldNames, $row);
-    		
     		return $row;
     	
     	}, $this->data);
@@ -110,17 +109,28 @@ abstract class ExclusionList
     }
     
     /**
+     * Retrieves the array string for a given space-delimeted value
+     * 
+     * @param string $value the npi space-delimeted value
+     * @return array the array string npi values
+     */
+    protected function getNpiValues($value)
+    {
+    	return explode(" ", $value);
+    }
+    
+    /**
      * Make a JSON array string representation for a given array, otherwise return the single value
      *
-     * @param array $values the array values
+     * @param string $value the npi space-delimeted value
      * @return string the JSON array string representation or the single value
      */
-    private function handleNpiValues($values)
+    private function handleNpiValues($value)
     {
-    	$npi = explode(" ", $values);
+    	$npi = $this->getNpiValues($value);
     	
-    	if (empty($values) || count($npi) <= 1) {
-    		return $values;
+    	if (count($npi) == 1) {
+    		return head($npi);
     	}
     	return json_encode($npi);
     }
