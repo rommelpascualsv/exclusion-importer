@@ -63,7 +63,7 @@ class Tennessee extends ExclusionList
         $data = [];
         
         foreach ($rows as $row) {
-            
+
             $row = trim($row);
             
             if (! $row || $this->isHeader($row)) {
