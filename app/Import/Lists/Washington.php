@@ -55,6 +55,8 @@ class Washington extends ExclusionList
     public $dateColumns = [
        'termination_date' => 6
     ];
+    
+    public $npiColumn = 5;
 
     private $business;
 
@@ -204,28 +206,25 @@ class Washington extends ExclusionList
                 }
             }
 
-            $data[] = $this->clearInvalidNpiValue($this->override($row));
+            $data[] = $this->override($row);
         }
 
         $this->data = $data;
     }
     
     /**
-     * Clears the invalid npi value from the record.
-     * @param array $columns the column array
-     * @return array $columns the column array
+     * Retrieves the array string for a given space-delimeted value
+     *
+     * @param string $value the npi space-delimeted value
+     * @return array the array string npi values
      */
-    private function clearInvalidNpiValue(array $columns)
+    protected function getNpiValues($value)
     {
-        // split multiple npi numbers
-        $npiArr = explode(' ', preg_replace('!\s+!', ' ', $columns[5]));
-        
-        // get the last npi number
-        $npi = array_pop($npiArr);
-        
-        // clear invalid npi value
-        $columns[5] = !is_numeric($npi) ? null : $npi;
-        
-        return $columns;
+    	// set null if npi contains letters
+    	if (preg_match("/[A-Z]|[a-z]/", $value)) {
+    		$value = null;
+    	}
+    	
+    	return parent::getNpiValues($value);
     }
 }
