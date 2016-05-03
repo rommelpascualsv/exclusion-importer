@@ -1083,6 +1083,9 @@
             <column name="birthdate" type="VARCHAR(255)"/>
             <column name="affiliated_entity" type="VARCHAR(255)"/>
             <column name="title_or_type" type="VARCHAR(255)"/>
+            <column name="provider_number" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="npi" type="VARCHAR(255)"/>
             <column name="exclusion_reason" type="VARCHAR(255)"/>
             <column name="period_of_exclusion" type="VARCHAR(255)"/>
@@ -1103,6 +1106,9 @@
             <column name="birthdate" type="VARCHAR(255)"/>
             <column name="affiliated_entity" type="VARCHAR(255)"/>
             <column name="title_or_type" type="VARCHAR(255)"/>
+            <column name="provider_number" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="npi" type="VARCHAR(255)"/>
             <column name="exclusion_reason" type="VARCHAR(255)"/>
             <column name="period_of_exclusion" type="VARCHAR(255)"/>

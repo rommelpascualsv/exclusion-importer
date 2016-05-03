@@ -45,8 +45,6 @@ class Florida extends ExclusionList
 
     public $shouldHashListName = true;
 
-    public $npiColumn = 3;
-    
     public function postHook()
     {
         app('db')->table('fl2_records')
