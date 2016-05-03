@@ -101,7 +101,7 @@ class Kentucky extends ExclusionList
     }
     
     /**
-     * Set the npi numbers by extracting from provider number column
+     * Set the npi numbers
      *
      * @param array $row the array record
      * @return array $row the array record
