@@ -45,7 +45,7 @@ class Nevada extends ExclusionList
     	'reinstatement_date' => 10
     ];
     
-    public $npiColumn = 4;
+    public $npiColumnName = "npi";
 
     /**
      * @var contains the headers of the pdf that should be excluded
@@ -98,6 +98,7 @@ class Nevada extends ExclusionList
         	// convert string row to comma-delimited array
         	$columns = str_getcsv($value);
         	
+        	// checks if termination_date if empty then this record belongs to another record
         	if (empty($columns[6])) {
         		$mergeData = $this->buildMergeData($mergeData, $columns);
         		continue;
@@ -108,11 +109,12 @@ class Nevada extends ExclusionList
         		$columns = $this->buildColumnsData($mergeData, $columns);
         	}
         	
-        	// cleans the records 
-        	$columns = array_map('trim', $columns);
+        	$columns = $this->setNpi($columns);
         	
 			// populate the array data
         	$data[] = $columns;
+        	
+        	// resets $mergeData
         	$mergeData = [];
         }
 
@@ -123,12 +125,12 @@ class Nevada extends ExclusionList
      * Builds the column records by merging the merge data
      *
      * @param mergeData the merge data
-     * @param columns the current column records
+     * @param columns the current column record
+     * @return columns the current column record
      *
      */
     private function buildColumnsData($mergeData, $columns) 
     {
-    	
     	foreach ($mergeData as $k => $v) {
     		$columns[$k] = $v . " " . $columns[$k];
     		$columns[$k] = preg_replace('!\s+!', ' ', $columns[$k]);
@@ -140,12 +142,11 @@ class Nevada extends ExclusionList
 	 * Builds the merge data needed for merging related rows
 	 * 
 	 * @param mergeData the merge data
-	 * @param columns the current column records
-	 * 
+	 * @param columns the current column record
+	 * @return columns the current column record
 	 */
 	private function buildMergeData($mergeData, $columns) 
 	{
-		
 		if (empty($mergeData) || empty(trim(implode('', $mergeData)))) {
 			$mergeData = $columns;
 		} else {
@@ -154,5 +155,18 @@ class Nevada extends ExclusionList
 			}
 		}
 		return $mergeData;
+    }
+    
+    /**
+     * Set an array string of npi numbers.
+     *
+	 * @param columns the current column record
+	 * @return columns the current column record
+     */
+    private function setNpi($columns)
+    {
+    	$columns[4] = explode(" ", trim($columns[4]));
+    	 
+    	return $columns;
     }
 }
