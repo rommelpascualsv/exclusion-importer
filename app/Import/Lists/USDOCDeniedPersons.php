@@ -41,23 +41,13 @@ class USDOCDeniedPersons extends ExclusionList
     ];
 
     /**
-     * @inherit preProcess
+     * Columns not included in schema
+     *
+     * @var array
      */
-    public function preProcess()
-    {
-        $this->parse();
-        parent::preProcess();
-    }
-
-    private function parse()
-    {
-        $data = [];
-        
-        foreach ($this->data as $key => $value) {
-            unset($value[8], $value[10], $value[11]);
-            $data[] = array_values($value);
-        }
-        
-        $this->data = $data;
-    }
+    public $ignoreColumns = [
+        'standard_order' => 8,
+        'action' => 10,
+        'FR_Citation' => 11,
+    ];
 }

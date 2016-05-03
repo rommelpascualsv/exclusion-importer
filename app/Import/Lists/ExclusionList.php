@@ -34,6 +34,11 @@ abstract class ExclusionList
     public $data = [];
 
     /**
+     * @var array
+     */
+    public $ignoreColumns = [];
+
+    /**
      * @var
      */
     public $fileHeaders;
@@ -82,6 +87,18 @@ abstract class ExclusionList
             }
 
             return $row;
+        }, $data);
+    }
+
+    public function removeColumns($data, $ignoreColumns)
+    {
+        return array_map(function ($row) use ($ignoreColumns) {
+
+            foreach ($ignoreColumns as $index) {
+                unset($row[$index]);
+            }
+
+            return array_values($row);
 
         }, $data);
     }
@@ -100,11 +117,16 @@ abstract class ExclusionList
         if (count($this->dateColumns) > 0) {
             $this->data = $this->convertDatesToMysql($this->data, $this->dateColumns);
         }
+
+        if (count($this->ignoreColumns) > 0) {
+            $this->data = $this->removeColumns($this->data, $this->dateColumns);
+        }
     }
 
     public function postProcess()
     {
     }
+    
     public function postHook()
     {
     }

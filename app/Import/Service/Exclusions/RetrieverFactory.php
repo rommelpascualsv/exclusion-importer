@@ -38,7 +38,7 @@ class RetrieverFactory
 
                 break;
 
-            case 'csv';
+            case 'csv':
                 return new CSVRetriever(
                     new DataCsvConverter(new CsvFileReader()),
                     new Client()
