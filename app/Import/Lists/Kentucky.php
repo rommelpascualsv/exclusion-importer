@@ -42,8 +42,10 @@ class Kentucky extends ExclusionList
         'effective_date' => 4
     ];
     
-    public $npiColumn = 2;
-
+    public $npiColumnName = "npi";
+    
+    public $npiRegex = "/1\d{9}/";
+    
     public function __construct()
     {
         parent::__construct();
@@ -60,15 +62,57 @@ class Kentucky extends ExclusionList
     }
     
     /**
-     * Retrieves the array string for a given space-delimeted value
-     *
-     * @param string $value the npi space-delimeted value
-     * @return array the array string npi values
+     * @inherit preProcess
      */
-    protected function getNpiValues($value)
+    public function preProcess()
     {
-    	$value = str_replace(";", "", $value);
+    	$this->parse();
+    	parent::preProcess();
+    }
+    
+    /**
+     * Parse the input data
+     */
+    private function parse()
+    {
+    	$data = [];
     	 
-    	return parent::getNpiValues($value);
+    	// iterate each row
+    	foreach ($this->data as $row) {
+    		$data[] = $this->handleRow($row);
+    	}
+    	 
+    	// set back to global data
+    	$this->data = $data;
+    }
+    
+    /**
+     * Handles the data manipulation of a record array.
+     *
+     * @param array $row the array record
+     * @return array $row the array record
+     */
+    private function handleRow($row)
+    {
+    	// set npi number array
+    	$row = $this->setNpi($row);
+    	 
+    	return $row;
+    }
+    
+    /**
+     * Set the npi numbers by extracting from provider number column
+     *
+     * @param array $row the array record
+     * @return array $row the array record
+     */
+    private function setNpi($row)
+    {
+    	// extract npi number/s
+    	preg_match_all($this->npiRegex, $row[2], $npi);
+    
+    	$row[2] = $npi[0];
+    	 
+    	return $row;
     }
 }
