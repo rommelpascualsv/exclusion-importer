@@ -5,22 +5,33 @@ namespace App\Import\Scrape\Scrapers\Connecticut;
 use Illuminate\Database\ConnectionInterface;
 use League\Csv\Reader;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MapperFactory;
+use Carbon\Carbon;
 
 class CsvImporter
 {
+	/**
+	 * @var array
+	 */
+	protected $importData;
+	
 	/**
 	 * @var ConnectionInterface
 	 */
 	protected $db;
 	
-	public function __construct(ConnectionInterface $db)
+	public function __construct(array $importData, ConnectionInterface $db)
 	{
+		$this->importData = $importData;
 		$this->db = $db;
 	}
 	
 	public function import()
 	{
+		$timestamp = Carbon::now()->format('Y-m-d H:i:s');
 		
+		foreach ($this->importData as $data) {
+			$this->importCsv($data, $timestamp);
+		}
 	}
 	
 	/**
@@ -32,6 +43,7 @@ class CsvImporter
 	{
 		$reader = Reader::createFromPath($data['file_path']);
 		$results = $reader->fetchAll();
+		
 		$resultsCount = count($results);
 		
 		if ($resultsCount < 2) {
@@ -75,9 +87,9 @@ class CsvImporter
 	public function dbFindFacilityIdByName($name)
 	{
 		$facility = $this->db->table('ct_roster_facilities')
-		->select('id')
-		->where('name', '=', $name)
-		->first();
+			->select('id')
+			->where('name', '=', $name)
+			->first();
 	
 		$facilityId = (is_object($facility)) ? $facility->id : null;
 	

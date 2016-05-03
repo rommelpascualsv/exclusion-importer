@@ -2,8 +2,33 @@
 
 namespace App\Import\Scrape\Scrapers\Connecticut\Data\Mappers;
 
-abstract class BaseMapper
+abstract class BaseMapper implements MapperInterface
 {
+	/**
+	 * @var array
+	 */
+	protected $csvHeaders = [];
+	
+	/**
+	 * @var int
+	 */
+	protected $csvHeadersCount;
+	
+	/**
+	 * Get db data
+	 * @param array $data
+	 * @return array
+	 */
+	abstract public function getDbData(array $data);
+	
+	/**
+	 * Initialize
+	 */
+	public function __construct()
+	{
+		$this->csvHeadersCount = count($this->csvHeaders);
+	}
+	
 	/**
 	 * Get csv data
 	 * @param array $data
@@ -11,10 +36,9 @@ abstract class BaseMapper
 	 */
 	public function getCsvData(array $data)
 	{
-		$dataCount = count($data);
 		$csvData = [];
 	
-		for ($i = 0; $i < $dataCount; $i++) {
+		for ($i = 0; $i < $this->csvHeadersCount; $i++) {
 			$key = $this->csvHeaders[$i];
 			$csvData[$key] = $data[$i];
 		}
