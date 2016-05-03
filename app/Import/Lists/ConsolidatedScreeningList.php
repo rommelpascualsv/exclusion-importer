@@ -98,4 +98,6 @@ class ConsolidatedScreeningList extends ExclusionList
         'start_date' => 8,
     	'end_date' => 9
     ];
+    
+    public $shouldHashListName = true;
 }
