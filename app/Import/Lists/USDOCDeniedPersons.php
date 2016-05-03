@@ -4,7 +4,7 @@ class USDOCDeniedPersons extends ExclusionList
 {
     public $dbPrefix = 'usdocdp';
 
-    public $uri = 'https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/usdocdp/DPL_2015-11-09.csv';
+    public $uri = 'http://www.bis.doc.gov/dpl/dpl.txt';
 
     public $type = 'tsv';
 
