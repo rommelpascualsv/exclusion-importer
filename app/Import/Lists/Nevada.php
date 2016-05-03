@@ -46,6 +46,8 @@ class Nevada extends ExclusionList
     ];
     
     public $npiColumnName = "npi";
+    
+    public $shouldHashListName = true;
 
     /**
      * @var contains the headers of the pdf that should be excluded
