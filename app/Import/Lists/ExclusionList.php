@@ -45,7 +45,7 @@ abstract class ExclusionList
      */
     public $hashColumns = [];
     public $dateColumns = [];
-    public $npiColumn = -1;
+    public $npiColumnName;
     public $fieldNames = [];
     public $urlSuffix = '';
     public $requestOptions = [];
@@ -91,8 +91,9 @@ abstract class ExclusionList
     			$row = $this->convertDatesToMysql($row, $this->dateColumns);
     		}
     		
-    		if ($this->npiColumn != -1) {
-    			$row[$this->npiColumn] = $this->handleNpiValues($row[$this->npiColumn]);
+    		if ($this->npiColumnName) {
+    			$npiColumnIndex = $this->getNpiColumnIndex($this->npiColumnName);
+    			$row[$npiColumnIndex] = $this->handleNpiValues($row[$npiColumnIndex]);
     		}
     		
     		$row = array_combine($this->fieldNames, $row);
@@ -109,29 +110,39 @@ abstract class ExclusionList
     }
     
     /**
-     * Retrieves the array string for a given space-delimeted value
-     * 
-     * @param string $value the npi space-delimeted value
-     * @return array the array string npi values
-     */
-    protected function getNpiValues($value)
-    {
-    	return explode(" ", $value);
-    }
-    
-    /**
-     * Make a JSON array string representation for a given array, otherwise return the single value
+     * Make a JSON array string representation for a given array, otherwise return a string value.
      *
-     * @param string $value the npi space-delimeted value
-     * @return string the JSON array string representation or the single value
+     * @param array $npi the npi array
+     * @return string the JSON array string representation or the string value
      */
-    private function handleNpiValues($value)
+    private function handleNpiValues(array $npi)
     {
-    	$npi = $this->getNpiValues(trim($value));
-    	
-    	if (count($npi) == 1) {
+    	if (empty($npi)) {
+    		return "";
+    	} else if (count($npi) == 1) {
     		return head($npi);
     	}
     	return json_encode($npi);
+    }
+    
+    /**
+     * Retrieves the npi column index for a given npi column name 
+     * 
+     * @param string $npiColumnName
+     * @return int the npi column index
+     */
+    private function getNpiColumnIndex($npiColumnName)
+    {
+    	$index = 0;
+    	foreach ($this->fieldNames as $field) {
+    		
+    		if ($field === $npiColumnName) {
+    			break;
+    		}
+    		
+    		$index++;
+    	}
+    	
+    	return $index;
     }
 }

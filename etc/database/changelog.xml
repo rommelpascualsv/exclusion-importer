@@ -223,6 +223,9 @@
             <column name="license_numbers" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="npi" type="VARCHAR(45)">
+                <constraints nullable="false"/>
+            </column>
             <column name="provider_numbers" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
@@ -262,6 +265,9 @@
                 <constraints nullable="false"/>
             </column>
             <column name="license_numbers" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="npi" type="VARCHAR(45)">
                 <constraints nullable="false"/>
             </column>
             <column name="provider_numbers" type="VARCHAR(255)">
@@ -1116,7 +1122,9 @@
             <column name="provider_type" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="npi" type="INT UNSIGNED"/>
+            <column name="npi" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="reason" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
@@ -1134,7 +1142,9 @@
             <column name="provider_type" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="npi" type="INT UNSIGNED"/>
+            <column name="npi" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="reason" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
