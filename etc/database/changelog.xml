@@ -3158,6 +3158,9 @@
             <column name="middle_etc" type="VARCHAR(45)"/>
             <column name="entity" type="VARCHAR(100)"/>
             <column name="provider_license" type="VARCHAR(45)"/>
+            <column name="provider_number" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="npi" type="VARCHAR(100)"/>
             <column name="termination_date" type="date"/>
             <column name="termination_reason" type="VARCHAR(500)"/>
@@ -3178,6 +3181,9 @@
             <column name="middle_etc" type="VARCHAR(45)"/>
             <column name="entity" type="VARCHAR(100)"/>
             <column name="provider_license" type="VARCHAR(45)"/>
+            <column name="provider_number" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="npi" type="VARCHAR(100)"/>
             <column name="termination_date" type="date"/>
             <column name="termination_reason" type="VARCHAR(500)"/>

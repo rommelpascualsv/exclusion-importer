@@ -10,7 +10,6 @@ class Washington extends ExclusionList
 
     public $type = 'pdf';
 
-
     /**
      * @var field names
      */
@@ -22,7 +21,8 @@ class Washington extends ExclusionList
         'provider_license',
         'npi',
         'termination_date',
-        'termination_reason'
+        'termination_reason',
+    	'provider_number'	
     ];
 
     /**
@@ -41,23 +41,28 @@ class Washington extends ExclusionList
         'termination_date'
     ];
 
+    public $dateColumns = [
+       'termination_date' => 6
+    ];
+
+    public $npiColumnName = 'npi';
+    
+    public $npiRegex = "/1\d{9}/";
+    
+    public $commaRegex = "/^(,+\s)?,?|(,+\s)?,?$/";
+    
+    public $spacesRegex = "!\s+!";
     /**
      * @var institution special cases
      */
     private $institutions = [
-        'Wheelchairs Plus',
-        'AA Adult Family Home',
-        'Our House Adult Family Home/',
-        'Wheelchairs Plus',
-        '/Fairwood Care'
-    ];
-
-    public $dateColumns = [
-       'termination_date' => 6
+    		'Wheelchairs Plus',
+    		'AA Adult Family Home',
+    		'Our House Adult Family Home/',
+    		'Wheelchairs Plus',
+    		'/Fairwood Care'
     ];
     
-    public $npiColumn = 5;
-
     private $business;
 
     /**
@@ -206,25 +211,69 @@ class Washington extends ExclusionList
                 }
             }
 
-            $data[] = $this->override($row);
+            // handles the population of name and business values
+            $row = $this->override($row);
+            
+            // handles npi number values 
+            $row = $this->handleRow($row);
+            
+            $data[] = $row;
         }
 
         $this->data = $data;
     }
     
     /**
-     * Retrieves the array string for a given space-delimeted value
-     *
-     * @param string $value the npi space-delimeted value
-     * @return array the array string npi values
+     * Handles the data manipulation of a record array.
+     * 
+     * @param array $row the array record
+     * @return array $row the array record
      */
-    protected function getNpiValues($value)
+    private function handleRow($row)
     {
-    	// set null if npi contains letters
-    	if (preg_match("/[A-Z]|[a-z]/", $value)) {
-    		$value = null;
-    	}
+
+    	// set provider number
+    	$row = $this->setProviderNo($row);
+    		
+    	// set npi number array
+    	$row = $this->setNpi($row);
     	
-    	return parent::getNpiValues($value);
+    	return $row;
+    }
+    
+    /**
+     * Set the provider number by clearing the unnecessary characters
+     *   
+     * @param array $row the array record
+     * @return array $row the array record
+     */
+    private function setProviderNo($row)
+    {	
+    	// remove valid npi numbers
+    	$providerNo = preg_replace($this->npiRegex, "", trim($row[5]));
+    	
+    	// remove commas
+    	$providerNo = preg_replace($this->commaRegex, "", trim($providerNo));
+    	
+    	// remove duplicate spaces in between numbers
+    	$row[] = preg_replace($this->spacesRegex, " ", trim($providerNo));
+    	
+    	return $row;
+    }
+    
+    /**
+     * Set the npi numbers by extracting the valid npi values from the npi column
+     *   
+     * @param array $row the array record
+     * @return array $row the array record
+     */
+    private function setNpi($row)
+    {
+    	// extract npi number/s
+    	preg_match_all($this->npiRegex, $row[5], $npi);
+    	 
+    	$row[5] = $npi[0];
+    	
+    	return $row;
     }
 }
