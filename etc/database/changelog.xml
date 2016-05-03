@@ -3243,8 +3243,7 @@
             <column name="exclusion_date" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="additional_info_1" type="VARCHAR(255)"/>
-            <column name="additional_info_2" type="VARCHAR(255)"/>
+            <column name="npi" type="VARCHAR(45)"/>
             <column name="hash" type="LONGBLOB">
                 <constraints nullable="false"/>
             </column>
@@ -3279,8 +3278,7 @@
             <column name="exclusion_date" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="additional_info_1" type="VARCHAR(255)"/>
-            <column name="additional_info_2" type="VARCHAR(255)"/>
+            <column name="npi" type="VARCHAR(45)"/>
             <column name="hash" type="LONGBLOB">
                 <constraints nullable="false"/>
             </column>
