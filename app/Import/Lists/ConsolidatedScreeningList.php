@@ -10,7 +10,7 @@ class ConsolidatedScreeningList extends ExclusionList
     /**
      * @var string
      */
-    public $uri = 'https://api.trade.gov/consolidated_screening_list/search.csv?api_key=OHZYuksFHSFao8jDXTkfiypO';
+    public $uri = 'https://api.trade.gov/consolidated_screening_list/search.csv';
 
     /**
      * @var string
@@ -95,6 +95,7 @@ class ConsolidatedScreeningList extends ExclusionList
      * @var array
      */
     public $dateColumns = [
-        //'termination_date' => 0
+        'start_date' => 8,
+    	'end_date' => 9
     ];
 }
