@@ -38,6 +38,8 @@ class Tennessee extends ExclusionList
 
     public $shouldHashListName = true;
     
+    public $npiColumnName = 'npi';
+    
     protected $headerLine = 'Last Name,First Name,NPI,Begin Date,Reason,End Date';
     
     /**
@@ -100,6 +102,8 @@ class Tennessee extends ExclusionList
                 }
                 
             }
+            
+            $npi = [$npi]; //Downstream processing expects NPI to be an array, so we wrap it in an array
             
             $data[] = [
                 $lastName,
