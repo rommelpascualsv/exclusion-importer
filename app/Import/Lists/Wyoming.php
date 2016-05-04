@@ -45,7 +45,7 @@ class Wyoming extends ExclusionList
      * 3. '<NPI number> NPI
      * @var string
      */
-    private $npiRegEx = '/NPI\s?(1\d{9});?|(1\d{9})\s?NPI/';
+    private $npiRegEx = '/NPI\s?(1\d{9})\b\s?;?|\b(1\d{9})\s?NPI/';
     
     private $npiColumnIndex;
     private $providerNumberColumnIndex;
