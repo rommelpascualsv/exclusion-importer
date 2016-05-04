@@ -1745,6 +1745,9 @@
             <column name="firm_plus4" type="VARCHAR(4)">
                 <constraints nullable="false"/>
             </column>
+            <column name="provider_number" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="npi" type="VARCHAR(45)"/>
             <column name="name" type="VARCHAR(100)">
                 <constraints nullable="false"/>
@@ -1817,6 +1820,9 @@
                 <constraints nullable="false"/>
             </column>
             <column name="firm_plus4" type="VARCHAR(4)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="provider_number" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="npi" type="VARCHAR(45)"/>
