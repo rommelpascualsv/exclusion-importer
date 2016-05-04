@@ -94,7 +94,17 @@ class Wyoming extends ExclusionList
         
         $this->data = $data;
         
-        $this->enrichData();
+        //Some post-processing that can only be done once we have the fully
+        //parsed data
+        $this->data = array_map(function ($columns){
+            
+            $this->enrichData($columns);
+            
+            $columns = $this->trimData($columns);
+            
+            return $columns;
+            
+        }, $this->data);
     }
 
     private function isHeader($row)
@@ -133,24 +143,21 @@ class Wyoming extends ExclusionList
     }
     
     /**
-     * Enriches this class' data array with derived column data, such as NPI numbers.
+     * Enriches the passed row column data with derived data, such as NPI numbers.
+     * @param array $columns the row column data
      */
-    private function enrichData()
+    private function enrichData(&$columns)
     {
-        $this->data = array_map(function ($columns){
+
+        $providerNumberColumnIndex = $this->providerNumberColumnIndex;
         
-            $providerNumberColumnIndex = $this->providerNumberColumnIndex;
-            
-            $npi = $this->parseNPI($columns[$providerNumberColumnIndex]);
-            
-            $columns[$this->npiColumnIndex] = $npi;
-            
-            if (! empty($npi)) {
-                $columns[$providerNumberColumnIndex] = $this->trimNPI($columns[$providerNumberColumnIndex]);            }
-            
-            return $columns;
+        $npi = $this->parseNPI($columns[$providerNumberColumnIndex]);
         
-        }, $this->data);        
+        $columns[$this->npiColumnIndex] = $npi;
+        
+        if (! empty($npi)) {
+            $columns[$providerNumberColumnIndex] = $this->trimNPI($columns[$providerNumberColumnIndex]);        }
+                  
     }
     
     /**
@@ -198,5 +205,16 @@ class Wyoming extends ExclusionList
     private function trimNPI($providerNumber)
     {
         return preg_replace($this->npiRegEx, '', $providerNumber);
-    }    
+    }
+    
+    /**
+     * Trims all whitespaces from each of the elements in columns and returns an
+     * array containing the trimmed column data
+     * @param array $columns the row column data
+     * @return array array containing the trimmed column data
+     */
+    private function trimData($columns)
+    {
+        return array_map('trim',$columns);
+    }
 }
