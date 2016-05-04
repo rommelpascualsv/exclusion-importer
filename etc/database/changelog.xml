@@ -1003,6 +1003,7 @@
             <column name="d_b_a" type="VARCHAR(100)"/>
             <column name="provider_type" type="VARCHAR(45)"/>
             <column name="kmap_provider_number" type="VARCHAR(70)"/>
+            <column name="kmap_provider_number_2" type="VARCHAR(70)"/>
             <column name="npi" type="VARCHAR(45)"/>
             <column name="comments" type="VARCHAR(255)"/>
             <column name="hash" type="LONGBLOB"/>
@@ -1019,6 +1020,7 @@
             <column name="d_b_a" type="VARCHAR(100)"/>
             <column name="provider_type" type="VARCHAR(45)"/>
             <column name="kmap_provider_number" type="VARCHAR(70)"/>
+            <column name="kmap_provider_number_2" type="VARCHAR(70)"/>
             <column name="npi" type="VARCHAR(45)"/>
             <column name="comments" type="VARCHAR(255)"/>
             <column name="hash" type="LONGBLOB"/>
