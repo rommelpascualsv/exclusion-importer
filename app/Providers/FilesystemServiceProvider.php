@@ -3,11 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use App\Import\Scrape\Components\FilesystemInterface;
 use League\Flysystem\Adapter\Local;
 use Laravel\Lumen\Application;
-use App\Import\Scrape\Components\Filesystem;
-use App\Import\Scrape\Components\TestFilesystem;
 use League\Flysystem\AdapterInterface;
 use App\Import\Scrape\Components\ScrapeFilesystemInterface;
 use App\Import\Scrape\Components\ScrapeFilesystem;
@@ -36,8 +33,6 @@ class FilesystemServiceProvider extends ServiceProvider
     public function provides()
     {
     	return [
-    			FilesystemInterface::class,
-    			TestFilesystem::class,
     			ScrapeFilesystemInterface::class,
     			'scrape_test_filesystem'
     	];
@@ -47,25 +42,7 @@ class FilesystemServiceProvider extends ServiceProvider
      * Register scrape filesystem
      */
     protected function registerScrapeFilesystem()
-    {
-    	$this->app->singleton(FilesystemInterface::class, function(Application $app) {
-    		$path = $app->basePath(Filesystem::getFolderPath());
-    	
-    		return new Filesystem(
-    				$this->getLocalAdapter($path),
-    				$this->getConfig()
-    		);
-    	});
-    	
-    	$this->app->singleton(TestFilesystem::class, function(Application $app) {
-    		$path = $app->basePath(TestFilesystem::getFolderPath());
-    		
-    		return new TestFilesystem(
-    				$this->getLocalAdapter($path),
-    				$this->getConfig()
-    		);
-    	});
-    	
+    {	
     	$this->app->singleton(ScrapeFilesystemInterface::class, function() {    		
     		return $this->getScrapeFilesystem(ScrapeFilesystemInterface::PATH);
     	});

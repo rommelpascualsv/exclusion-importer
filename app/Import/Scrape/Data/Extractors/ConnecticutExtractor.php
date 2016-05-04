@@ -4,7 +4,7 @@ namespace App\Import\Scrape\Data\Extractors;
 
 use App\Import\Scrape\Crawlers\ConnecticutCrawler;
 use Symfony\Component\DomCrawler\Crawler;
-use App\Import\Scrape\Components\FilesystemInterface;
+use App\Import\Scrape\Components\ScrapeFilesystemInterface;
 
 class ConnecticutExtractor
 {
@@ -14,7 +14,7 @@ class ConnecticutExtractor
 	protected $crawler;
 	
 	/**
-	 * @var FilesystemInterface
+	 * @var ScrapeFilesystemInterface
 	 */
 	protected $filesystem;
 	
@@ -22,7 +22,7 @@ class ConnecticutExtractor
 	 * Instantiate
 	 * @param ConnecticutCrawler $crawler
 	 */
-	public function __construct(ConnecticutCrawler $crawler, FilesystemInterface $filesystem)
+	public function __construct(ConnecticutCrawler $crawler, ScrapeFilesystemInterface $filesystem)
 	{
 		$this->crawler = $crawler;
 		$this->filesystem = $filesystem;

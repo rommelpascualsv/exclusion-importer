@@ -4,8 +4,6 @@ namespace Import\Scrape\Data\Extractors;
 
 use App\Import\Scrape\Crawlers\ConnecticutCrawler;
 use App\Import\Scrape\Data\Extractors\ConnecticutExtractor;
-use App\Import\Scrape\Components\FilesystemInterface;
-use App\Import\Scrape\Components\TestFilesystem;
 
 class ConnecticutExtractorTest extends \Codeception\TestCase\Test
 {
@@ -21,7 +19,7 @@ class ConnecticutExtractorTest extends \Codeception\TestCase\Test
     
     protected function _before()
     {
-    	$this->filesystem = $this->getModule('Lumen')->app->make(TestFilesystem::class);
+    	$this->filesystem = app('scrape_test_filesystem');
     	$this->extractor = new ConnecticutExtractor(
     			ConnecticutCrawler::create('', []),
     			$this->filesystem

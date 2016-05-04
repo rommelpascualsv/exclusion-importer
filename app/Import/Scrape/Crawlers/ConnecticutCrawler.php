@@ -43,7 +43,7 @@ class ConnecticutCrawler
 	 */
 	protected static $selectors = [
 			'main' => [
-				'category_header' => '.collapsePanelHeader'
+				'category_header' => '.panel-heading'
 			],
 			'download_options' => [
 					'download_button' => 'input[type="submit"][value="Download"]'
