@@ -12,7 +12,7 @@ class WestVirginia extends ExclusionList
      */
     public $uri = 'https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/west-virginia/wv2.xlsx';
 
-    public $pdfToText = 'java -jar ../etc/tabula.jar -p all -u -g -r'; //'pdftotext -layout -nopgbrk';
+    public $pdfToText = 'java -Dfile.encoding=utf-8 -jar ../etc/tabula.jar -p all -u -g -r'; //'pdftotext -layout -nopgbrk';
 
     public $type = 'pdf';
 
