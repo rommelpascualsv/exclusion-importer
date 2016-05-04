@@ -1957,6 +1957,9 @@
             <column name="provider_number" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="provider_number_2" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="npi" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
