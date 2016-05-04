@@ -1277,6 +1277,9 @@
             <column name="provider_category" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="provider_number" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="npi_number" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
@@ -1285,7 +1288,9 @@
             </column>
             <column name="license_number" type="VARCHAR(255)"/>
             <column name="sanction_date_1" type="VARCHAR(255)"/>
+            <column name="sanction_source_1" type="VARCHAR(255)"/>
             <column name="sanction_date_2" type="VARCHAR(255)"/>
+            <column name="sanction_source_2" type="VARCHAR(255)"/>
             <column name="reason" type="VARCHAR(255)"/>
             <column name="hash" type="LONGBLOB">
                 <constraints nullable="false"/>
@@ -1313,6 +1318,9 @@
             <column name="provider_category" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="provider_number" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="npi_number" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
@@ -1323,7 +1331,9 @@
                 <constraints nullable="false"/>
             </column>
             <column name="sanction_date_1" type="VARCHAR(255)"/>
+            <column name="sanction_source_1" type="VARCHAR(255)"/>
             <column name="sanction_date_2" type="VARCHAR(255)"/>
+            <column name="sanction_source_2" type="VARCHAR(255)"/>
             <column name="reason" type="VARCHAR(255)"/>
             <column name="hash" type="LONGBLOB">
                 <constraints nullable="false"/>
