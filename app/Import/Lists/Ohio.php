@@ -1,7 +1,5 @@
 <?php namespace App\Import\Lists;
 
-//TODO: unset two columns
-
 class Ohio extends ExclusionList
 {
     public $dbPrefix = 'oh1';
@@ -31,7 +29,8 @@ class Ohio extends ExclusionList
         'action_date',
         'date_added',
         'provider_type',
-        'date_revised'
+        'date_revised',
+    	'provider_number'
     ];
 
     public $hashColumns = [
@@ -43,7 +42,7 @@ class Ohio extends ExclusionList
         'npi',
         'provider_id',
         'status',
-        'action_date',
+        'action_date'
     ];
 
     public $dateColumns = [
@@ -53,9 +52,90 @@ class Ohio extends ExclusionList
         'date_added' => 13,
         'date_revised' => 15,
     ];
-
-    public function postHook()
+    
+    public $npiColumnName = "npi";
+    
+    private $npiRegex = "/1\d{9}\b/";
+    
+    private $symbolsRegex = "/^((,|\/|;)+\s)?(,|\/|;)?|((,|\/|;)+\s)?(,|\/|;)?$/";
+    
+    private $spacesRegex = "!\s+!";
+    
+    /**
+     * @inherit preProcess
+     */
+    public function preProcess()
     {
-        app('db')->statement('UPDATE oh1_records SET npi = NULL WHERE npi = 0');
+    	$this->parse();
+    	parent::preProcess();
+    }
+    
+    /**
+     * Parse the input data
+     */
+    private function parse()
+    {
+    	$data = [];
+    	 
+    	// iterate each row
+    	foreach ($this->data as $row) {
+    		$data[] = $this->handleRow($row);
+    	}
+    	 
+    	// set back to global data
+    	$this->data = $data;
+    }
+    
+    /**
+     * Handles the data manipulation of a record array.
+     *
+     * @param array $row the array record
+     * @return array $row the array record
+     */
+    private function handleRow($row)
+    {
+    	// set provider number
+    	$row = $this->setProviderNo($row);
+    	
+    	// set npi number array
+    	$row = $this->setNpi($row);
+    	 
+    	return $row;
+    }
+    
+    /**
+     * Set the provider number by clearing the unnecessary characters
+     *
+     * @param array $row the array record
+     * @return array $row the array record
+     */
+    private function setProviderNo($row)
+    {
+    	// remove valid npi numbers
+    	$providerNo = preg_replace($this->npiRegex, "", trim($row[4]));
+    	 
+    	// remove commas
+    	$providerNo = preg_replace($this->symbolsRegex, "", trim($providerNo));
+    	 
+    	// remove duplicate spaces in between numbers
+    	$row[] = preg_replace($this->spacesRegex, " ", trim($providerNo));
+    	 
+    	return $row;
+    }
+    
+    /**
+     * Set the npi numbers
+     *
+     * @param array $row the array record
+     * @return array $row the array record
+     */
+    private function setNpi($row)
+    {
+    	// extract npi number/s
+    	preg_match_all($this->npiRegex, $row[4], $npi);
+    
+    	$row[4] = $npi[0];
+    	 
+    	return $row;
     }
 }

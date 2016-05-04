@@ -2007,7 +2007,12 @@
                 <constraints nullable="false"/>
             </column>
             <column name="date_of_birth" type="date"/>
-            <column name="npi" type="INT"/>
+            <column name="npi" type="VARCHAR(45)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="provider_number" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="address1" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
@@ -2056,7 +2061,12 @@
                 <constraints nullable="false"/>
             </column>
             <column name="date_of_birth" type="date"/>
-            <column name="npi" type="INT"/>
+            <column name="npi" type="VARCHAR(45)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="provider_number" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="address1" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
