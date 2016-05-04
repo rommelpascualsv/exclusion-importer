@@ -4,6 +4,7 @@ namespace Import\Scrape\Scrapers\Connecticut\Data\Mappers;
 
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\ManufacturersDrugsCosmeticsMedicalDevicesMapper;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MapperInterface;
+use App\Import\Scrape\Scrapers\Connecticut\CsvImporter;
 
 class ManufacturersDrugsCosmeticsMedicalDevicesMapperTest extends \Codeception\TestCase\Test
 {
@@ -75,14 +76,17 @@ class ManufacturersDrugsCosmeticsMedicalDevicesMapperTest extends \Codeception\T
     	$dbData = $this->mapper->getDbData($csvData);
     
     	$expectedDbData = [
-    			'name' => 'JOLEN CREME BLEACH CORPORATION',
-    			'address1' => '25 WALLS DR',
-    			'address2' => '',
-    			'city' => 'FAIRFIELD',
-    			'county' => '',
-    			'state_code' => 'CT',
-    			'zip' => '06824-5156',
-    			'complete_address' => ''
+    			'type' => CsvImporter::TYPE_FACILITY,
+    			'values' => [
+    					'name' => 'JOLEN CREME BLEACH CORPORATION',
+    					'address1' => '25 WALLS DR',
+    					'address2' => '',
+    					'city' => 'FAIRFIELD',
+    					'county' => '',
+    					'state_code' => 'CT',
+    					'zip' => '06824-5156',
+    					'complete_address' => ''
+    			]
     	];
     
     	$this->assertEquals($expectedDbData, $dbData);

@@ -10,6 +10,9 @@ class MapperFactory
 			],
 			'controlled_substances_practitioners_labs_manufacturers' => [
 					'manufacturers_of_drugs_cosmetics_and_medical_devices' => ManufacturersDrugsCosmeticsMedicalDevicesMapper::class,
+			],
+			'healthcare_practitioners' => [
+					'acupuncturist' => AcupuncturistMapper::class
 			]
 	];
 	

@@ -3,6 +3,7 @@
 namespace Import\Scrape\Scrapers\Connecticut\Data\Mappers;
 
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\AmbulatorySurgicalCenterMapper;
+use App\Import\Scrape\Scrapers\Connecticut\CsvImporter;
 
 class AmbulatorySurgicalCenterMapperTest extends \Codeception\TestCase\Test
 {
@@ -17,8 +18,7 @@ class AmbulatorySurgicalCenterMapperTest extends \Codeception\TestCase\Test
     }
 
     protected function _after()
-    {
-    	
+    {	
     }
 
     // tests
@@ -66,19 +66,22 @@ class AmbulatorySurgicalCenterMapperTest extends \Codeception\TestCase\Test
     			'expiration_date' => '09/30/2016'
     	];
     	 
-    	$actual = $this->mapper->getDbData($data);
+    	$dbData = $this->mapper->getDbData($data);
     	 
-    	$expected = [
-    			'name' => 'SAINT FRANCIS GI ENDOSCOPY, LLC',
-    			'address1' => '360 BLOOMFIELD AVE STE 204',
-    			'address2' => '',
-    			'city' => 'WINDSOR',
-    			'county' => '',
-    			'state_code' => 'CT',
-    			'zip' => '06095-2700',
-    			'complete_address' => ''
+    	$expectedDbData = [
+    			'type' => CsvImporter::TYPE_FACILITY,
+    			'values' => [
+    					'name' => 'SAINT FRANCIS GI ENDOSCOPY, LLC',
+    					'address1' => '360 BLOOMFIELD AVE STE 204',
+    					'address2' => '',
+    					'city' => 'WINDSOR',
+    					'county' => '',
+    					'state_code' => 'CT',
+    					'zip' => '06095-2700',
+    					'complete_address' => ''
+    			]
     	];
     	 
-    	$this->assertEquals($expected, $actual);
+    	$this->assertEquals($expectedDbData, $dbData);
     }
 }

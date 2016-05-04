@@ -9,6 +9,8 @@ use Carbon\Carbon;
 
 class CsvImporter
 {
+	const TYPE_FACILITY = 'facility';
+	const TYPE_PERSON = 'person';
 	/**
 	 * @var array
 	 */
@@ -19,12 +21,20 @@ class CsvImporter
 	 */
 	protected $db;
 	
+	/**
+	 * Initialize
+	 * @param array $importData
+	 * @param ConnectionInterface $db
+	 */
 	public function __construct(array $importData, ConnectionInterface $db)
 	{
 		$this->importData = $importData;
 		$this->db = $db;
 	}
 	
+	/**
+	 * Import csv files to db
+	 */
 	public function import()
 	{
 		$timestamp = Carbon::now()->format('Y-m-d H:i:s');
@@ -59,8 +69,23 @@ class CsvImporter
 			$csvData = $mapper->getCsvData($row);
 			$dbData = $mapper->getDbData($csvData);
 			
-			$this->dbInsertRoster($dbData, $optionId, $timestamp);
+			if ($dbData['type'] == static::TYPE_FACILITY) {
+				$this->dbInsertFacilityRoster($optionId, $dbData['values'], $timestamp);
+			} elseif ($dbData['type'] == static::TYPE_PERSON) {
+				$this->dbInsertPersonRoster($optionId, $dbData['values'], $timestamp);
+			}
 		}
+	}
+	
+	public function dbInsertFacilityRoster($optionId, array $data, $timestamp)
+	{
+		$facilityId = $this->dbFindFacilityIdByName($data['name']);
+		
+		if (! $facilityId) {
+			$facilityId = $this->dbInsertFacility($data['name'], $timestamp);
+		}
+		
+		$this->dbInsertRoster($optionId, $facilityId, null, $data, $timestamp);
 	}
 	
 	/**
@@ -77,6 +102,78 @@ class CsvImporter
 		]);
 		
 		return $id;
+	}
+	
+	/**
+	 * Insert person roster to db
+	 * @param int $optionId
+	 * @param array $data
+	 * @param string $timestamp
+	 */
+	public function dbInsertPersonRoster($optionId, array $data, $timestamp)
+	{
+		$personId = $this->dbFindPersonIdByName($data['first_name'], $data['last_name']);
+		
+		if (! $personId) {
+			$personId = $this->dbInsertPerson($data['first_name'], $data['last_name'], $timestamp);
+		}
+		
+		$this->dbInsertRoster(
+				$optionId,
+				null,
+				$personId,
+				$data,
+				$timestamp
+		);
+	}
+	
+	/**
+	 * Insert roster to database
+	 * @param int $optionId
+	 * @param int|null $facilityId
+	 * @param int|null $personId
+	 * @param array $data
+	 * @param string $timestamp
+	 */
+	protected function dbInsertRoster(
+			$optionId,
+			$facilityId = null,
+			$personId = null,
+			array $data,
+			$timestamp
+	) {
+		$this->db->table('ct_rosters')->insert([
+				'option_id' => $optionId,
+				'facility_id' => $facilityId,
+				'person_id' => $personId,
+				'address1' => $data['address1'],
+				'address2' => $data['address2'],
+				'city' => $data['city'],
+				'county' => $data['county'],
+				'state_code' => $data['state_code'],
+				'zip' => $data['zip'],
+				'complete_address' => $data['complete_address'],
+				'created_at' => $timestamp,
+				'updated_at' => $timestamp
+		]);
+	}
+	
+	/**
+	 * Insert person to db
+	 * @param string $firstName
+	 * @param string $lastName
+	 * @param string $timestamp
+	 */
+	public function dbInsertPerson($firstName, $lastName, $timestamp)
+	{
+		$personId = $this->db->table('ct_roster_people')->insertGetId([
+				'first_name' => $firstName,
+				'last_name' => $lastName,
+				'created_at' => $timestamp,
+				'updated_at' => $timestamp
+		]);
+		
+		return $personId;
 	}
 	
 	/**
@@ -97,36 +194,6 @@ class CsvImporter
 	}
 	
 	/**
-	 * Insert roster to database
-	 * @param array $data
-	 * @param int $optionId
-	 * @param string $timestamp
-	 */
-	public function dbInsertRoster(array $data, $optionId, $timestamp)
-	{
-		// get facility id
-		$facilityId = $this->dbFindFacilityIdByName($data['name']);
-		
-		if (! $facilityId) {
-			$facilityId = $this->dbInsertFacility($data['name'], $timestamp);
-		}
-		
-		$this->db->table('ct_rosters')->insert([
-				'option_id' => $optionId,
-				'facility_id' => $facilityId,
-				'address1' => $data['address1'],
-				'address2' => $data['address2'],
-				'city' => $data['city'],
-				'county' => $data['county'],
-				'state_code' => $data['state_code'],
-				'zip' => $data['zip'],
-				'complete_address' => $data['complete_address'],
-				'created_at' => $timestamp,
-				'updated_at' => $timestamp
-		]);
-	}
-	
-	/**
 	 * Find option id by key
 	 * @param string $key
 	 * @return int|null
@@ -141,5 +208,24 @@ class CsvImporter
 		$optionId = (is_object($option)) ? $option->id : null;
 		
 		return $optionId;
+	}
+	
+	/**
+	 * Find person id by first name and last name
+	 * @param string $firstName
+	 * @param string $lastName
+	 * @return int|null
+	 */
+	public function dbFindPersonIdByName($firstName, $lastName)
+	{
+		$person = $this->db->table('ct_roster_people')
+			->select('id')
+			->where('first_name', '=', $firstName)
+			->where('last_name', '=', $lastName)
+			->first();
+		
+		$personId = (is_object($person)) ? $person->id : null;
+		
+		return $personId;
 	}
 }
