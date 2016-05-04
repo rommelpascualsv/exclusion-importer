@@ -71,16 +71,17 @@ abstract class ExclusionList
 
     public function convertDatesToMysql($row, $dateColumns)
     {
-    	foreach ($dateColumns as $index) {
-    		if (strtotime($row[$index])) {
-    			$date = new \DateTime($row[$index]);
-    			$row[$index] = $date->format('Y-m-d');
-    		} else {
-    			$row[$index] = null;
-    		}
-    	}
+            foreach ($dateColumns as $columnName => $index) {
+                $columnValue = $row[$index];
+                if (strtotime($columnValue)) {
+                    $date = new \DateTime($columnValue);
+                    $row[$index] = $date->format('Y-m-d');
+                } else {
+                    $row[$index] = $this->valueForUnparsableDate($columnName, $columnValue, $row);
+                }
+            }
 
-    	return $row;
+            return $row;
     }
 
     public function preProcess()
@@ -144,5 +145,20 @@ abstract class ExclusionList
     	}
     	
     	return $index;
+    }
+    
+    /**
+     * Returns a value for an unparsable date column in the given row. Returns
+     * null by default, but subclasses can override this method to return any value
+     * to set as the value for that date column.
+     * @param string $columnName the name of the date column whose value is being
+     * parsed. This can be any of the keys defined in this class' dateColumns array
+     * whose current value cannot be parsed as a date by convertDatesToMysql
+     * @param string $columnValue the value of the column
+     * @param array $row the array of values of each column in a row
+     */
+    protected function valueForUnparsableDate($columnName, $columnValue, $row)
+    {
+    	return null;
     }
 }

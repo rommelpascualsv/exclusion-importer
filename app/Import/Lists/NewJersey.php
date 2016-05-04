@@ -11,7 +11,7 @@ class NewJersey extends ExclusionList
 
     public $type = 'txt';
 
-    public $hashFields = [
+    public $hashColumns = [
         'firm_name',
         'name',
         'npi',
