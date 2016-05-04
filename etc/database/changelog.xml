@@ -1439,6 +1439,9 @@
             <column name="provider_name" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="provider_number" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="npi" type="VARCHAR(65)">
                 <constraints nullable="false"/>
             </column>
@@ -1465,6 +1468,9 @@
             <column name="termination_date" type="date"/>
             <column name="letter_date" type="date"/>
             <column name="provider_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="provider_number" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="npi" type="VARCHAR(65)">
