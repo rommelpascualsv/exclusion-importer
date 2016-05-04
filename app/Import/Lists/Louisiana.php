@@ -129,7 +129,7 @@ class Louisiana extends ExclusionList
     private function setNpi($row)
     {
     	// extract npi number/s
-    	preg_match_all($this->npiRegex, $row[4], $npi);
+    	preg_match_all($this->npiRegex, $row[5], $npi);
     	 
     	$row[5] = $npi[0];
     	
