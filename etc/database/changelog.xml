@@ -2543,6 +2543,9 @@
             <column name="entity" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="provider_number" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="npi" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
@@ -2569,6 +2572,9 @@
                 <constraints primaryKey="true"/>
             </column>
             <column name="entity" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="provider_number" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="npi" type="VARCHAR(255)">
