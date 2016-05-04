@@ -70,7 +70,7 @@ class CsvImporterTest extends \Codeception\TestCase\Test
     	$this->tester->haveRecord('ct_roster_categories', [
     			'id' => $this->categoryIds['healthcare_practitioners'],
     			'key' => 'healthcare_practitioners',
-    			'name' => 'healthcare_practitioners name',
+    			'name' => 'Healthcare Practitioners',
     	]);
     	
     	/* insert options */
@@ -96,7 +96,7 @@ class CsvImporterTest extends \Codeception\TestCase\Test
     			'id' => $this->optionIds['acupuncturist'],
     			'category_id' => $this->categoryIds['healthcare_practitioners'],
     			'key' => 'acupuncturist',
-    			'name' => 'acupuncturist name'
+    			'name' => 'Acupuncturist'
     	]);
     }
 
