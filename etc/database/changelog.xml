@@ -1647,6 +1647,9 @@
             <column name="provider_name" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="provider_number" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="npi" type="VARCHAR(255)">
                 <constraints nullable="true"/>
             </column>
@@ -1684,6 +1687,9 @@
             </column>
             <column name="npi" type="VARCHAR(255)">
                 <constraints nullable="true"/>
+            </column>
+            <column name="provider_number" type="VARCHAR(255)">
+                <constraints nullable="false"/>
             </column>
             <column name="provider_type" type="VARCHAR(255)">
                 <constraints nullable="false"/>
