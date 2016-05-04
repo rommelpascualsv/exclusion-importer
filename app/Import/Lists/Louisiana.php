@@ -51,11 +51,11 @@ class Louisiana extends ExclusionList
     
     public $npiColumnName = "npi";
     
-    public $npiRegex = "/1\d{9}/";
+    private $npiRegex = "/1\d{9}\b/";
     
-    public $commaRegex = "/^(,+\s)?,?|(,+\s)?,?$/";
+    private $commaRegex = "/^(,+\s)?,?|(,+\s)?,?$/";
     
-    public $spacesRegex = "!\s+!";
+    private $spacesRegex = "!\s+!";
     
     /**
      * @inherit preProcess

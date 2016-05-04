@@ -50,11 +50,11 @@ class Michigan extends ExclusionList
     
     public $npiColumnName = "npi_number";
     
-    public $npiRegex = "/1\d{9}\b/";
+    private $npiRegex = "/1\d{9}\b/";
     
-    public $commaRegex = "/^(,+\s)?,?|(,+\s)?,?$/";
+    private $commaRegex = "/^(,+\s)?,?|(,+\s)?,?$/";
     
-    public $spacesRegex = "!\s+!";
+    private $spacesRegex = "!\s+!";
     
     /**
      * @inherit preProcess

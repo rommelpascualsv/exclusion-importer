@@ -47,7 +47,7 @@ class Florida extends ExclusionList
 
     public $npiColumnName = "npi_number";
     
-    public $npiRegex = "/1\d{9}/";
+    private $npiRegex = "/1\d{9}\b/";
     
     /**
      * @inherit preProcess

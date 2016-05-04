@@ -44,7 +44,7 @@ class Kentucky extends ExclusionList
     
     public $npiColumnName = "npi";
     
-    public $npiRegex = "/1\d{9}/";
+    private $npiRegex = "/1\d{9}\b/";
     
     public function __construct()
     {
