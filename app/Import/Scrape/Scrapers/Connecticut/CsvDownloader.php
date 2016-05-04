@@ -2,7 +2,7 @@
 
 namespace App\Import\Scrape\Scrapers\Connecticut;
 
-use App\Import\Scrape\Components\FilesystemInterface;
+use App\Import\Scrape\Components\ScrapeFilesystemInterface;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Option;
 use App\Import\Scrape\Scrapers\Connecticut\Data\OptionCollection;
 use Goutte\Client;
@@ -26,7 +26,7 @@ class CsvDownloader
 	protected $options;
 	
 	/**
-	 * @var FilesystemInterface
+	 * @var ScrapeFilesystemInterface
 	 */
 	protected $filesystem;
 	
@@ -39,7 +39,7 @@ class CsvDownloader
 	public function __construct(
 			Client $client,
 			OptionCollection $options,
-			FilesystemInterface $filesystem
+			ScrapeFilesystemInterface $filesystem
 	) {
 		$this->client = $client;
 		$this->options = $options;

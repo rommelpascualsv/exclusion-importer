@@ -10,6 +10,7 @@ use Goutte\Client;
 use Laravel\Lumen\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use App\Import\Scrape\Components\ScrapeFilesystemInterface;
 
 class ScrapeConnecticutTest extends \Codeception\TestCase\Test
 {
@@ -39,14 +40,14 @@ class ScrapeConnecticutTest extends \Codeception\TestCase\Test
     protected $command;
     
     /**
-     * @var TestFilesystem
+     * @var ScrapeFilesystemInterface
      */
     protected $filesystem;
     
     protected function _before()
     {
     	$this->laravel = $this->getModule('Lumen')->app;
-    	$this->filesystem = $this->laravel->make(TestFilesystem::class);;
+    	$this->filesystem = app('scrape_test_filesystem');
     	$this->command = new ScrapeConnecticut();
     	$this->command->setLaravel($this->laravel);
     }
@@ -68,11 +69,11 @@ class ScrapeConnecticutTest extends \Codeception\TestCase\Test
     	]);
     	
     	$this->runCommand();
-    	
-    	$this->tester->assertScrapeFileExist('csv/connecticut/charities/paid_solicitors.csv');
-    	$this->tester->assertScrapeFileExist('csv/connecticut/charities/public_charity.csv');
-    	$this->tester->assertScrapeFileExist('csv/connecticut/healthcare_practitioners/acupuncturist.csv');
-    	$this->tester->assertScrapeFileExist('csv/connecticut/healthcare_practitioners/advanced_practice_registered_nurse.csv');
+        
+        $this->assertFileExists(codecept_output_dir('scrape/csv/connecticut/charities/paid_solicitors.csv'));
+        $this->assertFileExists(codecept_output_dir('scrape/csv/connecticut/charities/public_charity.csv'));
+        $this->assertFileExists(codecept_output_dir('scrape/csv/connecticut/healthcare_practitioners/acupuncturist.csv'));
+        $this->assertFileExists(codecept_output_dir('scrape/csv/connecticut/healthcare_practitioners/advanced_practice_registered_nurse.csv'));
     }
     
     /* public function testHandleDlOneFile()
@@ -102,8 +103,8 @@ class ScrapeConnecticutTest extends \Codeception\TestCase\Test
     	 
     	$this->runCommand();
     	 
-    	$this->tester->assertScrapeFileExist('csv/connecticut/ambulatory_surgical_centers_recovery_care_centers/ambulatory_surgical_center.csv');
-    	$this->tester->assertScrapeFileExist('csv/connecticut/healthcare_practitioners/acupuncturist.csv');
+    	$this->assertFileExists(codecept_output_dir('scrape/csv/connecticut/ambulatory_surgical_centers_recovery_care_centers/ambulatory_surgical_center.csv'));
+    	$this->assertFileExists(codecept_output_dir('scrape/csv/connecticut/healthcare_practitioners/acupuncturist.csv'));
     }
     
     protected function getCsvDownloader($options)

@@ -10,7 +10,7 @@ use League\Flysystem\FilesystemInterface;
 interface ScrapeFilesystemInterface extends FilesystemInterface
 {
 	const PATH = 'storage/app/scrape';
-	const TEST_PATH = 'tests/_data/scrape';
+	const TEST_PATH = 'tests/_output/scrape';
 	
 	/**
 	 * Get path
