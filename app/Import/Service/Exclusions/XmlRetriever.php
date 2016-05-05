@@ -56,12 +56,7 @@ class XmlRetriever extends Retriever
                 array_shift($data);
             }
 
-            $datas[] = $data;
-        }
-
-        // If single item return array element
-        if (count($datas) === 1) {
-            return $datas[0];
+            $datas = array_merge($datas, $data);
         }
 
         return $datas;
