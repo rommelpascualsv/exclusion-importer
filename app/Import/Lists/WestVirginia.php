@@ -66,6 +66,8 @@ class WestVirginia extends ExclusionList
         'reinstatement_date' => 12
     ];
 
+    public $shouldHashListName = true;
+    
     public $npiColumnName = "npi_number";
     
     private $npiRegex = "/1\d{9}\b/";

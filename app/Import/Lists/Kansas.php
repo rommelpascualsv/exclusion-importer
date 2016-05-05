@@ -58,6 +58,8 @@ class Kansas extends ExclusionList
         'termination_date' => 0
     ];
     
+    public $shouldHashListName = true;
+    
     /**
      * @var contains the headers of the pdf that should be excluded
      */

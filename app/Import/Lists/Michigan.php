@@ -48,6 +48,8 @@ class Michigan extends ExclusionList
         'sanction_date_2' => 10
     ];
     
+    public $shouldHashListName = true;
+    
     public $npiColumnName = "npi_number";
     
     private $npiRegex = "/1\d{9}\b/";

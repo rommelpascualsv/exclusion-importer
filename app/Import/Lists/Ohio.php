@@ -53,6 +53,8 @@ class Ohio extends ExclusionList
         'date_revised' => 15,
     ];
     
+    public $shouldHashListName = true;
+    
     public $npiColumnName = "npi";
     
     private $npiRegex = "/1\d{9}\b/";

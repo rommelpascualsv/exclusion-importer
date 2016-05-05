@@ -45,6 +45,8 @@ class Washington extends ExclusionList
        'termination_date' => 6
     ];
 
+    public $shouldHashListName = true;
+    
     public $npiColumnName = 'npi';
     
     private $npiRegex = "/1\d{9}\b/";

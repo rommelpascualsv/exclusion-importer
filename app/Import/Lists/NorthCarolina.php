@@ -38,6 +38,8 @@ class NorthCarolina extends ExclusionList
         'date_excluded' => 9
     ];
 
+    public $shouldHashListName = true;
+    
     public $npiColumnName = "npi";
     
     private $npiRegex = "/1\d{9}\b/";

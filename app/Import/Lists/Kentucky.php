@@ -42,6 +42,8 @@ class Kentucky extends ExclusionList
         'effective_date' => 4
     ];
     
+    public $shouldHashListName = true;
+    
     public $npiColumnName = "npi";
     
     private $npiRegex = "/1\d{9}\b/";
