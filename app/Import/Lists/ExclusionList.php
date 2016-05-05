@@ -34,6 +34,11 @@ abstract class ExclusionList
     public $data = [];
 
     /**
+     * @var array
+     */
+    public $ignoreColumns = [];
+
+    /**
      * @var
      */
     public $fileHeaders;
@@ -71,47 +76,64 @@ abstract class ExclusionList
 
     public function convertDatesToMysql($row, $dateColumns)
     {
-            foreach ($dateColumns as $columnName => $index) {
-                $columnValue = $row[$index];
-                if (strtotime($columnValue)) {
-                    $date = new \DateTime($columnValue);
-                    $row[$index] = $date->format('Y-m-d');
-                } else {
-                    $row[$index] = $this->valueForUnparsableDate($columnName, $columnValue, $row);
-                }
+        foreach ($dateColumns as $columnName => $index) {
+            $columnValue = $row[$index];
+            if (strtotime($columnValue)) {
+                $date = new \DateTime($columnValue);
+                $row[$index] = $date->format('Y-m-d');
+            } else {
+                $row[$index] = $this->valueForUnparsableDate($columnName, $columnValue, $row);
+            }
+        }
+
+        return $row;
+    }
+
+    public function removeColumns($data, $ignoreColumns)
+    {
+        return array_map(function ($row) use ($ignoreColumns) {
+
+            foreach ($ignoreColumns as $index) {
+                unset($row[$index]);
             }
 
-            return $row;
+            return array_values($row);
+
+        }, $data);
     }
     
     public function convertToAssoc($row)
     {
-    	return array_combine($this->fieldNames, $row);
+        return array_combine($this->fieldNames, $row);
     }
 
     public function preProcess()
     {
-    	$this->data = array_map(function ($row) {
-    	
-    		if (count($this->dateColumns) > 0) {
-    			$row = $this->convertDatesToMysql($row, $this->dateColumns);
-    		}
-    		
-    		if ($this->npiColumnName) {
-    			$npiColumnIndex = $this->getNpiColumnIndex($this->npiColumnName);
-    			$row[$npiColumnIndex] = $this->handleNpiValues($row[$npiColumnIndex]);
-    		}
-    		
-    		$row = $this->convertToAssoc($row);
-    		
-    		return $row;
-    	
-    	}, $this->data);
+        $this->data = array_map(function ($row) {
+        
+            if (count($this->dateColumns) > 0) {
+                $row = $this->convertDatesToMysql($row, $this->dateColumns);
+            }
+            
+            if (count($this->ignoreColumns) > 0) {
+                $row = $this->removeColumns($row, $this->ignoreColumns);
+            }
+            if ($this->npiColumnName) {
+                $npiColumnIndex = $this->getNpiColumnIndex($this->npiColumnName);
+                $row[$npiColumnIndex] = $this->handleNpiValues($row[$npiColumnIndex]);
+            }
+            
+            $row = $this->convertToAssoc($row);
+            
+            return $row;
+        
+        }, $this->data);
     }
 
     public function postProcess()
     {
     }
+    
     public function postHook()
     {
     }
@@ -124,33 +146,32 @@ abstract class ExclusionList
      */
     private function handleNpiValues(array $npi)
     {
-    	if (empty($npi)) {
-    		return "";
-    	} else if (count($npi) == 1) {
-    		return head($npi);
-    	}
-    	return json_encode($npi);
+        if (empty($npi)) {
+            return "";
+        } else if (count($npi) == 1) {
+            return head($npi);
+        }
+        return json_encode($npi);
     }
     
     /**
-     * Retrieves the npi column index for a given npi column name 
-     * 
+     * Retrieves the npi column index for a given npi column name
      * @param string $npiColumnName
      * @return int the npi column index
      */
     private function getNpiColumnIndex($npiColumnName)
     {
-    	$index = 0;
-    	foreach ($this->fieldNames as $field) {
-    		
-    		if ($field === $npiColumnName) {
-    			break;
-    		}
-    		
-    		$index++;
-    	}
-    	
-    	return $index;
+        $index = 0;
+        foreach ($this->fieldNames as $field) {
+            
+            if ($field === $npiColumnName) {
+                break;
+            }
+            
+            $index++;
+        }
+        
+        return $index;
     }
     
     /**
