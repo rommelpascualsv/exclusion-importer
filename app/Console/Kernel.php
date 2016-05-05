@@ -22,7 +22,8 @@ class Kernel extends ConsoleKernel
     	\App\Console\Commands\Scrape\ExtractConnecticutCategories::class,
     	\App\Console\Commands\Scrape\ScrapeConnecticut::class,
     	\App\Console\Commands\Scrape\Connecticut\ExtractCsvHeaders::class,
-    	\App\Console\Commands\Scrape\Connecticut\OrganizeCsvHeaders::class
+    	\App\Console\Commands\Scrape\Connecticut\OrganizeCsvHeaders::class,
+        \App\Console\Commands\Scrape\Connecticut\ImportCsv::class
     ];
 
     /**
