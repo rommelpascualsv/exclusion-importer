@@ -5,16 +5,17 @@ namespace App\Import\Scrape\Scrapers\Connecticut\Data\Mappers;
 class MapperFactory
 {
 	protected static $classes = [
-			'ambulatory_surgical_centers_recovery_care_centers' => [
-					'ambulatory_surgical_center' => AmbulatorySurgicalCenterMapper::class
-			],
-			'controlled_substances_practitioners_labs_manufacturers' => [
-					'manufacturers_of_drugs_cosmetics_and_medical_devices' => ManufacturersDrugsCosmeticsMedicalDevicesMapper::class,
-			],
-			'healthcare_practitioners' => [
-					'acupuncturist' => AcupuncturistMapper::class
-			]
-	];
+        'ambulatory_surgical_centers_recovery_care_centers' => [
+            'ambulatory_surgical_center' => AmbulatorySurgicalCenterMapper::class
+        ],
+        'controlled_substances_practitioners_labs_manufacturers' => [
+            'controlled_substance_laboratories' => ControlledSubstanceLaboratoriesMapper::class,
+            'manufacturers_of_drugs_cosmetics_and_medical_devices' => ManufacturersDrugsCosmeticsMedicalDevicesMapper::class
+        ],
+        'healthcare_practitioners' => [
+            'acupuncturist' => AcupuncturistMapper::class
+        ]
+    ];
 	
 	/**
 	 * Create by keys

@@ -25,6 +25,7 @@ class CsvImporterTest extends \Codeception\TestCase\Test
     protected $optionIds = [
     		'ambulatory_surgical_center' => 36,
     		'manufacturers_of_drugs_cosmetics_and_medical_devices' => 42,
+    		'controlled_substance_laboratories' => 43,
     		'acupuncturist' => 44
     ];
     
@@ -42,6 +43,11 @@ class CsvImporterTest extends \Codeception\TestCase\Test
     					'file_path' => codecept_data_dir('scrape/connecticut/csv/controlled_substances_practitioners_labs_manufacturers/manufacturers_of_drugs_cosmetics_and_medical_devices.csv')
     			],
     			[
+    					'category' => 'controlled_substances_practitioners_labs_manufacturers',
+    					'option' => 'controlled_substance_laboratories',
+    					'file_path' => codecept_data_dir('scrape/connecticut/csv/controlled_substances_practitioners_labs_manufacturers/controlled_substance_laboratories.csv')
+    			],
+    			[
     					'category' => 'healthcare_practitioners',
     					'option' => 'acupuncturist',
     					'file_path' => codecept_data_dir('scrape/connecticut/csv/healthcare_practitioners/acupuncturist.csv')
@@ -54,23 +60,19 @@ class CsvImporterTest extends \Codeception\TestCase\Test
     	$this->tester->haveRecord('ct_roster_categories', [
     			'id' => $this->categoryIds['ambulatory_surgical_centers_recovery_care_centers'],
     			'key' => 'ambulatory_surgical_centers_recovery_care_centers',
-    			'name' => 'Ambulatory Surgical Centers/Recovery Care Centers',
-    			'created_at' => '2016-05-01 01:30:00',
-    			'updated_at' => '2016-05-01 01:30:00'
+    			'name' => 'Ambulatory Surgical Centers/Recovery Care Centers'
     	]);
     	
     	$this->tester->haveRecord('ct_roster_categories', [
     			'id' => $this->categoryIds['controlled_substances_practitioners_labs_manufacturers'],
     			'key' => 'controlled_substances_practitioners_labs_manufacturers',
-    			'name' => 'Controlled Substances (Practitioners, Labs, Manufacturers)',
-    			'created_at' => '2016-05-01 01:30:00',
-    			'updated_at' => '2016-05-01 01:30:00'
+    			'name' => 'Controlled Substances (Practitioners, Labs, Manufacturers)'
     	]);
     	
     	$this->tester->haveRecord('ct_roster_categories', [
     			'id' => $this->categoryIds['healthcare_practitioners'],
     			'key' => 'healthcare_practitioners',
-    			'name' => 'Healthcare Practitioners',
+    			'name' => 'Healthcare Practitioners'
     	]);
     	
     	/* insert options */
@@ -78,18 +80,21 @@ class CsvImporterTest extends \Codeception\TestCase\Test
     			'id' => $this->optionIds['ambulatory_surgical_center'],
     			'category_id' => $this->categoryIds['ambulatory_surgical_centers_recovery_care_centers'],
     			'key' => 'ambulatory_surgical_center',
-    			'name' => 'Ambulatory Surgical Center',
-    			'created_at' => '2016-05-01 01:30:00',
-    			'updated_at' => '2016-05-01 01:30:00'
+    			'name' => 'Ambulatory Surgical Center'
     	]);
     	
     	$this->tester->haveRecord('ct_roster_options', [
     			'id' => $this->optionIds['manufacturers_of_drugs_cosmetics_and_medical_devices'],
     			'category_id' => $this->categoryIds['controlled_substances_practitioners_labs_manufacturers'],
     			'key' => 'manufacturers_of_drugs_cosmetics_and_medical_devices',
-    			'name' => 'Manufacturers of Drugs, Cosmetics and Medical Devices',
-    			'created_at' => '2016-05-01 01:30:00',
-    			'updated_at' => '2016-05-01 01:30:00'
+    			'name' => 'Manufacturers of Drugs, Cosmetics and Medical Devices'
+    	]);
+    	
+    	$this->tester->haveRecord('ct_roster_options', [
+    			'id' => $this->optionIds['controlled_substance_laboratories'],
+    			'category_id' => $this->categoryIds['controlled_substances_practitioners_labs_manufacturers'],
+    			'key' => 'controlled_substance_laboratories',
+    			'name' => 'Controlled Substance Laboratories'
     	]);
     	
     	$this->tester->haveRecord('ct_roster_options', [
@@ -249,9 +254,15 @@ class CsvImporterTest extends \Codeception\TestCase\Test
     {
     	$this->importer->import();
     	
+    	// facility records
     	$this->assertAmbulanceRecords();
     	$this->assertDrugManufacturerRecords();
+    	
+    	// person records
     	$this->assertAcupuncturistRecords();
+    	
+    	// has both facility and person records
+    	$this->assertControlledSubstanceLaboratoriesRecords();
     }
     
     public function testDbInsertPersonRoster()
@@ -427,6 +438,51 @@ class CsvImporterTest extends \Codeception\TestCase\Test
     			'zip' => '06082'
     	]);
     }
+
+    protected function assertControlledSubstanceLaboratoriesRecords()
+    {
+    	// first record, person record
+    	$this->tester->seeRecord('ct_rosters', [
+    			'option_id' => $this->optionIds['controlled_substance_laboratories'],
+    			'facility_id' => null,
+    			'person_id' => $this->getPersonId('ROBERT', 'MALISON'),
+    			'address1' => '34 PARK ST',
+    			'address2' => '',
+    			'city' => 'NEW HAVEN',
+    			'county' => '',
+    			'state_code' => 'CT',
+    			'zip' => '06519-1109',
+    			'complete_address' => ''
+    	]);
+    	
+    	// row 16 record, facility record
+    	$this->tester->seeRecord('ct_rosters', [
+    	    'option_id' => $this->optionIds['controlled_substance_laboratories'],
+    	    'facility_id' => $this->getFacilityId('NARCOTICS CONTROL OFFICER'),
+    	    'person_id' => null,
+    	    'address1' => '5 RESEARCH PKWY',
+    	    'address2' => '',
+    	    'city' => 'WALLINGFORD',
+    	    'county' => '',
+    	    'state_code' => 'CT',
+    	    'zip' => '06492-1951',
+    	    'complete_address' => ''
+    	]);
+    	
+    	// last record, person record
+    	$this->tester->seeRecord('ct_rosters', [
+    	    'option_id' => $this->optionIds['controlled_substance_laboratories'],
+    	    'facility_id' => null,
+    	    'person_id' => $this->getPersonId('SREEGANGA', 'CHANDRA'),
+    	    'address1' => '295 CONGRESS AVE BCMM 149',
+    	    'address2' => '',
+    	    'city' => 'NEW HAVEN',
+    	    'county' => '',
+    	    'state_code' => 'CT',
+    	    'zip' => '06519-1418',
+    	    'complete_address' => ''
+    	]);
+    }
     
     protected function assertAcupuncturistRecords()
     {
@@ -467,5 +523,24 @@ class CsvImporterTest extends \Codeception\TestCase\Test
     			'zip' => '1O58O-3812',
     			'complete_address' => ''
     	]);
+    }
+    
+    protected function getFacilityId($name)
+    {
+    	$facility = $this->tester->grabRecord('ct_roster_facilities', [
+    			'name' => $name
+    	]);
+    	
+    	return $facility->id;
+    }
+    
+    protected function getPersonId($firstName, $lastName)
+    {
+    	$person = $this->tester->grabRecord('ct_roster_people', [
+    			'first_name' => $firstName,
+    			'last_name' => $lastName
+    	]);
+    	
+    	return $person->id;
     }
 }
