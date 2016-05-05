@@ -48,5 +48,5 @@ INSERT INTO `exclusion_lists` (`id`, `prefix`, `accr`, `description`, `import_ur
 (47,  'usdosd', 'US Dos DL',  'US Department of State Debar List',  'https://www.pmddtc.state.gov/compliance/documents/debar.xlsx', 0,  0),
 (48,  'unsancindividuals',  'UN Sanc Individuals',  'UN Sanctions Individuals List',  'https://www.un.org/sc/suborg/sites/www.un.org.sc.suborg/files/consolidated.xml', 0,  0),
 (49,  'unsancentities', 'UN Sanc Entities', 'UN Sanctions Entities List', 'https://www.un.org/sc/suborg/sites/www.un.org.sc.suborg/files/consolidated.xml', 0,  0),
-(50,  'healthmil',  'Health Mil', 'Military Health System', '', 0,  0);
-(51,  'csl', 'Consolidated Screening List', 'Consolidated Screening List', 'https://api.trade.gov/consolidated_screening_list/search.csv?api_key=OHZYuksFHSFao8jDXTkfiypO', '', '', '', '', 'https://api.trade.gov/consolidated_screening_list/search.csv?api_key=OHZYuksFHSFao8jDXTkfiypO',0,0);
+(50,  'healthmil',  'Health Mil', 'Military Health System', '', 0,  0),
+(51,  'csl', 'Consolidated Screening List', 'Consolidated Screening List', 'https://api.trade.gov/consolidated_screening_list/search.csv?api_key=OHZYuksFHSFao8jDXTkfiypO', 0,0);
