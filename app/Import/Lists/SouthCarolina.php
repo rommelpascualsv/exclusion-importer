@@ -30,7 +30,7 @@ class SouthCarolina extends ExclusionList
         'zip',
         'provider_type',
         'date_excluded',
-    	'provider_number'
+        'provider_number'
     ];
 
     public $dateColumns = [

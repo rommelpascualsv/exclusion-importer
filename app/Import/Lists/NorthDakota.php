@@ -40,7 +40,7 @@ class NorthDakota extends ExclusionList
         'exclusion_date',
         'exclusion_reason',
         'exclusion_reason_2',
-    	'medicaid_provider_number_2',
+        'medicaid_provider_number_2',
     ];
 
     /**

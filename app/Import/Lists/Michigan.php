@@ -29,7 +29,7 @@ class Michigan extends ExclusionList
         'sanction_date_2',
         'sanction_source_2',
         'reason',
-    	'provider_number'
+        'provider_number'
     ];
 
     public $hashColumns = [

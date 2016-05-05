@@ -18,7 +18,7 @@ class Nebraska extends ExclusionList
     	'effective_date',
     	'term',
     	'end_date',
-        'reason_for_action',
+    	'reason_for_action',
     	'provider_number'
     ];
 

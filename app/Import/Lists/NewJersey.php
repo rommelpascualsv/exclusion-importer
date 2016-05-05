@@ -43,7 +43,7 @@ class NewJersey extends ExclusionList
         'effective_date',
         'expiration_date',
         'permanent_debarment',
-    	'provider_number'
+        'provider_number'
     ];
 
     /**

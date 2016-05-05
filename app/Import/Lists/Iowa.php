@@ -23,7 +23,7 @@ class Iowa extends ExclusionList
         'entity_name',
         'sanction',
         'sanction_end_date',
-    	'provider_number'
+        'provider_number'
     ];
 
     public $hashColumns = [

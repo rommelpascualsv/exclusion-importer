@@ -25,7 +25,7 @@ class Louisiana extends ExclusionList
         'effective_date',
         'reinstate_date',
         'state_zip',
-    	'provider_number'
+        'provider_number'
     ];
 
     /**

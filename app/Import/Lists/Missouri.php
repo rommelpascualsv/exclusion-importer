@@ -15,14 +15,14 @@ class Missouri extends ExclusionList
 	];
 
 	public $fieldNames = [
-		'termination_date',
-		'letter_date',
-		'provider_name',
-		'npi',
+        'termination_date',
+        'letter_date',
+        'provider_name',
+        'npi',
         'provider_type',
-		'license_number',
-		'termination_reason',
-		'provider_number'
+        'license_number',
+        'termination_reason',
+        'provider_number'
 	];
 
 	public $dateColumns = [

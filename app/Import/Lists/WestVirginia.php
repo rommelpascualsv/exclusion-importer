@@ -42,7 +42,7 @@ class WestVirginia extends ExclusionList
         'reason_for_exclusion',
         'reinstatement_date',
         'reinstatement_reason',
-    	'provider_number'	
+        'provider_number'	
     ];
 
     /**

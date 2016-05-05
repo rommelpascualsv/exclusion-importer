@@ -38,7 +38,7 @@ class Kansas extends ExclusionList
         'kmap_provider_number',
         'npi',
         'comments',
-    	'kmap_provider_number_2'
+        'kmap_provider_number_2'
     ];
 
     /**

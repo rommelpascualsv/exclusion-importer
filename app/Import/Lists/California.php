@@ -19,7 +19,7 @@ class California extends ExclusionList
         'provider_numbers',
         'date_of_suspension',
         'active_period',
-    	'npi'
+        'npi'
     ];
     
     public $npiColumnName = "npi";

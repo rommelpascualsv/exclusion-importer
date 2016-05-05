@@ -22,7 +22,7 @@ class Washington extends ExclusionList
         'npi',
         'termination_date',
         'termination_reason',
-    	'provider_number'	
+        'provider_number'	
     ];
 
     /**
