@@ -1620,6 +1620,7 @@
             <column name="business_name_address" type="VARCHAR(255)"/>
             <column name="medicaid_provider_id" type="VARCHAR(255)"/>
             <column name="medicaid_provider_number" type="VARCHAR(255)"/>
+            <column name="medicaid_provider_number_2" type="VARCHAR(255)"/>
             <column name="npi" type="VARCHAR(45)"/>
             <column name="provider_type" type="VARCHAR(45)"/>
             <column name="state" type="VARCHAR(45)"/>
@@ -1641,6 +1642,7 @@
             <column name="business_name_address" type="VARCHAR(255)"/>
             <column name="medicaid_provider_id" type="VARCHAR(255)"/>
             <column name="medicaid_provider_number" type="VARCHAR(255)"/>
+            <column name="medicaid_provider_number_2" type="VARCHAR(255)"/>
             <column name="npi" type="VARCHAR(45)"/>
             <column name="provider_type" type="VARCHAR(45)"/>
             <column name="state" type="VARCHAR(45)"/>
