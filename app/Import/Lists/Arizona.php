@@ -8,6 +8,8 @@ class Arizona extends ExclusionList
 
     public $type = 'html';
 
+    public $shouldHashListName = true;
+    
     public $retrieveOptions = [
         'htmlFilterElement' => 'table[class="datatable"]',
         'rowElement'        => 'tr',
