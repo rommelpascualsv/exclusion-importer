@@ -4511,4 +4511,16 @@
             </column>
         </addColumn>        
     </changeSet>
+    <changeSet author="sv" id="svg-359-1">
+        <dropColumn tableName="wy1_records" columnName="additional_info_1" />
+        <dropColumn tableName="wy1_records" columnName="additional_info_2" />
+        <dropColumn tableName="wy1_records_older" columnName="additional_info_1" />
+        <dropColumn tableName="wy1_records_older" columnName="additional_info_2" />
+        <addColumn tableName="wy1_records">
+            <column name="npi" type="VARCHAR(45)" afterColumn="exclusion_date"/>
+        </addColumn>
+        <addColumn tableName="wy1_records_older">
+            <column name="npi" type="VARCHAR(45)" afterColumn="exclusion_date"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

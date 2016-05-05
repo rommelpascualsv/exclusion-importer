@@ -2,11 +2,12 @@
 
 class Wyoming extends ExclusionList
 {
+
     public $dbPrefix = 'wy1';
 
-    public $pdfToText = "pdftotext -layout -nopgbrk";
+    public $pdfToText = "java -Dfile.encoding=utf-8 -jar ../etc/tabula.jar -g -p all";
 
-    public $uri = 'http://www.health.wyo.gov/Media.aspx?mediaId=18045';
+    public $uri = 'http://www.health.wyo.gov/Media.aspx?mediaId=18376';
 
     public $type = 'pdf';
 
@@ -19,13 +20,7 @@ class Wyoming extends ExclusionList
         'city',
         'state',
         'exclusion_date',
-        'additional_info_1',
-        'additional_info_2'
-    ];
-
-    public $retrieveOptions = [
-        'headerRow' => 0,
-        'offset'    => 1
+        'npi'
     ];
 
     public $hashColumns = [
@@ -39,7 +34,31 @@ class Wyoming extends ExclusionList
     public $dateColumns = [
         'exclusion_date' => 7
     ];
-
+    
+    public $npiColumnName = 'npi';
+    
+    public $shouldHashListName = true;
+    
+    /**
+     * Regular expression that identifies the NPI within a provider number string
+     * Known formats are:
+     * 1. 'NPI <NPI number>'
+     * 2. 'NPI <NPI number>;'
+     * 3. '<NPI number> NPI
+     * @var string
+     */
+    private $npiRegEx = '/NPI\s?(1\d{9})\b\s?;?|\b(1\d{9})\s?NPI/';
+    
+    private $npiColumnIndex;
+    private $providerNumberColumnIndex;
+    
+    public function __construct()
+    {
+        parent::__construct();
+        $this->npiColumnIndex = array_search($this->npiColumnName, $this->fieldNames);
+        $this->providerNumberColumnIndex = array_search('provider_number', $this->fieldNames);
+    }    
+    
     public function preProcess()
     {
         $this->parse();
@@ -48,72 +67,156 @@ class Wyoming extends ExclusionList
 
     protected function parse()
     {
-        $rowDelimiter = '^^^^^';
-        $columnDelimiter = '~~~~~';
-
-        $cleandata = preg_replace('/Registered Professional Nurs RN24869/', 'Registered Professional Nurs   RN24869', $this->data);
-        $cleandata1 = preg_replace('/1129821 Denver/', '1129821   Denver', $cleandata);
-        $cleandata2 = preg_replace('/Ambulance Company - Emer N\/A/', 'Ambulance Company - Emer   N/A', $cleandata1);
-        $cleandata3 = preg_replace('/WY6604A/', 'WY6604A  N/A', $cleandata2);
-        $cleandata4 = str_replace('Grooman (Martinez)', 'Grooman(Martinez)       ', $cleandata3);
-
-        $regex = preg_replace('/Wyoming Exclusion list[\w\s]+Exclusion Dat\n\n/', '', $cleandata4);
-        $regex1 = preg_replace('/WYLicense#4316A/' , '' , $regex);
-        $regex2 = str_replace('104091000', '104091000 WYLicense#4316A', $regex1);
-        $regex3 = str_replace('1087711 00 WY Prov Cheyenne', '1087711 00 WY Prov    Cheyenne', $regex2);
-        $regex4 = preg_replace('/\n\n\n\n\n[\w\s,]+\n/', '', $regex3);
-        $regex5 = preg_replace('/\n\n\n[\w\s,]+Exclusion Dat/', '', $regex4);
-        $regex6 = preg_replace('/\n\n/', $rowDelimiter, $regex5);
-        $regex7 = preg_replace('/\n/', $rowDelimiter, $regex6);
-        $regex8 = preg_replace('/\s{2,}/', $columnDelimiter, $regex7);
-        $regex9 = str_replace('6/18/2009', '6/18/2009' . $rowDelimiter, $regex8);
-        $regex10 = str_replace('8/20/2015', '8/20/2015' . $rowDelimiter, $regex9);
-
-        $rows = explode($rowDelimiter, $regex10);
-
-        $valid = -1;
-        $validRow = 0;
-
-        $columns = [];
-
+        $rows = preg_split('/(\r)?\n(\s+)?/', $this->data);
+        
+        $data = [];
+        
         foreach ($rows as $row) {
-            $valid++;
-
-            $rowArray = explode($columnDelimiter, $row);
-            array_shift($rowArray);
-
-            if (count($rowArray) == 7) {
-                array_splice($rowArray, 2, 0, '');
-            }
-            if (count($rowArray) == 6) {
-                array_splice($rowArray, 0, 0, '');
-                array_splice($rowArray, 0, 0, '');
-            }
-            if (count($rowArray) == 9) {
-                array_splice($rowArray, 8, 0, '');
-            }
-
-            if (count($rowArray) == 8) {
-                array_splice($rowArray, 8, 0, '');
-                array_splice($rowArray, 8, 0, '');
-            }
-
-            if (count($rowArray) == 3) {
-                array_push($rowArray, '', '', '', '', '', '', '');
-            }
-
-            if (count($rowArray) < 4) {
-                $valid--;
-                //$columns[$validRow] = array_merge($columns[$validRow],$rowArray);
-                array_splice($columns[$validRow], 8, count($rowArray),$rowArray);
+            
+            $row = trim($row);
+            
+            if (! $row || $this->isHeader($row)) {
                 continue;
             }
-
-            $validRow = $valid;
-
-            $columns[] = $rowArray;
+            
+            $columns = str_getcsv($row);
+            $columns[] = ''; // placeholder for NPI column value. Value will be derived in postProcess()
+            
+            if ($this->isContinuationOfPreviousRow($columns)) {
+                // Rows without any exclusion date are assumed to just be continuations
+                // of the data in the previous row. In this case, we should concatenate
+                // the data of the current row with the data of the previous row
+                $previousColumns = array_pop($data);
+                
+                $columns = $this->joinRowColumns($previousColumns, $columns);
+            }
+            
+            $data[] = $columns;
         }
+        
+        $this->data = $data;
+        
+        //Some post-processing that can only be done once we have the fully
+        //parsed data
+        $this->data = array_map(function ($columns){
+            
+            $this->enrichData($columns);
+            
+            $columns = $this->trimData($columns);
+            
+            return $columns;
+            
+        }, $this->data);
+    }
 
-        $this->data = $columns;
+    private function isHeader($row)
+    {
+        return stripos($row, 'Last Name') !== false;
+    }
+
+    /**
+     * Returns true if the given row columns indicate that the row is just a continuation
+     * of the previous row, false otherwise
+     * @param array $columns the row data
+     */
+    private function isContinuationOfPreviousRow($columns)
+    {
+        $exclusionDate = $columns[$this->dateColumns['exclusion_date']];
+        return empty(trim($exclusionDate));
+    }
+    
+    /**
+     * Appends the values of the given columns, i.e. columns2[0] is appended to
+     * columns1[0], etc. This method assumes that both columns1 and columns2 are
+     * the same size.
+     * @param array $columns1 the array of column values to wich values from column2 will be appended
+     * @param array $columns2 the array of column values to append to column1
+     * @return string[] array of the combined values of columns1 and columns2
+     */
+    private function joinRowColumns($columns1, $columns2)
+    {
+        $results = [];
+        
+        for ($i = 0; $i < count($columns1); $i ++) {
+            $results[] = $columns1[$i] . $columns2[$i];
+        }
+        
+        return $results;
+    }
+    
+    /**
+     * Enriches the passed row column data with derived data, such as NPI numbers.
+     * @param array $columns the row column data
+     */
+    private function enrichData(&$columns)
+    {
+
+        $providerNumberColumnIndex = $this->providerNumberColumnIndex;
+        
+        $npi = $this->parseNPI($columns[$providerNumberColumnIndex]);
+        
+        $columns[$this->npiColumnIndex] = $npi;
+        
+        if (! empty($npi)) {
+            $columns[$providerNumberColumnIndex] = $this->trimNPI($columns[$providerNumberColumnIndex]);        }
+                  
+    }
+    
+    /**
+     * Returns an array of NPI number(s) extracted from the given provider number,
+     * or null if there are no NPI numbers in the provider number 
+     * @param array $providerNumber the provider number from which to extract the
+     * NPI number(s)
+     * @return array array of NPI numbers contained by the provider number
+     */
+    private function parseNPI($providerNumber)
+    {
+        $providerNumber = trim($providerNumber);
+    
+        if (! $providerNumber) {
+            return null;    
+        }
+    
+        preg_match($this->npiRegEx, $providerNumber, $matches);
+        
+        if (empty($matches)) {
+            return null;
+        }
+        
+        $npi = [];
+        
+        // Start from matches[1], since we do not want the text that matched the full pattern (which is matches[0]),
+        // since we only want to get the capture groups that contain only the NPI number
+        for ($i = 1; $i < count($matches); $i++) {
+            
+            if ($matches[$i]) {
+                $npi[] = $matches[$i];
+            }
+        }
+    
+        return $npi;
+    }
+    
+    /**
+     * Removes all NPI numbers (along with their prefixes/suffixes) from the given
+     * provider number and returns the new provider number
+     * @param unknown $providerNumber the provider number whose NPI data should
+     * be removed
+     * @return string the new provider number without the NPI data
+     */
+    private function trimNPI($providerNumber)
+    {
+        return preg_replace($this->npiRegEx, '', $providerNumber);
+    }
+    
+    /**
+     * Trims all whitespaces from each of the elements in columns and returns an
+     * array containing the trimmed column data
+     * @param array $columns the row column data
+     * @return array array containing the trimmed column data
+     */
+    private function trimData($columns)
+    {
+        return array_map('trim',$columns);
     }
 }
