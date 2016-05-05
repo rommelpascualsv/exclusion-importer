@@ -25,6 +25,10 @@ class Arizona extends ExclusionList
         'npi_number'
     ];
     
+    public $npiColumnName = "npi_number";
+    
+    private $npiRegex = "/1\d{9}\b/";
+    
     public function preProcess()
     {
     	$this->parse();
@@ -45,7 +49,8 @@ class Arizona extends ExclusionList
     		$value[3] = str_replace(["\xA0", "\xC2"], '', trim($value[3]));
     		$value[4] = str_replace(["\xA0", "\xC2"], '', trim($value[4]));
     		$value[5] = str_replace(["\xA0", "\xC2"], '', trim($value[5]));
-    		$data[] = $value;
+    		
+    		$data[] = $this->handleRow($value);
     	}
     
     	$this->data = $data;
@@ -60,5 +65,35 @@ class Arizona extends ExclusionList
     	}
     	
     	return $nameArr;
+    }
+    
+    /**
+     * Handles the data manipulation of a record array.
+     *
+     * @param array $row the array record
+     * @return array $row the array record
+     */
+    private function handleRow($row)
+    {
+    	// set npi number array
+    	$row = $this->setNpi($row);
+    
+    	return $row;
+    }
+    
+    /**
+     * Set the npi numbers
+     *
+     * @param array $row the array record
+     * @return array $row the array record
+     */
+    private function setNpi($row)
+    {
+    	// extract npi number/s
+    	preg_match_all($this->npiRegex, $row[5], $npi);
+    
+    	$row[5] = $npi[0];
+    
+    	return $row;
     }
 }
