@@ -43,11 +43,15 @@ class Arizona extends ExclusionList
     	foreach ($rows as $key => $value) {
     		//Middle Initial
     		array_splice($value, 1, 0,  $this->extractFirstMiddle(str_replace(["\xA0", "\xC2"], '', trim($value[1])))[1]);
+    		//Last Name Company name
     		$value[0] = str_replace(["\xA0", "\xC2"], '', trim($value[0]));
     		//First Name
     		$value[2] = $this->extractFirstMiddle(str_replace(["\xA0", "\xC2"], '', trim($value[2])))[0];
+    		//Term Date
     		$value[3] = str_replace(["\xA0", "\xC2"], '', trim($value[3]));
+    		//Specialty
     		$value[4] = str_replace(["\xA0", "\xC2"], '', trim($value[4]));
+    		//NPI
     		$value[5] = str_replace(["\xA0", "\xC2"], '', trim($value[5]));
     		
     		$data[] = $this->handleRow($value);
@@ -56,6 +60,12 @@ class Arizona extends ExclusionList
     	$this->data = $data;
     }
     
+    /**
+     * Extracts the first name and middle initial from the first name column.
+     * 
+     * @param string $name contains both the first name and middle initial
+     * @return array $nameArr the array that contains the first name and the middle initial
+     */
     private function extractFirstMiddle($name)
     {
     	$firstName = str_replace('.', '', $name);
