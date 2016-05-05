@@ -29,16 +29,19 @@ class Mississippi extends ExclusionList
         'first_name',
         'middle_name',
         'entity_name',
-        'address',
-        'address_2',
+        'dba',
         'exclusion_from_date',
+        'exclusion_to_date',
+        'npi'
     ];
 
     public $dateColumns = [
         'exclusion_from_date' => 8
     ];
     
-    public $npiColumnName = 'npi'; 
+    public $npiColumnName = 'npi';
+    
+    public $shouldHashListName = true;
     
     protected $sanctionTypes = [
         'MFCU' => 'Medicaid Fraud Control Unit',
