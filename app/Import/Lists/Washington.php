@@ -4,12 +4,11 @@ class Washington extends ExclusionList
 {
     public $dbPrefix = 'wa1';
 
-    public $pdfToText = 'java -jar ../etc/tabula.jar -p all -u -g -r'; //'pdftotext -layout -nopgbrk';
+    public $pdfToText = 'java -Dfile.encoding=utf-8 -jar ../etc/tabula.jar -p all -u -g -r'; //'pdftotext -layout -nopgbrk';
 
     public $uri = 'http://www.hca.wa.gov/medicaid/provider/documents/termination_exclusion.pdf';
 
     public $type = 'pdf';
-
 
     /**
      * @var field names
@@ -22,7 +21,8 @@ class Washington extends ExclusionList
         'provider_license',
         'npi',
         'termination_date',
-        'termination_reason'
+        'termination_reason',
+        'provider_number'	
     ];
 
     /**
@@ -41,21 +41,31 @@ class Washington extends ExclusionList
         'termination_date'
     ];
 
-    /**
-     * @var institution special cases
-     */
-    private $institutions = [
-        'Wheelchairs Plus',
-        'AA Adult Family Home',
-        'Our House Adult Family Home/',
-        'Wheelchairs Plus',
-        '/Fairwood Care'
-    ];
-
     public $dateColumns = [
        'termination_date' => 6
     ];
 
+    public $shouldHashListName = true;
+    
+    public $npiColumnName = 'npi';
+    
+    private $npiRegex = "/1\d{9}\b/";
+    
+    private $commaRegex = "/^(,+\s)?,?|(,+\s)?,?$/";
+    
+    private $spacesRegex = "!\s+!";
+    
+    /**
+     * @var institution special cases
+     */
+    private $institutions = [
+    		'Wheelchairs Plus',
+    		'AA Adult Family Home',
+    		'Our House Adult Family Home/',
+    		'Wheelchairs Plus',
+    		'/Fairwood Care'
+    ];
+    
     private $business;
 
     /**
@@ -204,28 +214,69 @@ class Washington extends ExclusionList
                 }
             }
 
-            $data[] = $this->clearInvalidNpiValue($this->override($row));
+            // handles the population of name and business values
+            $row = $this->override($row);
+            
+            // handles npi number values 
+            $row = $this->handleRow($row);
+            
+            $data[] = $row;
         }
 
         $this->data = $data;
     }
     
     /**
-     * Clears the invalid npi value from the record.
-     * @param array $columns the column array
-     * @return array $columns the column array
+     * Handles the data manipulation of a record array.
+     * 
+     * @param array $row the array record
+     * @return array $row the array record
      */
-    private function clearInvalidNpiValue(array $columns)
+    private function handleRow($row)
     {
-        // split multiple npi numbers
-        $npiArr = explode(' ', preg_replace('!\s+!', ' ', $columns[5]));
-        
-        // get the last npi number
-        $npi = array_pop($npiArr);
-        
-        // clear invalid npi value
-        $columns[5] = !is_numeric($npi) ? null : $npi;
-        
-        return $columns;
+
+    	// set provider number
+    	$row = $this->setProviderNo($row);
+    		
+    	// set npi number array
+    	$row = $this->setNpi($row);
+    	
+    	return $row;
+    }
+    
+    /**
+     * Set the provider number by clearing the unnecessary characters
+     *   
+     * @param array $row the array record
+     * @return array $row the array record
+     */
+    private function setProviderNo($row)
+    {	
+    	// remove valid npi numbers
+    	$providerNo = preg_replace($this->npiRegex, "", trim($row[5]));
+    	
+    	// remove commas
+    	$providerNo = preg_replace($this->commaRegex, "", trim($providerNo));
+    	
+    	// remove duplicate spaces in between numbers
+    	$row[] = preg_replace($this->spacesRegex, " ", trim($providerNo));
+    	
+    	return $row;
+    }
+    
+    /**
+     * Set the npi numbers by extracting the valid npi values from the npi column
+     *   
+     * @param array $row the array record
+     * @return array $row the array record
+     */
+    private function setNpi($row)
+    {
+    	// extract npi number/s
+    	preg_match_all($this->npiRegex, $row[5], $npi);
+    	 
+    	$row[5] = $npi[0];
+    	
+    	return $row;
     }
 }

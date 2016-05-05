@@ -71,12 +71,7 @@ class HTMLRetriever extends Retriever
                 array_shift($columnsArray);
             }
             // Merge data
-            $data[] = $columnsArray;
-        }
-
-        // If single item return array element
-        if (count($data) === 1) {
-            return $data[0];
+            $data = array_merge($data, $columnsArray);
         }
 
         return $data;

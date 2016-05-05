@@ -27,6 +27,8 @@ class Alabama extends ExclusionList
         'provider_type'
     ];
     
+    public $shouldHashListName = true;
+    
     /**
      * The number of lines from the top of the exclusion list file preceding the 
      * start of the exclusion list data

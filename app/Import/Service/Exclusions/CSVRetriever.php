@@ -15,10 +15,10 @@ class CSVRetriever extends Retriever
      */
     protected $dataConverter;
 
-	/**
-	 * @var	\GuzzleHttp\Client	$httpClient
-	 */
-	protected $httpClient;
+    /**
+     * @var \GuzzleHttp\Client  $httpClient
+     */
+    protected $httpClient;
 
     /**
      * Constructor
@@ -26,29 +26,39 @@ class CSVRetriever extends Retriever
      * @param    DataCsvConverter $dataConverter
      * @param    Client $httpClient
      */
-	public function __construct(DataCsvConverter $dataConverter, Client $httpClient)
+    public function __construct(DataCsvConverter $dataConverter, Client $httpClient)
     {
         $this->dataConverter = $dataConverter;
         $this->httpClient = $httpClient;
     }
 
     /**
-	 * Retrieve the data from a remote source
-	 *
-     * @param	ExclusionList	$list
-     * @return	ExclusionList
+     * Retrieve the data from a remote source
+     *
+     * @param   ExclusionList   $list
+     * @return  ExclusionList
      */
     public function retrieveData(ExclusionList $list)
     {
-        if ($this->uriIsRemote($list->uri)) {
-            $response = $this->httpClient->get($list->uri, ['verify' => false]);
-            $contents = $response->getBody();
-        }
-        else {
-            $contents = file_get_contents($list->uri);
-        }
+        $data = [];
+        // Implement multiple file upload use comma searated
+        $url = explode(',', $list->uri);
 
-        $data = $this->dataConverter->convertData($list, $contents);
+        $uri = array_map(function ($item) {
+            return trim($item);
+        }, $url);
+
+        foreach ($uri as $key => $value) {
+
+            if ($this->uriIsRemote($value)) {
+                $response = $this->httpClient->get($value, ['verify' => false]);
+                $contents = $response->getBody();
+            } else {
+                $contents = file_get_contents($value);
+            }
+
+            $data = array_merge($data, $this->dataConverter->convertData($list, $contents));
+        }
 
         return $data;
     }
