@@ -3265,6 +3265,9 @@
                 <constraints primaryKey="true"/>
             </column>
             <column name="npi_number" type="VARCHAR(45)"/>
+            <column name="provider_number" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="full_name" type="VARCHAR(255)"/>
             <column name="first_name" type="VARCHAR(255)"/>
             <column name="middle_name" type="VARCHAR(255)"/>
@@ -3288,6 +3291,9 @@
                 <constraints primaryKey="true"/>
             </column>
             <column name="npi_number" type="VARCHAR(45)"/>
+            <column name="provider_number" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="full_name" type="VARCHAR(255)"/>
             <column name="first_name" type="VARCHAR(255)"/>
             <column name="middle_name" type="VARCHAR(255)"/>
