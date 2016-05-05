@@ -34,7 +34,7 @@ class Missouri extends ExclusionList
 	
 	private $npiRegex = "/1\d{9}\b/";
 	
-	private $commaRegex = "/^((,|\/)+\s)?(,|\/)?|((,|\/)+\s)?(,|\/)?$/";
+	private $symbolsRegex = "/^((,|\/)+\s)?(,|\/)?|((,|\/)+\s)?(,|\/)?$/";
 	
 	private $spacesRegex = "!\s+!";
 	
@@ -93,7 +93,7 @@ class Missouri extends ExclusionList
 		$providerNo = preg_replace($this->npiRegex, "", trim($row[3]));
 		 
 		// remove commas
-		$providerNo = preg_replace($this->commaRegex, "", trim($providerNo));
+		$providerNo = preg_replace($this->symbolsRegex, "", trim($providerNo));
 		 
 		// remove duplicate spaces in between numbers
 		$row[] = preg_replace($this->spacesRegex, " ", trim($providerNo));
