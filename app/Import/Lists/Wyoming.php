@@ -37,6 +37,8 @@ class Wyoming extends ExclusionList
     
     public $npiColumnName = 'npi';
     
+    public $shouldHashListName = true;
+    
     /**
      * Regular expression that identifies the NPI within a provider number string
      * Known formats are:
