@@ -38,11 +38,66 @@ class NorthCarolina extends ExclusionList
         'date_excluded' => 9
     ];
 
+    public $npiColumnName = "npi";
+    
+    private $npiRegex = "/1\d{9}\b/";
+    
 	public function preProcess()
     {
+    	$this->parse();
         parent::preProcess();
-        $this->data = array_map(function($row) {
-            return array_slice($row, 0, -1);
-		}, $this->data);
+    }
+    
+    public function parse()
+    {
+    	//Remove table header
+    	array_shift($this->data);
+    	
+    	$this->data = array_map(function($row) {
+    		if (count($row) > 11) {
+    			unset($row[11]);
+    			return $row;
+    		}
+    		return $row;
+    	}, $this->data);
+    	
+    	$rows = $this->data;
+    		 
+    	$data = [];
+    	foreach ($rows as $key => $value) {
+    		$data[] = $this->handleRow($value);
+    	}
+    	
+    	$this->data = $data;
+    }
+    
+    /**
+     * Handles the data manipulation of a record array.
+     *
+     * @param array $row the array record
+     * @return array $row the array record
+     */
+    private function handleRow($row)
+    {
+    	// set npi number array
+    	$row = $this->setNpi($row);
+    
+    	return $row;
+    }
+    
+    /**
+     * Set the npi numbers
+     *
+     * @param array $row the array record
+     * @return array $row the array record
+     */
+    private function setNpi($row)
+    {
+    	// extract npi number/s
+    	preg_match_all($this->npiRegex, $row[0], $npi);
+    
+    	$row[0] = $npi[0];
+    
+    	return $row;
     }
 }
