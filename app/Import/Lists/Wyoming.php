@@ -100,9 +100,9 @@ class Wyoming extends ExclusionList
         //parsed data
         $this->data = array_map(function ($columns){
             
-            $this->enrichData($columns);
-            
             $columns = $this->trimData($columns);
+            
+            $this->enrichData($columns);
             
             return $columns;
             
@@ -158,7 +158,7 @@ class Wyoming extends ExclusionList
         $columns[$this->npiColumnIndex] = $npi;
         
         if (! empty($npi)) {
-            $columns[$providerNumberColumnIndex] = $this->trimNPI($columns[$providerNumberColumnIndex]);        }
+            $columns[$providerNumberColumnIndex] = trim($this->trimNPI($columns[$providerNumberColumnIndex]));        }
                   
     }
     
