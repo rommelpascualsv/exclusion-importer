@@ -83,6 +83,11 @@ abstract class ExclusionList
 
             return $row;
     }
+    
+    public function convertToAssoc($row)
+    {
+    	return array_combine($this->fieldNames, $row);
+    }
 
     public function preProcess()
     {
@@ -97,7 +102,8 @@ abstract class ExclusionList
     			$row[$npiColumnIndex] = $this->handleNpiValues($row[$npiColumnIndex]);
     		}
     		
-    		$row = array_combine($this->fieldNames, $row);
+    		$row = $this->convertToAssoc($row);
+    		
     		return $row;
     	
     	}, $this->data);
