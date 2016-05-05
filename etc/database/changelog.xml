@@ -241,6 +241,9 @@
             <column name="license_numbers" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="npi" type="VARCHAR(45)">
+                <constraints nullable="false"/>
+            </column>
             <column name="provider_numbers" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
@@ -280,6 +283,9 @@
                 <constraints nullable="false"/>
             </column>
             <column name="license_numbers" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="npi" type="VARCHAR(45)">
                 <constraints nullable="false"/>
             </column>
             <column name="provider_numbers" type="VARCHAR(255)">
@@ -822,6 +828,9 @@
             </column>
             <column name="sanction_start_date" type="date"/>
             <column name="npi" type="VARCHAR(255)"/>
+            <column name="provider_number" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="individual_last_name" type="VARCHAR(45)"/>
             <column name="individual_first_name" type="VARCHAR(45)"/>
             <column name="entity_name" type="VARCHAR(45)"/>
@@ -838,6 +847,9 @@
             </column>
             <column name="sanction_start_date" type="date"/>
             <column name="npi" type="VARCHAR(255)"/>
+            <column name="provider_number" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="individual_last_name" type="VARCHAR(45)"/>
             <column name="individual_first_name" type="VARCHAR(45)"/>
             <column name="entity_name" type="VARCHAR(45)"/>
@@ -997,6 +1009,7 @@
             <column name="d_b_a" type="VARCHAR(100)"/>
             <column name="provider_type" type="VARCHAR(45)"/>
             <column name="kmap_provider_number" type="VARCHAR(70)"/>
+            <column name="kmap_provider_number_2" type="VARCHAR(70)"/>
             <column name="npi" type="VARCHAR(45)"/>
             <column name="comments" type="VARCHAR(255)"/>
             <column name="hash" type="LONGBLOB"/>
@@ -1013,6 +1026,7 @@
             <column name="d_b_a" type="VARCHAR(100)"/>
             <column name="provider_type" type="VARCHAR(45)"/>
             <column name="kmap_provider_number" type="VARCHAR(70)"/>
+            <column name="kmap_provider_number_2" type="VARCHAR(70)"/>
             <column name="npi" type="VARCHAR(45)"/>
             <column name="comments" type="VARCHAR(255)"/>
             <column name="hash" type="LONGBLOB"/>
@@ -1081,6 +1095,9 @@
             <column name="birthdate" type="VARCHAR(255)"/>
             <column name="affiliated_entity" type="VARCHAR(255)"/>
             <column name="title_or_type" type="VARCHAR(255)"/>
+            <column name="provider_number" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="npi" type="VARCHAR(255)"/>
             <column name="exclusion_reason" type="VARCHAR(255)"/>
             <column name="period_of_exclusion" type="VARCHAR(255)"/>
@@ -1101,6 +1118,9 @@
             <column name="birthdate" type="VARCHAR(255)"/>
             <column name="affiliated_entity" type="VARCHAR(255)"/>
             <column name="title_or_type" type="VARCHAR(255)"/>
+            <column name="provider_number" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="npi" type="VARCHAR(255)"/>
             <column name="exclusion_reason" type="VARCHAR(255)"/>
             <column name="period_of_exclusion" type="VARCHAR(255)"/>
@@ -1120,7 +1140,9 @@
             <column name="provider_type" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="npi" type="INT UNSIGNED"/>
+            <column name="npi" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="reason" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
@@ -1138,7 +1160,9 @@
             <column name="provider_type" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="npi" type="INT UNSIGNED"/>
+            <column name="npi" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="reason" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
@@ -1265,6 +1289,9 @@
             <column name="provider_category" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="provider_number" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="npi_number" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
@@ -1273,7 +1300,9 @@
             </column>
             <column name="license_number" type="VARCHAR(255)"/>
             <column name="sanction_date_1" type="VARCHAR(255)"/>
+            <column name="sanction_source_1" type="VARCHAR(255)"/>
             <column name="sanction_date_2" type="VARCHAR(255)"/>
+            <column name="sanction_source_2" type="VARCHAR(255)"/>
             <column name="reason" type="VARCHAR(255)"/>
             <column name="hash" type="LONGBLOB">
                 <constraints nullable="false"/>
@@ -1301,6 +1330,9 @@
             <column name="provider_category" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="provider_number" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="npi_number" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
@@ -1311,7 +1343,9 @@
                 <constraints nullable="false"/>
             </column>
             <column name="sanction_date_1" type="VARCHAR(255)"/>
+            <column name="sanction_source_1" type="VARCHAR(255)"/>
             <column name="sanction_date_2" type="VARCHAR(255)"/>
+            <column name="sanction_source_2" type="VARCHAR(255)"/>
             <column name="reason" type="VARCHAR(255)"/>
             <column name="hash" type="LONGBLOB">
                 <constraints nullable="false"/>
@@ -1417,6 +1451,9 @@
             <column name="provider_name" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="provider_number" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="npi" type="VARCHAR(65)">
                 <constraints nullable="false"/>
             </column>
@@ -1443,6 +1480,9 @@
             <column name="termination_date" type="date"/>
             <column name="letter_date" type="date"/>
             <column name="provider_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="provider_number" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="npi" type="VARCHAR(65)">
@@ -1580,6 +1620,7 @@
             <column name="business_name_address" type="VARCHAR(255)"/>
             <column name="medicaid_provider_id" type="VARCHAR(255)"/>
             <column name="medicaid_provider_number" type="VARCHAR(255)"/>
+            <column name="medicaid_provider_number_2" type="VARCHAR(255)"/>
             <column name="npi" type="VARCHAR(45)"/>
             <column name="provider_type" type="VARCHAR(45)"/>
             <column name="state" type="VARCHAR(45)"/>
@@ -1601,6 +1642,7 @@
             <column name="business_name_address" type="VARCHAR(255)"/>
             <column name="medicaid_provider_id" type="VARCHAR(255)"/>
             <column name="medicaid_provider_number" type="VARCHAR(255)"/>
+            <column name="medicaid_provider_number_2" type="VARCHAR(255)"/>
             <column name="npi" type="VARCHAR(45)"/>
             <column name="provider_type" type="VARCHAR(45)"/>
             <column name="state" type="VARCHAR(45)"/>
@@ -1617,6 +1659,9 @@
                 <constraints primaryKey="true"/>
             </column>
             <column name="provider_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="provider_number" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="npi" type="VARCHAR(255)">
@@ -1656,6 +1701,9 @@
             </column>
             <column name="npi" type="VARCHAR(255)">
                 <constraints nullable="true"/>
+            </column>
+            <column name="provider_number" type="VARCHAR(255)">
+                <constraints nullable="false"/>
             </column>
             <column name="provider_type" type="VARCHAR(255)">
                 <constraints nullable="false"/>
@@ -1705,6 +1753,9 @@
                 <constraints nullable="false"/>
             </column>
             <column name="firm_plus4" type="VARCHAR(4)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="provider_number" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="npi" type="VARCHAR(45)"/>
@@ -1781,6 +1832,9 @@
             <column name="firm_plus4" type="VARCHAR(4)">
                 <constraints nullable="false"/>
             </column>
+            <column name="provider_number" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="npi" type="VARCHAR(45)"/>
             <column name="name" type="VARCHAR(100)">
                 <constraints nullable="false"/>
@@ -1849,6 +1903,9 @@
             <column name="npi" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="provider_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="termination_date" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
@@ -1858,9 +1915,8 @@
             <column name="sanction_period" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="reinstatement_date" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
+            <column name="sanction_period_end_date" type="VARCHAR(255)"/>
+            <column name="reinstatement_date" type="VARCHAR(255)" />
             <column name="hash" type="LONGBLOB">
                 <constraints nullable="false"/>
             </column>
@@ -1887,6 +1943,9 @@
             <column name="npi" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="provider_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="termination_date" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
@@ -1896,9 +1955,8 @@
             <column name="sanction_period" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="reinstatement_date" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
+            <column name="sanction_period_end_date" type="VARCHAR(255)"/>
+            <column name="reinstatement_date" type="VARCHAR(255)"/>
             <column name="hash" type="LONGBLOB">
                 <constraints nullable="false"/>
             </column>
@@ -1917,6 +1975,9 @@
                 <constraints nullable="false"/>
             </column>
             <column name="provider_number" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="provider_number_2" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="npi" type="VARCHAR(255)">
@@ -1962,7 +2023,12 @@
                 <constraints nullable="false"/>
             </column>
             <column name="date_of_birth" type="date"/>
-            <column name="npi" type="INT"/>
+            <column name="npi" type="VARCHAR(45)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="provider_number" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="address1" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
@@ -2011,7 +2077,12 @@
                 <constraints nullable="false"/>
             </column>
             <column name="date_of_birth" type="date"/>
-            <column name="npi" type="INT"/>
+            <column name="npi" type="VARCHAR(45)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="provider_number" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="address1" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
@@ -2488,6 +2559,9 @@
             <column name="entity" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="provider_number" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="npi" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
@@ -2514,6 +2588,9 @@
                 <constraints primaryKey="true"/>
             </column>
             <column name="entity" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="provider_number" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="npi" type="VARCHAR(255)">
@@ -3148,6 +3225,9 @@
             <column name="middle_etc" type="VARCHAR(45)"/>
             <column name="entity" type="VARCHAR(100)"/>
             <column name="provider_license" type="VARCHAR(45)"/>
+            <column name="provider_number" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="npi" type="VARCHAR(100)"/>
             <column name="termination_date" type="date"/>
             <column name="termination_reason" type="VARCHAR(500)"/>
@@ -3168,6 +3248,9 @@
             <column name="middle_etc" type="VARCHAR(45)"/>
             <column name="entity" type="VARCHAR(100)"/>
             <column name="provider_license" type="VARCHAR(45)"/>
+            <column name="provider_number" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="npi" type="VARCHAR(100)"/>
             <column name="termination_date" type="date"/>
             <column name="termination_reason" type="VARCHAR(500)"/>
@@ -3184,6 +3267,9 @@
                 <constraints primaryKey="true"/>
             </column>
             <column name="npi_number" type="VARCHAR(45)"/>
+            <column name="provider_number" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="full_name" type="VARCHAR(255)"/>
             <column name="first_name" type="VARCHAR(255)"/>
             <column name="middle_name" type="VARCHAR(255)"/>
@@ -3207,6 +3293,9 @@
                 <constraints primaryKey="true"/>
             </column>
             <column name="npi_number" type="VARCHAR(45)"/>
+            <column name="provider_number" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="full_name" type="VARCHAR(255)"/>
             <column name="first_name" type="VARCHAR(255)"/>
             <column name="middle_name" type="VARCHAR(255)"/>
@@ -4368,5 +4457,17 @@
     </changeSet>
     <changeSet author="sv" id="1456985528119-329" context="prod">
         <createView fullDefinition="false" viewName="exclusion_search_table_view">(select 1 AS `exclusion_list_id`,`exclusion_lists_staging`.`oig_records`.`id` AS `exclusion_list_record_id`,`exclusion_lists_staging`.`oig_records`.`firstname` AS `first_name`,`exclusion_lists_staging`.`oig_records`.`midname` AS `middle_name`,`exclusion_lists_staging`.`oig_records`.`lastname` AS `last_name`,`exclusion_lists_staging`.`oig_records`.`busname` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,`exclusion_lists_staging`.`oig_records`.`npi` AS `npi`,`exclusion_lists_staging`.`oig_records`.`upin` AS `upin`,`exclusion_lists_staging`.`oig_records`.`dob` AS `date_of_birth` from `exclusion_lists_staging`.`oig_records`) union (select 2 AS `exclusion_list_id`,`exclusion_lists_staging`.`nyomig_records`.`id` AS `exclusion_list_record_id`,NULL AS `first_name`,NULL AS `middle_name`,NULL AS `last_name`,`exclusion_lists_staging`.`nyomig_records`.`business` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,`exclusion_lists_staging`.`nyomig_records`.`npi` AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`nyomig_records`) union (select 3 AS `exclusion_list_id`,`exclusion_lists_staging`.`njcdr_records`.`id` AS `exclusion_list_record_id`,NULL AS `first_name`,NULL AS `middle_name`,NULL AS `last_name`,`exclusion_lists_staging`.`njcdr_records`.`name` AS `entity1`,`exclusion_lists_staging`.`njcdr_records`.`firm_name` AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,`exclusion_lists_staging`.`njcdr_records`.`npi` AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`njcdr_records`) union (select 4 AS `exclusion_list_id`,`exclusion_lists_staging`.`pa1_records`.`id` AS `exclusion_list_record_id`,`exclusion_lists_staging`.`pa1_records`.`NAM_FIRST_PROVR` AS `first_name`,`exclusion_lists_staging`.`pa1_records`.`NAM_MIDDLE_PROVR` AS `middle_name`,`exclusion_lists_staging`.`pa1_records`.`NAM_LAST_PROVR` AS `last_name`,`exclusion_lists_staging`.`pa1_records`.`NAM_BUSNS_MP` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,`exclusion_lists_staging`.`pa1_records`.`IDN_NPI` AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`pa1_records`) union (select 5 AS `exclusion_list_id`,`exclusion_lists_staging`.`oh1_records`.`id` AS `exclusion_list_record_id`,`exclusion_lists_staging`.`oh1_records`.`first_name` AS `first_name`,NULL AS `middle_name`,`exclusion_lists_staging`.`oh1_records`.`last_name` AS `last_name`,`exclusion_lists_staging`.`oh1_records`.`organization_name` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,`exclusion_lists_staging`.`oh1_records`.`npi` AS `npi`,NULL AS `upin`,`exclusion_lists_staging`.`oh1_records`.`date_of_birth` AS `date_of_birth` from `exclusion_lists_staging`.`oh1_records`) union (select 6 AS `exclusion_list_id`,`exclusion_lists_staging`.`il1_records`.`id` AS `exclusion_list_record_id`,NULL AS `first_name`,NULL AS `middle_name`,NULL AS `last_name`,`exclusion_lists_staging`.`il1_records`.`ProvName` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`il1_records`) union (select 7 AS `exclusion_list_id`,`exclusion_lists_staging`.`ky1_records`.`id` AS `exclusion_list_record_id`,`exclusion_lists_staging`.`ky1_records`.`first_name` AS `first_name`,NULL AS `middle_name`,`exclusion_lists_staging`.`ky1_records`.`last_name_or_practice` AS `last_name`,`exclusion_lists_staging`.`ky1_records`.`last_name_or_practice` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,`exclusion_lists_staging`.`ky1_records`.`npi` AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`ky1_records`) union (select 8 AS `exclusion_list_id`,`exclusion_lists_staging`.`ma1_records`.`id` AS `exclusion_list_record_id`,NULL AS `first_name`,NULL AS `middle_name`,NULL AS `last_name`,`exclusion_lists_staging`.`ma1_records`.`provider_name` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,`exclusion_lists_staging`.`ma1_records`.`npi` AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`ma1_records`) union (select 9 AS `exclusion_list_id`,`exclusion_lists_staging`.`sc1_records`.`id` AS `exclusion_list_record_id`,NULL AS `first_name`,NULL AS `middle_name`,NULL AS `last_name`,`exclusion_lists_staging`.`sc1_records`.`entity` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,`exclusion_lists_staging`.`sc1_records`.`npi` AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`sc1_records`) union (select 10 AS `exclusion_list_id`,`exclusion_lists_staging`.`tx1_records`.`id` AS `exclusion_list_record_id`,`exclusion_lists_staging`.`tx1_records`.`first_name` AS `first_name`,`exclusion_lists_staging`.`tx1_records`.`mid_initial` AS `middle_name`,`exclusion_lists_staging`.`tx1_records`.`last_name` AS `last_name`,`exclusion_lists_staging`.`tx1_records`.`company_name` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,`exclusion_lists_staging`.`tx1_records`.`npi` AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`tx1_records`) union (select 11 AS `exclusion_list_id`,`exclusion_lists_staging`.`sam_records`.`id` AS `exclusion_list_record_id`,`exclusion_lists_staging`.`sam_records`.`First` AS `first_name`,`exclusion_lists_staging`.`sam_records`.`Middle` AS `middle_name`,`exclusion_lists_staging`.`sam_records`.`Last` AS `last_name`,`exclusion_lists_staging`.`sam_records`.`Name` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`sam_records`) union (select 12 AS `exclusion_list_id`,`exclusion_lists_staging`.`ct1_records`.`id` AS `exclusion_list_record_id`,NULL AS `first_name`,NULL AS `middle_name`,NULL AS `last_name`,`exclusion_lists_staging`.`ct1_records`.`business` AS `entity1`,`exclusion_lists_staging`.`ct1_records`.`name` AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`ct1_records`) union (select 13 AS `exclusion_list_id`,`exclusion_lists_staging`.`ar1_records`.`id` AS `exclusion_list_record_id`,NULL AS `first_name`,NULL AS `middle_name`,NULL AS `last_name`,`exclusion_lists_staging`.`ar1_records`.`FacilityName` AS `entity1`,`exclusion_lists_staging`.`ar1_records`.`ProviderName` AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`ar1_records`) union (select 14 AS `exclusion_list_id`,`exclusion_lists_staging`.`fl2_records`.`id` AS `exclusion_list_record_id`,NULL AS `first_name`,NULL AS `middle_name`,NULL AS `last_name`,`exclusion_lists_staging`.`fl2_records`.`provider` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,`exclusion_lists_staging`.`fl2_records`.`npi_number` AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`fl2_records`) union (select 15 AS `exclusion_list_id`,`exclusion_lists_staging`.`mi1_records`.`id` AS `exclusion_list_record_id`,`exclusion_lists_staging`.`mi1_records`.`first_name` AS `first_name`,`exclusion_lists_staging`.`mi1_records`.`middle_name` AS `middle_name`,`exclusion_lists_staging`.`mi1_records`.`last_name` AS `last_name`,`exclusion_lists_staging`.`mi1_records`.`entity_name` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,`exclusion_lists_staging`.`mi1_records`.`npi_number` AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`mi1_records`) union (select 16 AS `exclusion_list_id`,`exclusion_lists_staging`.`al1_records`.`id` AS `exclusion_list_record_id`,NULL AS `first_name`,NULL AS `middle_name`,NULL AS `last_name`,`exclusion_lists_staging`.`al1_records`.`name_of_provider` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`al1_records`) union (select 17 AS `exclusion_list_id`,`exclusion_lists_staging`.`wv2_records`.`id` AS `exclusion_list_record_id`,`exclusion_lists_staging`.`wv2_records`.`first_name` AS `first_name`,`exclusion_lists_staging`.`wv2_records`.`middle_name` AS `middle_name`,`exclusion_lists_staging`.`wv2_records`.`last_name` AS `last_name`,`exclusion_lists_staging`.`wv2_records`.`full_name` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,`exclusion_lists_staging`.`wv2_records`.`npi_number` AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`wv2_records`) union (select 18 AS `exclusion_list_id`,`exclusion_lists_staging`.`md1_records`.`id` AS `exclusion_list_record_id`,`exclusion_lists_staging`.`md1_records`.`first_name` AS `first_name`,NULL AS `middle_name`,`exclusion_lists_staging`.`md1_records`.`last_name` AS `last_name`,NULL AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`md1_records`) union (select 19 AS `exclusion_list_id`,`exclusion_lists_staging`.`id1_records`.`id` AS `exclusion_list_record_id`,NULL AS `first_name`,NULL AS `middle_name`,NULL AS `last_name`,`exclusion_lists_staging`.`id1_records`.`name` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`id1_records`) union (select 20 AS `exclusion_list_id`,`exclusion_lists_staging`.`ne1_records`.`id` AS `exclusion_list_record_id`,NULL AS `first_name`,NULL AS `middle_name`,NULL AS `last_name`,`exclusion_lists_staging`.`ne1_records`.`provider_name` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`ne1_records`) union (select 21 AS `exclusion_list_id`,`exclusion_lists_staging`.`wy1_records`.`id` AS `exclusion_list_record_id`,`exclusion_lists_staging`.`wy1_records`.`first_name` AS `first_name`,NULL AS `middle_name`,`exclusion_lists_staging`.`wy1_records`.`last_name` AS `last_name`,`exclusion_lists_staging`.`wy1_records`.`business_name` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`wy1_records`) union (select 22 AS `exclusion_list_id`,`exclusion_lists_staging`.`nv1_records`.`id` AS `exclusion_list_record_id`,NULL AS `first_name`,NULL AS `middle_name`,NULL AS `last_name`,`exclusion_lists_staging`.`nv1_records`.`doing_business_as` AS `entity1`,`exclusion_lists_staging`.`nv1_records`.`legal_entity` AS `entity2`,`exclusion_lists_staging`.`nv1_records`.`ownership_of_at_least_5_percent` AS `entity3`,NULL AS `ssn_last_four`,`exclusion_lists_staging`.`nv1_records`.`npi` AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`nv1_records`) union (select 23 AS `exclusion_list_id`,`exclusion_lists_staging`.`ca1_records`.`id` AS `exclusion_list_record_id`,`exclusion_lists_staging`.`ca1_records`.`first_name` AS `first_name`,`exclusion_lists_staging`.`ca1_records`.`middle_name` AS `middle_name`,`exclusion_lists_staging`.`ca1_records`.`last_name` AS `last_name`,`exclusion_lists_staging`.`ca1_records`.`business` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`ca1_records`) union (select 24 AS `exclusion_list_id`,`exclusion_lists_staging`.`hi1_records`.`id` AS `exclusion_list_record_id`,`exclusion_lists_staging`.`hi1_records`.`first_name` AS `first_name`,NULL AS `middle_name`,`exclusion_lists_staging`.`hi1_records`.`last_name_or_business` AS `last_name`,NULL AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`hi1_records`) union (select 25 AS `exclusion_list_id`,`exclusion_lists_staging`.`az1_records`.`id` AS `exclusion_list_record_id`,`exclusion_lists_staging`.`az1_records`.`first_name` AS `first_name`,`exclusion_lists_staging`.`az1_records`.`middle` AS `middle_name`,`exclusion_lists_staging`.`az1_records`.`last_name_company_name` AS `last_name`,NULL AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,`exclusion_lists_staging`.`az1_records`.`npi_number` AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`az1_records`) union (select 26 AS `exclusion_list_id`,`exclusion_lists_staging`.`tn1_records`.`id` AS `exclusion_list_record_id`,`exclusion_lists_staging`.`tn1_records`.`first_name` AS `first_name`,NULL AS `middle_name`,`exclusion_lists_staging`.`tn1_records`.`last_name` AS `last_name`,NULL AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,`exclusion_lists_staging`.`tn1_records`.`npi` AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`tn1_records`) union (select 27 AS `exclusion_list_id`,`exclusion_lists_staging`.`mn1_records`.`id` AS `exclusion_list_record_id`,`exclusion_lists_staging`.`mn1_records`.`first_name` AS `first_name`,`exclusion_lists_staging`.`mn1_records`.`middle_name` AS `middle_name`,`exclusion_lists_staging`.`mn1_records`.`last_name` AS `last_name`,`exclusion_lists_staging`.`mn1_records`.`sort_name` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`mn1_records`) union (select 29 AS `exclusion_list_id`,`exclusion_lists_staging`.`ak1_records`.`id` AS `exclusion_list_record_id`,`exclusion_lists_staging`.`ak1_records`.`first_name` AS `first_name`,`exclusion_lists_staging`.`ak1_records`.`middle_name` AS `middle_name`,`exclusion_lists_staging`.`ak1_records`.`last_name` AS `last_name`,NULL AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`ak1_records`) union (select 30 AS `exclusion_list_id`,`exclusion_lists_staging`.`ms1_records`.`id` AS `exclusion_list_record_id`,NULL AS `first_name`,NULL AS `middle_name`,NULL AS `last_name`,`exclusion_lists_staging`.`ms1_records`.`entity_1` AS `entity1`,`exclusion_lists_staging`.`ms1_records`.`entity_2` AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`ms1_records`) union (select 31 AS `exclusion_list_id`,`exclusion_lists_staging`.`nc1_records`.`id` AS `exclusion_list_record_id`,`exclusion_lists_staging`.`nc1_records`.`first_name` AS `first_name`,NULL AS `middle_name`,`exclusion_lists_staging`.`nc1_records`.`last_name` AS `last_name`,NULL AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,`exclusion_lists_staging`.`nc1_records`.`npi` AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`nc1_records`) union (select 32 AS `exclusion_list_id`,`exclusion_lists_staging`.`mo1_records`.`id` AS `exclusion_list_record_id`,NULL AS `first_name`,NULL AS `middle_name`,NULL AS `last_name`,`exclusion_lists_staging`.`mo1_records`.`provider_name` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,`exclusion_lists_staging`.`mo1_records`.`npi` AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`mo1_records`) union (select 33 AS `exclusion_list_id`,`exclusion_lists_staging`.`wa1_records`.`id` AS `exclusion_list_record_id`,`exclusion_lists_staging`.`wa1_records`.`first_name` AS `first_name`,`exclusion_lists_staging`.`wa1_records`.`middle_etc` AS `middle_name`,`exclusion_lists_staging`.`wa1_records`.`last_name` AS `last_name`,`exclusion_lists_staging`.`wa1_records`.`entity` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`wa1_records`) union (select 34 AS `exclusion_list_id`,`exclusion_lists_staging`.`ks1_records`.`id` AS `exclusion_list_record_id`,NULL AS `first_name`,NULL AS `middle_name`,NULL AS `last_name`,`exclusion_lists_staging`.`ks1_records`.`name` AS `entity1`,`exclusion_lists_staging`.`ks1_records`.`d_b_a` AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,`exclusion_lists_staging`.`ks1_records`.`npi` AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`ks1_records`) union (select 35 AS `exclusion_list_id`,`exclusion_lists_staging`.`la1_records`.`id` AS `exclusion_list_record_id`,`exclusion_lists_staging`.`la1_records`.`first_name` AS `first_name`,NULL AS `middle_name`,`exclusion_lists_staging`.`la1_records`.`last_or_entity_name` AS `last_name`,`exclusion_lists_staging`.`la1_records`.`last_or_entity_name` AS `entity1`,`exclusion_lists_staging`.`la1_records`.`affiliated_entity` AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,`exclusion_lists_staging`.`la1_records`.`npi` AS `npi`,NULL AS `upin`,`exclusion_lists_staging`.`la1_records`.`birthdate` AS `date_of_birth` from `exclusion_lists_staging`.`la1_records`) union (select 36 AS `exclusion_list_id`,`exclusion_lists_staging`.`nd1_records`.`id` AS `exclusion_list_record_id`,NULL AS `first_name`,NULL AS `middle_name`,NULL AS `last_name`,`exclusion_lists_staging`.`nd1_records`.`provider_name` AS `entity1`,`exclusion_lists_staging`.`nd1_records`.`business` AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,`exclusion_lists_staging`.`nd1_records`.`npi` AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`nd1_records`) union (select 37 AS `exclusion_list_id`,`exclusion_lists_staging`.`mt1_records`.`id` AS `exclusion_list_record_id`,NULL AS `first_name`,NULL AS `middle_name`,NULL AS `last_name`,`exclusion_lists_staging`.`mt1_records`.`provider_name` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`mt1_records`) union (select 38 AS `exclusion_list_id`,`exclusion_lists_staging`.`dc1_records`.`id` AS `exclusion_list_record_id`,`exclusion_lists_staging`.`dc1_records`.`first_name` AS `first_name`,`exclusion_lists_staging`.`dc1_records`.`middle_name` AS `middle_name`,`exclusion_lists_staging`.`dc1_records`.`last_name` AS `last_name`,`exclusion_lists_staging`.`dc1_records`.`company_name` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`dc1_records`) union (select 39 AS `exclusion_list_id`,`exclusion_lists_staging`.`ia1_records`.`id` AS `exclusion_list_record_id`,`exclusion_lists_staging`.`ia1_records`.`individual_first_name` AS `first_name`,NULL AS `middle_name`,`exclusion_lists_staging`.`ia1_records`.`individual_last_name` AS `last_name`,`exclusion_lists_staging`.`ia1_records`.`entity_name` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,`exclusion_lists_staging`.`ia1_records`.`npi` AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`ia1_records`) union (select 40 AS `exclusion_list_id`,`exclusion_lists_staging`.`ga1_records`.`id` AS `exclusion_list_record_id`,`exclusion_lists_staging`.`ga1_records`.`first_name` AS `first_name`,NULL AS `middle_name`,`exclusion_lists_staging`.`ga1_records`.`last_name` AS `last_name`,`exclusion_lists_staging`.`ga1_records`.`business_name` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`ga1_records`) union (select 41 AS `exclusion_list_id`,`exclusion_lists_staging`.`me1_records`.`id` AS `exclusion_list_record_id`,`exclusion_lists_staging`.`me1_records`.`first_name` AS `first_name`,`exclusion_lists_staging`.`me1_records`.`middle_initial` AS `middle_name`,`exclusion_lists_staging`.`me1_records`.`last_name` AS `last_name`,`exclusion_lists_staging`.`me1_records`.`entity` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`me1_records`) union (select 42 AS `exclusion_list_id`,`exclusion_lists_staging`.`fdac_records`.`id` AS `exclusion_list_record_id`,NULL AS `first_name`,NULL AS `middle_name`,NULL AS `last_name`,`exclusion_lists_staging`.`fdac_records`.`name` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`fdac_records`) union (select 43 AS `exclusion_list_id`,`exclusion_lists_staging`.`phs_records`.`id` AS `exclusion_list_record_id`,`exclusion_lists_staging`.`phs_records`.`first_name` AS `first_name`,`exclusion_lists_staging`.`phs_records`.`middle_name` AS `middle_name`,`exclusion_lists_staging`.`phs_records`.`last_name` AS `last_name`,NULL AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`phs_records`) union (select 44 AS `exclusion_list_id`,`exclusion_lists_staging`.`usdocdp_records`.`id` AS `exclusion_list_record_id`,NULL AS `first_name`,NULL AS `middle_name`,NULL AS `last_name`,`exclusion_lists_staging`.`usdocdp_records`.`name` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`usdocdp_records`) union (select 45 AS `exclusion_list_id`,`exclusion_lists_staging`.`fdadl_records`.`id` AS `exclusion_list_record_id`,NULL AS `first_name`,NULL AS `middle_name`,NULL AS `last_name`,`exclusion_lists_staging`.`fdadl_records`.`name` AS `entity1`,`exclusion_lists_staging`.`fdadl_records`.`aka` AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`fdadl_records`) union (select 46 AS `exclusion_list_id`,`exclusion_lists_staging`.`fehbp_records`.`id` AS `exclusion_list_record_id`,NULL AS `first_name`,NULL AS `middle_name`,NULL AS `last_name`,`exclusion_lists_staging`.`fehbp_records`.`name` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,`exclusion_lists_staging`.`fehbp_records`.`ssn_last_four` AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,`exclusion_lists_staging`.`fehbp_records`.`date_of_birth` AS `date_of_birth` from `exclusion_lists_staging`.`fehbp_records`) union (select 47 AS `exclusion_list_id`,`exclusion_lists_staging`.`usdosd_records`.`id` AS `exclusion_list_record_id`,NULL AS `first_name`,NULL AS `middle_name`,NULL AS `last_name`,`exclusion_lists_staging`.`usdosd_records`.`full_name` AS `entity1`,`exclusion_lists_staging`.`usdosd_records`.`aka_name` AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`usdosd_records`) union (select 48 AS `exclusion_list_id`,`exclusion_lists_staging`.`unsancindividuals_records`.`id` AS `exclusion_list_record_id`,`exclusion_lists_staging`.`unsancindividuals_records`.`first_name` AS `first_name`,NULL AS `middle_name`,`exclusion_lists_staging`.`unsancindividuals_records`.`second_name` AS `last_name`,`exclusion_lists_staging`.`unsancindividuals_records`.`first_name` AS `entity1`,`exclusion_lists_staging`.`unsancindividuals_records`.`second_name` AS `entity2`,`exclusion_lists_staging`.`unsancindividuals_records`.`third_name` AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,`exclusion_lists_staging`.`unsancindividuals_records`.`date_of_birth` AS `date_of_birth` from `exclusion_lists_staging`.`unsancindividuals_records`) union (select 49 AS `exclusion_list_id`,`exclusion_lists_staging`.`unsancentities_records`.`id` AS `exclusion_list_record_id`,NULL AS `first_name`,NULL AS `middle_name`,NULL AS `last_name`,`exclusion_lists_staging`.`unsancentities_records`.`entity_name` AS `entity1`,`exclusion_lists_staging`.`unsancentities_records`.`entity_alias` AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`unsancentities_records`) union (select 50 AS `exclusion_list_id`,`exclusion_lists_staging`.`healthmil_records`.`id` AS `exclusion_list_record_id`,`exclusion_lists_staging`.`healthmil_records`.`first_name` AS `first_name`,`exclusion_lists_staging`.`healthmil_records`.`middle_name` AS `middle_name`,`exclusion_lists_staging`.`healthmil_records`.`last_name` AS `last_name`,`exclusion_lists_staging`.`healthmil_records`.`companies` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth` from `exclusion_lists_staging`.`healthmil_records`)</createView>
+    </changeSet>
+    <changeSet id="svg-354-1" author="sv">
+        <addColumn tableName="il1_records">
+            <column name="NEW_ADDITION" type="VARCHAR(255)" afterColumn="ZIP_CODE">
+                    <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <addColumn tableName="il1_records_older">
+            <column name="NEW_ADDITION" type="VARCHAR(255)" afterColumn="ZIP_CODE">
+                    <constraints nullable="false"/>
+            </column>
+        </addColumn>        
     </changeSet>
 </databaseChangeLog>

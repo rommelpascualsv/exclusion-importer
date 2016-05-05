@@ -50,6 +50,7 @@ abstract class ExclusionList
      */
     public $hashColumns = [];
     public $dateColumns = [];
+    public $npiColumnName;
     public $fieldNames = [];
     public $urlSuffix = '';
     public $requestOptions = [];
@@ -73,22 +74,19 @@ abstract class ExclusionList
         $this->data = $retriever->retrieveData($this);
     }
 
-    public function convertDatesToMysql($data, $dateColumns)
+    public function convertDatesToMysql($row, $dateColumns)
     {
-        return array_map(function ($row) use ($dateColumns) {
-
-            foreach ($dateColumns as $columnName => $index) {
-                $columnValue = $row[$index];
-                if (strtotime($columnValue)) {
-                    $date = new \DateTime($columnValue);
-                    $row[$index] = $date->format('Y-m-d');
-                } else {
-                    $row[$index] = $this->valueForUnparsableDate($columnName, $columnValue, $row);
-                }
+        foreach ($dateColumns as $columnName => $index) {
+            $columnValue = $row[$index];
+            if (strtotime($columnValue)) {
+                $date = new \DateTime($columnValue);
+                $row[$index] = $date->format('Y-m-d');
+            } else {
+                $row[$index] = $this->valueForUnparsableDate($columnName, $columnValue, $row);
             }
+        }
 
-            return $row;
-        }, $data);
+        return $row;
     }
 
     public function removeColumns($data, $ignoreColumns)
@@ -103,25 +101,33 @@ abstract class ExclusionList
 
         }, $data);
     }
-
-    public function convertToAssoc()
+    
+    public function convertToAssoc($row)
     {
-        $this->data = array_map(function ($item) {
-            
-            return array_combine($this->fieldNames, $item);
-
-        }, $this->data);
+        return array_combine($this->fieldNames, $row);
     }
 
     public function preProcess()
     {
-        if (count($this->dateColumns) > 0) {
-            $this->data = $this->convertDatesToMysql($this->data, $this->dateColumns);
-        }
-
-        if (count($this->ignoreColumns) > 0) {
-            $this->data = $this->removeColumns($this->data, $this->dateColumns);
-        }
+        $this->data = array_map(function ($row) {
+        
+            if (count($this->dateColumns) > 0) {
+                $row = $this->convertDatesToMysql($row, $this->dateColumns);
+            }
+            
+            if (count($this->ignoreColumns) > 0) {
+                $row = $this->removeColumns($row, $this->ignoreColumns);
+            }
+            if ($this->npiColumnName) {
+                $npiColumnIndex = $this->getNpiColumnIndex($this->npiColumnName);
+                $row[$npiColumnIndex] = $this->handleNpiValues($row[$npiColumnIndex]);
+            }
+            
+            $row = $this->convertToAssoc($row);
+            
+            return $row;
+        
+        }, $this->data);
     }
 
     public function postProcess()
@@ -133,7 +139,43 @@ abstract class ExclusionList
     }
     
     /**
-     * Returns a value for an unparsable date column in the given row. Returns 
+     * Make a JSON array string representation for a given array, otherwise return a string value.
+     *
+     * @param array $npi the npi array
+     * @return string the JSON array string representation or the string value
+     */
+    private function handleNpiValues(array $npi)
+    {
+        if (empty($npi)) {
+            return "";
+        } else if (count($npi) == 1) {
+            return head($npi);
+        }
+        return json_encode($npi);
+    }
+    
+    /**
+     * Retrieves the npi column index for a given npi column name
+     * @param string $npiColumnName
+     * @return int the npi column index
+     */
+    private function getNpiColumnIndex($npiColumnName)
+    {
+        $index = 0;
+        foreach ($this->fieldNames as $field) {
+            
+            if ($field === $npiColumnName) {
+                break;
+            }
+            
+            $index++;
+        }
+        
+        return $index;
+    }
+    
+    /**
+     * Returns a value for an unparsable date column in the given row. Returns
      * null by default, but subclasses can override this method to return any value
      * to set as the value for that date column.
      * @param string $columnName the name of the date column whose value is being

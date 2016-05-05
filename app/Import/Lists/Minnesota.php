@@ -51,7 +51,7 @@ class Minnesota extends ExclusionList
        'effective_date_of_exclusion' => 5
     ];
 
-    public $hashFields = [
+    public $hashColumns = [
         'last_name',
         'first_name',
         'middle_name',
@@ -59,6 +59,8 @@ class Minnesota extends ExclusionList
         'sort_name'
     ];
 
+    public $shouldHashListName = true;
+    
     /**
      * @inherit preProcess
      */

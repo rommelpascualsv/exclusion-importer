@@ -4,7 +4,7 @@ class Nebraska extends ExclusionList
 {
     public $dbPrefix = 'ne1';
 
-    public $pdfToText = "java -jar ../etc/tabula.jar -p all -u -g -r";
+    public $pdfToText = "java -Dfile.encoding=utf-8 -jar ../etc/tabula.jar -p all -u -g -r";
 
     public $uri = "http://dhhs.ne.gov/medicaid/Documents/Excluded-Providers.pdf";
     
@@ -18,7 +18,8 @@ class Nebraska extends ExclusionList
     	'effective_date',
     	'term',
     	'end_date',
-        'reason_for_action'
+    	'reason_for_action',
+    	'provider_number'
     ];
 
 
@@ -40,13 +41,29 @@ class Nebraska extends ExclusionList
     public $dateColumns = [
         'effective_date' => 4
     ];
+    
+    public $shouldHashListName = true;
+    
+    public $npiColumnName = "npi";
+    
+    private $npiRegex = "/1\d{9}\b/";
+    
+    private $commaRegex = "/^((,|\/)+\s)?(,|\/)?|((,|\/)+\s)?(,|\/)?$/";
+    
+    private $spacesRegex = "!\s+!";
 
-    public function preProcess()
-    {
-    	$this->parse();
-    	parent::preProcess();
-    }
-
+    /**
+	 * @inherit preProcess
+	 */
+	public function preProcess()
+	{
+		$this->parse();
+		parent::preProcess();
+	}
+	
+	/**
+	 * Parse the input data
+	 */
     public function parse()
     {
         $rows = preg_split('/(\r)?\n(\s+)?/', $this->data);
@@ -80,27 +97,54 @@ class Nebraska extends ExclusionList
     
     /**
      * Applies the specific overrides to correct the data
+     * 
      * @param array $columns the column array
      * @return array $columns the column array
      */
     private function applyOverrides($columns)
     {
-    	$columns = $this->clearInvalidNpiValue($columns);
+    	// set provider number
+    	$columns = $this->setProviderNo($columns);
+    	
+    	// set npi number array
+    	$columns = $this->setNpi($columns);
     	
     	return $columns;
     }
     
     /**
-     * Clears the invalid npi value from the record.
-     * @param array $columns the column array
+	 * Set the provider number by clearing the unnecessary characters
+	 *
+	 * @param array $columns the column array
      * @return array $columns the column array
-     */
-    private function clearInvalidNpiValue($columns)
-    {
-    	if (!is_numeric($columns[1])) {
-    		$columns[1] = null; 
-    	}
-    		
-    	return $columns;
-    }
+	 */
+	private function setProviderNo($columns)
+	{
+		// remove valid npi numbers
+		$providerNo = preg_replace($this->npiRegex, "", trim($columns[1]));
+		 
+		// remove commas
+		$providerNo = preg_replace($this->commaRegex, "", trim($providerNo));
+		 
+		// remove duplicate spaces in between numbers
+		$columns[] = preg_replace($this->spacesRegex, " ", trim($providerNo));
+		 
+		return $columns;
+	}
+	
+	/**
+	 * Set the npi numbers
+	 *
+	 * @param array $columns the column array
+     * @return array $columns the column array
+	 */
+	private function setNpi($columns)
+	{
+		// extract npi number/s
+		preg_match_all($this->npiRegex, $columns[1], $npi);
+	
+		$columns[1] = $npi[0];
+		 
+		return $columns;
+	}
 }
