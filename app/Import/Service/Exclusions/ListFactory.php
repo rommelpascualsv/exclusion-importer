@@ -12,6 +12,7 @@ class ListFactory
         'fl2'               => 'Florida',
         'hi1'               => 'Hawaii',
         'id1'               => 'Idaho',
+        'il1'               => 'Illinois',
         'ky1'               => 'Kentucky',
         'ma1'               => 'Massachusetts',
         'md1'               => 'Maryland',
