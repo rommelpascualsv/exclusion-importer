@@ -51,7 +51,7 @@ class CSVRetriever extends Retriever
         foreach ($uri as $key => $value) {
 
             if ($this->uriIsRemote($value)) {
-                $response = $this->httpClient->get($value);
+                $response = $this->httpClient->get($value, ['verify' => false]);
                 $contents = $response->getBody();
             } else {
                 $contents = file_get_contents($value);

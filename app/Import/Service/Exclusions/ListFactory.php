@@ -48,7 +48,8 @@ class ListFactory
         'usdosd'            => 'USDosDebar',
         'unsancindividuals' => 'UnSanctionsIndividuals',
         'unsancentities'    => 'UnSanctionsEntities',
-        'healthmil'    => 'HealthMil',
+        'healthmil'         => 'HealthMil',
+    	'csl'               => 'ConsolidatedScreeningList'
     ];
 
     /**
