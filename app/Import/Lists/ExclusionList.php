@@ -144,7 +144,7 @@ abstract class ExclusionList
      * @param array $npi the npi array
      * @return string the JSON array string representation or the string value
      */
-    private function handleNpiValues(array $npi)
+    private function handleNpiValues(array $npi = null)
     {
         if (empty($npi)) {
             return "";
