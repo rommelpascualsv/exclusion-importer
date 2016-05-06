@@ -39,7 +39,7 @@ class Mississippi extends ExclusionList
         'exclusion_from_date' => 8
     ];
     
-    public $npiColumnName = 'npi';
+    protected $npiColumnName = 'npi';
     
     public $shouldHashListName = true;
     

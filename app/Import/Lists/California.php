@@ -1,5 +1,7 @@
 <?php namespace App\Import\Lists;
 
+use \App\Import\Lists\ProviderNumberHelper as PNHelper;
+
 class California extends ExclusionList
 {
     public $dbPrefix = 'ca1';
@@ -24,13 +26,9 @@ class California extends ExclusionList
     
     public $shouldHashListName = true;
     
-    public $npiColumnName = "npi";
+    protected $npiColumnName = "npi";
     
-    private $npiRegex = "/1\d{9}\b/";
-    
-    private $commaRegex = "/^(,+\s)?,?|(,+\s)?,?$/";
-    
-    private $spacesRegex = "!\s+!";
+    protected $providerNumberColumnName = "provider_numbers";
     
     /**
      * @inherit preProcess
@@ -50,63 +48,19 @@ class California extends ExclusionList
     	
     	// iterate each row
     	foreach ($this->data as $row) {
-    		$data[] = $this->handleRow($row);
+    	    
+    	    $providerNoIndex = $this->getProviderNumberColumnIndex();
+    	    
+    	    // set npi number array
+    	    $row = PNHelper::setNpiValue($row, PNHelper::getNpiValue($row, $providerNoIndex));
+    	    
+    	    // set provider number
+    	    $row = PNHelper::setProviderNumberValue($row, PNHelper::getProviderNumberValue($row, $providerNoIndex), $providerNoIndex);
+    	    
+    		$data[] = $row;
     	}
     	
     	// set back to global data
     	$this->data = $data;
-    }
-    
-    /**
-     * Handles the data manipulation of a record array.
-     * 
-     * @param array $row the array record
-     * @return array $row the array record
-     */
-    private function handleRow($row)
-    {
-    	// set npi number array
-    	$row = $this->setNpi($row);
-    	
-    	// set provider number
-    	$row = $this->setProviderNo($row);
-    	
-    	return $row;
-    }
-    
-    /**
-     * Set the provider number by clearing the unnecessary characters
-     *   
-     * @param array $row the array record
-     * @return array $row the array record
-     */
-    private function setProviderNo($row)
-    {	
-    	// remove valid npi numbers
-    	$row[7] = preg_replace($this->npiRegex, "", trim($row[7]));
-    	
-    	// remove commas
-    	$row[7] = preg_replace($this->commaRegex, "", trim($row[7]));
-    	
-    	// remove duplicate spaces in between numbers
-    	$row[7] = preg_replace($this->spacesRegex, " ", trim($row[7]));
-    	
-    	return $row;
-    }
-    
-    /**
-     * Set the npi numbers by extracting from provider number column
-     *   
-     * @param array $row the array record
-     * @return array $row the array record
-     */
-    private function setNpi($row)
-    {
-    	// extract npi number/s
-    	preg_match_all($this->npiRegex, $row[7], $npi);
-    	 
-    	$row[] = $npi[0];
-    	
-    	return $row;
     }
 }
