@@ -98,7 +98,7 @@ class Tennessee extends ExclusionList
                 $middleName = $this->findMiddleName($firstName);
                 
                 if ($middleName) {
-                    $firstName = $this->trimMiddleName($firstName, $middleName);
+                    $firstName = trim($this->trimMiddleName($firstName, $middleName));
                 }
                 
             }
