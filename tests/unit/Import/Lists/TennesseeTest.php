@@ -3,17 +3,22 @@ use App\Import\Lists\Tennessee;
 
 class TennesseeTest extends \Codeception\TestCase\Test
 {
+    private $importer;
  
+    protected function _before()
+    {
+        $this->importer = new Tennessee();
+    }
+    
     public function testHeaderRowShouldNotBeIncludedInData()
     {
-        $importer = new Tennessee();
         
-        $importer->data = "Last Name,First Name,NPI,Begin Date,Reason,End Date\r\n".
+        $this->importer->data = "Last Name,First Name,NPI,Begin Date,Reason,End Date\r\n".
                           "Foster,Allen R.,1326132572,3/20/2012,Felony conviction,\r\n".
                           "Last Name,First Name,NPI,Begin Date,Reason,End Date\r\n".
                           'Blankenship,Brad,1427090562,7/30/2015,Failure to respond to requests for records on Tenncare patients,7/30/2018';
         
-        $importer->preProcess();
+        $this->importer->preProcess();
         
         $expected = [
             [
@@ -35,21 +40,20 @@ class TennesseeTest extends \Codeception\TestCase\Test
             ]            
         ];
         
-        $this->assertEquals($expected, $importer->data);
+        $this->assertEquals($expected, $this->importer->data);
         
     }    
     
     public function testMiddleNamesShouldBeParsedFromFirstNameCorrectly()
     {
-        $importer = new Tennessee();
     
-        $importer->data = 
+        $this->importer->data = 
             "Foster,Allen R.,1326132572,3/20/2012,Felony conviction,\r\n". //Middle Initial
             "Blankenship,Brad Pitt,1427090562,7/30/2015,Failure to respond to requests for records on Tenncare patients,7/30/2018\r\n". //Middle Name
             "Doe,Mary Jane X.,1427090564,6/30/2016,Violation of the contract,6/30/2019\r\n". //Middle Name with Middle Initial
             'Clabough,Kenneth,1043631401,10/30/2015,Failure to disclose required information,'; //No middle name
         
-        $importer->preProcess();
+        $this->importer->preProcess();
     
         $expected = [
             [
@@ -87,17 +91,16 @@ class TennesseeTest extends \Codeception\TestCase\Test
             ]
         ];
     
-        $this->assertEquals($expected, $importer->data);
+        $this->assertEquals($expected, $this->importer->data);
     
     }
     
     public function testOverflowingNamesShouldBeProcessedCorrectly()
     {
-        $importer = new Tennessee();
     
-        $importer->data = 'The Rainbow Center of Children & Adole,scent,1073705141,3/31/2016,Violation of the contract.,';
+        $this->importer->data = 'The Rainbow Center of Children & Adole,scent,1073705141,3/31/2016,Violation of the contract.,';
     
-        $importer->preProcess();
+        $this->importer->preProcess();
     
         $expected = [[
             'last_name' => 'The Rainbow Center of Children & Adolescent',
@@ -109,7 +112,7 @@ class TennesseeTest extends \Codeception\TestCase\Test
             'end_date' => null
         ]];
         
-        $this->assertEquals($expected, $importer->data);
+        $this->assertEquals($expected, $this->importer->data);
     
     }    
 
