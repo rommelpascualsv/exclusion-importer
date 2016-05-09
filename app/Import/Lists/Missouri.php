@@ -6,7 +6,7 @@ class Missouri extends ExclusionList
 {
 	public $dbPrefix = 'mo1';
 
-	public $uri = 'http://www.mmac.mo.gov/files/Sanction-List-10-15-upd.xls';
+	public $uri = 'http://www.mmac.mo.gov/files/Sanction-List-jan-2016.xls';
 
 	public $type = 'xls';
 
