@@ -108,17 +108,13 @@ abstract class ExclusionList
         return $row;
     }
 
-    public function removeColumns($data, $ignoreColumns)
+    public function removeColumns(array $row, $ignoreColumns)
     {
-        return array_map(function ($row) use ($ignoreColumns) {
+        foreach ($ignoreColumns as $index) {
+            unset($row[$index]);
+        }
 
-            foreach ($ignoreColumns as $index) {
-                unset($row[$index]);
-            }
-
-            return array_values($row);
-
-        }, $data);
+        return array_values($row);
     }
     
     public function convertToAssoc($row)
