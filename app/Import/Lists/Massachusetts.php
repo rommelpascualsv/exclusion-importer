@@ -58,33 +58,4 @@ class Massachusetts extends ExclusionList
     	$this->data = $data;
     }
     
-    /**
-     * Handles the data manipulation of a record array.
-     *
-     * @param array $row the array record
-     * @return array $row the array record
-     */
-    private function handleRow($row)
-    {
-    	// set npi number array
-    	$row = $this->setNpi($row);
-    	 
-    	return $row;
-    }
-    
-    /**
-     * Set the npi numbers
-     *
-     * @param array $row the array record
-     * @return array $row the array record
-     */
-    private function setNpi($row)
-    {
-    	// extract npi number/s
-    	preg_match_all($this->npiRegex, $row[2], $npi);
-    
-    	$row[2] = $npi[0];
-    	 
-    	return $row;
-    }
 }
