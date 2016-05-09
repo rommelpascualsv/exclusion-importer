@@ -9,7 +9,7 @@ class NewJersey extends ExclusionList
      */
     public $dbPrefix = 'njcdr';
 
-    public $uri = 'http://www.state.nj.us/treasury/debarment/files/Debarment.txt';
+    public $uri = 'http://www.state.nj.us/treasury/treasfiles/debarment/Debarment.txt';
 
     public $type = 'txt';
 
