@@ -62,20 +62,50 @@ class CsvImporter
 		}
 		
 		$mapper = MapperFactory::createByKeys($data['category'], $data['option']);
-		$optionId = $this->dbFindOptionIdByKey($data['option']);
+		$licenseTypeId = $this->dbFindLicenseTypeIdByKey($data['option']);
+		
 		
 		for ($i = 1; $i < $resultsCount; $i++) {
-			$row = $results[$i];
-			$csvData = $mapper->getCsvData($row);
-			$dbData = $mapper->getDbData($csvData);
-			
-			if ($dbData['type'] == static::TYPE_FACILITY) {
-				$this->dbInsertFacilityRoster($optionId, $dbData['values'], $timestamp);
-			} elseif ($dbData['type'] == static::TYPE_PERSON) {
-				$this->dbInsertPersonRoster($optionId, $dbData['values'], $timestamp);
-			}
+		    $row = $results[$i];
+		    $csvData = $mapper->getCsvData($row);
+		    $dbData = $mapper->getDbData($csvData);
+		    
+		    $this->dbInsertRoster($licenseTypeId, $dbData, $timestamp);
 		}
 	}
+	
+	/**
+	 * Find license type id by key
+	 * @param string $key
+	 * @return int|null
+	 */
+	public function dbFindLicenseTypeIdByKey($key)
+	{
+	    $licenseType = $this->db->table('ct_license_types')
+	    ->select('id')
+	    ->where('key', '=', $key)
+	    ->first();
+	
+	    return (is_object($licenseType)) ? $licenseType->id : null;
+	}
+	
+	/**
+	 * Insert roster to database
+	 * @param int $licenseTypeId
+	 * @param array $data
+	 * @param string $timestamp
+	 */
+    public function dbInsertRoster($licenseTypeId, $data, $timestamp)
+    {
+        $data = array_merge([
+            'ct_license_types_id' => $licenseTypeId,
+            'created_at' => $timestamp,
+            'updated_at' => $timestamp
+        ], $data);
+        
+        $this->db->table('ct_rosters')->insert($data);
+	}
+	
 	
 	public function dbInsertFacilityRoster($optionId, array $data, $timestamp)
 	{
@@ -128,37 +158,6 @@ class CsvImporter
 	}
 	
 	/**
-	 * Insert roster to database
-	 * @param int $optionId
-	 * @param int|null $facilityId
-	 * @param int|null $personId
-	 * @param array $data
-	 * @param string $timestamp
-	 */
-	protected function dbInsertRoster(
-			$optionId,
-			$facilityId = null,
-			$personId = null,
-			array $data,
-			$timestamp
-	) {
-		$this->db->table('ct_rosters')->insert([
-				'option_id' => $optionId,
-				'facility_id' => $facilityId,
-				'person_id' => $personId,
-				'address1' => $data['address1'],
-				'address2' => $data['address2'],
-				'city' => $data['city'],
-				'county' => $data['county'],
-				'state_code' => $data['state_code'],
-				'zip' => $data['zip'],
-				'complete_address' => $data['complete_address'],
-				'created_at' => $timestamp,
-				'updated_at' => $timestamp
-		]);
-	}
-	
-	/**
 	 * Insert person to db
 	 * @param string $firstName
 	 * @param string $lastName
@@ -191,23 +190,6 @@ class CsvImporter
 		$facilityId = (is_object($facility)) ? $facility->id : null;
 	
 		return $facilityId;
-	}
-	
-	/**
-	 * Find option id by key
-	 * @param string $key
-	 * @return int|null
-	 */
-	public function dbFindOptionIdByKey($key)
-	{
-		$option = $this->db->table('ct_roster_options')
-			->select('id')
-			->where('key', '=', $key)
-			->first();
-		
-		$optionId = (is_object($option)) ? $option->id : null;
-		
-		return $optionId;
 	}
 	
 	/**

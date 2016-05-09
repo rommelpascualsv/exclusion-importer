@@ -69,19 +69,58 @@ class AmbulatorySurgicalCenterMapperTest extends \Codeception\TestCase\Test
     	$dbData = $this->mapper->getDbData($data);
     	 
     	$expectedDbData = [
-    			'type' => CsvImporter::TYPE_FACILITY,
-    			'values' => [
-    					'name' => 'SAINT FRANCIS GI ENDOSCOPY, LLC',
-    					'address1' => '360 BLOOMFIELD AVE STE 204',
-    					'address2' => '',
-    					'city' => 'WINDSOR',
-    					'county' => '',
-    					'state_code' => 'CT',
-    					'zip' => '06095-2700',
-    					'complete_address' => ''
-    			]
+    	    'first_name' => '',
+            'last_name' => '',
+            'business_name' => 'SAINT FRANCIS GI ENDOSCOPY, LLC',
+            'address1' => '360 BLOOMFIELD AVE STE 204',
+            'address2' => '',
+            'city' => 'WINDSOR',
+            'county' => '',
+            'state' => 'CT',
+            'zip' => '06095-2700',
+            'license_no' => '321',
+            'license_effective_date' => '2008-10-30',
+            'license_expiration_date' => '2016-09-30',
+            'license_status' => 'ACTIVE',
+            'license_status_reason' => ''
     	];
     	 
     	$this->assertEquals($expectedDbData, $dbData);
+    }
+    
+    public function getDbDataLicenseDatesEmpty()
+    {
+        $data = [
+            'facility_name' => 'SAINT FRANCIS GI ENDOSCOPY, LLC',
+            'address' => '360 BLOOMFIELD AVE STE 204',
+            'city' => 'WINDSOR',
+            'state' => 'CT',
+            'zip' => '06095-2700',
+            'license_no' => '321',
+            'status' => 'ACTIVE',
+            'effective_date' => '',
+            'expiration_date' => ''
+        ];
+        
+        $dbData = $this->mapper->getDbData($data);
+        
+        $expectedDbData = [
+            'first_name' => '',
+            'last_name' => '',
+            'business_name' => 'SAINT FRANCIS GI ENDOSCOPY, LLC',
+            'address1' => '360 BLOOMFIELD AVE STE 204',
+            'address2' => '',
+            'city' => 'WINDSOR',
+            'county' => '',
+            'state' => 'CT',
+            'zip' => '06095-2700',
+            'license_no' => '321',
+            'license_effective_date' => null,
+            'license_expiration_date' => null,
+            'license_status' => 'ACTIVE',
+            'license_status_reason' => ''
+        ];
+        
+        $this->assertEquals($expectedDbData, $dbData);
     }
 }

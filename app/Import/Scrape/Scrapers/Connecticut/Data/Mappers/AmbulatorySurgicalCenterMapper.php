@@ -24,14 +24,21 @@ class AmbulatorySurgicalCenterMapper extends Basemapper
 	 */
 	public function getDbData(array $data)
 	{
-		return $this->getFacilityDbData(
-				$data['facility_name'],
-				$data['address'],
-				'',
-				$data['city'],
-				'',
-				$data['state'],
-				$data['zip']
-		);
+	    return $this->getRosterDbData(
+	        '',
+	        '',
+	        $data['facility_name'],
+	        $data['address'],
+	        '',
+	        $data['city'],
+	        '',
+	        $data['state'],
+	        $data['zip'],
+	        $data['license_no'],
+	        $this->getDbDateFromFormat($data['effective_date']),
+	        $this->getDbDateFromFormat($data['expiration_date']),
+	        $data['status'],
+	        ''
+        );
 	}
 }

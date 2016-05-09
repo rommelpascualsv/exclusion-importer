@@ -22,7 +22,7 @@ class CsvImporterTest extends \Codeception\TestCase\Test
     		'healthcare_practitioners' => 21
     ];
     
-    protected $optionIds = [
+    protected $licenseTypeIds = [
     		'ambulatory_surgical_center' => 36,
     		'manufacturers_of_drugs_cosmetics_and_medical_devices' => 42,
     		'controlled_substance_laboratories' => 43,
@@ -31,83 +31,226 @@ class CsvImporterTest extends \Codeception\TestCase\Test
     
     protected function _before()
 	{
-    	$this->importData = [
-    			[
-    					'category' => 'ambulatory_surgical_centers_recovery_care_centers',
-    					'option' => 'ambulatory_surgical_center',
-    					'file_path' => codecept_data_dir('scrape/connecticut/csv/ambulatory_surgical_centers_recovery_care_centers/ambulatory_surgical_center.csv')
-    			],
-    			[
-    					'category' => 'controlled_substances_practitioners_labs_manufacturers',
-    					'option' => 'manufacturers_of_drugs_cosmetics_and_medical_devices',
-    					'file_path' => codecept_data_dir('scrape/connecticut/csv/controlled_substances_practitioners_labs_manufacturers/manufacturers_of_drugs_cosmetics_and_medical_devices.csv')
-    			],
-    			[
-    					'category' => 'controlled_substances_practitioners_labs_manufacturers',
-    					'option' => 'controlled_substance_laboratories',
-    					'file_path' => codecept_data_dir('scrape/connecticut/csv/controlled_substances_practitioners_labs_manufacturers/controlled_substance_laboratories.csv')
-    			],
-    			[
-    					'category' => 'healthcare_practitioners',
-    					'option' => 'acupuncturist',
-    					'file_path' => codecept_data_dir('scrape/connecticut/csv/healthcare_practitioners/acupuncturist.csv')
-    			]
-    	];
+    	$this->importData = $this->getImportData();
     	$this->db = app('db')->connection();
     	$this->importer = new CsvImporter($this->importData, $this->db);
     	
-    	/* insert categories */
-    	$this->tester->haveRecord('ct_roster_categories', [
-    			'id' => $this->categoryIds['ambulatory_surgical_centers_recovery_care_centers'],
-    			'key' => 'ambulatory_surgical_centers_recovery_care_centers',
-    			'name' => 'Ambulatory Surgical Centers/Recovery Care Centers'
-    	]);
-    	
-    	$this->tester->haveRecord('ct_roster_categories', [
-    			'id' => $this->categoryIds['controlled_substances_practitioners_labs_manufacturers'],
-    			'key' => 'controlled_substances_practitioners_labs_manufacturers',
-    			'name' => 'Controlled Substances (Practitioners, Labs, Manufacturers)'
-    	]);
-    	
-    	$this->tester->haveRecord('ct_roster_categories', [
-    			'id' => $this->categoryIds['healthcare_practitioners'],
-    			'key' => 'healthcare_practitioners',
-    			'name' => 'Healthcare Practitioners'
-    	]);
-    	
-    	/* insert options */
-    	$this->tester->haveRecord('ct_roster_options', [
-    			'id' => $this->optionIds['ambulatory_surgical_center'],
-    			'category_id' => $this->categoryIds['ambulatory_surgical_centers_recovery_care_centers'],
-    			'key' => 'ambulatory_surgical_center',
-    			'name' => 'Ambulatory Surgical Center'
-    	]);
-    	
-    	$this->tester->haveRecord('ct_roster_options', [
-    			'id' => $this->optionIds['manufacturers_of_drugs_cosmetics_and_medical_devices'],
-    			'category_id' => $this->categoryIds['controlled_substances_practitioners_labs_manufacturers'],
-    			'key' => 'manufacturers_of_drugs_cosmetics_and_medical_devices',
-    			'name' => 'Manufacturers of Drugs, Cosmetics and Medical Devices'
-    	]);
-    	
-    	$this->tester->haveRecord('ct_roster_options', [
-    			'id' => $this->optionIds['controlled_substance_laboratories'],
-    			'category_id' => $this->categoryIds['controlled_substances_practitioners_labs_manufacturers'],
-    			'key' => 'controlled_substance_laboratories',
-    			'name' => 'Controlled Substance Laboratories'
-    	]);
-    	
-    	$this->tester->haveRecord('ct_roster_options', [
-    			'id' => $this->optionIds['acupuncturist'],
-    			'category_id' => $this->categoryIds['healthcare_practitioners'],
-    			'key' => 'acupuncturist',
-    			'name' => 'Acupuncturist'
-    	]);
+    	$this->seedCategories();
+    	$this->seedLicenseTypes();
     }
 
     protected function _after()
     {
     }
+    
+    protected function getImportData()
+    {
+        return [
+            [
+                'category' => 'ambulatory_surgical_centers_recovery_care_centers',
+                'option' => 'ambulatory_surgical_center',
+                'file_path' => codecept_data_dir('scrape/connecticut/csv/ambulatory_surgical_centers_recovery_care_centers/ambulatory_surgical_center.csv')
+            ],
+            [
+                'category' => 'controlled_substances_practitioners_labs_manufacturers',
+                'option' => 'manufacturers_of_drugs_cosmetics_and_medical_devices',
+                'file_path' => codecept_data_dir('scrape/connecticut/csv/controlled_substances_practitioners_labs_manufacturers/manufacturers_of_drugs_cosmetics_and_medical_devices.csv')
+            ],
+            [
+                'category' => 'controlled_substances_practitioners_labs_manufacturers',
+                'option' => 'controlled_substance_laboratories',
+                'file_path' => codecept_data_dir('scrape/connecticut/csv/controlled_substances_practitioners_labs_manufacturers/controlled_substance_laboratories.csv')
+            ],
+            [
+                'category' => 'healthcare_practitioners',
+                'option' => 'acupuncturist',
+                'file_path' => codecept_data_dir('scrape/connecticut/csv/healthcare_practitioners/acupuncturist.csv')
+            ]
+        ];
+    }
+    
+    protected function seedCategories()
+    {
+        $this->tester->haveRecord('ct_license_categories', [
+            'id' => $this->categoryIds['ambulatory_surgical_centers_recovery_care_centers'],
+            'key' => 'ambulatory_surgical_centers_recovery_care_centers',
+            'name' => 'Ambulatory Surgical Centers/Recovery Care Centers'
+        ]);
+         
+        $this->tester->haveRecord('ct_license_categories', [
+            'id' => $this->categoryIds['controlled_substances_practitioners_labs_manufacturers'],
+            'key' => 'controlled_substances_practitioners_labs_manufacturers',
+            'name' => 'Controlled Substances (Practitioners, Labs, Manufacturers)'
+        ]);
+         
+        $this->tester->haveRecord('ct_license_categories', [
+            'id' => $this->categoryIds['healthcare_practitioners'],
+            'key' => 'healthcare_practitioners',
+            'name' => 'Healthcare Practitioners'
+        ]);
+    }
+    
+    protected function seedLicenseTypes()
+    {
+        $table = 'ct_license_types';
+        
+        $this->tester->haveRecord($table, [
+            'id' => $this->licenseTypeIds['ambulatory_surgical_center'],
+            'ct_license_categories_id' => $this->categoryIds['ambulatory_surgical_centers_recovery_care_centers'],
+            'key' => 'ambulatory_surgical_center',
+            'name' => 'Ambulatory Surgical Center'
+        ]);
+         
+        $this->tester->haveRecord($table, [
+            'id' => $this->licenseTypeIds['manufacturers_of_drugs_cosmetics_and_medical_devices'],
+            'ct_license_categories_id' => $this->categoryIds['controlled_substances_practitioners_labs_manufacturers'],
+            'key' => 'manufacturers_of_drugs_cosmetics_and_medical_devices',
+            'name' => 'Manufacturers of Drugs, Cosmetics and Medical Devices'
+        ]);
+         
+        $this->tester->haveRecord($table, [
+            'id' => $this->licenseTypeIds['controlled_substance_laboratories'],
+            'ct_license_categories_id' => $this->categoryIds['controlled_substances_practitioners_labs_manufacturers'],
+            'key' => 'controlled_substance_laboratories',
+            'name' => 'Controlled Substance Laboratories'
+        ]);
+         
+        $this->tester->haveRecord($table, [
+            'id' => $this->licenseTypeIds['acupuncturist'],
+            'ct_license_categories_id' => $this->categoryIds['healthcare_practitioners'],
+            'key' => 'acupuncturist',
+            'name' => 'Acupuncturist'
+        ]);
+    }
+    
+    public function testImport()
+    {
+        $this->importer->import();
+         
+        $this->assertAmbulanceRecords();
+        /* $this->assertDrugManufacturerRecords();
+        $this->assertAcupuncturistRecords();
+        $this->assertControlledSubstanceLaboratoriesRecords(); */
+    }
+    
+    public function testDbFindLicenseTypeIdByKey()
+    {
+        $key = 'ambulatory_surgical_center';
+         
+        $id = $this->importer->dbFindLicenseTypeIdByKey($key);
+         
+        $this->assertEquals($this->licenseTypeIds['ambulatory_surgical_center'], $id);
+    }
+    
+    public function testDbFindLicenseTypeIdByKeyNotFound()
+    {
+        $key = 'some_unknown_key';
+    
+        $id = $this->importer->dbFindLicenseTypeIdByKey($key);
+    
+        $this->assertNull($id);
+    }
+    
+    public function testDbInsertRoster()
+    {
+        $licenseTypeId = $this->licenseTypeIds['ambulatory_surgical_center'];
+        $data = [
+            'first_name' => '',
+            'last_name' => '',
+            'business_name' => 'SAINT FRANCIS GI ENDOSCOPY, LLC',
+            'address1' => '360 BLOOMFIELD AVE STE 204',
+            'address2' => '',
+            'city' => 'WINDSOR',
+            'county' => '',
+            'state' => 'CT',
+            'zip' => '06095-2700',
+            'license_no' => '321',
+            'license_effective_date' => '2008-10-30',
+            'license_expiration_date' => '2016-09-30',
+            'license_status' => 'ACTIVE',
+            'license_status_reason' => ''
+        ];
+        $timestamp = '2016-05-01 01:30:00';
+    
+        $this->importer->dbInsertRoster($licenseTypeId, $data, $timestamp);
+    
+        $this->tester->seeRecord('ct_rosters', [
+            'ct_license_types_id' => $this->licenseTypeIds['ambulatory_surgical_center'],
+            'first_name' => '',
+            'last_name' => '',
+            'business_name' => 'SAINT FRANCIS GI ENDOSCOPY, LLC',
+            'address1' => '360 BLOOMFIELD AVE STE 204',
+            'address2' => '',
+            'city' => 'WINDSOR',
+            'county' => '',
+            'state' => 'CT',
+            'zip' => '06095-2700',
+            'license_no' => '321',
+            'license_effective_date' => '2008-10-30',
+            'license_expiration_date' => '2016-09-30',
+            'license_status' => 'ACTIVE',
+            'license_status_reason' => '',
+            'created_at' => '2016-05-01 01:30:00',
+            'updated_at' => '2016-05-01 01:30:00'
+        ]);
+    }
+    
+    public function testImportCsv()
+    {
+        $data = [
+            'category' => 'ambulatory_surgical_centers_recovery_care_centers',
+            'option' => 'ambulatory_surgical_center',
+            'file_path' => codecept_data_dir('scrape/connecticut/csv/ambulatory_surgical_centers_recovery_care_centers/ambulatory_surgical_center.csv')
+        ];
+        $timestamp = '2016-05-01 01:30:00';
+         
+        $this->importer->importCsv($data, $timestamp);
+         
+        $this->assertAmbulanceRecords();
+    }
+    
+    protected function assertAmbulanceRecords()
+    {
+        // first record
+        $this->tester->seeRecord('ct_rosters', [
+            'ct_license_types_id' => $this->licenseTypeIds['ambulatory_surgical_center'],
+            'first_name' => '',
+            'last_name' => '',
+            'business_name' => 'SAINT FRANCIS GI ENDOSCOPY, LLC',
+            'address1' => '360 BLOOMFIELD AVE STE 204',
+            'address2' => '',
+            'city' => 'WINDSOR',
+            'county' => '',
+            'state' => 'CT',
+            'zip' => '06095-2700',
+            'license_no' => '321',
+            'license_effective_date' => '2008-10-30',
+            'license_expiration_date' => '2016-09-30',
+            'license_status' => 'ACTIVE',
+            'license_status_reason' => ''
+        ]);
+        
+        // last record
+        $this->tester->seeRecord('ct_rosters', [
+            'ct_license_types_id' => $this->licenseTypeIds['ambulatory_surgical_center'],
+            'first_name' => '',
+            'last_name' => '',
+            'business_name' => 'STAMFORD ASC, LLC',
+            'address1' => '200 STAMFORD PL',
+            'address2' => '',
+            'city' => 'STAMFORD',
+            'county' => '',
+            'state' => 'CT',
+            'zip' => '06902-6753',
+            'license_no' => '351',
+            'license_effective_date' => '2016-03-31',
+            'license_expiration_date' => '2017-12-31',
+            'license_status' => 'ACTIVE',
+            'license_status_reason' => ''
+        ]);
+    }
+    
+    
     
     public function testDbInsertFacility()
     {
@@ -148,7 +291,7 @@ class CsvImporterTest extends \Codeception\TestCase\Test
     
     public function testDbInsertFacilityRoster()
     {
-    	$optionId = $this->optionIds['ambulatory_surgical_center'];
+    	$optionId = $this->licenseTypeIds['ambulatory_surgical_center'];
     	$data = [
     			'name' => 'SAINT FRANCIS GI ENDOSCOPY, LLC',
     			'address1' => '360 BLOOMFIELD AVE STE 204',
@@ -168,7 +311,7 @@ class CsvImporterTest extends \Codeception\TestCase\Test
     	]);
     	 
     	$this->tester->seeRecord('ct_rosters', [
-    			'option_id' => $this->optionIds['ambulatory_surgical_center'],
+    			'option_id' => $this->licenseTypeIds['ambulatory_surgical_center'],
     			'facility_id' => $facility->id,
     			'person_id' => null,
     			'address1' => '360 BLOOMFIELD AVE STE 204',
@@ -189,7 +332,7 @@ class CsvImporterTest extends \Codeception\TestCase\Test
     			'name' => 'SAINT FRANCIS GI ENDOSCOPY, LLC',
     	]);
     	
-    	$optionId = $this->optionIds['ambulatory_surgical_center'];
+    	$optionId = $this->licenseTypeIds['ambulatory_surgical_center'];
     	$data = [
     			'name' => 'SAINT FRANCIS GI ENDOSCOPY, LLC',
     			'address1' => '360 BLOOMFIELD AVE STE 204',
@@ -205,7 +348,7 @@ class CsvImporterTest extends \Codeception\TestCase\Test
     	$this->importer->dbInsertFacilityRoster($optionId, $data, $timestamp);
     	
     	$this->tester->seeRecord('ct_rosters', [
-    			'option_id' => $this->optionIds['ambulatory_surgical_center'],
+    			'option_id' => $this->licenseTypeIds['ambulatory_surgical_center'],
     			'facility_id' => 23,
     			'person_id' => null,
     			'address1' => '360 BLOOMFIELD AVE STE 204',
@@ -218,56 +361,15 @@ class CsvImporterTest extends \Codeception\TestCase\Test
     	]);
     }
     
-    public function testImportCsv()
-    {
-    	$data = [
-    			'category' => 'ambulatory_surgical_centers_recovery_care_centers',
-    			'option' => 'ambulatory_surgical_center',
-    			'file_path' => codecept_data_dir('scrape/connecticut/csv/ambulatory_surgical_centers_recovery_care_centers/ambulatory_surgical_center.csv')
-    	];
-    	$timestamp = '2016-05-01 01:30:00';
-    	
-    	$this->importer->importCsv($data, $timestamp);
-    	
-    	$this->assertAmbulanceRecords();
-    }
     
-    public function testDbFindOptionIdByKey()
-    {
-    	$key = 'ambulatory_surgical_center';
-    	
-    	$optionId = $this->importer->dbFindOptionIdByKey($key);
-    	
-    	$this->assertEquals($this->optionIds['ambulatory_surgical_center'], $optionId);
-    }
     
-    public function testDbFindOptionIdByKeyNotFound()
-    {
-    	$key = 'some_unknown_key';
-    	 
-    	$optionId = $this->importer->dbFindOptionIdByKey($key);
-    	 
-    	$this->assertNull($optionId);
-    }
     
-    public function testImport()
-    {
-    	$this->importer->import();
-    	
-    	// facility records
-    	$this->assertAmbulanceRecords();
-    	$this->assertDrugManufacturerRecords();
-    	
-    	// person records
-    	$this->assertAcupuncturistRecords();
-    	
-    	// has both facility and person records
-    	$this->assertControlledSubstanceLaboratoriesRecords();
-    }
+    
+    
     
     public function testDbInsertPersonRoster()
     {
-    	$optionId = $this->optionIds['acupuncturist'];
+    	$optionId = $this->licenseTypeIds['acupuncturist'];
 		$data = [
 				'first_name' => 'THOMAS',
 				'last_name' => 'RYAN',
@@ -289,7 +391,7 @@ class CsvImporterTest extends \Codeception\TestCase\Test
     	]);
     	
     	$this->tester->seeRecord('ct_rosters', [
-    			'option_id' => $this->optionIds['acupuncturist'],
+    			'option_id' => $this->licenseTypeIds['acupuncturist'],
     			'facility_id' => null,
     			'person_id' => $person->id,
     			'address1' => '15 MAIN STREET',
@@ -311,7 +413,7 @@ class CsvImporterTest extends \Codeception\TestCase\Test
     			'last_name' => 'RYAN'
     	]);
     	
-    	$optionId = $this->optionIds['acupuncturist'];
+    	$optionId = $this->licenseTypeIds['acupuncturist'];
     	$data = [
     			'first_name' => 'THOMAS',
     			'last_name' => 'RYAN',
@@ -328,7 +430,7 @@ class CsvImporterTest extends \Codeception\TestCase\Test
     	$this->importer->dbInsertPersonRoster($optionId, $data, $timestamp);
     	 
     	$this->tester->seeRecord('ct_rosters', [
-    			'option_id' => $this->optionIds['acupuncturist'],
+    			'option_id' => $this->licenseTypeIds['acupuncturist'],
     			'facility_id' => null,
     			'person_id' => 26,
     			'address1' => '15 MAIN STREET',
@@ -385,32 +487,7 @@ class CsvImporterTest extends \Codeception\TestCase\Test
     	$this->assertTrue(is_numeric($personId));
     }
     
-    protected function assertAmbulanceRecords()
-    {
-    	$firstFacility = $this->tester->grabRecord('ct_roster_facilities', [
-    			'name' => 'SAINT FRANCIS GI ENDOSCOPY, LLC'
-    	]);
-    	 
-    	$this->tester->seeRecord('ct_rosters', [
-    			'option_id' => $this->optionIds['ambulatory_surgical_center'],
-    			'facility_id' => $firstFacility->id,
-    			'address1' => '360 BLOOMFIELD AVE STE 204',
-    			'city' => 'WINDSOR',
-    			'zip' => '06095-2700'
-    	]);
-    	 
-    	$lastFacility = $this->tester->grabRecord('ct_roster_facilities', [
-    			'name' => 'STAMFORD ASC, LLC'
-    	]);
-    	 
-    	$this->tester->seeRecord('ct_rosters', [
-    			'option_id' => $this->optionIds['ambulatory_surgical_center'],
-    			'facility_id' => $lastFacility->id,
-    			'address1' => '200 STAMFORD PL',
-    			'city' => 'STAMFORD',
-    			'zip' => '06902-6753'
-    	]);
-    }
+    
     
     protected function assertDrugManufacturerRecords()
     {	
@@ -419,7 +496,7 @@ class CsvImporterTest extends \Codeception\TestCase\Test
     	]);
     	
     	$this->tester->seeRecord('ct_rosters', [
-    			'option_id' => $this->optionIds['manufacturers_of_drugs_cosmetics_and_medical_devices'],
+    			'option_id' => $this->licenseTypeIds['manufacturers_of_drugs_cosmetics_and_medical_devices'],
     			'facility_id' => $firstFacility->id,
     			'address1' => '25 WALLS DR',
     			'city' => 'FAIRFIELD',
@@ -431,7 +508,7 @@ class CsvImporterTest extends \Codeception\TestCase\Test
     	]);
     	
     	$this->tester->seeRecord('ct_rosters', [
-    			'option_id' => $this->optionIds['manufacturers_of_drugs_cosmetics_and_medical_devices'],
+    			'option_id' => $this->licenseTypeIds['manufacturers_of_drugs_cosmetics_and_medical_devices'],
     			'facility_id' => $lastFacility->id,
     			'address1' => '156 Spring St.',
     			'city' => 'Enfield',
@@ -443,7 +520,7 @@ class CsvImporterTest extends \Codeception\TestCase\Test
     {
     	// first record, person record
     	$this->tester->seeRecord('ct_rosters', [
-    			'option_id' => $this->optionIds['controlled_substance_laboratories'],
+    			'option_id' => $this->licenseTypeIds['controlled_substance_laboratories'],
     			'facility_id' => null,
     			'person_id' => $this->getPersonId('ROBERT', 'MALISON'),
     			'address1' => '34 PARK ST',
@@ -457,7 +534,7 @@ class CsvImporterTest extends \Codeception\TestCase\Test
     	
     	// row 16 record, facility record
     	$this->tester->seeRecord('ct_rosters', [
-    	    'option_id' => $this->optionIds['controlled_substance_laboratories'],
+    	    'option_id' => $this->licenseTypeIds['controlled_substance_laboratories'],
     	    'facility_id' => $this->getFacilityId('NARCOTICS CONTROL OFFICER'),
     	    'person_id' => null,
     	    'address1' => '5 RESEARCH PKWY',
@@ -471,7 +548,7 @@ class CsvImporterTest extends \Codeception\TestCase\Test
     	
     	// last record, person record
     	$this->tester->seeRecord('ct_rosters', [
-    	    'option_id' => $this->optionIds['controlled_substance_laboratories'],
+    	    'option_id' => $this->licenseTypeIds['controlled_substance_laboratories'],
     	    'facility_id' => null,
     	    'person_id' => $this->getPersonId('SREEGANGA', 'CHANDRA'),
     	    'address1' => '295 CONGRESS AVE BCMM 149',
@@ -493,7 +570,7 @@ class CsvImporterTest extends \Codeception\TestCase\Test
     	]);
     	
     	$this->tester->seeRecord('ct_rosters', [
-    			'option_id' => $this->optionIds['acupuncturist'],
+    			'option_id' => $this->licenseTypeIds['acupuncturist'],
     			'facility_id' => null,
     			'person_id' => $firstPerson->id,
     			'address1' => '15 MAIN STREET',
@@ -512,7 +589,7 @@ class CsvImporterTest extends \Codeception\TestCase\Test
     	]);
     	 
     	$this->tester->seeRecord('ct_rosters', [
-    			'option_id' => $this->optionIds['acupuncturist'],
+    			'option_id' => $this->licenseTypeIds['acupuncturist'],
     			'facility_id' => null,
     			'person_id' => $lastPerson->id,
     			'address1' => '145 MILTON RD',
