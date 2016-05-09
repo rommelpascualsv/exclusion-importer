@@ -76,18 +76,21 @@ class ManufacturersDrugsCosmeticsMedicalDevicesMapperTest extends \Codeception\T
     	$dbData = $this->mapper->getDbData($csvData);
     
     	$expectedDbData = [
-    			'type' => CsvImporter::TYPE_FACILITY,
-    			'values' => [
-    					'name' => 'JOLEN CREME BLEACH CORPORATION',
-    					'address1' => '25 WALLS DR',
-    					'address2' => '',
-    					'city' => 'FAIRFIELD',
-    					'county' => '',
-    					'state_code' => 'CT',
-    					'zip' => '06824-5156',
-    					'complete_address' => ''
-    			]
-    	];
+            'first_name' => '',
+            'last_name' => '',
+            'business_name' => 'JOLEN CREME BLEACH CORPORATION',
+            'address1' => '25 WALLS DR',
+            'address2' => '',
+            'city' => 'FAIRFIELD',
+            'county' => '',
+            'state' => 'CT',
+            'zip' => '06824-5156',
+            'license_no' => 'CSM.0000025',
+            'license_effective_date' => '2015-07-01',
+            'license_expiration_date' => '2016-06-30',
+            'license_status' => 'ACTIVE',
+            'license_status_reason' => ''
+        ];
     
     	$this->assertEquals($expectedDbData, $dbData);
     }

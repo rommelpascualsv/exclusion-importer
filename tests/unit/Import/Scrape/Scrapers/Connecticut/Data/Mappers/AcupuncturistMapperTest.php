@@ -82,18 +82,20 @@ class AcupuncturistMapperTest extends \Codeception\TestCase\Test
     	$dbData = $this->mapper->getDbData($data);
     
     	$expectedDbData = [
-    			'type' => CsvImporter::TYPE_PERSON,
-    			'values' => [
-    					'first_name' => 'THOMAS',
-    					'last_name' => 'RYAN',
-    					'address1' => '15 MAIN STREET',
-    					'address2' => '',
-    					'city' => 'EAST HAMPTON',
-    					'county' => 'Middlesex',
-    					'state_code' => 'CT',
-    					'zip' => 'O6424',
-    					'complete_address' => ''
-    			]
+    	    'first_name' => 'THOMAS',
+    	    'last_name' => 'RYAN',
+    	    'business_name' => '',
+    	    'address1' => '15 MAIN STREET',
+    	    'address2' => '',
+    	    'city' => 'EAST HAMPTON',
+    	    'county' => 'Middlesex',
+    	    'state' => 'CT',
+    	    'zip' => 'O6424',
+    	    'license_no' => '1',
+    	    'license_effective_date' => '1996-04-12',
+    	    'license_expiration_date' => '2016-08-31',
+    	    'license_status' => 'ACTIVE',
+    	    'license_status_reason' => 'CURRENT'
     	];
     
     	$this->assertEquals($expectedDbData, $dbData);

@@ -24,14 +24,21 @@ class ManufacturersDrugsCosmeticsMedicalDevicesMapper extends Basemapper
 	 */
 	public function getDbData(array $data)
 	{
-		return $this->getFacilityDbData(
-				$data['manufacturer_name'],
-				$data['address'],
-				'',
-				$data['city'],
-				'',
-				$data['state'],
-				$data['zip']
-		);
+		return $this->getRosterDbData(
+		    '',
+		    '', 
+		    $data['manufacturer_name'], 
+		    $data['address'], 
+		    '', 
+		    $data['city'], 
+		    '', 
+		    $data['state'], 
+		    $data['zip'], 
+		    $data['registration'], 
+		    $this->getDbDateFromFormat($data['effective_date']), 
+		    $this->getDbDateFromFormat($data['expiration_date']), 
+		    $data['status'],
+		    ''
+	    );
 	}
 }

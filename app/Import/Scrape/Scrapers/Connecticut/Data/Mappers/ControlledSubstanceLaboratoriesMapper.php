@@ -25,29 +25,21 @@ class ControlledSubstanceLaboratoriesMapper extends Basemapper
 	 */
 	public function getDbData(array $data)
 	{
-	    if ($data['business_name'] == '') {
-	        $dbData = $this->getPersonDbData(
-	            $data['contact_first_name'],
-	            $data['contact_last_name'],
-	            $data['address'],
-	            '',
-	            $data['city'],
-	            '',
-	            $data['state'],
-	            $data['zip']
-            );
-	    } else {
-	        $dbData = $this->getFacilityDbData(
-	            $data['business_name'],
-	            $data['address'],
-	            '',
-	            $data['city'],
-	            '',
-	            $data['state'],
-	            $data['zip']
-            );
-	    }
-	    
-	    return $dbData;
+	    return $this->getRosterDbData(
+	        $data['contact_first_name'],
+	        $data['contact_last_name'],
+	        $data['business_name'],
+	        $data['address'],
+	        '',
+	        $data['city'],
+	        '', 
+	        $data['state'], 
+	        $data['zip'],
+	        $data['license_number'],
+	        $this->getDbDateFromFormat($data['effective_date']),
+	        $this->getDbDateFromFormat($data['expiration_date']),
+	        $data['status'],
+	        ''
+        );
 	}
 }

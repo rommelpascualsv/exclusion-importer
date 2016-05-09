@@ -53,13 +53,13 @@ class CsvImporterTest extends \Codeception\TestCase\Test
             ],
             [
                 'category' => 'controlled_substances_practitioners_labs_manufacturers',
-                'option' => 'manufacturers_of_drugs_cosmetics_and_medical_devices',
-                'file_path' => codecept_data_dir('scrape/connecticut/csv/controlled_substances_practitioners_labs_manufacturers/manufacturers_of_drugs_cosmetics_and_medical_devices.csv')
+                'option' => 'controlled_substance_laboratories',
+                'file_path' => codecept_data_dir('scrape/connecticut/csv/controlled_substances_practitioners_labs_manufacturers/controlled_substance_laboratories.csv')
             ],
             [
                 'category' => 'controlled_substances_practitioners_labs_manufacturers',
-                'option' => 'controlled_substance_laboratories',
-                'file_path' => codecept_data_dir('scrape/connecticut/csv/controlled_substances_practitioners_labs_manufacturers/controlled_substance_laboratories.csv')
+                'option' => 'manufacturers_of_drugs_cosmetics_and_medical_devices',
+                'file_path' => codecept_data_dir('scrape/connecticut/csv/controlled_substances_practitioners_labs_manufacturers/manufacturers_of_drugs_cosmetics_and_medical_devices.csv')
             ],
             [
                 'category' => 'healthcare_practitioners',
@@ -121,16 +121,6 @@ class CsvImporterTest extends \Codeception\TestCase\Test
             'key' => 'acupuncturist',
             'name' => 'Acupuncturist'
         ]);
-    }
-    
-    public function testImport()
-    {
-        $this->importer->import();
-         
-        $this->assertAmbulanceRecords();
-        /* $this->assertDrugManufacturerRecords();
-        $this->assertAcupuncturistRecords();
-        $this->assertControlledSubstanceLaboratoriesRecords(); */
     }
     
     public function testDbFindLicenseTypeIdByKey()
@@ -209,9 +199,19 @@ class CsvImporterTest extends \Codeception\TestCase\Test
         $this->assertAmbulanceRecords();
     }
     
+    public function testImport()
+    {
+        $this->importer->import();
+         
+        $this->assertAmbulanceRecords();
+        $this->assertControlledSubstanceLaboratoriesRecords();
+        $this->assertDrugManufacturerRecords();
+        $this->assertAcupuncturistRecords();
+    }
+    
     protected function assertAmbulanceRecords()
     {
-        // first record
+        // first row
         $this->tester->seeRecord('ct_rosters', [
             'ct_license_types_id' => $this->licenseTypeIds['ambulatory_surgical_center'],
             'first_name' => '',
@@ -230,7 +230,7 @@ class CsvImporterTest extends \Codeception\TestCase\Test
             'license_status_reason' => ''
         ]);
         
-        // last record
+        // last row
         $this->tester->seeRecord('ct_rosters', [
             'ct_license_types_id' => $this->licenseTypeIds['ambulatory_surgical_center'],
             'first_name' => '',
@@ -250,374 +250,145 @@ class CsvImporterTest extends \Codeception\TestCase\Test
         ]);
     }
     
-    
-    
-    public function testDbInsertFacility()
+    protected function assertControlledSubstanceLaboratoriesRecords()
     {
-    	$name = 'SAINT FRANCIS GI ENDOSCOPY, LLC';
-    	$timestamp = '2016-05-01 01:30:00';
-    	
-    	$this->importer->dbInsertFacility($name, $timestamp);
-    	
-    	$this->tester->seeRecord('ct_roster_facilities', [
-    			'name' => 'SAINT FRANCIS GI ENDOSCOPY, LLC',
-    			'created_at' => '2016-05-01 01:30:00',
-    			'updated_at' => '2016-05-01 01:30:00' 
-    	]);
+        // first row, person record
+        $this->tester->seeRecord('ct_rosters', [
+            'ct_license_types_id' => $this->licenseTypeIds['controlled_substance_laboratories'],
+            'first_name' => 'ROBERT',
+            'last_name' => 'MALISON',
+            'business_name' => '',
+            'address1' => '34 PARK ST',
+            'address2' => '',
+            'city' => 'NEW HAVEN',
+            'county' => '',
+            'state' => 'CT',
+            'zip' => '06519-1109',
+            'license_no' => 'CSL.0000432',
+            'license_effective_date' => '2016-02-01',
+            'license_expiration_date' => '2017-01-31',
+            'license_status' => 'ACTIVE',
+            'license_status_reason' => ''
+        ]);
+         
+        // row 16, facility record
+        $this->tester->seeRecord('ct_rosters', [
+            'ct_license_types_id' => $this->licenseTypeIds['controlled_substance_laboratories'],
+            'first_name' => '',
+            'last_name' => '',
+            'business_name' => 'NARCOTICS CONTROL OFFICER',
+            'address1' => '5 RESEARCH PKWY',
+            'address2' => '',
+            'city' => 'WALLINGFORD',
+            'county' => '',
+            'state' => 'CT',
+            'zip' => '06492-1951',
+            'license_no' => 'CSL.0000252',
+            'license_effective_date' => '2016-02-01',
+            'license_expiration_date' => '2017-01-31',
+            'license_status' => 'ACTIVE',
+            'license_status_reason' => ''
+        ]);
+         
+        // last row, person record
+        $this->tester->seeRecord('ct_rosters', [
+            'ct_license_types_id' => $this->licenseTypeIds['controlled_substance_laboratories'],
+            'first_name' => 'SREEGANGA',
+            'last_name' => 'CHANDRA',
+            'business_name' => '',
+            'address1' => '295 CONGRESS AVE BCMM 149',
+            'address2' => '',
+            'city' => 'NEW HAVEN',
+            'county' => '',
+            'state' => 'CT',
+            'zip' => '06519-1418',
+            'license_no' => 'CSL.0001141',
+            'license_effective_date' => '2016-03-08',
+            'license_expiration_date' => '2017-01-31',
+            'license_status' => 'ACTIVE',
+            'license_status_reason' => ''
+        ]); 
     }
-    
-    public function testDbFindFacilityIdByName()
-    {
-    	$this->tester->haveRecord('ct_roster_facilities', [
-    			'id' => 3,
-    			'name' => 'Some Roster'
-    	]);
-    	
-    	$name = 'Some Roster';
-    	 
-    	$facilityId = $this->importer->dbFindFacilityIdByName($name);
-    	 
-    	$this->assertEquals(3, $facilityId);
-    }
-    
-    public function testDbFindFacilityIdByNameNotFound()
-    {    	
-    	$name = 'Some Unknown Roster';
-    	 
-    	$facilityId = $this->importer->dbFindFacilityIdByName($name);
-    	 
-    	$this->assertNull($facilityId);
-    }
-    
-    public function testDbInsertFacilityRoster()
-    {
-    	$optionId = $this->licenseTypeIds['ambulatory_surgical_center'];
-    	$data = [
-    			'name' => 'SAINT FRANCIS GI ENDOSCOPY, LLC',
-    			'address1' => '360 BLOOMFIELD AVE STE 204',
-    			'address2' => '',
-    			'city' => 'WINDSOR',
-    			'county' => '',
-    			'state_code' => 'CT',
-    			'zip' => '06095-2700',
-    			'complete_address' => ''
-    	];
-    	$timestamp = '2016-05-01 01:30:00';
-    	 
-    	$this->importer->dbInsertFacilityRoster($optionId, $data, $timestamp);
-    	 
-    	$facility = $this->tester->grabRecord('ct_roster_facilities', [
-    			'name' => 'SAINT FRANCIS GI ENDOSCOPY, LLC'
-    	]);
-    	 
-    	$this->tester->seeRecord('ct_rosters', [
-    			'option_id' => $this->licenseTypeIds['ambulatory_surgical_center'],
-    			'facility_id' => $facility->id,
-    			'person_id' => null,
-    			'address1' => '360 BLOOMFIELD AVE STE 204',
-    			'address2' => '',
-    			'city' => 'WINDSOR',
-    			'county' => '',
-    			'state_code' => 'CT',
-    			'zip' => '06095-2700',
-    			'complete_address' => ''
-    	]);
-    }
-    
-    public function testDbInsertFacilityRosterWithExisting()
-    {
-    	// insert existing facility
-    	$this->tester->haveRecord('ct_roster_facilities', [
-    			'id' => 23,
-    			'name' => 'SAINT FRANCIS GI ENDOSCOPY, LLC',
-    	]);
-    	
-    	$optionId = $this->licenseTypeIds['ambulatory_surgical_center'];
-    	$data = [
-    			'name' => 'SAINT FRANCIS GI ENDOSCOPY, LLC',
-    			'address1' => '360 BLOOMFIELD AVE STE 204',
-    			'address2' => '',
-    			'city' => 'WINDSOR',
-    			'county' => '',
-    			'state_code' => 'CT',
-    			'zip' => '06095-2700',
-    			'complete_address' => ''
-    	];
-    	$timestamp = '2016-05-01 01:30:00';
-    	 
-    	$this->importer->dbInsertFacilityRoster($optionId, $data, $timestamp);
-    	
-    	$this->tester->seeRecord('ct_rosters', [
-    			'option_id' => $this->licenseTypeIds['ambulatory_surgical_center'],
-    			'facility_id' => 23,
-    			'person_id' => null,
-    			'address1' => '360 BLOOMFIELD AVE STE 204',
-    			'address2' => '',
-    			'city' => 'WINDSOR',
-    			'county' => '',
-    			'state_code' => 'CT',
-    			'zip' => '06095-2700',
-    			'complete_address' => ''
-    	]);
-    }
-    
-    
-    
-    
-    
-    
-    
-    public function testDbInsertPersonRoster()
-    {
-    	$optionId = $this->licenseTypeIds['acupuncturist'];
-		$data = [
-				'first_name' => 'THOMAS',
-				'last_name' => 'RYAN',
-				'address1' => '15 MAIN STREET',
-				'address2' => '',
-				'city' => 'EAST HAMPTON',
-				'county' => 'Middlesex',
-				'state_code' => 'CT',
-				'zip' => 'O6424',
-				'complete_address' => ''
-    	];
-		$timestamp = '2016-05-01 01:30:00';
-    	
-    	$this->importer->dbInsertPersonRoster($optionId, $data, $timestamp);
-    	
-    	$person = $this->tester->grabRecord('ct_roster_people', [
-    			'first_name' => 'THOMAS',
-    			'last_name' => 'RYAN'
-    	]);
-    	
-    	$this->tester->seeRecord('ct_rosters', [
-    			'option_id' => $this->licenseTypeIds['acupuncturist'],
-    			'facility_id' => null,
-    			'person_id' => $person->id,
-    			'address1' => '15 MAIN STREET',
-    			'address2' => '',
-    			'city' => 'EAST HAMPTON',
-    			'county' => 'Middlesex',
-    			'state_code' => 'CT',
-    			'zip' => 'O6424',
-    			'complete_address' => ''
-    	]);
-    }
-    
-    public function testDbInsertPersonRosterWithExisting()
-    {
-    	// add person to db
-    	$this->tester->haveRecord('ct_roster_people', [
-    			'id' => 26,
-    			'first_name' => 'THOMAS',
-    			'last_name' => 'RYAN'
-    	]);
-    	
-    	$optionId = $this->licenseTypeIds['acupuncturist'];
-    	$data = [
-    			'first_name' => 'THOMAS',
-    			'last_name' => 'RYAN',
-    			'address1' => '15 MAIN STREET',
-    			'address2' => '',
-    			'city' => 'EAST HAMPTON',
-    			'county' => 'Middlesex',
-    			'state_code' => 'CT',
-    			'zip' => 'O6424',
-    			'complete_address' => ''
-    	];
-    	$timestamp = '2016-05-01 01:30:00';
-    	 
-    	$this->importer->dbInsertPersonRoster($optionId, $data, $timestamp);
-    	 
-    	$this->tester->seeRecord('ct_rosters', [
-    			'option_id' => $this->licenseTypeIds['acupuncturist'],
-    			'facility_id' => null,
-    			'person_id' => 26,
-    			'address1' => '15 MAIN STREET',
-    			'address2' => '',
-    			'city' => 'EAST HAMPTON',
-    			'county' => 'Middlesex',
-    			'state_code' => 'CT',
-    			'zip' => 'O6424',
-    			'complete_address' => ''
-    	]);
-    }
-    
-    public function testDbFindPersonIdByName()
-    {
-    	$this->tester->haveRecord('ct_roster_people', [
-    			'id' => 26,
-    			'first_name' => 'THOMAS',
-    			'last_name' => 'RYAN'
-    	]);
-    	
-    	$firstName = 'THOMAS';
-    	$lastName = 'RYAN';
-    	
-    	$personId = $this->importer->dbFindPersonIdByName($firstName, $lastName);
-    	
-    	$this->assertEquals(26, $personId);
-    }
-    
-    public function testDbFindPersonIdByNameNotFound()
-    {    	 
-    	$firstName = 'THOMAS';
-    	$lastName = 'RYAN';
-    	 
-    	$personId = $this->importer->dbFindPersonIdByName($firstName, $lastName);
-    	 
-    	$this->assertNull($personId);
-    }
-    
-    public function testDbInsertPerson()
-    {
-    	$firstName = 'THOMAS';
-    	$lastName = 'RYAN';
-    	$timestamp = '2016-05-01 01:30:00';
-    	
-    	$personId = $this->importer->dbInsertPerson($firstName, $lastName, $timestamp);
-    	
-    	$this->tester->seeRecord('ct_roster_people', [
-    			'first_name' => 'THOMAS',
-    			'last_name' => 'RYAN',
-    			'created_at' => '2016-05-01 01:30:00',
-    			'updated_at' => '2016-05-01 01:30:00'
-    	]);
-    	
-    	$this->assertTrue(is_numeric($personId));
-    }
-    
-    
     
     protected function assertDrugManufacturerRecords()
     {	
-    	$firstFacility = $this->tester->grabRecord('ct_roster_facilities', [
-    			'name' => 'JOLEN CREME BLEACH CORPORATION'
-    	]);
-    	
-    	$this->tester->seeRecord('ct_rosters', [
-    			'option_id' => $this->licenseTypeIds['manufacturers_of_drugs_cosmetics_and_medical_devices'],
-    			'facility_id' => $firstFacility->id,
-    			'address1' => '25 WALLS DR',
-    			'city' => 'FAIRFIELD',
-    			'zip' => '06824-5156'
-    	]);
-    
-    	$lastFacility = $this->tester->grabRecord('ct_roster_facilities', [
-    			'name' => 'Esquire Gas Products'
-    	]);
-    	
-    	$this->tester->seeRecord('ct_rosters', [
-    			'option_id' => $this->licenseTypeIds['manufacturers_of_drugs_cosmetics_and_medical_devices'],
-    			'facility_id' => $lastFacility->id,
-    			'address1' => '156 Spring St.',
-    			'city' => 'Enfield',
-    			'zip' => '06082'
-    	]);
-    }
-
-    protected function assertControlledSubstanceLaboratoriesRecords()
-    {
-    	// first record, person record
-    	$this->tester->seeRecord('ct_rosters', [
-    			'option_id' => $this->licenseTypeIds['controlled_substance_laboratories'],
-    			'facility_id' => null,
-    			'person_id' => $this->getPersonId('ROBERT', 'MALISON'),
-    			'address1' => '34 PARK ST',
-    			'address2' => '',
-    			'city' => 'NEW HAVEN',
-    			'county' => '',
-    			'state_code' => 'CT',
-    			'zip' => '06519-1109',
-    			'complete_address' => ''
-    	]);
-    	
-    	// row 16 record, facility record
-    	$this->tester->seeRecord('ct_rosters', [
-    	    'option_id' => $this->licenseTypeIds['controlled_substance_laboratories'],
-    	    'facility_id' => $this->getFacilityId('NARCOTICS CONTROL OFFICER'),
-    	    'person_id' => null,
-    	    'address1' => '5 RESEARCH PKWY',
-    	    'address2' => '',
-    	    'city' => 'WALLINGFORD',
-    	    'county' => '',
-    	    'state_code' => 'CT',
-    	    'zip' => '06492-1951',
-    	    'complete_address' => ''
-    	]);
-    	
-    	// last record, person record
-    	$this->tester->seeRecord('ct_rosters', [
-    	    'option_id' => $this->licenseTypeIds['controlled_substance_laboratories'],
-    	    'facility_id' => null,
-    	    'person_id' => $this->getPersonId('SREEGANGA', 'CHANDRA'),
-    	    'address1' => '295 CONGRESS AVE BCMM 149',
-    	    'address2' => '',
-    	    'city' => 'NEW HAVEN',
-    	    'county' => '',
-    	    'state_code' => 'CT',
-    	    'zip' => '06519-1418',
-    	    'complete_address' => ''
-    	]);
+        // first row
+        $this->tester->seeRecord('ct_rosters', [
+            'ct_license_types_id' => $this->licenseTypeIds['manufacturers_of_drugs_cosmetics_and_medical_devices'],
+            'first_name' => '',
+            'last_name' => '',
+            'business_name' => 'JOLEN CREME BLEACH CORPORATION',
+            'address1' => '25 WALLS DR',
+            'address2' => '',
+            'city' => 'FAIRFIELD',
+            'county' => '',
+            'state' => 'CT',
+            'zip' => '06824-5156',
+            'license_no' => 'CSM.0000025',
+            'license_effective_date' => '2015-07-01',
+            'license_expiration_date' => '2016-06-30',
+            'license_status' => 'ACTIVE',
+            'license_status_reason' => ''
+        ]);
+        
+        // last row
+        $this->tester->seeRecord('ct_rosters', [
+            'ct_license_types_id' => $this->licenseTypeIds['manufacturers_of_drugs_cosmetics_and_medical_devices'],
+            'first_name' => '',
+            'last_name' => '',
+            'business_name' => 'Esquire Gas Products',
+            'address1' => '156 Spring St.',
+            'address2' => '',
+            'city' => 'Enfield',
+            'county' => '',
+            'state' => 'CT',
+            'zip' => '06082',
+            'license_no' => 'CSM.0000893',
+            'license_effective_date' => '2016-01-27',
+            'license_expiration_date' => '2016-06-30',
+            'license_status' => 'ACTIVE',
+            'license_status_reason' => ''
+        ]);
     }
     
     protected function assertAcupuncturistRecords()
     {
-    	/* check first row */
-    	$firstPerson = $this->tester->grabRecord('ct_roster_people', [
-    			'first_name' => 'THOMAS',
-    			'last_name' => 'RYAN'
-    	]);
-    	
+    	// first row
     	$this->tester->seeRecord('ct_rosters', [
-    			'option_id' => $this->licenseTypeIds['acupuncturist'],
-    			'facility_id' => null,
-    			'person_id' => $firstPerson->id,
-    			'address1' => '15 MAIN STREET',
-    			'address2' => '',
-    			'city' => 'EAST HAMPTON',
-    			'county' => 'Middlesex',
-    			'state_code' => 'CT',
-    			'zip' => 'O6424',
-    			'complete_address' => ''
+    	    'ct_license_types_id' => $this->licenseTypeIds['acupuncturist'],
+    	    'first_name' => 'THOMAS',
+    	    'last_name' => 'RYAN',
+    	    'business_name' => '',
+    	    'address1' => '15 MAIN STREET',
+            'address2' => '',
+            'city' => 'EAST HAMPTON',
+            'county' => 'Middlesex',
+            'state' => 'CT',
+            'zip' => 'O6424',
+            'license_no' => '000001',
+            'license_effective_date' => '1996-04-12',
+            'license_expiration_date' => '2016-08-31',
+            'license_status' => 'ACTIVE',
+    	    'license_status_reason' => 'CURRENT'
     	]);
     	
-    	/* check last row */
-    	$lastPerson = $this->tester->grabRecord('ct_roster_people', [
-    			'first_name' => 'HAROLDO',
-    			'last_name' => 'JEZLER'
-    	]);
-    	 
+    	// last row    	
     	$this->tester->seeRecord('ct_rosters', [
-    			'option_id' => $this->licenseTypeIds['acupuncturist'],
-    			'facility_id' => null,
-    			'person_id' => $lastPerson->id,
-    			'address1' => '145 MILTON RD',
-    			'address2' => '',
-    			'city' => 'RYE',
-    			'county' => 'Westchester',
-    			'state_code' => 'NY',
-    			'zip' => '1O58O-3812',
-    			'complete_address' => ''
+    	    'ct_license_types_id' => $this->licenseTypeIds['acupuncturist'],
+    	    'first_name' => 'HAROLDO',
+    	    'last_name' => 'JEZLER',
+    	    'business_name' => '',
+    	    'address1' => '145 MILTON RD',
+    	    'address2' => '',
+    	    'city' => 'RYE',
+    	    'county' => 'Westchester',
+    	    'state' => 'NY',
+    	    'zip' => '1O58O-3812',
+    	    'license_no' => '000667',
+    	    'license_effective_date' => '2016-04-19',
+    	    'license_expiration_date' => '2017-12-31',
+    	    'license_status' => 'ACTIVE',
+    	    'license_status_reason' => 'PRINT LICENSE'
     	]);
-    }
-    
-    protected function getFacilityId($name)
-    {
-    	$facility = $this->tester->grabRecord('ct_roster_facilities', [
-    			'name' => $name
-    	]);
-    	
-    	return $facility->id;
-    }
-    
-    protected function getPersonId($firstName, $lastName)
-    {
-    	$person = $this->tester->grabRecord('ct_roster_people', [
-    			'first_name' => $firstName,
-    			'last_name' => $lastName
-    	]);
-    	
-    	return $person->id;
     }
 }

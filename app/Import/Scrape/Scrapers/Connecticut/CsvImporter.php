@@ -9,8 +9,6 @@ use Carbon\Carbon;
 
 class CsvImporter
 {
-	const TYPE_FACILITY = 'facility';
-	const TYPE_PERSON = 'person';
 	/**
 	 * @var array
 	 */
@@ -104,110 +102,5 @@ class CsvImporter
         ], $data);
         
         $this->db->table('ct_rosters')->insert($data);
-	}
-	
-	
-	public function dbInsertFacilityRoster($optionId, array $data, $timestamp)
-	{
-		$facilityId = $this->dbFindFacilityIdByName($data['name']);
-		
-		if (! $facilityId) {
-			$facilityId = $this->dbInsertFacility($data['name'], $timestamp);
-		}
-		
-		$this->dbInsertRoster($optionId, $facilityId, null, $data, $timestamp);
-	}
-	
-	/**
-	 * Insert facility to database
-	 * @param string $name
-	 * @param string $timestamp
-	 */
-	public function dbInsertFacility($name, $timestamp)
-	{		
-		$id = $this->db->table('ct_roster_facilities')->insertGetId([
-				'name' => $name,
-				'created_at' => $timestamp,
-				'updated_at' => $timestamp
-		]);
-		
-		return $id;
-	}
-	
-	/**
-	 * Insert person roster to db
-	 * @param int $optionId
-	 * @param array $data
-	 * @param string $timestamp
-	 */
-	public function dbInsertPersonRoster($optionId, array $data, $timestamp)
-	{
-		$personId = $this->dbFindPersonIdByName($data['first_name'], $data['last_name']);
-		
-		if (! $personId) {
-			$personId = $this->dbInsertPerson($data['first_name'], $data['last_name'], $timestamp);
-		}
-		
-		$this->dbInsertRoster(
-				$optionId,
-				null,
-				$personId,
-				$data,
-				$timestamp
-		);
-	}
-	
-	/**
-	 * Insert person to db
-	 * @param string $firstName
-	 * @param string $lastName
-	 * @param string $timestamp
-	 */
-	public function dbInsertPerson($firstName, $lastName, $timestamp)
-	{
-		$personId = $this->db->table('ct_roster_people')->insertGetId([
-				'first_name' => $firstName,
-				'last_name' => $lastName,
-				'created_at' => $timestamp,
-				'updated_at' => $timestamp
-		]);
-		
-		return $personId;
-	}
-	
-	/**
-	 * Find facility
-	 * @param string $name
-	 * @return int|null
-	 */
-	public function dbFindFacilityIdByName($name)
-	{
-		$facility = $this->db->table('ct_roster_facilities')
-			->select('id')
-			->where('name', '=', $name)
-			->first();
-	
-		$facilityId = (is_object($facility)) ? $facility->id : null;
-	
-		return $facilityId;
-	}
-	
-	/**
-	 * Find person id by first name and last name
-	 * @param string $firstName
-	 * @param string $lastName
-	 * @return int|null
-	 */
-	public function dbFindPersonIdByName($firstName, $lastName)
-	{
-		$person = $this->db->table('ct_roster_people')
-			->select('id')
-			->where('first_name', '=', $firstName)
-			->where('last_name', '=', $lastName)
-			->first();
-		
-		$personId = (is_object($person)) ? $person->id : null;
-		
-		return $personId;
 	}
 }

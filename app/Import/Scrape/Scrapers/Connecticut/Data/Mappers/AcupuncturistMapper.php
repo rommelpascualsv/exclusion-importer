@@ -28,15 +28,21 @@ class AcupuncturistMapper extends Basemapper
 	 */
 	public function getDbData(array $data)
 	{
-		return $this->getPersonDbData(
-				$data['first_name'],
-				$data['last_name'],
-				$data['address1'],
-				$data['address2'],
-				$data['city'],
-				$data['county'],
-				$data['state'],
-				$data['zip']
-		);
+	    return $this->getRosterDbData(
+	        $data['first_name'],
+	        $data['last_name'],
+	        '',
+	        $data['address1'], 
+	        $data['address2'], 
+	        $data['city'], 
+	        $data['county'], 
+	        $data['state'], 
+	        $data['zip'],
+	        $data['license_no'],
+	        $this->getDbDateFromFormat($data['issue_date']),
+	        $this->getDbDateFromFormat($data['expiration_date']), 
+	        $data['status'],
+	        $data['reason']
+        );
 	}
 }

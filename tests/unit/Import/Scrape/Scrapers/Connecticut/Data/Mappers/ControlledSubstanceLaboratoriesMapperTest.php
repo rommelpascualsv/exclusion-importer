@@ -82,18 +82,20 @@ class ControlledSubstanceLaboratoriesMapperTest extends \Codeception\TestCase\Te
         $dbData = $this->mapper->getDbData($data);
         
         $expectedDbData = [
-            'type' => CsvImporter::TYPE_PERSON,
-            'values' => [
-                'first_name' => 'ROBERT',
-                'last_name' => 'MALISON',
-                'address1' => '34 PARK ST',
-                'address2' => '',
-                'city' => 'NEW HAVEN',
-                'county' => '',
-                'state_code' => 'CT',
-                'zip' => '06519-1109',
-                'complete_address' => ''
-            ]
+            'first_name' => 'ROBERT',
+            'last_name' => 'MALISON',
+            'business_name' => '',
+            'address1' => '34 PARK ST',
+            'address2' => '',
+            'city' => 'NEW HAVEN',
+            'county' => '',
+            'state' => 'CT',
+            'zip' => '06519-1109',
+            'license_no' => 'CSL.0000432',
+            'license_effective_date' => '2016-02-01',
+            'license_expiration_date' => '2017-01-31',
+            'license_status' => 'ACTIVE',
+            'license_status_reason' => ''
         ];
         
         $this->assertEquals($expectedDbData, $dbData);
@@ -118,17 +120,20 @@ class ControlledSubstanceLaboratoriesMapperTest extends \Codeception\TestCase\Te
         $dbData = $this->mapper->getDbData($data);
     
         $expectedDbData = [
-            'type' => CsvImporter::TYPE_FACILITY,
-            'values' => [
-                'name' => 'NARCOTICS CONTROL OFFICER',
-                'address1' => '5 RESEARCH PKWY',
-                'address2' => '',
-                'city' => 'WALLINGFORD',
-                'county' => '',
-                'state_code' => 'CT',
-                'zip' => '06492-1951',
-                'complete_address' => ''
-            ]
+            'first_name' => '',
+            'last_name' => '',
+            'business_name' => 'NARCOTICS CONTROL OFFICER',
+            'address1' => '5 RESEARCH PKWY',
+            'address2' => '',
+            'city' => 'WALLINGFORD',
+            'county' => '',
+            'state' => 'CT',
+            'zip' => '06492-1951',
+            'license_no' => 'CSL.0000252',
+            'license_effective_date' => '2016-02-01',
+            'license_expiration_date' => '2017-01-31',
+            'license_status' => 'ACTIVE',
+            'license_status_reason' => ''
         ];
     
         $this->assertEquals($expectedDbData, $dbData);
