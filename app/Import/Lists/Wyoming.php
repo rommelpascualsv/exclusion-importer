@@ -1,7 +1,5 @@
 <?php namespace App\Import\Lists;
 
-use \App\Import\Lists\ProviderNumberHelper as PNHelper;
-
 class Wyoming extends ExclusionList
 {
 
@@ -74,7 +72,7 @@ class Wyoming extends ExclusionList
             }
             
             $columns = str_getcsv($row);
-//             $columns[] = ''; // placeholder for NPI column value. Value will be derived in postProcess()
+            $columns[] = ''; // placeholder for NPI column value. Value will be derived in postProcess()
             
             if ($this->isContinuationOfPreviousRow($columns)) {
                 // Rows without any exclusion date are assumed to just be continuations
@@ -92,9 +90,13 @@ class Wyoming extends ExclusionList
         
         //Some post-processing that can only be done once we have the fully
         //parsed data
-        $this->data = array_map(function ($row){
+        $this->data = array_map(function ($columns){
             
-            return $this->handleRow($row);
+            $columns = $this->trimData($columns);
+            
+            $this->enrichData($columns);
+            
+            return $columns;
             
         }, $this->data);
     }
@@ -135,26 +137,79 @@ class Wyoming extends ExclusionList
     }
     
     /**
-     * Handles the data manipulation of an array record.
-     *
-     * @param array $row the array record
-     * @return array $row the array record
+     * Enriches the passed row column data with derived data, such as NPI numbers.
+     * @param array $columns the row column data
      */
-    private function handleRow($row)
+    private function enrichData(&$columns)
     {
-        $providerNoIndex = $this->getProviderNumberColumnIndex();
-         
-        $regex = [
-            '/(NPI\s?(1\d{9})\b\s?;?)|(\b(1\d{9})\s?NPI)/',
-            '/1\d{9}/'
-        ];
+
+        $providerNumberColumnIndex = $this->getProviderNumberColumnIndex();
         
-        // set npi number array
-        $row = PNHelper::setNpiValue($row, PNHelper::getNpiValue($row, $providerNoIndex, $regex));
-         
-        // set provider number
-        $row = PNHelper::setProviderNumberValue($row, PNHelper::getProviderNumberValue($row, $providerNoIndex), $providerNoIndex);
+        $npi = $this->parseNPI($columns[$providerNumberColumnIndex]);
         
-        return $row;
+        $columns[$this->getNpiColumnIndex()] = $npi;
+        
+        if (! empty($npi)) {
+            $columns[$providerNumberColumnIndex] = trim($this->trimNPI($columns[$providerNumberColumnIndex]));
+        }
+                  
+    }
+    
+    /**
+     * Returns an array of NPI number(s) extracted from the given provider number,
+     * or null if there are no NPI numbers in the provider number 
+     * @param array $providerNumber the provider number from which to extract the
+     * NPI number(s)
+     * @return array array of NPI numbers contained by the provider number
+     */
+    private function parseNPI($providerNumber)
+    {
+        $providerNumber = trim($providerNumber);
+    
+        if (! $providerNumber) {
+            return null;    
+        }
+    
+        preg_match($this->npiRegEx, $providerNumber, $matches);
+        
+        if (empty($matches)) {
+            return null;
+        }
+        
+        $npi = [];
+        
+        // Start from matches[1], since we do not want the text that matched the full pattern (which is matches[0]),
+        // since we only want to get the capture groups that contain only the NPI number
+        for ($i = 1; $i < count($matches); $i++) {
+            
+            if ($matches[$i]) {
+                $npi[] = $matches[$i];
+            }
+        }
+    
+        return $npi;
+    }
+    
+    /**
+     * Removes all NPI numbers (along with their prefixes/suffixes) from the given
+     * provider number and returns the new provider number
+     * @param unknown $providerNumber the provider number whose NPI data should
+     * be removed
+     * @return string the new provider number without the NPI data
+     */
+    private function trimNPI($providerNumber)
+    {
+        return preg_replace($this->npiRegEx, '', $providerNumber);
+    }
+    
+    /**
+     * Trims all whitespaces from each of the elements in columns and returns an
+     * array containing the trimmed column data
+     * @param array $columns the row column data
+     * @return array array containing the trimmed column data
+     */
+    private function trimData($columns)
+    {
+        return array_map('trim',$columns);
     }
 }
