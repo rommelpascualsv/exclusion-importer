@@ -6,7 +6,7 @@ class California extends ExclusionList
 {
     public $dbPrefix = 'ca1';
 
-    public $uri = 'https://files.medi-cal.ca.gov/pubsdoco/Publications/masters-MTP/zOnlineOnly/susp100-49_z03/suspall_092015.xls';
+    public $uri = 'https://files.medi-cal.ca.gov/pubsdoco/Publications/masters-MTP/zOnlineOnly/susp100-49_z03/suspall_032016.xls';
 
     public $type = 'xls';
 
