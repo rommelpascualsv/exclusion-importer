@@ -60,7 +60,7 @@ class Minnesota extends ExclusionList
     ];
 
     public $shouldHashListName = true;
-    
+
     /**
      * @inherit preProcess
      */
@@ -78,9 +78,7 @@ class Minnesota extends ExclusionList
     {
         $array = ['', '', ''];
 
-        return array_map(function ($item) use ($array) {
-            return $this->arrayInsert(2, $item, $array);
-        }, $data);
+        return $this->arrayInsert(2, $data, $array);
     }
 
     /**
@@ -91,9 +89,7 @@ class Minnesota extends ExclusionList
     {
         $array = [''];
 
-        return array_map(function ($item) use ($array) {
-            return $this->arrayInsert(1, $item, $array);
-        }, $data);
+        return $this->arrayInsert(1, $data, $array);
     }
 
     /**
@@ -116,18 +112,19 @@ class Minnesota extends ExclusionList
     protected function parse()
     {
         $data = [];
+
         foreach ($this->data as $key => $value) {
 
-            if (count($value[0]) === 8) {
-                $data = array_merge($data, $this->parseEntity($value));
+            if (count($value) === 8) {
+                $data[] = $this->parseEntity($value);
             }
 
-            if (count($value[0]) === 10) {
-                $data = array_merge($data, $this->parseIndividual($value));
+            if (count($value) === 10) {
+                $data[] = $this->parseIndividual($value);
             }
 
         }
-        
+
         $this->data = $data;
     }
 }
