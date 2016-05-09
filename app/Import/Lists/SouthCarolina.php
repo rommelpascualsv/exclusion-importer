@@ -5,8 +5,8 @@ use \App\Import\Lists\ProviderNumberHelper as PNHelper;
 class SouthCarolina extends ExclusionList
 {
     public $dbPrefix = 'sc1';
-
-    public $uri = 'https://www.scdhhs.gov/sites/default/files/Exclusion%20Provider%20List%20for%20DHHS%20Website_14.xls';
+                  
+    public $uri = 'https://www.scdhhs.gov/sites/default/files/Exclusion%20Provider%20List%20for%20DHHS%20Website_19.xls';
 
     public $type = 'xls';
 
