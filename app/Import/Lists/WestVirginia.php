@@ -12,7 +12,9 @@ class WestVirginia extends ExclusionList
     /**
      * @var string
      */
-    public $uri = 'https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/west-virginia/wv2.xlsx';
+    public $uri = 'https://www.wvmmis.com/WV%20Medicaid%20Provider%20SanctionedExclusion/WV%20Medicaid%20Exclusions%20-%20March%20Posting.pdf,'.
+                  'https://www.wvmmis.com/WV%20Medicaid%20Provider%20SanctionedExclusion/WV%20Medicaid%20Provider%20Term%20-%20Exclusion%20Info%20Other%20-%20March%202016%20Posting.pdf,'.
+                  'https://www.wvmmis.com/WV%20Medicaid%20Provider%20SanctionedExclusion/WV%20Medicaid%20Terminations%20-%20March%202016%20Posting.pdf';
 
     public $pdfToText = 'java -Dfile.encoding=utf-8 -jar ../etc/tabula.jar -p all -u -g -r'; //'pdftotext -layout -nopgbrk';
 
