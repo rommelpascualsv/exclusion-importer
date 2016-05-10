@@ -24,7 +24,7 @@ class Washington extends ExclusionList
         'npi',
         'termination_date',
         'termination_reason',
-        'provider_number'	
+        'provider_number'
     ];
 
     /**
@@ -48,20 +48,19 @@ class Washington extends ExclusionList
     ];
 
     public $shouldHashListName = true;
-    
+
     protected $npiColumnName = "npi";
-    
+
     /**
      * @var institution special cases
      */
     private $institutions = [
-    		'Wheelchairs Plus',
-    		'AA Adult Family Home',
-    		'Our House Adult Family Home/',
-    		'Wheelchairs Plus',
-    		'/Fairwood Care'
+        'Wheelchairs Plus',
+        'AA Adult Family Home',
+        'Our House Adult Family Home/',
+        '/Fairwood Care'
     ];
-    
+
     private $business;
 
     /**
@@ -191,6 +190,7 @@ class Washington extends ExclusionList
     protected function parse()
     {
         $data = [];
+
         $rows = $this->textNewLineToArray($this->data);
 
         //array offset
@@ -212,14 +212,14 @@ class Washington extends ExclusionList
 
             // handles the population of name and business values
             $row = $this->override($row);
-            
+
             $npiColumnIndex = $this->getNpiColumnIndex();
             // set provider number
             $row = PNHelper::setProviderNumberValue($row, PNHelper::getProviderNumberValue($row, $npiColumnIndex));
-            
+
             // set npi number array
             $row = PNHelper::setNpiValue($row, PNHelper::getNpiValue($row, $npiColumnIndex), $npiColumnIndex);
-            
+
             // populate the array data
             $data[] = $row;
         }
