@@ -1,5 +1,7 @@
 <?php namespace App\Import\Lists;
 
+use \App\Import\Lists\ProviderNumberHelper as PNHelper;
+
 class WestVirginia extends ExclusionList
 {
     /**
@@ -8,11 +10,13 @@ class WestVirginia extends ExclusionList
     public $dbPrefix = 'wv2';
 
     /**
+     * The parser needs to work with multiple urls in this case
+     *
      * @var string
      */
-    public $uri = 'https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/west-virginia/wv2.xlsx';
+    public $uri = 'https://www.wvmmis.com/WV%20Medicaid%20Provider%20SanctionedExclusion/WV%20Medicaid%20Exclusions%20-%20March%20Posting.pdf,https://www.wvmmis.com/WV%20Medicaid%20Provider%20SanctionedExclusion/WV%20Medicaid%20Provider%20Term%20-%20Exclusion%20Info%20Other%20-%20March%202016%20Posting.pdf,https://www.wvmmis.com/WV%20Medicaid%20Provider%20SanctionedExclusion/WV%20Medicaid%20Terminations%20-%20March%202016%20Posting.pdf';
 
-    public $pdfToText = 'java -jar ../etc/tabula.jar -p all -u -g -r'; //'pdftotext -layout -nopgbrk';
+    public $pdfToText = 'java -Dfile.encoding=utf-8 -jar ../etc/tabula.jar -p all -u -g -r'; //'pdftotext -layout -nopgbrk';
 
     public $type = 'pdf';
 
@@ -41,7 +45,8 @@ class WestVirginia extends ExclusionList
         'exclusion_date',
         'reason_for_exclusion',
         'reinstatement_date',
-        'reinstatement_reason'
+        'reinstatement_reason',
+        'provider_number'	
     ];
 
     /**
@@ -65,6 +70,10 @@ class WestVirginia extends ExclusionList
         'reinstatement_date' => 12
     ];
 
+    public $shouldHashListName = true;
+    
+    protected $npiColumnName = "npi_number";
+    
     /**
      * @inherit preProcess
      */
@@ -115,7 +124,13 @@ class WestVirginia extends ExclusionList
         }, $array);
     }
 
-    private function sanitize(array $array)
+    /**
+     * Remove header of the array
+     * 
+     * @param array $array
+     * @return array the array data without the header
+     */
+    private function removeHeader(array $array)
     {
         $data = [];
 
@@ -146,9 +161,20 @@ class WestVirginia extends ExclusionList
     {
         $data = [];
         foreach ($this->data as $key => $value) {
-            $data = array_merge($data, $this->sanitize($this->buildData($value)));
+            $data = array_merge($data, $this->removeHeader($this->buildData($value)));
         }
-
-        $this->data = $data;
+        
+        $this->data = array_map(function ($row) {
+        	
+            $npiColumnIndex = $this->getNpiColumnIndex();
+            // set provider number
+            $row = PNHelper::setProviderNumberValue($row, PNHelper::getProviderNumberValue($row, $npiColumnIndex));
+            
+            // set npi number array
+            $row = PNHelper::setNpiValue($row, PNHelper::getNpiValue($row, $npiColumnIndex), $npiColumnIndex);
+            
+            return $row;
+            
+        }, $data);
     }
 }

@@ -32,6 +32,8 @@ class Idaho extends ExclusionList
         'additional_information'
     ];
 
+    public $shouldHashListName = true;
+    
     protected $tableHeaders = [
         '"",Exclusion,Date Eligible,Date,',
         'Name,Start,for,Reinstated,Additional Information',

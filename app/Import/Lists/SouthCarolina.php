@@ -1,10 +1,12 @@
 <?php namespace App\Import\Lists;
 
+use \App\Import\Lists\ProviderNumberHelper as PNHelper;
+
 class SouthCarolina extends ExclusionList
 {
     public $dbPrefix = 'sc1';
-
-    public $uri = 'https://www.scdhhs.gov/sites/default/files/Exclusion%20Provider%20List%20for%20DHHS%20Website_14.xls';
+                  
+    public $uri = 'https://www.scdhhs.gov/sites/default/files/Exclusion%20Provider%20List%20for%20DHHS%20Website_19.xls';
 
     public $type = 'xls';
 
@@ -29,7 +31,8 @@ class SouthCarolina extends ExclusionList
         'state',
         'zip',
         'provider_type',
-        'date_excluded'
+        'date_excluded',
+        'provider_number'
     ];
 
     public $dateColumns = [
@@ -38,12 +41,40 @@ class SouthCarolina extends ExclusionList
 
     public $shouldHashListName = true;
 
-    public function postProcess()
+    protected $npiColumnName = "npi";
+    
+    /**
+     * @inherit preProcess
+     */
+    public function preProcess()
     {
-        array_walk_recursive($this->data, function (&$value, $key) {
-            if ($key === 'npi' && ! is_numeric($value)) {
-                $value = null;
-            }
-        });
+    	$this->parse();
+    	parent::preProcess();
+    }
+    
+    /**
+     * Parse the input data
+     */
+    private function parse()
+    {
+    	$data = [];
+    	 
+    	// iterate each row
+    	foreach ($this->data as $row) {
+    		
+    	    $npiColumnIndex = $this->getNpiColumnIndex();
+    	    
+    	    // set provider number
+    	    $row = PNHelper::setProviderNumberValue($row, PNHelper::getProviderNumberValue($row, $npiColumnIndex));
+    	    	
+    	    // set npi number array
+    	    $row = PNHelper::setNpiValue($row, PNHelper::getNpiValue($row, $npiColumnIndex), $npiColumnIndex);
+    	    	
+    	    // populate the array data
+    	    $data[] = $row;
+    	}
+    	 
+    	// set back to global data
+    	$this->data = $data;
     }
 }

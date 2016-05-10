@@ -1,10 +1,12 @@
 <?php namespace App\Import\Lists;
 
+use \App\Import\Lists\ProviderNumberHelper as PNHelper;
+
 class Nebraska extends ExclusionList
 {
     public $dbPrefix = 'ne1';
 
-    public $pdfToText = "java -jar ../etc/tabula.jar -p all -u -g -r";
+    public $pdfToText = "java -Dfile.encoding=utf-8 -jar ../etc/tabula.jar -p all -u -g -r";
 
     public $uri = "http://dhhs.ne.gov/medicaid/Documents/Excluded-Providers.pdf";
     
@@ -18,7 +20,8 @@ class Nebraska extends ExclusionList
     	'effective_date',
     	'term',
     	'end_date',
-        'reason_for_action'
+    	'reason_for_action',
+    	'provider_number'
     ];
 
 
@@ -40,13 +43,23 @@ class Nebraska extends ExclusionList
     public $dateColumns = [
         'effective_date' => 4
     ];
+    
+    public $shouldHashListName = true;
+    
+    protected $npiColumnName = "npi";
 
-    public function preProcess()
-    {
-    	$this->parse();
-    	parent::preProcess();
-    }
-
+    /**
+	 * @inherit preProcess
+	 */
+	public function preProcess()
+	{
+		$this->parse();
+		parent::preProcess();
+	}
+	
+	/**
+	 * Parse the input data
+	 */
     public function parse()
     {
         $rows = preg_split('/(\r)?\n(\s+)?/', $this->data);
@@ -68,39 +81,18 @@ class Nebraska extends ExclusionList
         	//remove date_added column
 			array_shift($columns);
 			
-			// applies specific overrides
-			$columns = $this->applyOverrides($columns);
+			$npiColumnIndex = $this->getNpiColumnIndex();
+			 
+			// set provider number
+			$columns = PNHelper::setProviderNumberValue($columns, PNHelper::getProviderNumberValue($columns, $npiColumnIndex));
+			
+			// set npi number array
+			$columns = PNHelper::setNpiValue($columns, PNHelper::getNpiValue($columns, $npiColumnIndex), $npiColumnIndex);
 			
 			// populate the array data
         	$data[] = $columns;
         }
 
         $this->data = $data;
-    }
-    
-    /**
-     * Applies the specific overrides to correct the data
-     * @param array $columns the column array
-     * @return array $columns the column array
-     */
-    private function applyOverrides($columns)
-    {
-    	$columns = $this->clearInvalidNpiValue($columns);
-    	
-    	return $columns;
-    }
-    
-    /**
-     * Clears the invalid npi value from the record.
-     * @param array $columns the column array
-     * @return array $columns the column array
-     */
-    private function clearInvalidNpiValue($columns)
-    {
-    	if (!is_numeric($columns[1])) {
-    		$columns[1] = null; 
-    	}
-    		
-    	return $columns;
     }
 }

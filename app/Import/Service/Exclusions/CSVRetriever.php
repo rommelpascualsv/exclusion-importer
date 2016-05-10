@@ -41,28 +41,20 @@ class CSVRetriever extends Retriever
     public function retrieveData(ExclusionList $list)
     {
         $data = [];
-        // Implement multiple file upload use comma searated
-        $url = explode(',', $list->uri);
 
-        $uri = array_map(function ($item) {
-            return trim($item);
-        }, $url);
+        // Implement multiple file upload use comma searated
+        $uri = $this->multipleUri($list->uri);
 
         foreach ($uri as $key => $value) {
 
             if ($this->uriIsRemote($value)) {
-                $response = $this->httpClient->get($value);
+                $response = $this->httpClient->get($value, ['verify' => false]);
                 $contents = $response->getBody();
             } else {
                 $contents = file_get_contents($value);
             }
 
-            $data[] = $this->dataConverter->convertData($list, $contents);
-        }
-
-        // If single item return array element
-        if (count($data) === 1) {
-            return $data[0];
+            $data = array_merge($data, $this->dataConverter->convertData($list, $contents));
         }
 
         return $data;

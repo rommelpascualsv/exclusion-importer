@@ -12,11 +12,13 @@ class ListFactory
         'fl2'               => 'Florida',
         'hi1'               => 'Hawaii',
         'id1'               => 'Idaho',
+        'il1'               => 'Illinois',
         'ky1'               => 'Kentucky',
         'ma1'               => 'Massachusetts',
         'md1'               => 'Maryland',
         'mi1'               => 'Michigan',
-        'ne1'                => 'Nebraska',
+        'ne1'               => 'Nebraska',
+        'nv1'               => 'Nevada',
         'njcdr'             => 'NewJersey',
         'nyomig'            => 'NewYork',
         'oh1'               => 'Ohio',
@@ -46,7 +48,8 @@ class ListFactory
         'usdosd'            => 'USDosDebar',
         'unsancindividuals' => 'UnSanctionsIndividuals',
         'unsancentities'    => 'UnSanctionsEntities',
-        'healthmil'    => 'HealthMil',
+        'healthmil'         => 'HealthMil',
+    	'csl'               => 'ConsolidatedScreeningList'
     ];
 
     /**
