@@ -71,17 +71,19 @@ class ImportFileService implements ImportFileServiceInterface
             if ($shouldSaveFile) {
                 // 'N' will be the value for ready_for_update as the updated records were already inserted to its corresponding state table
                 $this->saveFile($listPrefix, $url, 'N');
-            } else {
+            }  {
                 $this->updateReadyForUpdate($listPrefix, 'N');
             }
-
+            
             // 6. Return successful response
             return $this->createResponse('', true);
-
+            
         } catch (\Exception $e) {
+            
             info("Encountered an error while trying to import " . $listPrefix . ": " . $e->getMessage());
-
-            return $this->createResponse($e->getMessage(), false);
+            
+            return $this->createResponse($this->getErrorMessageFrom($e), false);
+            
         }
     }
     
@@ -423,5 +425,10 @@ class ImportFileService implements ImportFileServiceInterface
         curl_close($ch);
     
         return $data;
+    }
+    
+    private function getErrorMessageFrom($exception)
+    {
+        return $exception instanceof \PDOException ? 'A data access error occurred. Please check the logs for details.' : $exception->getMessage();
     }
 }
