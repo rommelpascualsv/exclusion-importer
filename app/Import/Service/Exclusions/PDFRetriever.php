@@ -18,15 +18,13 @@ class PDFRetriever extends Retriever
      */
     protected $httpClient;
 
+    protected $url;
+
     public function retrieveData(ExclusionList $list)
     {
         $data = [];
         // Implement multiple file upload use comma searated
-        $url = explode(',', $list->uri);
-
-        $uri = array_map(function ($item) {
-            return trim($item);
-        }, $url);
+        $uri = $this->multipleUri($list->uri);
 
         foreach ($uri as $key => $value) {
             $folder = storage_path('app');

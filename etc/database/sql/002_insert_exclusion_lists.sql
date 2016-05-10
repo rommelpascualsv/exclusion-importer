@@ -25,7 +25,7 @@ INSERT INTO `exclusion_lists` (`id`, `prefix`, `accr`, `description`, `import_ur
 (24,  'hi1',  'Quest Hawaii', 'Department of Human Services Med Quest Division',  'http://www.med-quest.us/PDFs/Providers/MedProvExcl-ReinList.xls', 0,  0),
 (25,  'az1',  'AZ AHCCCS',  'Arizona Office of the Inspector General',  'https://web.archive.org/web/20150609233844/http://www.azahcccs.gov/OIG/ExludedProviders.aspx', 0,  0),
 (26,  'tn1',  'TennCare', 'Tennesee State Medicaid Program',  'http://www.tn.gov/assets/entities/tenncare/attachments/terminatedproviderlist.pdf', 0,  0),
-(27,  'mn1',  'Minnesota MHCP', 'Minnesota Department of Human Resources',  NULL, 0,  0),
+(27,  'mn1',  'Minnesota MHCP', 'Minnesota Department of Human Resources',  'http://www.dhs.state.mn.us/main/idcplg?IdcService=GET_FILE&RevisionSelectionMethod=LatestReleased&Rendition=Primary&allowInterrupt=1&noSaveAs=1&dDocName=dhs16_177447,http://www.dhs.state.mn.us/main/idcplg?IdcService=GET_FILE&RevisionSelectionMethod=LatestReleased&Rendition=Primary&allowInterrupt=1&noSaveAs=1&dDocName=dhs16_177448', 0,  0),
 (28,  'os1',  'OFAC SDN', 'Specially Designated Nationals', NULL, 0,  0),
 (29,  'ak1',  'AK DHSS',  'Alaska Department of Health and Social Services',  'http://dhss.alaska.gov/Commissioner/Documents/PDF/AlaskaExcludedProviderList.pdf', 0,  0),
 (30,  'ms1',  'MS DOM', 'Mississppi Division of Medicaid',  'https://medicaid.ms.gov/wp-content/uploads/2015/12/SanctionedProvidersList.xlsx', 0,  0),

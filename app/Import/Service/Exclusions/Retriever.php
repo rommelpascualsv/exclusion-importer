@@ -1,4 +1,4 @@
-<?php namespace App\Import\Service\Exclusions;
+<?php namespace app\Import\Service\Exclusions;
 
 use App\Import\Lists\ExclusionList;
 
@@ -10,4 +10,14 @@ abstract class Retriever
      * @return
      */
     abstract public function retrieveData(ExclusionList $list);
+
+    public function multipleUri($uri)
+    {
+        $url = explode(',', $uri);
+
+        return array_map(function ($item) {
+            return trim($item);
+        }, $url);
+
+    }
 }
