@@ -115,6 +115,21 @@ class CategoriesExtractor
 
         return $text;
     }
+    
+    public function getOptionsData($crawler)
+    {
+        return array_filter(array_map(function($a) {
+                    $name = $this->getOptionName(strip_tags(trim($a)));
+                    $file_name = $this->getKey($name);
+
+                    return (!$file_name || !$this->getOptionName(strip_tags(trim($a))))
+                    ? false : [
+                        'name' => $this->getOptionName(strip_tags(trim($a))),
+                        'file_name' => $file_name
+                    ];
+                }, explode('<br>', $crawler->html())
+        ));
+    }
 
     /**
      * Get category options
@@ -123,33 +138,23 @@ class CategoriesExtractor
      */
     public function getCategoryOptions(Crawler $nodeCrawler, $i = 0)
     {
-        $collapsePanelCrawler = $nodeCrawler->nextAll()->first();
         $options = [];
-        $this->page->getNodesByCss('.panel-default .panel-body', 'Something went wrong!')->each(function(Crawler $crawler) use (&$options, $i) {
-            $optionsTexts = array_filter(array_map(function($a) {
-                        return strip_tags(trim($a));
-                    }, explode('<br>', $crawler->html())
-            ));
 
+        $this->page->getNodesByCss('.panel-default .panel-body', 'Something went wrong!')->each(function(Crawler $crawler) use (&$options, $i) {
+            $optionsData = $this->getOptionsData($crawler);
+            $data = [];
+            $counter = 0;
+            
             // Get checkbox for options
-            $this->page->getNodesByCss('span', 'Something went wrong!', $crawler)->each(function(Crawler $crawler) use (&$optionsTexts, $i) {
-                $data = $this->getOptionData($crawler, $i);
-                dd($optionsTexts);
-//                $key = $this->getKey($data['name']);
-//                if (!array_key_exists($key, $options)) {
-//                    $options[$key] = $data;
-//                }
+            $this->page->getNodesByCss('span', 'Something went wrong!', $crawler)->each(function(Crawler $spanCrawler) use (&$optionsData, &$counter, &$data) {
+                $data = $this->getFieldName($spanCrawler, $counter);
+                $optionsData[$counter]['field_name'] = $data;
+                $counter++;
             });
+
+            array_filter($optionsData);
         });
-//        $collapsePanelCrawler->filter('.panel-default .panel-body span')->each(function(Crawler $crawler) use (&$options, $i) {
-//            $data = $this->getOptionData($crawler, $i);
-//            $key = $this->getKey($data['name']);
-//
-//            if (!array_key_exists($key, $options)) {
-//                $options[$key] = $data;
-//            }
-//        });
-        dd($options);
+
         return $options;
     }
 
@@ -158,19 +163,16 @@ class CategoriesExtractor
      * @param Crawler $optionsNode
      * @return array
      */
-    public function getOptionData(Crawler $optionsNode, $index = 0)
+    public function getFieldName(Crawler $optionsNode, $index = 0)
     {
-        $checkboxNode = $optionsNode->filter('input[type=checkbox]');
+        $checkboxNode = $this->page->getNodesByCss('input[type=checkbox]', 'Something went wrong', $optionsNode);
+//        $checkboxNode = $optionsNode->filter('input[type=checkbox]');
 
         if ($checkboxNode->count() == 0) {
             throw new \Exception(sprintf('Option name checkbox cannot be found on node %d', $index));
         }
 
-        $fieldName = $checkboxNode->attr('name');
-
-        return [
-            'field_name' => $fieldName
-        ];
+        return $checkboxNode->attr('name');
     }
 
     /**
