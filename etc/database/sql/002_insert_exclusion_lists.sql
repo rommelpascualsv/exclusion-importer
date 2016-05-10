@@ -5,7 +5,7 @@ INSERT INTO `exclusion_lists` (`id`, `prefix`, `accr`, `description`, `import_ur
 (4, 'pa1',  'PA Medicheck', 'Pennslyvania Department of Public Welfare',  'http://services.dpw.state.pa.us/dhs/medicheck.txt', 0,  0),
 (5, 'oh1',  'OH Medicaid',  'Ohio Department of Job and Family Services', 'http://medicaid.ohio.gov/Portals/0/Providers/Enrollment%20and%20Support/ExclusionSuspensionList.xlsx', 0,  0),
 (6, 'il1',  'IL OIG', 'Illinois Department of human Services, Office of the Inspector General', 'http://www.illinois.gov/hfs/oig/Documents/ILMedicaidSanctionsExcel20160421.xls', 0,  0),
-(7, 'ky1',  'KY CHFS',  'Kentucky Cabinet for Health and Family Services', NULL, 0,  0),
+(7, 'ky1',  'KY CHFS',  'Kentucky Cabinet for Health and Family Services', 'http://chfs.ky.gov/NR/rdonlyres/99A6E4D1-4EE9-437D-98F4-0FB4369C7100/0/CopyofKYMedicaidTerminationListApril2016web.xls', 0,  0),
 (8, 'ma1',  'MA HHS', 'Massachusetts Health and Human Services',  'http://www.mass.gov/eohhs/docs/masshealth/provlibrary/suspended-excluded-masshealth-providers.xls', 0,  0),
 (9, 'sc1',  'SC HHS', 'South Carolina Department Health and Human Services',  'https://www.scdhhs.gov/sites/default/files/Exclusion%20Provider%20List%20for%20DHHS%20Website_19.xls', 0,  0),
 (10,  'tx1',  'TX OIG', 'Texas Office of the Inspector General',  NULL, 0,  0),
