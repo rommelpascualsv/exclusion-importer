@@ -8,12 +8,27 @@ use Goutte\Client;
 use Illuminate\Database\DatabaseManager;
 use Laravel\Lumen\Routing\Controller as BaseController;
 use Illuminate\Database\ConnectionInterface;
+use App\Import\Scrape\Scrapers\Connecticut\Data\OptionCollection;
+use Illuminate\Support\Facades\DB;
 
 class ScrapeController extends BaseController
 {
-	public function test()
+	public function test(OptionCollection $options)
 	{
-		
+//        $categories = [];
+//        
+//        foreach($options as $option) {
+//            $categoryId = DB::table('ct_license_categories')->where('key', $option->getCategory()->getDir())->value('id');
+//            echo '["key"=>\'', $option->getFieldName(), '\', "name" =>"', $option->getName(),'", "created_at" => Carbon::now()->format("Y-m-d H:i:s"), "updated_at" => Carbon::now()->format("Y-m-d H:i:s"), "ct_license_categories_id" => "',$categoryId,'"],<br>';
+//            $categories[$option->getCategory()->getDir()] = $option->getCategory();
+//        }
+//        
+//        foreach($categories as $category) {
+//            echo '["key"=>"', $category->getDir(), '", "name" =>"', $category->getName(),'", "created_at" => Carbon::now()->format("Y-m-d H:i:s"), "updated_at" => Carbon::now()->format("Y-m-d H:i:s")],<br>';
+//        }
+//        foreach ($options as $option) {
+//            echo '["key"=>"', $option->getName(), '", "name" =>"', $option->getName(),'", "created_at" => Carbon::now()->format("Y-m-d H:i:s"), "updated_at" => Carbon::now()->format("Y-m-d H:i:s")],<br>';
+//        }
 		/* dd($a); */
 		
 		/* $a->download(); */
