@@ -88,7 +88,7 @@ class ImportFileService implements ImportFileServiceInterface
             
             info("Encountered an error while trying to import " . $listPrefix . ": " . $e->getMessage());
             
-            return $this->createResponse($exception->getMessage(), false);
+            return $this->createResponse($e->getMessage(), false);
             
         }
     }
