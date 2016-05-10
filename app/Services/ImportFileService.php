@@ -78,11 +78,17 @@ class ImportFileService implements ImportFileServiceInterface
             // 6. Return successful response
             return $this->createResponse('', true);
             
-        } catch (\Exception $e) {
+        } catch (\PDOException $e) {
             
             info("Encountered an error while trying to import " . $listPrefix . ": " . $e->getMessage());
             
             return $this->createResponse($this->getErrorMessageFrom($e), false);
+            
+        } catch (\Exception $e) {
+            
+            info("Encountered an error while trying to import " . $listPrefix . ": " . $e->getMessage());
+            
+            return $this->createResponse($exception->getMessage(), false);
             
         }
     }
@@ -427,8 +433,8 @@ class ImportFileService implements ImportFileServiceInterface
         return $data;
     }
     
-    private function getErrorMessageFrom($exception)
+    private function getErrorMessageFrom(\PDOException $e)
     {
-        return $exception instanceof \PDOException ? 'A data access error occurred. Please check the logs for details.' : $exception->getMessage();
+        return sprintf('SQLSTATE[%s]: %s: %s', $e->errorInfo[0], $e->errorInfo[1], $e->errorInfo[2]);
     }
 }
