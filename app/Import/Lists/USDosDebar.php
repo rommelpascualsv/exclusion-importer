@@ -26,8 +26,8 @@ class USDosDebar extends ExclusionList
     ];
 
     public $hashColumns = [
-        'name',
-        'aka',
+        'full_name',
+        'aka_name',
         'date_of_birth',
         'notice_date'
     ];
@@ -40,8 +40,8 @@ class USDosDebar extends ExclusionList
      * @var array
      */
     public $ignoreColumns = [
-        'corrected_notice' => 4,
-        'corrected_notice_date' => 5
+        'corrected_notice' => 5,
+        'corrected_notice_date' => 6
     ];
     
     public function preProcess()
