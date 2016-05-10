@@ -49,7 +49,7 @@ class AmbulatorySurgicalCenterMapperTest extends \Codeception\TestCase\Test
     			'expiration_date' => '09/30/2016'
     	];
     	
-    	$this->assertEquals($expected, $actual);
+    	$this->assertSame($expected, $actual);
     }
     
     public function testGetDbData()
@@ -69,26 +69,26 @@ class AmbulatorySurgicalCenterMapperTest extends \Codeception\TestCase\Test
     	$dbData = $this->mapper->getDbData($data);
     	 
     	$expectedDbData = [
-    	    'first_name' => '',
-            'last_name' => '',
+    	    'first_name' => null,
+            'last_name' => null,
             'business_name' => 'SAINT FRANCIS GI ENDOSCOPY, LLC',
             'address1' => '360 BLOOMFIELD AVE STE 204',
-            'address2' => '',
+            'address2' => null,
             'city' => 'WINDSOR',
-            'county' => '',
+            'county' => null,
             'state' => 'CT',
             'zip' => '06095-2700',
             'license_no' => '321',
             'license_effective_date' => '2008-10-30',
             'license_expiration_date' => '2016-09-30',
             'license_status' => 'ACTIVE',
-            'license_status_reason' => ''
+            'license_status_reason' => null
     	];
     	 
-    	$this->assertEquals($expectedDbData, $dbData);
+    	$this->assertSame($expectedDbData, $dbData);
     }
     
-    public function getDbDataLicenseDatesEmpty()
+    public function testGetDbDataLicenseDatesEmpty()
     {
         $data = [
             'facility_name' => 'SAINT FRANCIS GI ENDOSCOPY, LLC',
@@ -105,22 +105,22 @@ class AmbulatorySurgicalCenterMapperTest extends \Codeception\TestCase\Test
         $dbData = $this->mapper->getDbData($data);
         
         $expectedDbData = [
-            'first_name' => '',
-            'last_name' => '',
+            'first_name' => null,
+            'last_name' => null,
             'business_name' => 'SAINT FRANCIS GI ENDOSCOPY, LLC',
             'address1' => '360 BLOOMFIELD AVE STE 204',
-            'address2' => '',
+            'address2' => null,
             'city' => 'WINDSOR',
-            'county' => '',
+            'county' => null,
             'state' => 'CT',
             'zip' => '06095-2700',
             'license_no' => '321',
             'license_effective_date' => null,
             'license_expiration_date' => null,
             'license_status' => 'ACTIVE',
-            'license_status_reason' => ''
+            'license_status_reason' => null
         ];
         
-        $this->assertEquals($expectedDbData, $dbData);
+        $this->assertSame($expectedDbData, $dbData);
     }
 }

@@ -6,6 +6,23 @@ use Carbon\Carbon;
 
 abstract class BaseMapper implements MapperInterface
 {
+    protected static $dbColumns = [
+        'first_name',
+        'last_name',
+        'business_name',
+        'address1',
+        'address2',
+        'city',
+        'county',
+        'state',
+        'zip',
+        'license_no',
+        'license_effective_date',
+        'license_expiration_date',
+        'license_status',
+        'license_status_reason'
+    ];
+    
 	/**
 	 * @var array
 	 */
@@ -49,69 +66,38 @@ abstract class BaseMapper implements MapperInterface
 	}
 	
 	/**
-	 * Get db date from format
+	 * Get date from format
 	 * @param string $date
 	 * @param string $sourceFormat
 	 * @return string|null
 	 */
-	protected function getDbDateFromFormat($date, $sourceFormat = 'm/d/Y')
+	protected function getDateFromFormat($date, $sourceFormat = 'm/d/Y')
 	{
-        if ($date == '') {
-            return null;
-        }
-        
-        return Carbon::createFromFormat($sourceFormat, $date)->format('Y-m-d');
+	    if ($date != '') {
+	        $date = Carbon::createFromFormat($sourceFormat, $date)->format('Y-m-d');
+	    }
+	    
+	    return $date;
 	}
 	
 	/**
 	 * Get roster db data
-	 * @param string $firstName
-	 * @param string $lastName
-	 * @param string $businessName
-	 * @param string $address1
-	 * @param string $address2
-	 * @param string $city
-	 * @param string $county
-	 * @param string $state
-	 * @param string $zip
-	 * @param string $licenseNo
-	 * @param string|null $licenseEffectiveDate
-	 * @param string|null $licenseExpirationDate
-	 * @param string $licenseStatus
-	 * @param string $licenseStatusReason
+	 * @param array $data
+	 * @return array
 	 */
-	protected function getRosterDbData(
-	    $firstName,
-	    $lastName,
-	    $businessName,
-	    $address1,
-	    $address2,
-	    $city,
-	    $county,
-	    $state,
-	    $zip,
-	    $licenseNo,
-	    $licenseEffectiveDate,
-	    $licenseExpirationDate,
-	    $licenseStatus,
-	    $licenseStatusReason
-	) {
+	protected function getRosterDbData(array $data) {
+	    $dbData = [];
 	    
-		return [
-		    'first_name' => $firstName,
-		    'last_name' => $lastName,
-		    'business_name' => $businessName,
-		    'address1' => $address1,
-		    'address2' => $address2,
-		    'city' => $city,
-		    'county' => $county,
-		    'state' => $state,
-		    'zip' => $zip,
-		    'license_no' => $licenseNo,
-		    'license_effective_date' => $licenseEffectiveDate,
-		    'license_expiration_date' => $licenseExpirationDate,
-		    'license_status' => $licenseStatus,
-		    'license_status_reason' => $licenseStatusReason
-		];
+	    foreach (static::$dbColumns as $column) {
+	        if (array_key_exists($column, $data) && $data[$column] !== '') {
+	            $value = $data[$column];
+	        } else {
+	            $value = null;
+	        }
+	        
+	        $dbData[$column] = $value;
+	    } 
+		
+		return $dbData;
 	}
 }

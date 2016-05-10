@@ -84,9 +84,9 @@ class AcupuncturistMapperTest extends \Codeception\TestCase\Test
     	$expectedDbData = [
     	    'first_name' => 'THOMAS',
     	    'last_name' => 'RYAN',
-    	    'business_name' => '',
+    	    'business_name' => null,
     	    'address1' => '15 MAIN STREET',
-    	    'address2' => '',
+    	    'address2' => null,
     	    'city' => 'EAST HAMPTON',
     	    'county' => 'Middlesex',
     	    'state' => 'CT',
@@ -98,6 +98,6 @@ class AcupuncturistMapperTest extends \Codeception\TestCase\Test
     	    'license_status_reason' => 'CURRENT'
     	];
     
-    	$this->assertEquals($expectedDbData, $dbData);
+    	$this->assertSame($expectedDbData, $dbData);
     }
 }
