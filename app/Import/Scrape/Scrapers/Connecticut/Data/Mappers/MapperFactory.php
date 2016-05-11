@@ -49,6 +49,7 @@ use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MentalHealthCare\MentalH
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MentalHealthCare\ProfessionalCounselorMapper;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MentalHealthCare\PsychiratricOutpatientClinicsMapper;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MentalHealthCare\PsychologistMapper;
+use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\RegisteredSanitarian\RegisteredSanitarianMapper;
 
 
 class MapperFactory
@@ -122,6 +123,9 @@ class MapperFactory
             'professional_counselor' => ProfessionalCounselorMapper::class,
             'psychiratric_outpatient_clinics' => PsychiratricOutpatientClinicsMapper::class,
             'psychologist' => PsychologistMapper::class,
+        ],
+        'registered_sanitarian' => [
+            'registered_sanitarian' => RegisteredSanitarianMapper::class
         ]
     ];
 	

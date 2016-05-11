@@ -2,6 +2,7 @@
 namespace Import\Scrape\Scrapers\Connecticut\Data\Mappers\HealthcarePractitioners;
 
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\HealthcarePractitioners\PodiatristMapper;
+use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MapperFactory;
 use Codeception\TestCase\Test;
 use UnitTester;
 
@@ -103,7 +104,7 @@ class PodiatristMapperTest extends Test
     
     public function testMapperFactoryInstance()
     {
-        $mapper = \App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MapperFactory::createByKeys('healthcare_practitioners', 'podiatrist');
+        $mapper = MapperFactory::createByKeys('healthcare_practitioners', 'podiatrist');
         
         $this->assertInstanceOf(PodiatristMapper::class, $mapper);
     }
