@@ -119,7 +119,6 @@ class MapperFactory
             'master_s_level_social_worker' => MasterSLevelSocialWorkerMapper::class,
             'mental_health_community_residence' => MentalHealthCommunityResidenceMapper::class,
             'mental_health_day_treatement_facilities' => MentalHealthDayTreatementFacilitiesMapper::class,
-            'mental_health_intermedicate_treatment_facilities' => MentalHealthIntermedicateTreatmentFacilitiesMapper::class,
             'mental_health_residential_living_facilities' => MentalHealthResidentialLivingFacilitiesMapper::class,
             'professional_counselor' => ProfessionalCounselorMapper::class,
             'psychiratric_outpatient_clinics' => PsychiratricOutpatientClinicsMapper::class,
