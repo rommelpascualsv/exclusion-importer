@@ -57,8 +57,8 @@
                     <th>List</th>
                     <th>Description</th>
                     <th>URL</th>
-                    <th>Update</th>
-                    <th>Ready For Update</th>
+                    <th>Start Update</th>
+                    <th>Update Required</th>
                 </tr>
                 <form name="importForm" method="get">
                 <?php

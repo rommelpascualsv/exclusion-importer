@@ -1,5 +1,7 @@
 <?php namespace App\Import\Lists;
 
+use \App\Import\Lists\ProviderNumberHelper as PNHelper;
+
 class WestVirginia extends ExclusionList
 {
     /**
@@ -8,9 +10,11 @@ class WestVirginia extends ExclusionList
     public $dbPrefix = 'wv2';
 
     /**
+     * The parser needs to work with multiple urls in this case
+     *
      * @var string
      */
-    public $uri = 'https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/west-virginia/wv2.xlsx';
+    public $uri = 'https://www.wvmmis.com/WV%20Medicaid%20Provider%20SanctionedExclusion/WV%20Medicaid%20Exclusions%20-%20March%20Posting.pdf,https://www.wvmmis.com/WV%20Medicaid%20Provider%20SanctionedExclusion/WV%20Medicaid%20Provider%20Term%20-%20Exclusion%20Info%20Other%20-%20March%202016%20Posting.pdf,https://www.wvmmis.com/WV%20Medicaid%20Provider%20SanctionedExclusion/WV%20Medicaid%20Terminations%20-%20March%202016%20Posting.pdf';
 
     public $pdfToText = 'java -Dfile.encoding=utf-8 -jar ../etc/tabula.jar -p all -u -g -r'; //'pdftotext -layout -nopgbrk';
 
@@ -68,13 +72,7 @@ class WestVirginia extends ExclusionList
 
     public $shouldHashListName = true;
     
-    public $npiColumnName = "npi_number";
-    
-    private $npiRegex = "/1\d{9}\b/";
-    
-    private $symbolsRegex = "/^((,|\/)+\s)?(,|\/)?|((,|\/)+\s)?(,|\/)?$/";
-    
-    private $spacesRegex = "!\s+!";
+    protected $npiColumnName = "npi_number";
     
     /**
      * @inherit preProcess
@@ -167,61 +165,16 @@ class WestVirginia extends ExclusionList
         }
         
         $this->data = array_map(function ($row) {
-        	return $this->handleRow($row);
+        	
+            $npiColumnIndex = $this->getNpiColumnIndex();
+            // set provider number
+            $row = PNHelper::setProviderNumberValue($row, PNHelper::getProviderNumberValue($row, $npiColumnIndex));
+            
+            // set npi number array
+            $row = PNHelper::setNpiValue($row, PNHelper::getNpiValue($row, $npiColumnIndex), $npiColumnIndex);
+            
+            return $row;
+            
         }, $data);
-    }
-    
-    /**
-     * Handles the data manipulation of a record array.
-     *
-     * @param array $row the array record
-     * @return array $row the array record
-     */
-    private function handleRow($row)
-    {
-    		
-    	// set provider number
-    	$row = $this->setProviderNo($row);
-    
-    	// set npi number array
-    	$row = $this->setNpi($row);
-    		
-    	return $row;
-    }
-    
-    /**
-     * Set the provider number by clearing the unnecessary characters
-     *
-     * @param array $row the array record
-     * @return array $row the array record
-     */
-    private function setProviderNo($row)
-    {
-    	// remove valid npi numbers
-    	$providerNo = preg_replace($this->npiRegex, "", trim($row[0]));
-    		
-    	// remove commas
-    	$providerNo = preg_replace($this->symbolsRegex, "", trim($providerNo));
-    		
-    	// remove duplicate spaces in between numbers
-    	$row[] = preg_replace($this->spacesRegex, " ", trim($providerNo));
-    		
-    	return $row;
-    }
-    
-    /**
-     * Set the npi numbers
-     *
-     * @param array $row the array record
-     * @return array $row the array record
-     */
-    private function setNpi($row)
-    {
-    	// extract npi number/s
-    	preg_match_all($this->npiRegex, $row[0], $npi);
-    
-    	$row[0] = $npi[0];
-    		
-    	return $row;
     }
 }

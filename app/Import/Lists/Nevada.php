@@ -1,5 +1,7 @@
 <?php namespace App\Import\Lists;
 
+use \App\Import\Lists\ProviderNumberHelper as PNHelper;
+
 class Nevada extends ExclusionList
 {
     public $dbPrefix = 'nv1';
@@ -45,10 +47,10 @@ class Nevada extends ExclusionList
     	'reinstatement_date' => 10
     ];
     
-    public $npiColumnName = "npi";
-    
     public $shouldHashListName = true;
 
+    protected $npiColumnName = "npi";
+    
     /**
      * @var contains the headers of the pdf that should be excluded
      */
@@ -111,7 +113,9 @@ class Nevada extends ExclusionList
         		$columns = $this->buildColumnsData($mergeData, $columns);
         	}
         	
-        	$columns = $this->setNpi($columns);
+        	// set npi number array
+        	$npiColumnIndex = $this->getNpiColumnIndex();
+		    $columns = PNHelper::setNpiValue($columns, PNHelper::getNpiValue($columns, $npiColumnIndex), $npiColumnIndex);
         	
 			// populate the array data
         	$data[] = $columns;
@@ -157,18 +161,5 @@ class Nevada extends ExclusionList
 			}
 		}
 		return $mergeData;
-    }
-    
-    /**
-     * Set an array string of npi numbers.
-     *
-	 * @param columns the current column record
-	 * @return columns the current column record
-     */
-    private function setNpi($columns)
-    {
-    	$columns[4] = explode(" ", trim($columns[4]));
-    	 
-    	return $columns;
     }
 }

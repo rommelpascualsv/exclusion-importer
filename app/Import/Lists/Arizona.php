@@ -1,5 +1,7 @@
 <?php namespace App\Import\Lists;
 
+use \App\Import\Lists\ProviderNumberHelper as PNHelper;
+
 class Arizona extends ExclusionList
 {
     public $dbPrefix = 'az1';
@@ -27,9 +29,7 @@ class Arizona extends ExclusionList
         'npi_number'
     ];
     
-    public $npiColumnName = "npi_number";
-    
-    private $npiRegex = "/1\d{9}\b/";
+    protected $npiColumnName = "npi_number";
     
     public function preProcess()
     {
@@ -56,7 +56,12 @@ class Arizona extends ExclusionList
     		//NPI
     		$value[5] = str_replace(["\xA0", "\xC2"], '', trim($value[5]));
     		
-    		$data[] = $this->handleRow($value);
+    		$npiColumnIndex = $this->getNpiColumnIndex();
+    		
+    		// set npi number array
+    		$value = PNHelper::setNpiValue($value, PNHelper::getNpiValue($value, $npiColumnIndex), $npiColumnIndex);
+    			
+    		$data[] = $value;
     	}
     
     	$this->data = $data;
@@ -77,35 +82,5 @@ class Arizona extends ExclusionList
     	}
     	
     	return $nameArr;
-    }
-    
-    /**
-     * Handles the data manipulation of a record array.
-     *
-     * @param array $row the array record
-     * @return array $row the array record
-     */
-    private function handleRow($row)
-    {
-    	// set npi number array
-    	$row = $this->setNpi($row);
-    
-    	return $row;
-    }
-    
-    /**
-     * Set the npi numbers
-     *
-     * @param array $row the array record
-     * @return array $row the array record
-     */
-    private function setNpi($row)
-    {
-    	// extract npi number/s
-    	preg_match_all($this->npiRegex, $row[5], $npi);
-    
-    	$row[5] = $npi[0];
-    
-    	return $row;
     }
 }

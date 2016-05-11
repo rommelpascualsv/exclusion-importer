@@ -4,7 +4,7 @@ class Maryland extends ExclusionList
 {
     public $dbPrefix = 'md1';
 
-    public $uri = "http://dhmh.maryland.gov/oig/Documents/03_17_16_Exclusion_Update.xls";
+    public $uri = "http://dhmh.maryland.gov/oig/Documents/04_28_16_Exclusion_Update.xls";
 
     public $type = 'xls';
 
