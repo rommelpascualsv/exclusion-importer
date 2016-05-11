@@ -102,34 +102,39 @@
                 "field_name": "ctl00$MainContentPlaceHolder$ckbRoster18",
                 "file_name": "pet_shops"
             },
+            "poultry_disposal_facility": {
+                "name": "Poultry Disposal Facility",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster19",
+                "file_name": "poultry_disposal_facility"
+            },
             "poultry_slaughter_facilites": {
                 "name": "Poultry Slaughter Facilites",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster19",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster20",
                 "file_name": "poultry_slaughter_facilites"
             },
             "raw_milk_cheese_manufacturers": {
                 "name": "Raw Milk Cheese Manufacturers",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster20",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster21",
                 "file_name": "raw_milk_cheese_manufacturers"
             },
             "retail_dairy_stores": {
                 "name": "Retail Dairy Stores",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster21",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster22",
                 "file_name": "retail_dairy_stores"
             },
             "retail_raw_milk_producers": {
                 "name": "Retail Raw Milk Producers",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster22",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster23",
                 "file_name": "retail_raw_milk_producers"
             },
             "seed_labeler": {
                 "name": "Seed Labeler",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster23",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster24",
                 "file_name": "seed_labeler"
             },
             "swine_garbage_feeder": {
                 "name": "Swine Garbage Feeder",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster24",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster25",
                 "file_name": "swine_garbage_feeder"
             }
         }
@@ -139,12 +144,12 @@
         "options": {
             "ambulatory_surgical_center": {
                 "name": "Ambulatory Surgical Center",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster25",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster26",
                 "file_name": "ambulatory_surgical_center"
             },
             "recovery_care_centers": {
                 "name": "Recovery Care Centers",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster26",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster27",
                 "file_name": "recovery_care_centers"
             }
         }
@@ -154,27 +159,27 @@
         "options": {
             "asbestos_consultant_inspector": {
                 "name": "Asbestos Consultant-Inspector",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster27",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster28",
                 "file_name": "asbestos_consultant_inspector"
             },
             "asbestos_consultant_inspector_managment_planner": {
                 "name": "Asbestos Consultant-Inspector\/Managment Planner",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster28",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster29",
                 "file_name": "asbestos_consultant_inspector_managment_planner"
             },
             "asbestos_consultant_project_designer": {
                 "name": "Asbestos Consultant-Project Designer",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster29",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster30",
                 "file_name": "asbestos_consultant_project_designer"
             },
             "asbestos_consultants_project_monitor": {
                 "name": "Asbestos Consultants-Project Monitor",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster30",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster31",
                 "file_name": "asbestos_consultants_project_monitor"
             },
             "asbestos_contractor": {
                 "name": "Asbestos Contractor",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster31",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster32",
                 "file_name": "asbestos_contractor"
             }
         }
@@ -184,22 +189,22 @@
         "options": {
             "barber": {
                 "name": "Barber",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster32",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster33",
                 "file_name": "barber"
             },
             "electrologist": {
                 "name": "Electrologist",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster33",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster34",
                 "file_name": "electrologist"
             },
             "hairdresser": {
                 "name": "Hairdresser",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster34",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster35",
                 "file_name": "hairdresser"
             },
             "tattoo_technician": {
                 "name": "Tattoo Technician",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster35",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster36",
                 "file_name": "tattoo_technician"
             }
         }
@@ -209,12 +214,12 @@
         "options": {
             "paid_solicitors": {
                 "name": "Paid Solicitors",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster36",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster37",
                 "file_name": "paid_solicitors"
             },
             "public_charity": {
                 "name": "Public Charity",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster37",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster38",
                 "file_name": "public_charity"
             }
         }
@@ -224,22 +229,22 @@
         "options": {
             "appraisal_continuing_education_courses": {
                 "name": "Appraisal Continuing Education Courses",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster38",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster39",
                 "file_name": "appraisal_continuing_education_courses"
             },
             "appraisal_pre_license_courses": {
                 "name": "Appraisal Pre-License Courses",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster39",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster40",
                 "file_name": "appraisal_pre_license_courses"
             },
             "real_estate_continuing_education_courses": {
                 "name": "Real Estate Continuing Education Courses",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster40",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster41",
                 "file_name": "real_estate_continuing_education_courses"
             },
             "real_estate_pre_license_courses": {
                 "name": "Real Estate Pre-License Courses",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster41",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster42",
                 "file_name": "real_estate_pre_license_courses"
             }
         }
@@ -249,22 +254,22 @@
         "options": {
             "controlled_substance_laboratories": {
                 "name": "Controlled Substance Laboratories",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster42",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster43",
                 "file_name": "controlled_substance_laboratories"
             },
             "controlled_substance_registration_for_practitioners": {
                 "name": "Controlled Substance Registration for Practitioners",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster43",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster44",
                 "file_name": "controlled_substance_registration_for_practitioners"
             },
             "manufacturers_of_drugs_cosmetics_and_medical_devices": {
                 "name": "Manufacturers of Drugs, Cosmetics and Medical Devices",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster44",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster45",
                 "file_name": "manufacturers_of_drugs_cosmetics_and_medical_devices"
             },
             "wholesalers_of_drugs_cosmetics_and_medical_devices": {
                 "name": "Wholesalers of Drugs, Cosmetics and Medical Devices",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster45",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster46",
                 "file_name": "wholesalers_of_drugs_cosmetics_and_medical_devices"
             }
         }
@@ -274,52 +279,52 @@
         "options": {
             "child_day_care_centers_and_group_day_care_homes_closed_1_year": {
                 "name": "Child Day Care Centers and Group Day Care Homes Closed - 1 Year",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster46",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster47",
                 "file_name": "child_day_care_centers_and_group_day_care_homes_closed_1_year"
             },
             "child_day_care_centers_and_group_day_care_homes_closed_60_days": {
                 "name": "Child Day Care Centers and Group Day Care Homes Closed - 60 Days",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster47",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster48",
                 "file_name": "child_day_care_centers_and_group_day_care_homes_closed_60_days"
             },
             "child_day_care_centers_and_group_day_care_homes_opened_1_year": {
                 "name": "Child Day Care Centers and Group Day Care Homes Opened - 1 Year",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster48",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster49",
                 "file_name": "child_day_care_centers_and_group_day_care_homes_opened_1_year"
             },
             "child_day_care_centers_and_group_day_care_homes_opened_60_days": {
                 "name": "Child Day Care Centers and Group Day Care Homes Opened - 60 Days",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster49",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster50",
                 "file_name": "child_day_care_centers_and_group_day_care_homes_opened_60_days"
             },
             "child_day_care_centers_and_group_day_care_homes_total_by_date_active": {
                 "name": "Child Day Care Centers and Group Day Care Homes Total  by Date (Active)",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster50",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster51",
                 "file_name": "child_day_care_centers_and_group_day_care_homes_total_by_date_active"
             },
             "family_day_care_homes_closed_1_year": {
                 "name": "Family Day Care Homes Closed - 1 Year",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster51",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster52",
                 "file_name": "family_day_care_homes_closed_1_year"
             },
             "family_day_care_homes_closed_60_days": {
                 "name": "Family Day Care Homes Closed - 60 Days",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster52",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster53",
                 "file_name": "family_day_care_homes_closed_60_days"
             },
             "family_day_care_homes_opened_1_year": {
                 "name": "Family Day Care Homes Opened - 1 Year",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster53",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster54",
                 "file_name": "family_day_care_homes_opened_1_year"
             },
             "family_day_care_homes_opened_60_days": {
                 "name": "Family Day Care Homes Opened - 60 Days",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster54",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster55",
                 "file_name": "family_day_care_homes_opened_60_days"
             },
             "family_day_care_homes_total_by_date_active": {
                 "name": "Family Day Care Homes Total by Date (Active)",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster55",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster56",
                 "file_name": "family_day_care_homes_total_by_date_active"
             }
         }
@@ -329,37 +334,37 @@
         "options": {
             "backflow_preventer_testers": {
                 "name": "Backflow Preventer Testers",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster56",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster57",
                 "file_name": "backflow_preventer_testers"
             },
             "contractor_list_drinking_water_systems": {
                 "name": "Contractor List - Drinking Water Systems",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster57",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster58",
                 "file_name": "contractor_list_drinking_water_systems"
             },
             "cross_connection_survey_inspectors": {
                 "name": "Cross Connection Survey Inspectors",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster58",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster59",
                 "file_name": "cross_connection_survey_inspectors"
             },
             "distribution_system_operators": {
                 "name": "Distribution System Operators",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster59",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster60",
                 "file_name": "distribution_system_operators"
             },
             "operators_in_training": {
                 "name": "Operators in Training",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster60",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster61",
                 "file_name": "operators_in_training"
             },
             "small_water_system_operators": {
                 "name": "Small Water System Operators",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster61",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster62",
                 "file_name": "small_water_system_operators"
             },
             "treatment_plant_operators": {
                 "name": "Treatment Plant Operators",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster62",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster63",
                 "file_name": "treatment_plant_operators"
             }
         }
@@ -369,42 +374,42 @@
         "options": {
             "dealers_of_electronic_nicotine_delivery_systems_or_vapor_products": {
                 "name": "Dealers of Electronic Nicotine Delivery Systems or Vapor Products",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster63",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster64",
                 "file_name": "dealers_of_electronic_nicotine_delivery_systems_or_vapor_products"
             },
             "non_legend_drug_permits": {
                 "name": "Non-Legend Drug Permits",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster64",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster65",
                 "file_name": "non_legend_drug_permits"
             },
             "non_resident_pharmacies": {
                 "name": "Non-Resident Pharmacies",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster65",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster66",
                 "file_name": "non_resident_pharmacies"
             },
             "pharmacies": {
                 "name": "Pharmacies",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster66",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster67",
                 "file_name": "pharmacies"
             },
             "pharmacists": {
                 "name": "Pharmacists",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster67",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster68",
                 "file_name": "pharmacists"
             },
             "pharmacy_interns": {
                 "name": "Pharmacy Interns",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster68",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster69",
                 "file_name": "pharmacy_interns"
             },
             "pharmacy_technicians": {
                 "name": "Pharmacy Technicians",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster69",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster70",
                 "file_name": "pharmacy_technicians"
             },
             "temporary_permit_to_practice_pharmacy": {
                 "name": "Temporary Permit to Practice Pharmacy",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster70",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster71",
                 "file_name": "temporary_permit_to_practice_pharmacy"
             }
         }
@@ -414,47 +419,47 @@
         "options": {
             "advanced_emergency_medical_technician": {
                 "name": "Advanced Emergency Medical Technician",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster71",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster72",
                 "file_name": "advanced_emergency_medical_technician"
             },
             "certified_ems_organization": {
                 "name": "Certified EMS Organization",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster72",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster73",
                 "file_name": "certified_ems_organization"
             },
             "emergency_medical_responder": {
                 "name": "Emergency Medical Responder",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster73",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster74",
                 "file_name": "emergency_medical_responder"
             },
             "emergency_medical_services_instructor": {
                 "name": "Emergency Medical Services Instructor",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster74",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster75",
                 "file_name": "emergency_medical_services_instructor"
             },
             "emergency_medical_technician": {
                 "name": "Emergency Medical Technician",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster75",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster76",
                 "file_name": "emergency_medical_technician"
             },
             "first_responder_organization": {
                 "name": "First Responder Organization",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster76",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster77",
                 "file_name": "first_responder_organization"
             },
             "licensed_ems_organization": {
                 "name": "Licensed EMS Organization",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster77",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster78",
                 "file_name": "licensed_ems_organization"
             },
             "paramedic": {
                 "name": "Paramedic",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster78",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster79",
                 "file_name": "paramedic"
             },
             "supplemental_responder_ems_organization": {
                 "name": "Supplemental Responder EMS Organization",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster79",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster80",
                 "file_name": "supplemental_responder_ems_organization"
             }
         }
@@ -464,37 +469,37 @@
         "options": {
             "architect_licenses": {
                 "name": "Architect Licenses",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster80",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster81",
                 "file_name": "architect_licenses"
             },
             "architect_engineer_and_land_surveying_corporations": {
                 "name": "Architect, Engineer and Land Surveying Corporations",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster81",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster82",
                 "file_name": "architect_engineer_and_land_surveying_corporations"
             },
             "engineer_in_training": {
                 "name": "Engineer-in-Training",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster82",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster83",
                 "file_name": "engineer_in_training"
             },
             "engineers_and_land_surveyors": {
                 "name": "Engineers and Land Surveyors",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster83",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster84",
                 "file_name": "engineers_and_land_surveyors"
             },
             "interior_designer": {
                 "name": "Interior Designer",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster84",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster85",
                 "file_name": "interior_designer"
             },
             "land_surveyor_in_training": {
                 "name": "Land Surveyor-In-Training",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster85",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster86",
                 "file_name": "land_surveyor_in_training"
             },
             "landscape_architect": {
                 "name": "Landscape Architect",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster86",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster87",
                 "file_name": "landscape_architect"
             }
         }
@@ -504,42 +509,42 @@
         "options": {
             "apple_juice_and_cider_manufacturers": {
                 "name": "Apple Juice and Cider Manufacturers",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster87",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster88",
                 "file_name": "apple_juice_and_cider_manufacturers"
             },
             "bakeries": {
                 "name": "Bakeries",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster88",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster89",
                 "file_name": "bakeries"
             },
             "food_manufacturing_establishments": {
                 "name": "Food Manufacturing Establishments",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster89",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster90",
                 "file_name": "food_manufacturing_establishments"
             },
             "frozen_dessert_retailers": {
                 "name": "Frozen Dessert Retailers",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster90",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster91",
                 "file_name": "frozen_dessert_retailers"
             },
             "frozen_dessert_wholesalers": {
                 "name": "Frozen Dessert Wholesalers",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster91",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster92",
                 "file_name": "frozen_dessert_wholesalers"
             },
             "item_price_exemption": {
                 "name": "Item Price Exemption",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster92",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster93",
                 "file_name": "item_price_exemption"
             },
             "non_alcoholic_beverage_and_water_bottlers": {
                 "name": "Non Alcoholic Beverage and Water Bottlers",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster93",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster94",
                 "file_name": "non_alcoholic_beverage_and_water_bottlers"
             },
             "vending_machine_operators": {
                 "name": "Vending Machine Operators",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster94",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster95",
                 "file_name": "vending_machine_operators"
             }
         }
@@ -549,22 +554,22 @@
         "options": {
             "crematories": {
                 "name": "Crematories",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster95",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster96",
                 "file_name": "crematories"
             },
             "embalmer": {
                 "name": "Embalmer",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster96",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster97",
                 "file_name": "embalmer"
             },
             "funeral_director": {
                 "name": "Funeral Director",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster97",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster98",
                 "file_name": "funeral_director"
             },
             "funeral_home": {
                 "name": "Funeral Home",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster98",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster99",
                 "file_name": "funeral_home"
             }
         }
@@ -574,7 +579,7 @@
         "options": {
             "lottery_sales_agents": {
                 "name": "Lottery Sales Agents",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster99",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster100",
                 "file_name": "lottery_sales_agents"
             }
         }
@@ -584,172 +589,172 @@
         "options": {
             "acupuncturist": {
                 "name": "Acupuncturist",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster100",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster101",
                 "file_name": "acupuncturist"
             },
             "advanced_practice_registered_nurse": {
                 "name": "Advanced Practice Registered Nurse",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster101",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster102",
                 "file_name": "advanced_practice_registered_nurse"
             },
             "athletic_trainer": {
                 "name": "Athletic Trainer",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster102",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster103",
                 "file_name": "athletic_trainer"
             },
             "audiologist": {
                 "name": "Audiologist",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster103",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster104",
                 "file_name": "audiologist"
             },
             "chiropractor": {
                 "name": "Chiropractor",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster104",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster105",
                 "file_name": "chiropractor"
             },
             "dental_anesthesia_conscious_sedation_permit": {
                 "name": "Dental Anesthesia\/Conscious Sedation Permit",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster105",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster106",
                 "file_name": "dental_anesthesia_conscious_sedation_permit"
             },
             "dental_conscious_sedation_permit": {
                 "name": "Dental Conscious Sedation Permit",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster106",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster107",
                 "file_name": "dental_conscious_sedation_permit"
             },
             "dental_hygienist": {
                 "name": "Dental Hygienist",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster107",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster108",
                 "file_name": "dental_hygienist"
             },
             "dentist": {
                 "name": "Dentist",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster108",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster109",
                 "file_name": "dentist"
             },
             "dietitian_nutritionist": {
                 "name": "Dietitian\/Nutritionist",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster109",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster110",
                 "file_name": "dietitian_nutritionist"
             },
             "genetic_counselor": {
                 "name": "Genetic Counselor",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster111",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster112",
                 "file_name": "genetic_counselor"
             },
             "hearing_instrument_specialist": {
                 "name": "Hearing Instrument Specialist",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster112",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster113",
                 "file_name": "hearing_instrument_specialist"
             },
             "homeopathic_physician": {
                 "name": "Homeopathic Physician",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster113",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster114",
                 "file_name": "homeopathic_physician"
             },
             "licensed_practical_nurse": {
                 "name": "Licensed Practical Nurse",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster114",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster115",
                 "file_name": "licensed_practical_nurse"
             },
             "massage_therapist": {
                 "name": "Massage Therapist",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster115",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster116",
                 "file_name": "massage_therapist"
             },
             "naturopathic_physician": {
                 "name": "Naturopathic Physician",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster116",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster117",
                 "file_name": "naturopathic_physician"
             },
             "nurse_midwife": {
                 "name": "Nurse Midwife",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster117",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster118",
                 "file_name": "nurse_midwife"
             },
             "occupational_therapist": {
                 "name": "Occupational Therapist",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster118",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster119",
                 "file_name": "occupational_therapist"
             },
             "occupational_therapist_assistant": {
                 "name": "Occupational Therapist Assistant",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster119",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster120",
                 "file_name": "occupational_therapist_assistant"
             },
             "optician": {
                 "name": "Optician",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster120",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster121",
                 "file_name": "optician"
             },
             "optician_apprentice": {
                 "name": "Optician Apprentice",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster121",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster122",
                 "file_name": "optician_apprentice"
             },
             "optometrist": {
                 "name": "Optometrist",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster122",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster123",
                 "file_name": "optometrist"
             },
             "physical_therapist": {
                 "name": "Physical Therapist",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster123",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster124",
                 "file_name": "physical_therapist"
             },
             "physical_therapist_assistant": {
                 "name": "Physical Therapist Assistant",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster124",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster125",
                 "file_name": "physical_therapist_assistant"
             },
             "physician_assistant": {
                 "name": "Physician Assistant",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster125",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster126",
                 "file_name": "physician_assistant"
             },
             "physician_surgeon_md_do": {
                 "name": "Physician\/Surgeon - MD\/DO",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster126",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster127",
                 "file_name": "physician_surgeon_md_do"
             },
             "podiatrist": {
                 "name": "Podiatrist",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster127",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster128",
                 "file_name": "podiatrist"
             },
             "podiatrist_advanced_ankle_surgery_permit": {
                 "name": "Podiatrist-Advanced Ankle Surgery Permit",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster128",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster129",
                 "file_name": "podiatrist_advanced_ankle_surgery_permit"
             },
             "podiatrist_standard_ankle_surgery_permit": {
                 "name": "Podiatrist-Standard Ankle Surgery Permit",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster129",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster130",
                 "file_name": "podiatrist_standard_ankle_surgery_permit"
             },
             "radiographer": {
                 "name": "Radiographer",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster130",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster131",
                 "file_name": "radiographer"
             },
             "registered_nurse": {
                 "name": "Registered Nurse",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster131",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster132",
                 "file_name": "registered_nurse"
             },
             "respiratory_care_practitioner": {
                 "name": "Respiratory Care Practitioner",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster132",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster133",
                 "file_name": "respiratory_care_practitioner"
             },
             "speech_and_language_pathologist": {
                 "name": "Speech and Language Pathologist",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster133",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster134",
                 "file_name": "speech_and_language_pathologist"
             },
             "veterinarian": {
                 "name": "Veterinarian",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster134",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster135",
                 "file_name": "veterinarian"
             }
         }
@@ -759,7 +764,7 @@
         "options": {
             "hemodialysis_centers": {
                 "name": "Hemodialysis Centers",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster135",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster136",
                 "file_name": "hemodialysis_centers"
             }
         }
@@ -769,37 +774,37 @@
         "options": {
             "home_improvement_contractors": {
                 "name": "Home Improvement Contractors",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster136",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster137",
                 "file_name": "home_improvement_contractors"
             },
             "home_improvement_salespersons": {
                 "name": "Home Improvement Salespersons",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster137",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster138",
                 "file_name": "home_improvement_salespersons"
             },
             "home_inspector_interns": {
                 "name": "Home Inspector Interns",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster138",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster139",
                 "file_name": "home_inspector_interns"
             },
             "home_inspectors": {
                 "name": "Home Inspectors",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster139",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster140",
                 "file_name": "home_inspectors"
             },
             "major_contractors": {
                 "name": "Major Contractors",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster140",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster141",
                 "file_name": "major_contractors"
             },
             "mechanical_contractors": {
                 "name": "Mechanical Contractors",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster141",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster142",
                 "file_name": "mechanical_contractors"
             },
             "new_home_construction_contractors": {
                 "name": "New Home Construction Contractors",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster142",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster143",
                 "file_name": "new_home_construction_contractors"
             }
         }
@@ -809,27 +814,27 @@
         "options": {
             "childrens_hospitals": {
                 "name": "Childrens Hospitals",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster143",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster144",
                 "file_name": "childrens_hospitals"
             },
             "chronic_disease_hospitals": {
                 "name": "Chronic Disease Hospitals",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster144",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster145",
                 "file_name": "chronic_disease_hospitals"
             },
             "general_hospitals": {
                 "name": "General Hospitals",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster145",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster146",
                 "file_name": "general_hospitals"
             },
             "hospitals_for_mentally_ill_persons": {
                 "name": "Hospitals for Mentally Ill Persons",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster146",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster147",
                 "file_name": "hospitals_for_mentally_ill_persons"
             },
             "maternity_hospitals": {
                 "name": "Maternity Hospitals",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster147",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster148",
                 "file_name": "maternity_hospitals"
             }
         }
@@ -839,22 +844,22 @@
         "options": {
             "family_planning_clinics": {
                 "name": "Family Planning Clinics",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster148",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster149",
                 "file_name": "family_planning_clinics"
             },
             "infirmary_operated_by_an_educational_institution": {
                 "name": "Infirmary Operated by an Educational Institution",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster149",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster150",
                 "file_name": "infirmary_operated_by_an_educational_institution"
             },
             "outpatient_clinic": {
                 "name": "Outpatient Clinic",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster150",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster151",
                 "file_name": "outpatient_clinic"
             },
             "wll_child_clinic": {
                 "name": "Wll Child Clinic",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster151",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster152",
                 "file_name": "wll_child_clinic"
             }
         }
@@ -864,12 +869,12 @@
         "options": {
             "lead_abatement_contractors": {
                 "name": "Lead Abatement Contractors",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster152",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster153",
                 "file_name": "lead_abatement_contractors"
             },
             "lead_consultants": {
                 "name": "Lead Consultants",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster153",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster154",
                 "file_name": "lead_consultants"
             }
         }
@@ -879,67 +884,67 @@
         "options": {
             "brands": {
                 "name": "Brands",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster154",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster155",
                 "file_name": "brands"
             },
             "brands_with_associated_shippers_and_distributors": {
                 "name": "BRANDS with associated Shippers and Distributors",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster155",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster156",
                 "file_name": "brands_with_associated_shippers_and_distributors"
             },
             "manufacturers_of_apple_brandy_beer_cider_liquor_and_liquor": {
                 "name": "Manufacturers of Apple Brandy, Beer, Cider Liquor and Liquor",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster156",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster157",
                 "file_name": "manufacturers_of_apple_brandy_beer_cider_liquor_and_liquor"
             },
             "out_of_state_winery": {
                 "name": "Out of State Winery",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster157",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster158",
                 "file_name": "out_of_state_winery"
             },
             "shipper_of_beer_or_liquor": {
                 "name": "Shipper of Beer or Liquor",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster158",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster159",
                 "file_name": "shipper_of_beer_or_liquor"
             },
             "shipper_of_beer_or_liquor_located_in_connecticut": {
                 "name": "Shipper of Beer or Liquor Located in Connecticut",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster159",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster160",
                 "file_name": "shipper_of_beer_or_liquor_located_in_connecticut"
             },
             "shipper_with_associated_brands_and_distributors": {
                 "name": "SHIPPER with associated Brands and Distributors",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster160",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster161",
                 "file_name": "shipper_with_associated_brands_and_distributors"
             },
             "transporter_of_liquor": {
                 "name": "Transporter of Liquor",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster161",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster162",
                 "file_name": "transporter_of_liquor"
             },
             "warehouse_bottling_or_storage": {
                 "name": "Warehouse Bottling or Storage",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster162",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster163",
                 "file_name": "warehouse_bottling_or_storage"
             },
             "wholesaler_liquor_or_beer": {
                 "name": "Wholesaler Liquor or Beer",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster163",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster164",
                 "file_name": "wholesaler_liquor_or_beer"
             },
             "wholesaler_salesman": {
                 "name": "Wholesaler Salesman",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster164",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster165",
                 "file_name": "wholesaler_salesman"
             },
             "wholesaler_with_associated_brands_and_shippers": {
                 "name": "WHOLESALER with associated brands and shippers",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster165",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster166",
                 "file_name": "wholesaler_with_associated_brands_and_shippers"
             },
             "wine_and_spirits_inventory": {
                 "name": "Wine and Spirits Inventory",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster166",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster167",
                 "file_name": "wine_and_spirits_inventory"
             }
         }
@@ -949,52 +954,52 @@
         "options": {
             "cafe_liquor_permits": {
                 "name": "Cafe Liquor Permits",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster167",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster168",
                 "file_name": "cafe_liquor_permits"
             },
             "caterer": {
                 "name": "Caterer",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster168",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster169",
                 "file_name": "caterer"
             },
             "connecticut_brewerys_and_brew_pubs": {
                 "name": "Connecticut Brewerys and Brew Pubs",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster169",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster170",
                 "file_name": "connecticut_brewerys_and_brew_pubs"
             },
             "connecticut_farm_winery": {
                 "name": "Connecticut Farm Winery",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster170",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster171",
                 "file_name": "connecticut_farm_winery"
             },
             "grocery_beer_permits": {
                 "name": "Grocery Beer Permits",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster171",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster172",
                 "file_name": "grocery_beer_permits"
             },
             "off_premise_liquor_establishments": {
                 "name": "Off Premise Liquor Establishments",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster172",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster173",
                 "file_name": "off_premise_liquor_establishments"
             },
             "on_premise_liquor_establishments": {
                 "name": "On Premise Liquor Establishments",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster173",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster174",
                 "file_name": "on_premise_liquor_establishments"
             },
             "package_stores": {
                 "name": "Package Stores",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster174",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster175",
                 "file_name": "package_stores"
             },
             "package_stores_number_allowed_by_town_and_current_count_active_and_requested": {
                 "name": "Package Stores: Number Allowed By Town And Current Count (Active and Requested)",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster175",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster176",
                 "file_name": "package_stores_number_allowed_by_town_and_current_count_active_and_requested"
             },
             "restaurant_liquor_permits": {
                 "name": "Restaurant Liquor Permits",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster176",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster177",
                 "file_name": "restaurant_liquor_permits"
             }
         }
@@ -1004,52 +1009,52 @@
         "options": {
             "assisted_living_service_agency": {
                 "name": "Assisted Living Service Agency",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster177",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster178",
                 "file_name": "assisted_living_service_agency"
             },
             "chronic_and_convalescent_nursing_home": {
                 "name": "Chronic and Convalescent Nursing Home",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster178",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster179",
                 "file_name": "chronic_and_convalescent_nursing_home"
             },
             "chronic_and_convalescent_nursing_homes_and_rest_homes_with_nursing_supervision": {
                 "name": "Chronic and Convalescent Nursing Homes and Rest Homes with Nursing Supervision",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster179",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster180",
                 "file_name": "chronic_and_convalescent_nursing_homes_and_rest_homes_with_nursing_supervision"
             },
             "home_health_care_agencies": {
                 "name": "Home Health Care Agencies",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster180",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster181",
                 "file_name": "home_health_care_agencies"
             },
             "homemaker_home_health_care": {
                 "name": "Homemaker\/Home Health Care",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster182",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster183",
                 "file_name": "homemaker_home_health_care"
             },
             "hospice_care": {
                 "name": "Hospice Care",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster183",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster184",
                 "file_name": "hospice_care"
             },
             "nursing_home_administrator": {
                 "name": "Nursing Home Administrator",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster185",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster186",
                 "file_name": "nursing_home_administrator"
             },
             "nursing_home_management_company": {
                 "name": "Nursing Home Management Company",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster186",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster187",
                 "file_name": "nursing_home_management_company"
             },
             "residential_care_facility": {
                 "name": "Residential Care Facility",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster187",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster188",
                 "file_name": "residential_care_facility"
             },
             "rest_homes_with_nursing_supervision": {
                 "name": "Rest Homes with Nursing Supervision",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster188",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster189",
                 "file_name": "rest_homes_with_nursing_supervision"
             }
         }
@@ -1059,42 +1064,42 @@
         "options": {
             "medical_marijuana_dispensary_facility_backer_license": {
                 "name": "Medical Marijuana Dispensary Facility Backer License",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster189",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster190",
                 "file_name": "medical_marijuana_dispensary_facility_backer_license"
             },
             "medical_marijuana_dispensary_facility_employee_license": {
                 "name": "Medical Marijuana Dispensary Facility Employee License",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster190",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster191",
                 "file_name": "medical_marijuana_dispensary_facility_employee_license"
             },
             "medical_marijuana_dispensary_facility_license": {
                 "name": "Medical Marijuana Dispensary Facility License",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster191",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster192",
                 "file_name": "medical_marijuana_dispensary_facility_license"
             },
             "medical_marijuana_dispensary_license": {
                 "name": "Medical Marijuana Dispensary License",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster192",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster193",
                 "file_name": "medical_marijuana_dispensary_license"
             },
             "medical_marijuana_dispensary_technician_license": {
                 "name": "Medical Marijuana Dispensary Technician License",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster193",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster194",
                 "file_name": "medical_marijuana_dispensary_technician_license"
             },
             "medical_marijuana_producer_backer_license": {
                 "name": "Medical Marijuana Producer Backer License",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster194",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster195",
                 "file_name": "medical_marijuana_producer_backer_license"
             },
             "medical_marijuana_producer_employee_license": {
                 "name": "Medical Marijuana Producer Employee License",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster195",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster196",
                 "file_name": "medical_marijuana_producer_employee_license"
             },
             "medical_marijuana_producer_license": {
                 "name": "Medical Marijuana Producer License",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster196",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster197",
                 "file_name": "medical_marijuana_producer_license"
             }
         }
@@ -1104,57 +1109,57 @@
         "options": {
             "clinical_social_worker": {
                 "name": "Clinical Social Worker",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster197",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster198",
                 "file_name": "clinical_social_worker"
             },
             "hospitals_for_mentally_ill_persons": {
                 "name": "Hospitals for Mentally Ill Persons",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster198",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster199",
                 "file_name": "hospitals_for_mentally_ill_persons"
             },
             "marital_and_family_therapist": {
                 "name": "Marital and Family Therapist",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster199",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster200",
                 "file_name": "marital_and_family_therapist"
             },
             "master_s_level_social_worker": {
                 "name": "Master's Level Social Worker",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster200",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster201",
                 "file_name": "master_s_level_social_worker"
             },
             "mental_health_community_residence": {
                 "name": "Mental Health Community Residence",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster201",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster202",
                 "file_name": "mental_health_community_residence"
             },
             "mental_health_day_treatement_facilities": {
                 "name": "Mental Health Day Treatement Facilities",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster202",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster203",
                 "file_name": "mental_health_day_treatement_facilities"
             },
             "mental_health_intermedicate_treatment_facilities": {
                 "name": "Mental Health Intermedicate Treatment Facilities",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster203",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster204",
                 "file_name": "mental_health_intermedicate_treatment_facilities"
             },
             "mental_health_residential_living_facilities": {
                 "name": "Mental Health Residential Living Facilities",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster204",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster205",
                 "file_name": "mental_health_residential_living_facilities"
             },
             "professional_counselor": {
                 "name": "Professional Counselor",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster205",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster206",
                 "file_name": "professional_counselor"
             },
             "psychiratric_outpatient_clinics": {
                 "name": "Psychiratric Outpatient Clinics",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster206",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster207",
                 "file_name": "psychiratric_outpatient_clinics"
             },
             "psychologist": {
                 "name": "Psychologist",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster207",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster208",
                 "file_name": "psychologist"
             }
         }
@@ -1164,7 +1169,7 @@
         "options": {
             "optical_shop": {
                 "name": "Optical Shop",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster208",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster209",
                 "file_name": "optical_shop"
             }
         }
@@ -1174,42 +1179,42 @@
         "options": {
             "closing_out_sales_and_closing_out_sales_promoter": {
                 "name": "Closing Out Sales and Closing Out Sales Promoter",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster209",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster210",
                 "file_name": "closing_out_sales_and_closing_out_sales_promoter"
             },
             "importer_of_bedding_and_upholstered_furniture": {
                 "name": "Importer of Bedding and Upholstered Furniture",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster210",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster211",
                 "file_name": "importer_of_bedding_and_upholstered_furniture"
             },
             "itinerant_vendors_and_managing_itinerant_vendors": {
                 "name": "Itinerant Vendors and Managing Itinerant Vendors",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster211",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster212",
                 "file_name": "itinerant_vendors_and_managing_itinerant_vendors"
             },
             "manufacturer_of_bedding_and_upholstered_furniture": {
                 "name": "Manufacturer of Bedding and Upholstered Furniture",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster212",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster213",
                 "file_name": "manufacturer_of_bedding_and_upholstered_furniture"
             },
             "renovator_of_bedding_and_upholstered_furniture": {
                 "name": "Renovator of Bedding and Upholstered Furniture",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster213",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster214",
                 "file_name": "renovator_of_bedding_and_upholstered_furniture"
             },
             "secondhand_dealer_of_bedding_and_upholstered_furniture": {
                 "name": "Secondhand Dealer of Bedding and Upholstered Furniture",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster214",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster215",
                 "file_name": "secondhand_dealer_of_bedding_and_upholstered_furniture"
             },
             "sterilization_permit_for_bedding_and_upholstered_furniture": {
                 "name": "Sterilization Permit for Bedding and Upholstered Furniture",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster215",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster216",
                 "file_name": "sterilization_permit_for_bedding_and_upholstered_furniture"
             },
             "supply_dealer_of_bedding_and_upholstered_furniture": {
                 "name": "Supply Dealer of Bedding and Upholstered Furniture",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster216",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster217",
                 "file_name": "supply_dealer_of_bedding_and_upholstered_furniture"
             }
         }
@@ -1219,77 +1224,77 @@
         "options": {
             "appraisal_management_company": {
                 "name": "Appraisal Management Company",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster217",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster218",
                 "file_name": "appraisal_management_company"
             },
             "certified_general_real_estate_appraisers": {
                 "name": "Certified General Real Estate Appraisers",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster218",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster219",
                 "file_name": "certified_general_real_estate_appraisers"
             },
             "certified_residential_real_estate_appraisers": {
                 "name": "Certified Residential Real Estate Appraisers",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster219",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster220",
                 "file_name": "certified_residential_real_estate_appraisers"
             },
             "community_association_managers": {
                 "name": "Community Association Managers",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster220",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster221",
                 "file_name": "community_association_managers"
             },
             "exchange_company_filing": {
                 "name": "Exchange Company Filing",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster221",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster222",
                 "file_name": "exchange_company_filing"
             },
             "interstate_land_sales_registrations": {
                 "name": "Interstate Land Sales Registrations",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster222",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster223",
                 "file_name": "interstate_land_sales_registrations"
             },
             "mobile_home_parks": {
                 "name": "Mobile Home Parks",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster223",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster224",
                 "file_name": "mobile_home_parks"
             },
             "mobile_home_sellers": {
                 "name": "Mobile Home Sellers",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster224",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster225",
                 "file_name": "mobile_home_sellers"
             },
             "provisional_real_estate_appraisers": {
                 "name": "Provisional Real Estate Appraisers",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster225",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster226",
                 "file_name": "provisional_real_estate_appraisers"
             },
             "real_estate_brokers": {
                 "name": "Real Estate Brokers",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster226",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster227",
                 "file_name": "real_estate_brokers"
             },
             "real_estate_brokers_with_the_salesman_they_supervise": {
                 "name": "Real Estate Brokers with the Salesman they Supervise",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster227",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster228",
                 "file_name": "real_estate_brokers_with_the_salesman_they_supervise"
             },
             "real_estate_salespersons": {
                 "name": "Real Estate Salespersons",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster228",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster229",
                 "file_name": "real_estate_salespersons"
             },
             "real_estate_salespersons_new_pending": {
                 "name": "Real Estate Salespersons - New (Pending)",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster229",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster230",
                 "file_name": "real_estate_salespersons_new_pending"
             },
             "temporary_certified_general_certified_residential_and_provisional_permits": {
                 "name": "Temporary Certified General, Certified Residential and Provisional Permits",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster230",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster231",
                 "file_name": "temporary_certified_general_certified_residential_and_provisional_permits"
             },
             "timeshares": {
                 "name": "Timeshares",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster231",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster232",
                 "file_name": "timeshares"
             }
         }
@@ -1299,7 +1304,7 @@
         "options": {
             "registered_sanitarian": {
                 "name": "Registered Sanitarian",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster232",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster233",
                 "file_name": "registered_sanitarian"
             }
         }
@@ -1309,37 +1314,37 @@
         "options": {
             "dealer_of_weighing_and_measuring_devices": {
                 "name": "Dealer of Weighing and Measuring Devices",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster233",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster234",
                 "file_name": "dealer_of_weighing_and_measuring_devices"
             },
             "device_registration": {
                 "name": "Device Registration",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster234",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster235",
                 "file_name": "device_registration"
             },
             "home_heating_dealers": {
                 "name": "Home Heating Dealers",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster235",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster236",
                 "file_name": "home_heating_dealers"
             },
             "motor_fuel_quality_registration": {
                 "name": "Motor Fuel Quality Registration",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster236",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster237",
                 "file_name": "motor_fuel_quality_registration"
             },
             "public_weigher": {
                 "name": "Public Weigher",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster237",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster238",
                 "file_name": "public_weigher"
             },
             "repairers_of_weighing_devices": {
                 "name": "Repairers of Weighing Devices",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster238",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster239",
                 "file_name": "repairers_of_weighing_devices"
             },
             "retail_gasoline_dealers": {
                 "name": "Retail Gasoline Dealers",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster239",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster240",
                 "file_name": "retail_gasoline_dealers"
             }
         }
@@ -1349,17 +1354,17 @@
         "options": {
             "certified_alcohol_and_drug_counselor": {
                 "name": "Certified Alcohol and Drug Counselor",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster240",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster241",
                 "file_name": "certified_alcohol_and_drug_counselor"
             },
             "licensed_alcohol_and_drug_counselor": {
                 "name": "Licensed Alcohol and Drug Counselor",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster241",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster242",
                 "file_name": "licensed_alcohol_and_drug_counselor"
             },
             "substance_abuse_care_facilites": {
                 "name": "Substance Abuse Care Facilites",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster242",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster243",
                 "file_name": "substance_abuse_care_facilites"
             }
         }
@@ -1369,12 +1374,12 @@
         "options": {
             "sub_surface_sewage_cleaner": {
                 "name": "Sub-surface Sewage Cleaner",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster243",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster244",
                 "file_name": "sub_surface_sewage_cleaner"
             },
             "sub_surface_sewage_installer": {
                 "name": "Sub-Surface Sewage Installer",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster244",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster245",
                 "file_name": "sub_surface_sewage_installer"
             }
         }
@@ -1384,107 +1389,107 @@
         "options": {
             "auto_sprinkler_layout_technician": {
                 "name": "Auto Sprinkler Layout Technician",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster245",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster246",
                 "file_name": "auto_sprinkler_layout_technician"
             },
             "automotive_and_flat_glass_licensees": {
                 "name": "Automotive and Flat Glass Licensees",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster246",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster247",
                 "file_name": "automotive_and_flat_glass_licensees"
             },
             "electrical_licenses": {
                 "name": "Electrical Licenses",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster247",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster248",
                 "file_name": "electrical_licenses"
             },
             "elevator_licenses": {
                 "name": "Elevator Licenses",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster248",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster249",
                 "file_name": "elevator_licenses"
             },
             "fire_protection_licenses": {
                 "name": "Fire Protection Licenses",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster249",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster250",
                 "file_name": "fire_protection_licenses"
             },
             "health_clubs_and_martial_arts_health_clubs": {
                 "name": "Health Clubs and Martial Arts Health Clubs",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster250",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster251",
                 "file_name": "health_clubs_and_martial_arts_health_clubs"
             },
             "heating_piping_and_cooling_licenses": {
                 "name": "Heating Piping and Cooling Licenses",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster251",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster252",
                 "file_name": "heating_piping_and_cooling_licenses"
             },
             "homemaker_companion_agencies": {
                 "name": "Homemaker Companion Agencies",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster252",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster253",
                 "file_name": "homemaker_companion_agencies"
             },
             "hypnotists": {
                 "name": "Hypnotists",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster253",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster254",
                 "file_name": "hypnotists"
             },
             "locksmiths": {
                 "name": "Locksmiths",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster254",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster255",
                 "file_name": "locksmiths"
             },
             "medical_gas_vacuum_systems_certifications": {
                 "name": "Medical Gas - Vacuum Systems Certifications",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster255",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster256",
                 "file_name": "medical_gas_vacuum_systems_certifications"
             },
             "plumbing_licenses": {
                 "name": "Plumbing Licenses",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster256",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster257",
                 "file_name": "plumbing_licenses"
             },
             "public_service_technicians_gas": {
                 "name": "Public Service Technicians - Gas",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster257",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster258",
                 "file_name": "public_service_technicians_gas"
             },
             "public_service_technicians_telephone": {
                 "name": "Public Service Technicians - Telephone",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster258",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster259",
                 "file_name": "public_service_technicians_telephone"
             },
             "sheet_metal_licenses": {
                 "name": "Sheet Metal Licenses",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster259",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster260",
                 "file_name": "sheet_metal_licenses"
             },
             "shorthand_court_reporters": {
                 "name": "Shorthand Court Reporters",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster260",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster261",
                 "file_name": "shorthand_court_reporters"
             },
             "swimming_pool_builder": {
                 "name": "Swimming Pool Builder",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster261",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster262",
                 "file_name": "swimming_pool_builder"
             },
             "telecommunications_infrastructure_layout_technician": {
                 "name": "Telecommunications Infrastructure Layout Technician",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster262",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster263",
                 "file_name": "telecommunications_infrastructure_layout_technician"
             },
             "tv_and_radio_licenses": {
                 "name": "TV and Radio Licenses",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster263",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster264",
                 "file_name": "tv_and_radio_licenses"
             },
             "water_supply_and_non_water_supply_contractors_and_drillers": {
                 "name": "Water Supply and Non-Water Supply Contractors and Drillers",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster264",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster265",
                 "file_name": "water_supply_and_non_water_supply_contractors_and_drillers"
             },
             "well_drilling_licenses": {
                 "name": "Well Drilling Licenses",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster265",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster266",
                 "file_name": "well_drilling_licenses"
             }
         }
@@ -1494,12 +1499,12 @@
         "options": {
             "actively_licensed_youth_camps": {
                 "name": "Actively Licensed Youth Camps",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster266",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster267",
                 "file_name": "actively_licensed_youth_camps"
             },
             "approved_youth_camp_directors": {
                 "name": "Approved Youth Camp Directors",
-                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster267",
+                "field_name": "ctl00$MainContentPlaceHolder$ckbRoster268",
                 "file_name": "approved_youth_camp_directors"
             }
         }

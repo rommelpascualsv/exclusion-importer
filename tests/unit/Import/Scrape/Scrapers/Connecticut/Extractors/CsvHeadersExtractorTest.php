@@ -202,7 +202,7 @@ class CsvHeadersExtractorTest extends \Codeception\TestCase\Test
 //    	$this->assertEquals($expected, $this->extractor->getFiles());
 //    }
 
-    public function testSave()
+    /* public function testSave()
     {
         $this->filesystem->deleteDir('extracted/connecticut');
 
@@ -211,6 +211,6 @@ class CsvHeadersExtractorTest extends \Codeception\TestCase\Test
         $this->extractor->extract()->save();
 
         $this->tester->assertScrapeFileExist('extracted/connecticut/headers.csv');
-    }
+    } */
 
 }

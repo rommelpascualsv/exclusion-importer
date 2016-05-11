@@ -1,180 +1,105 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace App\Import\Scrape\Scrapers\Connecticut\Extractors;
 
-use App\Import\Scrape\Crawlers\ConnecticutCrawler;
-use Symfony\Component\DomCrawler\Crawler;
 use App\Import\Scrape\Components\ScrapeFilesystemInterface;
 use App\Import\Scrape\Scrapers\Connecticut\MainPage;
-use Goutte\Client;
+use Symfony\Component\DomCrawler\Crawler;
 
-/**
- * Description of CategoriesExtractor
- *
- * @author Lenovo
- */
 class CategoriesExtractor
 {
-
     /**
-     * @var ConnecticutCrawler
+     * @var MainPage
      */
-    protected $crawler;
+    protected $page;
 
     /**
      * @var ScrapeFilesystemInterface
      */
     protected $filesystem;
-
+    
     /**
-     * Instantiate
-     * @param ConnecticutCrawler $crawler
+     * @var array
+     */
+    protected $data = [];
+    
+    /**
+     * @var string
+     */
+    protected static $saveFilePath = 'extracted/connecticut/connecticut-categories.json';
+    
+    /**
+     * Initialize
+     * @param MainPage $page
+     * @param ScrapeFilesystemInterface $filesystem
      */
     public function __construct(MainPage $page, ScrapeFilesystemInterface $filesystem)
     {
         $this->page = $page;
         $this->filesystem = $filesystem;
     }
-
+    
     /**
-     * Save extracted categories to a JSON
-     */
-    public function extractCategories()
-    {
-        $categoryHeadersCrawler = $this->page->getNodesByCss('.panel-heading', 'cannot find heading');
-
-        $categories = $this->getCategoriesData($categoryHeadersCrawler);
-
-        $this->filesystem->put(
-                'extracted/connecticut-categories.json', json_encode($categories, JSON_PRETTY_PRINT
-        ));
-    }
-
-    public function getMainCrawler()
-    {
-        return $this->crawler->getMainCrawler();
-    }
-
-    public function getCategoryHeadersCrawler(Crawler $mainCrawler)
-    {
-        return $mainCrawler->filter($this->crawler->getSelector('main', 'category_header'));
-    }
-
-    /**
-     * Get category data
-     * @param Crawler $categoryHeaderCrawler
+     * Get data
      * @return array
      */
-    public function getCategoryData(Crawler $categoryHeaderCrawler, $i = 0)
+    public function getData()
     {
-        $name = $this->getCategoryName($categoryHeaderCrawler);
-        $options = $this->getCategoryOptions($categoryHeaderCrawler, $i);
-
-        return [
-            'name' => $name,
-            'options' => $options
-        ];
-    }
-
-    public function getCategoriesData(Crawler $categoryHeadersCrawler)
-    {
-        $categories = [];
-
-        $categoryHeadersCrawler->each(function(Crawler $categoryHeaderNode, $i) use (&$categories) {
-            $data = $this->getCategoryData($categoryHeaderNode, $i);
-            $key = $this->getKey($data['name']);
-
-            $categories[$key] = $data;
-        });
-
-        return $categories;
-    }
-
-    /**
-     * Get category text
-     * @param Crawler $nodeCrawler
-     * @return string
-     */
-    public function getCategoryName(Crawler $nodeCrawler)
-    {
-        $text = trim(
-                str_replace(
-                        [
-            '-  (click this bar to expand/collapse group)',
-            "\xA0",
-            "\xC2"
-                        ], '', $nodeCrawler->text()
-                )
-        );
-
-        return $text;
+        return $this->data;
     }
     
-    public function getOptionsData($crawler)
-    {
-        return array_filter(array_map(function($a) {
-                    $name = $this->getOptionName(strip_tags(trim($a)));
-                    $file_name = $this->getKey($name);
-
-                    return (!$file_name || !$this->getOptionName(strip_tags(trim($a))))
-                    ? false : [
-                        'name' => $this->getOptionName(strip_tags(trim($a))),
-                        'file_name' => $file_name
-                    ];
-                }, explode('<br>', $crawler->html())
-        ));
-    }
-
     /**
-     * Get category options
-     * @param Crawler $nodeCrawler
-     * @return array
+     * Extract categories
+     * @return $this
      */
-    public function getCategoryOptions(Crawler $nodeCrawler, $i = 0)
+    public function extract()
     {
-        $options = [];
-
-        $this->page->getNodesByCss('.panel-default .panel-body', 'Something went wrong!')->each(function(Crawler $crawler) use (&$options, $i) {
-            $optionsData = $this->getOptionsData($crawler);
-            $data = [];
-            $counter = 0;
+        $panelNodes = $this->page->getPanelNodes();
+        $data = [];
+        
+        $panelNodes->each(function(Crawler $panelNode, $i) use (&$data) {
+            $categoryData = $this->extractCategoryData($panelNode, $i);
             
-            // Get checkbox for options
-            $this->page->getNodesByCss('span', 'Something went wrong!', $crawler)->each(function(Crawler $spanCrawler) use (&$optionsData, &$counter, &$data) {
-                $data = $this->getFieldName($spanCrawler, $counter);
-                $optionsData[$counter]['field_name'] = $data;
-                $counter++;
-            });
-
-            array_filter($optionsData);
+            $key = $this->getKey($categoryData['name']);
+            $data[$key] = $categoryData;
         });
-
-        return $options;
+        
+        $this->data = $data;
+        
+        return $this;
     }
-
+    
     /**
-     * Get options data
-     * @param Crawler $optionsNode
+     * Extract category data
+     * @param Crawler $panelNode
+     * @param int $i
      * @return array
      */
-    public function getFieldName(Crawler $optionsNode, $index = 0)
+    public function extractCategoryData(Crawler $panelNode, $i)
     {
-        $checkboxNode = $this->page->getNodesByCss('input[type=checkbox]', 'Something went wrong', $optionsNode);
-//        $checkboxNode = $optionsNode->filter('input[type=checkbox]');
-
-        if ($checkboxNode->count() == 0) {
-            throw new \Exception(sprintf('Option name checkbox cannot be found on node %d', $index));
+        $categoryName = $this->page->getCategoryText($panelNode, $i);
+        $optionsData = $this->page->getOptionsData($panelNode, $i);
+        
+        foreach ($optionsData as $optionIndex => $data) {
+            /* add key-based option data if unique */
+            $key = $this->getKey($data['name']);
+            if (! array_key_exists($key, $optionsData)) {
+                /* add file name */
+                $data['file_name'] = $key;
+                
+                $optionsData[$key] = $data;
+            }
+            
+            /* remove index-based option data */
+            unset($optionsData[$optionIndex]);
         }
-
-        return $checkboxNode->attr('name');
+        
+        return [
+            'name' => $categoryName,
+            'options' => $optionsData
+        ];
     }
-
+    
     /**
      * Get key
      * @param string $name
@@ -184,17 +109,7 @@ class CategoriesExtractor
     {
         return strtolower($this->underscorify($name));
     }
-
-    /**
-     * Get file name
-     * @param string $name
-     * @return string
-     */
-    public function getFileName($name)
-    {
-        return $this->underscorify($name);
-    }
-
+    
     /**
      * Underscorify text
      * @param string $text
@@ -203,36 +118,29 @@ class CategoriesExtractor
     public function underscorify($text)
     {
         return preg_replace(
-                ['/[^a-zA-Z0-9 ]/', '/ /', '/_{2,}/', '/^_|_$/'], [' ', '_', '_', ''], $text
+            ['/[^a-zA-Z0-9 ]/', '/ /', '/_{2,}/', '/^_|_$/'],
+            [' ', '_', '_', ''],
+            $text
         );
     }
-
+    
     /**
-     * Get option name
-     * @param string $text
+     * Save extracted data to JSON file
+     */
+    public function save()
+    {
+        $this->filesystem->put(
+            static::$saveFilePath,
+            json_encode($this->data, JSON_PRETTY_PRINT)
+        );
+    }
+    
+    /**
+     * Get save file path
      * @return string
      */
-    protected function getOptionName($text)
+    public function getSaveFilePath()
     {
-        return $this->stripNodeText('(No Fee Required)', $text);
+        return $this->filesystem->getPath(static::$saveFilePath);
     }
-
-    /**
-     * Strip node text
-     * @param string $needle
-     * @param string $haystack
-     * @return string
-     */
-    protected function stripNodeText($needle, $haystack)
-    {
-        return trim(str_replace([$needle, "\xA0", "\xC2"], '', $haystack));
-    }
-
-    public static function create(Client $client, ScrapeFilesystemInterface $filesystem)
-    {
-        $mainPage = MainPage::scrape($client);
-
-        return new static($mainPage, $filesystem);
-    }
-
 }

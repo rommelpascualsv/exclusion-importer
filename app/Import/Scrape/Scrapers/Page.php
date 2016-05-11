@@ -113,6 +113,35 @@ class Page
 	}
 	
 	/**
+	 * Get trimmed node text
+	 * @param Crawler $node
+	 * @param string $text
+	 */
+	public function getTrimmedNodeText(Crawler $node, $text = '')
+	{
+	    return trim(
+	        str_replace(
+	            [
+	                $text,
+	                "\xA0",
+	                "\xC2"
+	            ],
+	            '',
+	            $node->text()
+            )
+        );
+	}
+	
+	public function getTrimmedText($value, $toRemove = '')
+	{
+	    return trim(str_replace(
+	        [$toRemove, "\xA0", "\xC2"],
+	        '',
+	        $value
+        ));
+	}
+	
+	/**
 	 * 
 	 * Get nodes
 	 * @param string $method
