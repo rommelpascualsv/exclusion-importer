@@ -27,6 +27,8 @@ class Alabama extends ExclusionList
         'provider_type'
     ];
     
+    public $shouldHashListName = true;
+    
     /**
      * The number of lines from the top of the exclusion list file preceding the 
      * start of the exclusion list data
@@ -44,109 +46,109 @@ class Alabama extends ExclusionList
      * Known titles of persons in the exclusion list (add new titles as needed)
      */
     protected $titles = [
-        'Accountant/Operator', 
-        'Accounts Payable Clerk', 
-        'Administrative Assistant', 
-        'Ambulance Company Owner', 
-        'Attorney', 
-        'Audiologist', 
-        'Bookkeeper', 
-        'Business Manager', 
-        'CRNP', 
-        'Caregiver', 
-        'Certified Nursing Assistant', 
-        'Certified Nursing Asstistant',
-        'Chairman/CEO', 
-        'Chiropractor', 
-        'Clinic Employee', 
-        'Clinic Owner', 
-        'Consulting Service Owner', 
-        'Contractor', 
-        'Counselor', 
-        'DMD', 
-        'DME Company Owner', 
-        'DME Owner', 
-        'DME Sales Representative', 
-        'DME Supplier', 
-        'DME Supply Owner', 
-        'DME/Sales', 
-        'DO', 
-        'Dental Technician', 
-        'Dentist', 
-        'Dentistry Employee', 
-        'Direct Care Employee', 
-        'Direct Care Staff', 
-        'Drug Distributor', 
-        'Employee of a Health Care Provider', 
-        'Former County Judge', 
-        'Health Care Aide', 
-        'Health Care Worker', 
-        'Home Health Agency Employee', 
-        'Hospital Staff Member', 
-        'IHSS Provider', 
-        'LPN', 
-        'LPN & RN', 
-        'LPN & Vocational Nurse', 
-        'LVN', 
-        'Lab Sales Representative', 
-        'Licensed Social Worker', 
-        'MD', 
-        'Massage Therapist', 
-        'Medicaid Assister', 
-        'Medical Group Employee', 
-        'Mental Health Worker', 
-        'Nurse', 
-        'Nurse Aide',
-        'Nursing Assistant',
-        'Nursing Home Administrator', 
-        'Nursing Home Employee', 
-        'Nursing Home Secretary/Receptionist', 
-        'Occupational Therapist', 
-        'Office Manager', 
-        'Ombudsman Representative', 
-        'Optician', 
-        'Owner of Hospice Facility',
-        'Paramedic', 
-        'Pharmacist', 
-        'Pharmacy Employee', 
-        'Pharmacy Owner', 
-        'Pharmacy Technician', 
-        'Podiatrist', 
-        'President of Medical Clinic', 
-        'Private Business Owner', 
-        'private citizen',
-        'Psychologist', 
-        'RN', 
-        'RN, Clinical Nurse Specialist & Public Health Nurse',
-        'RN & ARNP', 
-        'RN & CRNA', 
-        'RN & LPN', 
-        'RN/LPN', 
-        'Rehabilitation Facility Owner', 
-        'Respiratory Therapist', 
-        'Sales/Marketing Agent', 
-        'Sitter', 
-        'Social Worker', 
-        'Social Worker Aide', 
-        'Treasurer of Medical Clinic', 
-        'Vocational Nurse'
+        'Accountant/Operator'                                 => 'Accountant/Operator', 
+        'Accounts Payable Clerk'                              => 'Accounts Payable Clerk', 
+        'Administrative Assistant'                            => 'Administrative Assistant', 
+        'Ambulance Company Owner'                             => 'Ambulance Company Owner', 
+        'Attorney'                                            => 'Attorney', 
+        'Audiologist'                                         => 'Audiologist', 
+        'Bookkeeper'                                          => 'Bookkeeper', 
+        'Business Manager'                                    => 'Business Manager', 
+        'CRNP'                                                => 'CRNP', 
+        'Caregiver'                                           => 'Caregiver', 
+        'Certified Nursing Assistant'                         => 'Certified Nursing Assistant', 
+        'Certified Nursing Asstistant'                        => 'Certified Nursing Asstistant',
+        'Chairman/CEO'                                        => 'Chairman/CEO', 
+        'Chiropractor'                                        => 'Chiropractor', 
+        'Clinic Employee'                                     => 'Clinic Employee', 
+        'Clinic Owner'                                        => 'Clinic Owner', 
+        'Consulting Service Owner'                            => 'Consulting Service Owner', 
+        'Contractor'                                          => 'Contractor', 
+        'Counselor'                                           => 'Counselor', 
+        'DMD'                                                 => 'DMD', 
+        'DME Company Owner'                                   => 'DME Company Owner', 
+        'DME Owner'                                           => 'DME Owner', 
+        'DME Sales Representative'                            => 'DME Sales Representative', 
+        'DME Supplier'                                        => 'DME Supplier', 
+        'DME Supply Owner'                                    => 'DME Supply Owner', 
+        'DME/Sales'                                           => 'DME/Sales', 
+        'DO'                                                  => 'DO', 
+        'Dental Technician'                                   => 'Dental Technician', 
+        'Dentist'                                             => 'Dentist', 
+        'Dentistry Employee'                                  => 'Dentistry Employee', 
+        'Direct Care Employee'                                => 'Direct Care Employee', 
+        'Direct Care Staff'                                   => 'Direct Care Staff', 
+        'Drug Distributor'                                    => 'Drug Distributor', 
+        'Employee of a Health Care Provider'                  => 'Employee of a Health Care Provider', 
+        'Former County Judge'                                 => 'Former County Judge', 
+        'Health Care Aide'                                    => 'Health Care Aide', 
+        'Health Care Worker'                                  => 'Health Care Worker', 
+        'Home Health Agency Employee'                         => 'Home Health Agency Employee', 
+        'Hospital Staff Member'                               => 'Hospital Staff Member', 
+        'IHSS Provider'                                       => 'IHSS Provider', 
+        'LPN'                                                 => 'LPN', 
+        'LPN & RN'                                            => 'LPN & RN', 
+        'LPN & Vocational Nurse'                              => 'LPN & Vocational Nurse', 
+        'LVN'                                                 => 'LVN', 
+        'Lab Sales Representative'                            => 'Lab Sales Representative', 
+        'Licensed Social Worker'                              => 'Licensed Social Worker', 
+        'MD'                                                  => 'MD', 
+        'Massage Therapist'                                   => 'Massage Therapist', 
+        'Medicaid Assister'                                   => 'Medicaid Assister', 
+        'Medical Group Employee'                              => 'Medical Group Employee', 
+        'Mental Health Worker'                                => 'Mental Health Worker', 
+        'Nurse'                                               => 'Nurse', 
+        'Nurse Aide'                                          => 'Nurse Aide',
+        'Nursing Assistant'                                   => 'Nursing Assistant',
+        'Nursing Home Administrator'                          => 'Nursing Home Administrator', 
+        'Nursing Home Employee'                               => 'Nursing Home Employee', 
+        'Nursing Home Secretary/Receptionist'                 => 'Nursing Home Secretary/Receptionist', 
+        'Occupational Therapist'                              => 'Occupational Therapist', 
+        'Office Manager'                                      => 'Office Manager', 
+        'Ombudsman Representative'                            => 'Ombudsman Representative', 
+        'Optician'                                            => 'Optician', 
+        'Owner of Hospice Facility'                           => 'Owner of Hospice Facility',
+        'Paramedic'                                           => 'Paramedic', 
+        'Pharmacist'                                          => 'Pharmacist', 
+        'Pharmacy Employee'                                   => 'Pharmacy Employee', 
+        'Pharmacy Owner'                                      => 'Pharmacy Owner', 
+        'Pharmacy Technician'                                 => 'Pharmacy Technician', 
+        'Podiatrist'                                          => 'Podiatrist', 
+        'President of Medical Clinic'                         => 'President of Medical Clinic', 
+        'Private Business Owner'                              => 'Private Business Owner', 
+        'private citizen'                                     => 'private citizen',
+        'Psychologist'                                        => 'Psychologist', 
+        'RN'                                                  => 'RN', 
+        'RN, Clinical Nurse Specialist & Public Health Nurse' => 'RN, Clinical Nurse Specialist & Public Health Nurse',
+        'RN & ARNP'                                           => 'RN & ARNP', 
+        'RN & CRNA'                                           => 'RN & CRNA', 
+        'RN & LPN'                                            => 'RN & LPN', 
+        'RN/LPN'                                              => 'RN/LPN', 
+        'Rehabilitation Facility Owner'                       => 'Rehabilitation Facility Owner', 
+        'Respiratory Therapist'                               => 'Respiratory Therapist', 
+        'Sales/Marketing Agent'                               => 'Sales/Marketing Agent', 
+        'Sitter'                                              => 'Sitter', 
+        'Social Worker'                                       => 'Social Worker', 
+        'Social Worker Aide'                                  => 'Social Worker Aide', 
+        'Treasurer of Medical Clinic'                         => 'Treasurer of Medical Clinic', 
+        'Vocational Nurse'                                    => 'Vocational Nurse'
     ];
     
     protected $nameSuffixes = [
-        'Jr.',
-        'Jr',
-        'Sr.',
-        'Sr',
-        'I',
-        'II',
-        'III',
-        'IV',
-        'V',
-        'VI',
-        'VII',
-        'VIII',
-        'IX',
-        'X'
+        'Jr.'  => 'Jr.', 
+        'Jr'   => 'Jr',  
+        'Sr.'  => 'Sr.', 
+        'Sr'   => 'Sr',  
+        'I'    => 'I',   
+        'II'   => 'II',  
+        'III'  => 'III', 
+        'IV'   => 'IV',  
+        'V'    => 'V',   
+        'VI'   => 'VI',  
+        'VII'  => 'VII', 
+        'VIII' => 'VIII',
+        'IX'   => 'IX',  
+        'X'    => 'X'    
     ];
     
     public function preProcess()
@@ -289,7 +291,7 @@ class Alabama extends ExclusionList
     {
         if (preg_match('/,(\s*[O,o]wner\s*[\),]*.*)/', $name, $matches)) {
             
-            if ($matches[1] && array_search(trim($matches[1]), $this->titles) !== false) {
+            if ($matches[1] && isset($this->titles[trim($matches[1])])) {
                 //i.e. ('last name, first name, Owner of Hospice Facility') scenario should not be considered an institution with owner
                 return false;
             } else {
@@ -323,9 +325,9 @@ class Alabama extends ExclusionList
             $titleToken = $matches[1];
         }
         
-        $titleKey = array_search($titleToken, $this->titles);
+        $titleKey = isset($this->titles[$titleToken]) ? $this->titles[$titleToken] : '';
         
-        if ($titleKey === false && $nameTokenCount > 2) {
+        if (empty($titleKey) && $nameTokenCount > 2) {
 
             //Special case : The last token may not have contained the full title string that's why there was no
             //titleKey returned - get everything  after the last name and first name tokens and see if that comes up with a match
@@ -339,7 +341,7 @@ class Alabama extends ExclusionList
                
                 //Include only tokens that are not name suffixes (i.e. not 'Jr.','I', 'II', 'III', etc.) as part of the title
                 //to search
-                if (array_search($nameToken, $this->nameSuffixes) === false) {
+                if (! isset($this->nameSuffixes[$nameToken])) {
                     $titleTokens[] = $nameToken;
                 }
                 
@@ -347,10 +349,10 @@ class Alabama extends ExclusionList
             
             $titleToken = implode(', ', $titleTokens);
             
-            $titleKey = $titleToken ? array_search($titleToken, $this->titles) : false;
+            $titleKey = $titleToken && isset($this->titles[$titleToken]) ? $this->titles[$titleToken] : '';
         }
         
-        return ($titleKey !== false ? $this->titles[$titleKey] : '');
+        return (! empty($titleKey) ? $this->titles[$titleKey] : '');
     }
     
     /**

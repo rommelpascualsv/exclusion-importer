@@ -1,15 +1,16 @@
 <?php namespace App\Import\Lists;
 
+use \App\Import\Lists\ProviderNumberHelper as PNHelper;
+
 class Washington extends ExclusionList
 {
     public $dbPrefix = 'wa1';
 
-    public $pdfToText = 'java -jar ../etc/tabula.jar -p all -u -g -r'; //'pdftotext -layout -nopgbrk';
+    public $pdfToText = 'java -Dfile.encoding=utf-8 -jar ../etc/tabula.jar -p all -u -g -r'; //'pdftotext -layout -nopgbrk';
 
     public $uri = 'http://www.hca.wa.gov/medicaid/provider/documents/termination_exclusion.pdf';
 
     public $type = 'pdf';
-
 
     /**
      * @var field names
@@ -22,7 +23,8 @@ class Washington extends ExclusionList
         'provider_license',
         'npi',
         'termination_date',
-        'termination_reason'
+        'termination_reason',
+        'provider_number'	
     ];
 
     /**
@@ -41,21 +43,25 @@ class Washington extends ExclusionList
         'termination_date'
     ];
 
-    /**
-     * @var institution special cases
-     */
-    private $institutions = [
-        'Wheelchairs Plus',
-        'AA Adult Family Home',
-        'Our House Adult Family Home/',
-        'Wheelchairs Plus',
-        '/Fairwood Care'
-    ];
-
     public $dateColumns = [
        'termination_date' => 6
     ];
 
+    public $shouldHashListName = true;
+    
+    protected $npiColumnName = "npi";
+    
+    /**
+     * @var institution special cases
+     */
+    private $institutions = [
+    		'Wheelchairs Plus',
+    		'AA Adult Family Home',
+    		'Our House Adult Family Home/',
+    		'Wheelchairs Plus',
+    		'/Fairwood Care'
+    ];
+    
     private $business;
 
     /**
@@ -204,28 +210,20 @@ class Washington extends ExclusionList
                 }
             }
 
-            $data[] = $this->clearInvalidNpiValue($this->override($row));
+            // handles the population of name and business values
+            $row = $this->override($row);
+            
+            $npiColumnIndex = $this->getNpiColumnIndex();
+            // set provider number
+            $row = PNHelper::setProviderNumberValue($row, PNHelper::getProviderNumberValue($row, $npiColumnIndex));
+            
+            // set npi number array
+            $row = PNHelper::setNpiValue($row, PNHelper::getNpiValue($row, $npiColumnIndex), $npiColumnIndex);
+            
+            // populate the array data
+            $data[] = $row;
         }
 
         $this->data = $data;
-    }
-    
-    /**
-     * Clears the invalid npi value from the record.
-     * @param array $columns the column array
-     * @return array $columns the column array
-     */
-    private function clearInvalidNpiValue(array $columns)
-    {
-        // split multiple npi numbers
-        $npiArr = explode(' ', preg_replace('!\s+!', ' ', $columns[5]));
-        
-        // get the last npi number
-        $npi = array_pop($npiArr);
-        
-        // clear invalid npi value
-        $columns[5] = !is_numeric($npi) ? null : $npi;
-        
-        return $columns;
     }
 }

@@ -35,12 +35,9 @@ class HTMLRetriever extends Retriever
     public function retrieveData(ExclusionList $list)
     {
         $data = [];
-        // Implement multiple file upload use comma searated
-        $url = explode(',', $list->uri);
 
-        $uri = array_map(function ($item) {
-            return trim($item);
-        }, $url);
+        // Implement multiple file upload use comma searated
+        $uri = $this->multipleUri($list->uri);
 
         foreach ($uri as $key => $value) {
             $client = new Client([
@@ -71,12 +68,7 @@ class HTMLRetriever extends Retriever
                 array_shift($columnsArray);
             }
             // Merge data
-            $data[] = $columnsArray;
-        }
-
-        // If single item return array element
-        if (count($data) === 1) {
-            return $data[0];
+            $data = array_merge($data, $columnsArray);
         }
 
         return $data;

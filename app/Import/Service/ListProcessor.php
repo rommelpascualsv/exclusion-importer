@@ -38,7 +38,6 @@ class ListProcessor
 	public function insertRecords()
     {
         $this->exclusionList->preProcess();
-        $this->exclusionList->convertToAssoc();
         $this->exclusionList->postProcess();
 
         $this->createNewTable();

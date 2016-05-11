@@ -1,5 +1,7 @@
 <?php namespace App\Import\Lists;
 
+use \App\Import\Lists\ProviderNumberHelper as PNHelper;
+
 class NewJersey extends ExclusionList
 {
     /**
@@ -7,11 +9,11 @@ class NewJersey extends ExclusionList
      */
     public $dbPrefix = 'njcdr';
 
-    public $uri = 'http://www.state.nj.us/treasury/debarment/files/Debarment.txt';
+    public $uri = 'http://www.state.nj.us/treasury/treasfiles/debarment/Debarment.txt';
 
     public $type = 'txt';
 
-    public $hashFields = [
+    public $hashColumns = [
         'firm_name',
         'name',
         'npi',
@@ -42,7 +44,8 @@ class NewJersey extends ExclusionList
         'debarring_agency',
         'effective_date',
         'expiration_date',
-        'permanent_debarment'
+        'permanent_debarment',
+        'provider_number'
     ];
 
     /**
@@ -63,20 +66,65 @@ class NewJersey extends ExclusionList
 
     public $shouldHashListName = true;
 
+    protected $npiColumnName = "npi";
+    
+    /**
+     * @inherit preProcess
+     */
     public function preProcess()
     {
-        $this->parse();
-        parent::preProcess();
+    	$this->parse();
+    	parent::preProcess();
     }
-
+    
+    /**
+     * Parse the input data
+     */
     private function parse()
     {
-        $rows = $this->data;
-
-        foreach ($rows as $key => $row) {
-            $rows[$key][1] = str_replace('_', '', $rows[$key][1]);
-        }
-
-        $this->data = $rows;
+    	$data = [];
+    
+    	// iterate each row
+    	foreach ($this->data as $row) {
+    		$data[] = $this->handleRow($row);
+    	}
+    
+    	// set back to global data
+    	$this->data = $data;
+    }
+    
+    /**
+     * Handles the data manipulation of a record array.
+     *
+     * @param array $row the array record
+     * @return array $row the array record
+     */
+    private function handleRow($row)
+    {
+    	// remove underscore from name field
+    	$row = $this->normalizeName($row);
+    	
+    	$npiColumnIndex = $this->getNpiColumnIndex();
+			 
+		// set provider number
+		$row = PNHelper::setProviderNumberValue($row, PNHelper::getProviderNumberValue($row, $npiColumnIndex));
+		
+		// set npi number array
+		$row = PNHelper::setNpiValue($row, PNHelper::getNpiValue($row, $npiColumnIndex), $npiColumnIndex);
+		
+    	return $row;
+    }
+    
+    /**
+     * Normalize the name field by replacing the underscore characters with spaces.
+     *
+     * @param array $row the array record
+     * @return array $row the array record
+     */
+    private function normalizeName($row)
+    {
+    	$row[1] = str_replace('_', ' ', $row[1]);
+    	
+    	return $row;
     }
 }
