@@ -38,7 +38,7 @@ class Tennessee extends ExclusionList
 
     public $shouldHashListName = true;
     
-    public $npiColumnName = 'npi';
+    protected $npiColumnName = 'npi';
     
     protected $headerLine = 'Last Name,First Name,NPI,Begin Date,Reason,End Date';
     
@@ -98,7 +98,7 @@ class Tennessee extends ExclusionList
                 $middleName = $this->findMiddleName($firstName);
                 
                 if ($middleName) {
-                    $firstName = $this->trimMiddleName($firstName, $middleName);
+                    $firstName = trim($this->trimMiddleName($firstName, $middleName));
                 }
                 
             }

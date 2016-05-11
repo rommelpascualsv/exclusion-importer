@@ -1,5 +1,7 @@
 <?php namespace App\Import\Lists;
 
+use \App\Import\Lists\ProviderNumberHelper as PNHelper;
+
 class Kansas extends ExclusionList
 {
     /**
@@ -59,6 +61,10 @@ class Kansas extends ExclusionList
     ];
     
     public $shouldHashListName = true;
+
+    protected $npiColumnName = "npi";
+    
+    protected $providerNumberColumnName = "kmap_provider_number_2";
     
     /**
      * @var contains the headers of the pdf that should be excluded
@@ -68,14 +74,6 @@ class Kansas extends ExclusionList
     		'"Termination ",,,,,,,',
     		'"Date: ","Name: ","d/b/a: ","Provider Type: ","KMAP Provider #: ","NPI #: ",Comments:,'
     ];
-    
-    public $npiColumnName = "npi";
-    
-    private $npiRegex = "/1\d{9}\b/";
-    
-    private $symbolsRegex = "/^(;+\s)?;?|(;+\s)?;?$/";
-    
-    private $spacesRegex = "!\s+!";
     
     public function preProcess()
     {
@@ -174,48 +172,13 @@ class Kansas extends ExclusionList
      */
     private function handleRow($columns)
     {
-    
-    	// set provider number
-    	$columns = $this->setProviderNo($columns);
-    
-    	// set npi number array
-    	$columns = $this->setNpi($columns);
-    
-    	return $columns;
-    }
-    
-    /**
-     * Set the provider number by clearing the unnecessary characters
-     *
-     * @param array $columns the array record
-     * @return array $columns the array record
-     */
-    private function setProviderNo($columns)
-    {
-    	// remove valid npi numbers
-    	$providerNo = preg_replace($this->npiRegex, "", trim($columns[5]));
-    
-    	// remove commas
-    	$providerNo = preg_replace($this->symbolsRegex, "", trim($providerNo));
-    
-    	// remove duplicate spaces in between numbers
-    	$columns[] = preg_replace($this->spacesRegex, " ", trim($providerNo));
-    
-    	return $columns;
-    }
-    
-    /**
-     * Set the npi numbers
-     *
-     * @param array $columns the array record
-     * @return array $columns the array record
-     */
-    private function setNpi($columns)
-    {
-    	// extract npi number/s
-    	preg_match_all($this->npiRegex, $columns[5], $npi);
-    
-    	$columns[5] = $npi[0];
+        $npiColumnIndex = $this->getNpiColumnIndex();
+        
+        // set provider number
+        $columns = PNHelper::setProviderNumberValue($columns, PNHelper::getProviderNumberValue($columns, $npiColumnIndex));
+        
+        // set npi number array
+        $columns = PNHelper::setNpiValue($columns, PNHelper::getNpiValue($columns, $npiColumnIndex), $npiColumnIndex);
     
     	return $columns;
     }

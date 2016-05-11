@@ -1,5 +1,7 @@
 <?php namespace App\Import\Lists;
 
+use \App\Import\Lists\ProviderNumberHelper as PNHelper;
+
 class Nebraska extends ExclusionList
 {
     public $dbPrefix = 'ne1';
@@ -44,13 +46,7 @@ class Nebraska extends ExclusionList
     
     public $shouldHashListName = true;
     
-    public $npiColumnName = "npi";
-    
-    private $npiRegex = "/1\d{9}\b/";
-    
-    private $commaRegex = "/^((,|\/)+\s)?(,|\/)?|((,|\/)+\s)?(,|\/)?$/";
-    
-    private $spacesRegex = "!\s+!";
+    protected $npiColumnName = "npi";
 
     /**
 	 * @inherit preProcess
@@ -85,8 +81,13 @@ class Nebraska extends ExclusionList
         	//remove date_added column
 			array_shift($columns);
 			
-			// applies specific overrides
-			$columns = $this->applyOverrides($columns);
+			$npiColumnIndex = $this->getNpiColumnIndex();
+			 
+			// set provider number
+			$columns = PNHelper::setProviderNumberValue($columns, PNHelper::getProviderNumberValue($columns, $npiColumnIndex));
+			
+			// set npi number array
+			$columns = PNHelper::setNpiValue($columns, PNHelper::getNpiValue($columns, $npiColumnIndex), $npiColumnIndex);
 			
 			// populate the array data
         	$data[] = $columns;
@@ -94,57 +95,4 @@ class Nebraska extends ExclusionList
 
         $this->data = $data;
     }
-    
-    /**
-     * Applies the specific overrides to correct the data
-     * 
-     * @param array $columns the column array
-     * @return array $columns the column array
-     */
-    private function applyOverrides($columns)
-    {
-    	// set provider number
-    	$columns = $this->setProviderNo($columns);
-    	
-    	// set npi number array
-    	$columns = $this->setNpi($columns);
-    	
-    	return $columns;
-    }
-    
-    /**
-	 * Set the provider number by clearing the unnecessary characters
-	 *
-	 * @param array $columns the column array
-     * @return array $columns the column array
-	 */
-	private function setProviderNo($columns)
-	{
-		// remove valid npi numbers
-		$providerNo = preg_replace($this->npiRegex, "", trim($columns[1]));
-		 
-		// remove commas
-		$providerNo = preg_replace($this->commaRegex, "", trim($providerNo));
-		 
-		// remove duplicate spaces in between numbers
-		$columns[] = preg_replace($this->spacesRegex, " ", trim($providerNo));
-		 
-		return $columns;
-	}
-	
-	/**
-	 * Set the npi numbers
-	 *
-	 * @param array $columns the column array
-     * @return array $columns the column array
-	 */
-	private function setNpi($columns)
-	{
-		// extract npi number/s
-		preg_match_all($this->npiRegex, $columns[1], $npi);
-	
-		$columns[1] = $npi[0];
-		 
-		return $columns;
-	}
 }

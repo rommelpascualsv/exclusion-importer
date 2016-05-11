@@ -4,7 +4,7 @@ class Alaska extends ExclusionList
 {
     public $dbPrefix = 'ak1';
 
-    public $pdfToText = "java -Dfile.encoding=utf-8 -jar ../etc/tabula.jar -p 2-7 -u -g -r";
+    public $pdfToText = "java -Dfile.encoding=utf-8 -jar ../etc/tabula.jar -p 2-7 -c 89,215,308,546,598,753";
 
     public $uri = "http://dhss.alaska.gov/Commissioner/Documents/PDF/AlaskaExcludedProviderList.pdf";
     
@@ -41,8 +41,16 @@ class Alaska extends ExclusionList
      * @var institution special cases
      */
     private $institutions = [
-    	"ANCHORAGE ADULT DAY SERVICES",
+    	"ANCHORAGE ADULT DAY SVCS",
     	"EBEN-EZER HOMECARE, LLC"
+    ];
+    
+    private $headers = [
+    		'"",,Alas,ka Medical Assistance Excluded Provider List,,',
+    		'"",,,May 2016,,',
+    		'"EXCLUSION ",,,,"EXCLUSION ",',
+    		'"",LAST NAME,FIRST NAME,PROVIDER TYPE,,EXCLUSION REASON',
+    		'DATE,,,,AUTHORITY,'
     ];
     
     public function preProcess()
@@ -53,6 +61,12 @@ class Alaska extends ExclusionList
     
     public function parse()
     {
+    	// remove all headers
+    	$this->data = str_replace($this->headers, "", $this->data);
+    	
+    	// remove all page numbers
+    	$this->data = preg_replace('/"",,,Page 1 of 6,,/', "", $this->data);
+    	
     	$rows = preg_split('/(\r)?\n(\s+)?/', $this->data);
     	
     	$data = [];
