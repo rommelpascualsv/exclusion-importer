@@ -4,6 +4,7 @@ use League\Flysystem\Filesystem;
 use App\Import\Service\DataCsvConverter;
 use App\Import\Service\File\CsvFileReader;
 use League\Flysystem\ZipArchive\ZipArchiveAdapter;
+use \App\Import\Lists\ProviderNumberHelper as PNHelper;
 
 class Iowa extends ExclusionList
 {
@@ -40,13 +41,7 @@ class Iowa extends ExclusionList
         'sanction_end_date' => 6
     ];
 
-    public $npiColumnName = "npi";
-    
-    private $npiRegex = "/1\d{9}\b/";
-    
-    private $symbolsRegex = "/^((,|\/)+\s)?(,|\/)?|((,|\/)+\s)?(,|\/)?$/";
-    
-    private $spacesRegex = "!\s+!";
+    protected $npiColumnName = "npi";
     
     /**
      * @inherit preProcess
@@ -66,7 +61,16 @@ class Iowa extends ExclusionList
     		
     	// iterate each row
     	foreach ($this->data as $row) {
-    		$data[] = $this->handleRow($row);
+    		
+    	    $npiColumnIndex = $this->getNpiColumnIndex();
+
+    	    // set provider number
+    	    $row = PNHelper::setProviderNumberValue($row, PNHelper::getProviderNumberValue($row, $npiColumnIndex));
+    	    	
+    	    // set npi number array
+    	    $row = PNHelper::setNpiValue($row, PNHelper::getNpiValue($row, $npiColumnIndex), $npiColumnIndex);
+    	    	
+    	    $data[] = $row;
     	}
     		
     	// set back to global data

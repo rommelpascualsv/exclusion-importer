@@ -38,7 +38,7 @@ class Tennessee extends ExclusionList
 
     public $shouldHashListName = true;
     
-    public $npiColumnName = 'npi';
+    protected $npiColumnName = 'npi';
     
     protected $headerLine = 'Last Name,First Name,NPI,Begin Date,Reason,End Date';
     

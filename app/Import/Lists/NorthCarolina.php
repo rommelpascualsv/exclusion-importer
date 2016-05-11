@@ -1,5 +1,7 @@
 <?php namespace App\Import\Lists;
 
+use \App\Import\Lists\ProviderNumberHelper as PNHelper;
+
 class NorthCarolina extends ExclusionList
 {
     public $dbPrefix = 'nc1';
@@ -40,9 +42,7 @@ class NorthCarolina extends ExclusionList
 
     public $shouldHashListName = true;
     
-    public $npiColumnName = "npi";
-    
-    private $npiRegex = "/1\d{9}\b/";
+    protected $npiColumnName = "npi";
     
 	public function preProcess()
     {
@@ -67,39 +67,15 @@ class NorthCarolina extends ExclusionList
     		 
     	$data = [];
     	foreach ($rows as $key => $value) {
-    		$data[] = $this->handleRow($value);
+			 
+			// set npi number array
+    		$npiColumnIndex = $this->getNpiColumnIndex();
+			$value = PNHelper::setNpiValue($value, PNHelper::getNpiValue($value, $npiColumnIndex), $npiColumnIndex);
+			
+			// populate the array data
+        	$data[] = $value;
     	}
     	
     	$this->data = $data;
-    }
-    
-    /**
-     * Handles the data manipulation of a record array.
-     *
-     * @param array $row the array record
-     * @return array $row the array record
-     */
-    private function handleRow($row)
-    {
-    	// set npi number array
-    	$row = $this->setNpi($row);
-    
-    	return $row;
-    }
-    
-    /**
-     * Set the npi numbers
-     *
-     * @param array $row the array record
-     * @return array $row the array record
-     */
-    private function setNpi($row)
-    {
-    	// extract npi number/s
-    	preg_match_all($this->npiRegex, $row[0], $npi);
-    
-    	$row[0] = $npi[0];
-    
-    	return $row;
     }
 }

@@ -1,5 +1,7 @@
 <?php namespace App\Import\Lists;
 
+use \App\Import\Lists\ProviderNumberHelper as PNHelper;
+
 class NewJersey extends ExclusionList
 {
     /**
@@ -7,7 +9,7 @@ class NewJersey extends ExclusionList
      */
     public $dbPrefix = 'njcdr';
 
-    public $uri = 'http://www.state.nj.us/treasury/debarment/files/Debarment.txt';
+    public $uri = 'http://www.state.nj.us/treasury/treasfiles/debarment/Debarment.txt';
 
     public $type = 'txt';
 
@@ -64,13 +66,7 @@ class NewJersey extends ExclusionList
 
     public $shouldHashListName = true;
 
-    public $npiColumnName = "npi";
-    
-    private $npiRegex = "/1\d{9}\b/";
-    
-    private $symbolsRegex = "/^((,|\/)+\s)?(,|\/)?|((,|\/)+\s)?(,|\/)?$/";
-    
-    private $spacesRegex = "!\s+!";
+    protected $npiColumnName = "npi";
     
     /**
      * @inherit preProcess
@@ -108,12 +104,14 @@ class NewJersey extends ExclusionList
     	// remove underscore from name field
     	$row = $this->normalizeName($row);
     	
-    	// set provider number
-    	$row = $this->setProviderNo($row);
-    	
-    	// set npi number array
-    	$row = $this->setNpi($row);
-    
+    	$npiColumnIndex = $this->getNpiColumnIndex();
+			 
+		// set provider number
+		$row = PNHelper::setProviderNumberValue($row, PNHelper::getProviderNumberValue($row, $npiColumnIndex));
+		
+		// set npi number array
+		$row = PNHelper::setNpiValue($row, PNHelper::getNpiValue($row, $npiColumnIndex), $npiColumnIndex);
+		
     	return $row;
     }
     
@@ -127,42 +125,6 @@ class NewJersey extends ExclusionList
     {
     	$row[1] = str_replace('_', ' ', $row[1]);
     	
-    	return $row;
-    }
-    
-    /**
-     * Set the provider number by clearing the unnecessary characters
-     *
-     * @param array $row the array record
-     * @return array $row the array record
-     */
-    private function setProviderNo($row)
-    {
-    	// remove valid npi numbers
-    	$providerNo = preg_replace($this->npiRegex, "", trim($row[8]));
-    		
-    	// remove commas
-    	$providerNo = preg_replace($this->symbolsRegex, "", trim($providerNo));
-    		
-    	// remove duplicate spaces in between numbers
-    	$row[] = preg_replace($this->spacesRegex, " ", trim($providerNo));
-    		
-    	return $row;
-    }
-    
-    /**
-     * Set the npi numbers
-     *
-     * @param array $row the array record
-     * @return array $row the array record
-     */
-    private function setNpi($row)
-    {
-    	// extract npi number/s
-    	preg_match_all($this->npiRegex, $row[8], $npi);
-    
-    	$row[8] = $npi[0];
-    
     	return $row;
     }
 }
