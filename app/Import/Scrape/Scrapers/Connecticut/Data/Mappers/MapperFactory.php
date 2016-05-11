@@ -45,7 +45,6 @@ use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MentalHealthCare\Marital
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MentalHealthCare\MasterSLevelSocialWorkerMapper;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MentalHealthCare\MentalHealthCommunityResidenceMapper;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MentalHealthCare\MentalHealthDayTreatementFacilitiesMapper;
-use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MentalHealthCare\MentalHealthIntermedicateTreatmentFacilitiesMapper;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MentalHealthCare\MentalHealthResidentialLivingFacilitiesMapper;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MentalHealthCare\ProfessionalCounselorMapper;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MentalHealthCare\PsychiratricOutpatientClinicsMapper;
