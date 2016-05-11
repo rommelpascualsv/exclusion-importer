@@ -49,7 +49,7 @@ class ListFactory
         'unsancindividuals' => 'UnSanctionsIndividuals',
         'unsancentities'    => 'UnSanctionsEntities',
         'healthmil'         => 'HealthMil',
-    	'csl'               => 'ConsolidatedScreeningList'
+        'csl'               => 'ConsolidatedScreeningList'
     ];
 
     /**

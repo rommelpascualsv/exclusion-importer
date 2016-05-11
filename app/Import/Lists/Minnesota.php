@@ -114,7 +114,6 @@ class Minnesota extends ExclusionList
         $data = [];
 
         foreach ($this->data as $key => $value) {
-
             if (count($value) === 8) {
                 $data[] = $this->parseEntity($value);
             }
@@ -122,7 +121,6 @@ class Minnesota extends ExclusionList
             if (count($value) === 10) {
                 $data[] = $this->parseIndividual($value);
             }
-
         }
 
         $this->data = $data;

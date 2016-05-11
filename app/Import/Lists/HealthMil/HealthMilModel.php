@@ -1,6 +1,4 @@
-<?php
-
-namespace App\Import\Lists\HealthMil;
+<?php namespace App\Import\Lists\HealthMil;
 
 class HealthMilModel
 {
@@ -19,7 +17,7 @@ class HealthMilModel
     private $lastName;
 
     private $title;
-    
+
     private $addresses;
 
     private $summary;
@@ -98,7 +96,7 @@ class HealthMilModel
         if (is_array($name) && isset($name[0])) {
             $value = $name[0];
             if (isset($name[1])) {
-            	$this->title = $name[1];
+                $this->title = $name[1];
             }
         }
 
@@ -131,10 +129,10 @@ class HealthMilModel
                 break;
         }
     }
-    
+
     public function getTitle()
     {
-    	return $this->title;
+        return $this->title;
     }
 
     public function getFirstName()

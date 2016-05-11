@@ -42,41 +42,40 @@ class Iowa extends ExclusionList
     ];
 
     protected $npiColumnName = "npi";
-    
+
     /**
      * @inherit preProcess
      */
     public function preProcess()
     {
-    	$this->parse();
-    	parent::preProcess();
+        $this->parse();
+        parent::preProcess();
     }
-    
+
     /**
      * Parse the input data
      */
     private function parse()
     {
-    	$data = [];
-    		
-    	// iterate each row
-    	foreach ($this->data as $row) {
-    		
-    	    $npiColumnIndex = $this->getNpiColumnIndex();
+        $data = [];
 
-    	    // set provider number
-    	    $row = PNHelper::setProviderNumberValue($row, PNHelper::getProviderNumberValue($row, $npiColumnIndex));
-    	    	
-    	    // set npi number array
-    	    $row = PNHelper::setNpiValue($row, PNHelper::getNpiValue($row, $npiColumnIndex), $npiColumnIndex);
-    	    	
-    	    $data[] = $row;
-    	}
-    		
-    	// set back to global data
-    	$this->data = $data;
+        // iterate each row
+        foreach ($this->data as $row) {
+            $npiColumnIndex = $this->getNpiColumnIndex();
+
+            // set provider number
+            $row = PNHelper::setProviderNumberValue($row, PNHelper::getProviderNumberValue($row, $npiColumnIndex));
+
+            // set npi number array
+            $row = PNHelper::setNpiValue($row, PNHelper::getNpiValue($row, $npiColumnIndex), $npiColumnIndex);
+
+            $data[] = $row;
+        }
+
+        // set back to global data
+        $this->data = $data;
     }
-    
+
     /**
      * Handles the data manipulation of a record array.
      *
@@ -85,16 +84,16 @@ class Iowa extends ExclusionList
      */
     private function handleRow($row)
     {
-    		
-    	// set provider number
-    	$row = $this->setProviderNo($row);
-    
-    	// set npi number array
-    	$row = $this->setNpi($row);
-    		
-    	return $row;
+
+        // set provider number
+        $row = $this->setProviderNo($row);
+
+        // set npi number array
+        $row = $this->setNpi($row);
+
+        return $row;
     }
-    
+
     /**
      * Set the provider number by clearing the unnecessary characters
      *
@@ -103,18 +102,18 @@ class Iowa extends ExclusionList
      */
     private function setProviderNo($row)
     {
-    	// remove valid npi numbers
-    	$providerNo = preg_replace($this->npiRegex, "", trim($row[1]));
-    		
-    	// remove commas
-    	$providerNo = preg_replace($this->symbolsRegex, "", trim($providerNo));
-    		
-    	// remove duplicate spaces in between numbers
-    	$row[] = preg_replace($this->spacesRegex, " ", trim($providerNo));
-    		
-    	return $row;
+        // remove valid npi numbers
+        $providerNo = preg_replace($this->npiRegex, "", trim($row[1]));
+
+        // remove commas
+        $providerNo = preg_replace($this->symbolsRegex, "", trim($providerNo));
+
+        // remove duplicate spaces in between numbers
+        $row[] = preg_replace($this->spacesRegex, " ", trim($providerNo));
+
+        return $row;
     }
-    
+
     /**
      * Set the npi numbers
      *
@@ -123,14 +122,14 @@ class Iowa extends ExclusionList
      */
     private function setNpi($row)
     {
-    	// extract npi number/s
-    	preg_match_all($this->npiRegex, $row[1], $npi);
-    
-    	$row[1] = $npi[0];
-    		
-    	return $row;
+        // extract npi number/s
+        preg_match_all($this->npiRegex, $row[1], $npi);
+
+        $row[1] = $npi[0];
+
+        return $row;
     }
-    
+
     public function retrieveData()
     {
         $filePath = '';

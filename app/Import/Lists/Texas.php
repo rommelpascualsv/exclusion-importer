@@ -46,37 +46,37 @@ class Texas extends ExclusionList
         'add_date' => 8,
         'reinstated_date' => 9,
     ];
-    
+
     protected $npiColumnName = "npi";
-    
+
     /**
      * @inherit preProcess
      */
     public function preProcess()
     {
-    	$this->parse();
-    	parent::preProcess();
+        $this->parse();
+        parent::preProcess();
     }
-    
+
     /**
      * Parse the input data
      */
     private function parse()
     {
-    	$data = [];
-    
-    	// iterate each row
-    	foreach ($this->data as $row) {
-    		
-    	    // set npi number array
-    	    $npiColumnIndex = $this->getNpiColumnIndex();
-    	    $row = PNHelper::setNpiValue($row, PNHelper::getNpiValue($row, $npiColumnIndex), $npiColumnIndex);
-    	    
-    	    // populate the array data
-    	    $data[] = $row;
-    	}
-    
-    	// set back to global data
-    	$this->data = $data;
+        $data = [];
+
+        // iterate each row
+        foreach ($this->data as $row) {
+
+            // set npi number array
+            $npiColumnIndex = $this->getNpiColumnIndex();
+            $row = PNHelper::setNpiValue($row, PNHelper::getNpiValue($row, $npiColumnIndex), $npiColumnIndex);
+
+            // populate the array data
+            $data[] = $row;
+        }
+
+        // set back to global data
+        $this->data = $data;
     }
 }

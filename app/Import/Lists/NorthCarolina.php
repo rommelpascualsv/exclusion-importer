@@ -6,7 +6,7 @@ class NorthCarolina extends ExclusionList
 {
     public $dbPrefix = 'nc1';
 
-	public $uri = 'http://www2.ncdhhs.gov/dma/ProgramIntegrity/ProviderExclusionList_082615.xlsx';
+    public $uri = 'http://www2.ncdhhs.gov/dma/ProgramIntegrity/ProviderExclusionList_082615.xlsx';
 
     public $type = 'xlsx';
 
@@ -41,41 +41,41 @@ class NorthCarolina extends ExclusionList
     ];
 
     public $shouldHashListName = true;
-    
+
     protected $npiColumnName = "npi";
-    
-	public function preProcess()
+
+    public function preProcess()
     {
-    	$this->parse();
+        $this->parse();
         parent::preProcess();
     }
-    
+
     public function parse()
     {
-    	//Remove table header
-    	array_shift($this->data);
-    	
-    	$this->data = array_map(function($row) {
-    		if (count($row) > 11) {
-    			unset($row[11]);
-    			return $row;
-    		}
-    		return $row;
-    	}, $this->data);
-    	
-    	$rows = $this->data;
-    		 
-    	$data = [];
-    	foreach ($rows as $key => $value) {
-			 
-			// set npi number array
-    		$npiColumnIndex = $this->getNpiColumnIndex();
-			$value = PNHelper::setNpiValue($value, PNHelper::getNpiValue($value, $npiColumnIndex), $npiColumnIndex);
-			
-			// populate the array data
-        	$data[] = $value;
-    	}
-    	
-    	$this->data = $data;
+        //Remove table header
+        array_shift($this->data);
+
+        $this->data = array_map(function ($row) {
+            if (count($row) > 11) {
+                unset($row[11]);
+                return $row;
+            }
+            return $row;
+        }, $this->data);
+
+        $rows = $this->data;
+
+        $data = [];
+        foreach ($rows as $key => $value) {
+
+            // set npi number array
+            $npiColumnIndex = $this->getNpiColumnIndex();
+            $value = PNHelper::setNpiValue($value, PNHelper::getNpiValue($value, $npiColumnIndex), $npiColumnIndex);
+
+            // populate the array data
+            $data[] = $value;
+        }
+
+        $this->data = $data;
     }
 }

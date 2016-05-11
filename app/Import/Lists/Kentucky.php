@@ -42,11 +42,11 @@ class Kentucky extends ExclusionList
     public $dateColumns = [
         'effective_date' => 4
     ];
-    
+
     public $shouldHashListName = true;
-    
+
     protected $npiColumnName = "npi";
-    
+
     public function __construct()
     {
         parent::__construct();
@@ -61,35 +61,34 @@ class Kentucky extends ExclusionList
 
         return 'http://chfs.ky.gov' . $link;
     }
-    
+
     /**
      * @inherit preProcess
      */
     public function preProcess()
     {
-    	$this->parse();
-    	parent::preProcess();
+        $this->parse();
+        parent::preProcess();
     }
-    
+
     /**
      * Parse the input data
      */
     private function parse()
     {
-    	$data = [];
-    	 
-    	// iterate each row
-    	foreach ($this->data as $row) {
-    	    
-    	    $npiColumnIndex = $this->getNpiColumnIndex();
-    	    	
-    	    // set npi number array
-    	    $row = PNHelper::setNpiValue($row, PNHelper::getNpiValue($row, $npiColumnIndex), $npiColumnIndex);
-    	    
-    	    $data[] = $row;
-    	}
-    	 
-    	// set back to global data
-    	$this->data = $data;
+        $data = [];
+
+        // iterate each row
+        foreach ($this->data as $row) {
+            $npiColumnIndex = $this->getNpiColumnIndex();
+
+            // set npi number array
+            $row = PNHelper::setNpiValue($row, PNHelper::getNpiValue($row, $npiColumnIndex), $npiColumnIndex);
+
+            $data[] = $row;
+        }
+
+        // set back to global data
+        $this->data = $data;
     }
 }

@@ -1,6 +1,4 @@
-<?php
-
-namespace App\Import\Lists\HealthMil;
+<?php namespace App\Import\Lists\HealthMil;
 
 use Streamlineverify\SVBot\BaseScraper;
 

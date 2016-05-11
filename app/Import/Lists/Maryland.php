@@ -24,6 +24,6 @@ class Maryland extends ExclusionList
     ];
 
     public $dateColumns = [
-    	'sanction_date' => 4
+        'sanction_date' => 4
     ];
 }

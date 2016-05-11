@@ -23,6 +23,6 @@ class ImportFileServiceProvider extends ServiceProvider
      */
     public function register()
     {
-    	$this->app->bind('App\Services\Contracts\ImportFileServiceInterface', 'App\Services\ImportFileService');
+        $this->app->bind('App\Services\Contracts\ImportFileServiceInterface', 'App\Services\ImportFileService');
     }
 }

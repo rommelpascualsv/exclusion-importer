@@ -1,6 +1,4 @@
-<?php
-
-namespace App\Import\Lists;
+<?php namespace App\Import\Lists;
 
 class FDADebarmentList extends ExclusionList
 {
@@ -45,7 +43,7 @@ class FDADebarmentList extends ExclusionList
         $this->parse();
         parent::preProcess();
     }
-    
+
     private function parse()
     {
         $replacableStrings = [
@@ -65,29 +63,29 @@ class FDADebarmentList extends ExclusionList
             '*'                            => ' Hearing requested and denied',
             '('                            => '',
             ')'                            => '',
-        
+
         ];
-        
+
         foreach ($this->data as $key => &$record) {
             $stringOfRecord = implode('~', $record);
-        
+
             $newStringOfRecord = str_replace(
                 array_keys($replacableStrings),
                 array_values($replacableStrings),
                 $stringOfRecord
-                );
-        
+            );
+
             $record = explode('~', $newStringOfRecord);
-        
+
             if (trim($record[0], chr(0xC2).chr(0xA0)) == '') {
                 unset($this->data[$key]);
                 continue;
             }
-        
+
             if (count($record) == 5) {
                 array_splice($record, 1, 0, '');
             }
-        
+
             array_pop($record);
         }
     }

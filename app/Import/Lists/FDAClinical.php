@@ -1,6 +1,4 @@
-<?php namespace
-
-App\Import\Lists;
+<?php namespace App\Import\Lists;
 
 class FDAClinical extends ExclusionList
 {
@@ -46,7 +44,7 @@ class FDAClinical extends ExclusionList
         $this->parse();
         parent::preProcess();
     }
-    
+
     private function parse()
     {
         $removableSuffixes = [
@@ -55,17 +53,17 @@ class FDAClinical extends ExclusionList
             ', PhD',
             ', DO',
         ];
-        
+
         $removableSuffixesAsString = "/" . implode('|', $removableSuffixes) . "/";
-        
+
         foreach ($this->data as &$record) {
             $record[0] = preg_replace_callback($removableSuffixesAsString, function () {
                 return '';
             }, $record[0]);
-        
-                $record[4] = preg_replace('/1/', '', $record[4]);
-        
-                $record = array_slice($record, 0, 8);
+
+            $record[4] = preg_replace('/1/', '', $record[4]);
+
+            $record = array_slice($record, 0, 8);
         }
     }
 }

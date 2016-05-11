@@ -63,44 +63,43 @@ class NorthDakota extends ExclusionList
     public $dateColumns = [];
 
     public $shouldHashListName = true;
-    
+
     protected $npiColumnName = "npi";
-    
+
     /**
      * @inherit preProcess
      */
     public function preProcess()
     {
-    	$this->parse();
-    	parent::preProcess();
+        $this->parse();
+        parent::preProcess();
     }
-    
+
     /**
      * Parse the input data
      */
     private function parse()
     {
-    	$data = [];
-    		
-    	// iterate each row
-    	foreach ($this->data as $row) {
-    		
-    	    $npiColumnIndex = $this->getNpiColumnIndex();
-    	    
-    	    // set provider number
-    	    $row = PNHelper::setProviderNumberValue($row, PNHelper::getProviderNumberValue($row, $npiColumnIndex));
-    	    	
-    	    // set npi number array
-    	    $row = PNHelper::setNpiValue($row, PNHelper::getNpiValue($row, $npiColumnIndex), $npiColumnIndex);
-    	    	
-    	    // populate the array data
-    	    $data[] = $row;
-    	}
-    		
-    	// set back to global data
-    	$this->data = $data;
+        $data = [];
+
+        // iterate each row
+        foreach ($this->data as $row) {
+            $npiColumnIndex = $this->getNpiColumnIndex();
+
+            // set provider number
+            $row = PNHelper::setProviderNumberValue($row, PNHelper::getProviderNumberValue($row, $npiColumnIndex));
+
+            // set npi number array
+            $row = PNHelper::setNpiValue($row, PNHelper::getNpiValue($row, $npiColumnIndex), $npiColumnIndex);
+
+            // populate the array data
+            $data[] = $row;
+        }
+
+        // set back to global data
+        $this->data = $data;
     }
-    
+
     public function postHook()
     {
         $results = app('db')
@@ -111,11 +110,10 @@ class NorthDakota extends ExclusionList
         foreach ($results as $key => $value) {
             preg_match('/^(?!N\/A)[\D]+/', $value->business_name_address, $match);
 
-            if ( ! empty($match)) {
-                app('db')
-                    ->table($this->dbPrefix . '_records')
-                    ->where('id', $value->id)
-                    ->update(['business' => $match[0]]);
+            if (! empty($match)) {
+                app('db')->table($this->dbPrefix . '_records')
+                ->where('id', $value->id)
+                ->update(['business' => $match[0]]);
             }
         }
     }

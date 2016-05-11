@@ -1,6 +1,4 @@
-<?php
-
-namespace App\Import\Lists;
+<?php namespace App\Import\Lists;
 
 use App\Import\Lists\HealthMil\HealthMilParser;
 
@@ -20,7 +18,7 @@ class HealthMil extends ExclusionList
         'first_name',
         'middle_name',
         'last_name',
-    	'title',
+        'title',
         'addresses',
         'summary'
     ];
@@ -34,7 +32,7 @@ class HealthMil extends ExclusionList
         'firstName',
         'middleName',
         'lastName',
-    	'title'
+        'title'
     ];
 
     private $parser;

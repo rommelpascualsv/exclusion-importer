@@ -46,7 +46,7 @@ class WestVirginia extends ExclusionList
         'reason_for_exclusion',
         'reinstatement_date',
         'reinstatement_reason',
-        'provider_number'	
+        'provider_number'
     ];
 
     /**
@@ -71,9 +71,9 @@ class WestVirginia extends ExclusionList
     ];
 
     public $shouldHashListName = true;
-    
+
     protected $npiColumnName = "npi_number";
-    
+
     /**
      * @inherit preProcess
      */
@@ -90,7 +90,6 @@ class WestVirginia extends ExclusionList
     public function lineToaArray($string)
     {
         return preg_split('/(\r)?\n(\s+)?/', trim($string));
-
     }
 
     private function csvToArray($csv)
@@ -108,7 +107,6 @@ class WestVirginia extends ExclusionList
             $row = $this->csvToArray($item);
 
             if (strpos($row[0], 'NPI') === false) {
-
                 if (count($row) == 15) {
                     unset($row[11]);
                     $row = array_values($row);
@@ -126,7 +124,7 @@ class WestVirginia extends ExclusionList
 
     /**
      * Remove header of the array
-     * 
+     *
      * @param array $array
      * @return array the array data without the header
      */
@@ -163,18 +161,18 @@ class WestVirginia extends ExclusionList
         foreach ($this->data as $key => $value) {
             $data = array_merge($data, $this->removeHeader($this->buildData($value)));
         }
-        
+
         $this->data = array_map(function ($row) {
-        	
+
             $npiColumnIndex = $this->getNpiColumnIndex();
             // set provider number
             $row = PNHelper::setProviderNumberValue($row, PNHelper::getProviderNumberValue($row, $npiColumnIndex));
-            
+
             // set npi number array
             $row = PNHelper::setNpiValue($row, PNHelper::getNpiValue($row, $npiColumnIndex), $npiColumnIndex);
-            
+
             return $row;
-            
+
         }, $data);
     }
 }

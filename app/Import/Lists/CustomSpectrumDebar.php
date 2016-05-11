@@ -50,7 +50,7 @@ class CustomSpectrumDebar extends ExclusionList
 
     public function postProcess()
     {
-        $this->data = array_map(function($record) {
+        $this->data = array_map(function ($record) {
             if ($record['ssn'] == null) {
                 $record['ssn_last_four'] = null;
                 return $record;

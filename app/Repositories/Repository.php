@@ -1,12 +1,10 @@
-<?php
+<?php namespace app\Repositories;
 
-namespace App\Repositories;
-
-interface Repository 
+interface Repository
 {
-	public function create($record);
+    public function create($record);
 
-	public function clear();
+    public function clear();
 
-	public function find($id);
+    public function find($id);
 }

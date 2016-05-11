@@ -1,6 +1,4 @@
-<?php
-
-namespace App\Import\Lists;
+<?php namespace App\Import\Lists;
 
 class PHS extends ExclusionList
 {
@@ -44,7 +42,7 @@ class PHS extends ExclusionList
         'middle_name',
         'debarment_until',
     ];
-    
+
     /**
      * Columns not included in schema
      *

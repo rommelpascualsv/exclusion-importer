@@ -1,18 +1,20 @@
-<?php namespace App\Http\Controllers;
+<?php
+
+namespace App\Http\Controllers;
 
 use App\Services\Contracts\ImportFileServiceInterface;
 use Illuminate\Http\Request;
-use Laravel\Lumen\Routing\Controller as BaseController;
+use Illuminate\Routing\Controller as BaseController;
 
 class ImportController extends BaseController
 {
     protected $importFileService;
-    
+
     public function __construct(ImportFileServiceInterface $importFileService)
     {
         $this->importFileService = $importFileService;
     }
-    
+
     public function createOldTables()
     {
         $lists = [
@@ -79,17 +81,17 @@ class ImportController extends BaseController
             app('db')->statement('CREATE TABLE  `' . $list . '_older` LIKE `' . $list . '`');
             app('db')->statement('INSERT  INTO `' . $list . '_older` SELECT * FROM `' . $list . '`');
         }
-	}
+    }
 
     public function index()
     {
         return view('import')->with('exclusionLists', $this->importFileService->getExclusionList());
     }
-    
+
     public function import(Request $request, $listPrefix)
     {
         $this->initPhpSettings();
-        
+
         return $this->importFileService->importFile($request->input('url'), $listPrefix, true);
     }
 

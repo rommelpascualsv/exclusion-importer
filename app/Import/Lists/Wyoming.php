@@ -36,11 +36,11 @@ class Wyoming extends ExclusionList
     public $dateColumns = [
         'exclusion_date' => 7
     ];
-    
+
     protected $npiColumnName = "npi";
-    
+
     public $shouldHashListName = true;
-    
+
     /**
      * Regular expression that identifies the NPI within a provider number string
      * Known formats are:
@@ -53,14 +53,14 @@ class Wyoming extends ExclusionList
         '/(NPI\s?(1\d{9})\b\s?;?)|(\b(1\d{9})\s?NPI)/',
         '/1\d{9}/'
     ];
-    
+
     private $providerRegex = [
         '/(NPI\s?(1\d{9})\b\s?;?)|(\b(1\d{9})\s?NPI)/',
         '/(^(,|;|\/)?\s?)|((,|;|\/)?\s?$)/' // Extra symbols at the start and end
     ];
-    
+
     protected $providerNumberColumnName = "provider_number";
-    
+
     public function preProcess()
     {
         $this->parse();
@@ -70,40 +70,39 @@ class Wyoming extends ExclusionList
     protected function parse()
     {
         $rows = preg_split('/(\r)?\n(\s+)?/', $this->data);
-        
+
         $data = [];
-        
+
         foreach ($rows as $row) {
-            
             $row = trim($row);
-            
+
             if (! $row || $this->isHeader($row)) {
                 continue;
             }
-            
+
             $columns = str_getcsv($row);
 //             $columns[] = ''; // placeholder for NPI column value. Value will be derived in postProcess()
-            
+
             if ($this->isContinuationOfPreviousRow($columns)) {
                 // Rows without any exclusion date are assumed to just be continuations
                 // of the data in the previous row. In this case, we should concatenate
                 // the data of the current row with the data of the previous row
                 $previousColumns = array_pop($data);
-                
+
                 $columns = $this->joinRowColumns($previousColumns, $columns);
             }
-            
+
             $data[] = $columns;
         }
-        
+
         $this->data = $data;
-        
+
         //Some post-processing that can only be done once we have the fully
         //parsed data
-        $this->data = array_map(function ($row){
+        $this->data = array_map(function ($row) {
             $row = array_map('trim', $row);
             return $this->handleRow($row);
-            
+
         }, $this->data);
     }
 
@@ -122,7 +121,7 @@ class Wyoming extends ExclusionList
         $exclusionDate = $columns[$this->dateColumns['exclusion_date']];
         return empty(trim($exclusionDate));
     }
-    
+
     /**
      * Appends the values of the given columns, i.e. columns2[0] is appended to
      * columns1[0], etc. This method assumes that both columns1 and columns2 are
@@ -134,14 +133,14 @@ class Wyoming extends ExclusionList
     private function joinRowColumns($columns1, $columns2)
     {
         $results = [];
-        
+
         for ($i = 0; $i < count($columns1); $i ++) {
             $results[] = $columns1[$i] . $columns2[$i];
         }
-        
+
         return $results;
     }
-    
+
     /**
      * Handles the data manipulation of an array record.
      *
@@ -151,13 +150,13 @@ class Wyoming extends ExclusionList
     private function handleRow($row)
     {
         $providerNoIndex = $this->getProviderNumberColumnIndex();
-        
+
         // set npi number array
         $row = PNHelper::setNpiValue($row, PNHelper::getNpiValue($row, $providerNoIndex, $this->npiRegEx));
-         
+
         // set provider number
         $row = PNHelper::setProviderNumberValue($row, PNHelper::getProviderNumberValue($row, $providerNoIndex, $this->providerRegex), $providerNoIndex);
-        
+
         return $row;
     }
 }

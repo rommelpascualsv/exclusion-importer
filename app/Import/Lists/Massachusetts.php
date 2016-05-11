@@ -22,40 +22,38 @@ class Massachusetts extends ExclusionList
         'reason',
         'effective_date'
     ];
-    
+
     public $shouldHashListName = true;
-    
+
     protected $npiColumnName = "npi";
-    
+
     /**
      * @inherit preProcess
      */
     public function preProcess()
     {
-    	$this->parse();
-    	parent::preProcess();
+        $this->parse();
+        parent::preProcess();
     }
-    
+
     /**
      * Parse the input data
      */
     private function parse()
     {
-    	$data = [];
-    	 
-    	// iterate each row
-    	foreach ($this->data as $row) {
-    	    
-    	    $npiColumnIndex = $this->getNpiColumnIndex();
-    	    
-    	    // set npi number array
-    	    $row = PNHelper::setNpiValue($row, PNHelper::getNpiValue($row, $npiColumnIndex), $npiColumnIndex);
-    	    	
-    	    $data[] = $row;
-    	}
-    	 
-    	// set back to global data
-    	$this->data = $data;
+        $data = [];
+
+        // iterate each row
+        foreach ($this->data as $row) {
+            $npiColumnIndex = $this->getNpiColumnIndex();
+
+            // set npi number array
+            $row = PNHelper::setNpiValue($row, PNHelper::getNpiValue($row, $npiColumnIndex), $npiColumnIndex);
+
+            $data[] = $row;
+        }
+
+        // set back to global data
+        $this->data = $data;
     }
-    
 }

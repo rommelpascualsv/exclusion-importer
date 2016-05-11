@@ -3,7 +3,7 @@
 namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
-use Laravel\Lumen\Console\Kernel as ConsoleKernel;
+use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
@@ -13,28 +13,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        '\App\Console\Commands\ImportSDN',
-        '\App\Console\Commands\ImportSam',
-        '\App\Console\Commands\DeleteOIGDuplicates',
-        '\App\Console\Commands\DeleteOPMExtras',
-        '\App\Console\Commands\MigrateSam',
-
-        '\App\Console\Commands\Nppes\Seed',
-        '\App\Console\Commands\Nppes\Update',
-        '\App\Console\Commands\Nppes\Deactivate',
-
-        '\App\Console\Commands\Taxonomy\Seed',
-        '\App\Console\Commands\Taxonomy\Clear',
-
-        '\App\Console\Commands\Njna\Seed',
-        '\App\Console\Commands\Njna\Clear',
-
-        '\App\Console\Commands\NJCredential\Seed',
-        '\App\Console\Commands\NJCredential\Update',
-
-        '\App\Console\Commands\MICna\Seed',
-        '\App\Console\Commands\MICna\Clear',
-    	'\App\Console\Commands\UpdateFiles'
+        // Commands\Inspire::class,
     ];
 
     /**
@@ -45,6 +24,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('updateFiles')->daily();
+        // $schedule->command('inspire')
+        //          ->hourly();
     }
 }

@@ -23,44 +23,43 @@ class California extends ExclusionList
         'active_period',
         'npi'
     ];
-    
+
     public $shouldHashListName = true;
-    
+
     protected $npiColumnName = "npi";
-    
+
     protected $providerNumberColumnName = "provider_numbers";
-    
+
     /**
      * @inherit preProcess
      */
     public function preProcess()
     {
-    	$this->parse();
-    	parent::preProcess();
+        $this->parse();
+        parent::preProcess();
     }
-    
+
     /**
      * Parse the input data
      */
     private function parse()
     {
-    	$data = [];
-    	
-    	// iterate each row
-    	foreach ($this->data as $row) {
-    	    
-    	    $providerNoIndex = $this->getProviderNumberColumnIndex();
-    	    
-    	    // set npi number array
-    	    $row = PNHelper::setNpiValue($row, PNHelper::getNpiValue($row, $providerNoIndex));
-    	    
-    	    // set provider number
-    	    $row = PNHelper::setProviderNumberValue($row, PNHelper::getProviderNumberValue($row, $providerNoIndex), $providerNoIndex);
-    	    
-    		$data[] = $row;
-    	}
-    	
-    	// set back to global data
-    	$this->data = $data;
+        $data = [];
+
+        // iterate each row
+        foreach ($this->data as $row) {
+            $providerNoIndex = $this->getProviderNumberColumnIndex();
+
+            // set npi number array
+            $row = PNHelper::setNpiValue($row, PNHelper::getNpiValue($row, $providerNoIndex));
+
+            // set provider number
+            $row = PNHelper::setProviderNumberValue($row, PNHelper::getProviderNumberValue($row, $providerNoIndex), $providerNoIndex);
+
+            $data[] = $row;
+        }
+
+        // set back to global data
+        $this->data = $data;
     }
 }

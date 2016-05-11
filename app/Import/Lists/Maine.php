@@ -69,11 +69,10 @@ class Maine extends ExclusionList
         $finalData = [];
 
         foreach ($this->data as $values) {
-
             $arrayWithKeyNames = array_combine($this->originalFieldNames, $values);
 
             $filteredArray = $this->removeBadColumns($arrayWithKeyNames);
-            
+
             unset($arrayWithKeyNames);
 
             $arrayWithEntities = $this->moveEntitiesToNewColumn($filteredArray);
@@ -135,11 +134,7 @@ class Maine extends ExclusionList
         $akaName = [];
 
         foreach ($akaColumns as $akaGroup) {
-
-            if (
-                (empty($akaGroup[0]) OR $akaGroup[0] == "N/A") AND
-                (empty($akaGroup[1]) OR $akaGroup[0] == "N/A")
-            ) {
+            if ((empty($akaGroup[0]) or $akaGroup[0] == "N/A") and (empty($akaGroup[1]) or $akaGroup[0] == "N/A")) {
                 continue;
             }
 

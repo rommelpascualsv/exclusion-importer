@@ -6,14 +6,14 @@ use App\Import\Service\File\CsvFileReader;
 class DataCsvConverter
 {
     /**
-     * @var	\App\Import\Service\File\FileReader	$fileReader
+     * @var \App\Import\Service\File\FileReader $fileReader
      */
     protected $fileReader;
 
     /**
      * Constructor
      *
-     * @param	CsvFileReader	$fileReader
+     * @param   CsvFileReader   $fileReader
      */
     public function __construct(CsvFileReader $fileReader)
     {
@@ -23,9 +23,9 @@ class DataCsvConverter
     /**
      * Fill the ExclusionList object's data property
      *
-     * @param	ExclusionList	$list
-     * @param	$data
-     * @return	ExclusionList
+     * @param   ExclusionList   $list
+     * @param   $data
+     * @return  ExclusionList
      */
     public function convertData(ExclusionList $list, $data)
     {
@@ -37,13 +37,13 @@ class DataCsvConverter
     /**
      * Convert a file to csv
      *
-     * @param	string	$fileContent
-     * @param	string	$prefix
-     * @return	string
+     * @param   string  $fileContent
+     * @param   string  $prefix
+     * @return  string
      */
     protected function convertDataToCsvFile($fileContent, $prefix)
     {
-//        $directory = storage_path('app') . '/' . $prefix . '_files';
+        //        $directory = storage_path('app') . '/' . $prefix . '_files';
 //
 //        if ( ! is_dir($directory))
 //        {

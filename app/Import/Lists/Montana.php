@@ -9,11 +9,11 @@ class Montana extends ExclusionList
     public $type = 'html';
 
     public $retrieveOptions = [
-    		'htmlFilterElement' => 'div > table',
-    		'rowElement'        => 'tr',
-    		'columnElement'     => 'td',
-    		'headerRow'         => 0,
-    		'offset'            => 0
+        'htmlFilterElement' => 'div > table',
+        'rowElement'        => 'tr',
+        'columnElement'     => 'td',
+        'headerRow'         => 0,
+        'offset'            => 0
     ];
 
     public $fieldNames = [

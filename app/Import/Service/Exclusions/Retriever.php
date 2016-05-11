@@ -1,4 +1,4 @@
-<?php namespace app\Import\Service\Exclusions;
+<?php namespace App\Import\Service\Exclusions;
 
 use App\Import\Lists\ExclusionList;
 
