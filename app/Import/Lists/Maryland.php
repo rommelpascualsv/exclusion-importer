@@ -1,14 +1,10 @@
 <?php namespace App\Import\Lists;
 
-
-use Symfony\Component\DomCrawler\Crawler;
-
 class Maryland extends ExclusionList
 {
-
     public $dbPrefix = 'md1';
 
-    public $uri;
+    public $uri = "http://dhmh.maryland.gov/oig/Documents/04_28_16_Exclusion_Update.xls";
 
     public $type = 'xls';
 
@@ -24,22 +20,10 @@ class Maryland extends ExclusionList
         'sanction_type',
         'sanction_date',
         'address',
-        'city_state_zip',
+        'city_state_zip'
     ];
 
-
-    public function __construct()
-    {
-        $this->getUri();
-    }
-
-
-    protected function getUri()
-    {
-        $crawler = new Crawler(file_get_contents('https://mmcp.dhmh.maryland.gov/SitePages/Provider%20Information.aspx'));
-
-        $link = $crawler->filter('#Column560 > div > h1 > div > ul:nth-child(11) > li:nth-child(4) > a')->attr('href');
-
-        $this->uri = $link;
-    }
+    public $dateColumns = [
+    	'sanction_date' => 4
+    ];
 }

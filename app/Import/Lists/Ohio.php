@@ -1,25 +1,19 @@
 <?php namespace App\Import\Lists;
 
-
-//TODO: unset two columns
+use \App\Import\Lists\ProviderNumberHelper as PNHelper;
 
 class Ohio extends ExclusionList
 {
-
     public $dbPrefix = 'oh1';
-
 
     public $uri = 'http://medicaid.ohio.gov/Portals/0/Providers/Enrollment%20and%20Support/ExclusionSuspensionList.xlsx';
 
-
     public $type = 'xlsx';
-
 
     public $retrieveOptions = [
         'headerRow' => 0,
         'offset' => 1
     ];
-
 
     public $fieldNames = [
         'last_name',
@@ -37,7 +31,8 @@ class Ohio extends ExclusionList
         'action_date',
         'date_added',
         'provider_type',
-        'date_revised'
+        'date_revised',
+        'provider_number'
     ];
 
     public $hashColumns = [
@@ -49,7 +44,7 @@ class Ohio extends ExclusionList
         'npi',
         'provider_id',
         'status',
-        'action_date',
+        'action_date'
     ];
 
     public $dateColumns = [
@@ -59,9 +54,43 @@ class Ohio extends ExclusionList
         'date_added' => 13,
         'date_revised' => 15,
     ];
-
-    public function postHook()
+    
+    public $shouldHashListName = true;
+    
+    protected $npiColumnName = "npi";
+    
+    /**
+     * @inherit preProcess
+     */
+    public function preProcess()
     {
-        app('db')->statement('UPDATE oh1_records SET npi = NULL WHERE npi = 0');
+    	$this->parse();
+    	parent::preProcess();
+    }
+    
+    /**
+     * Parse the input data
+     */
+    private function parse()
+    {
+    	$data = [];
+    	 
+    	// iterate each row
+    	foreach ($this->data as $row) {
+    		
+    	    $npiColumnIndex = $this->getNpiColumnIndex();
+    	    
+    	    // set provider number
+    	    $row = PNHelper::setProviderNumberValue($row, PNHelper::getProviderNumberValue($row, $npiColumnIndex));
+    	    	
+    	    // set npi number array
+    	    $row = PNHelper::setNpiValue($row, PNHelper::getNpiValue($row, $npiColumnIndex), $npiColumnIndex);
+    	    	
+    	    // populate the array data
+    	    $data[] = $row;
+    	}
+    	 
+    	// set back to global data
+    	$this->data = $data;
     }
 }

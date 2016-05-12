@@ -55,26 +55,35 @@
             <table class="table table-striped">
                 <tr>
                     <th>List</th>
+                    <th>Description</th>
                     <th>URL</th>
-                    <th>Update</th>
+                    <th>Start Update</th>
+                    <th>Update Required</th>
                 </tr>
+                <form name="importForm" method="get">
                 <?php
                 foreach ($exclusionLists as $prefix => $info)
                 {
                     ?>
                     <tr>
                         <td><?= $info[0] ?></td>
-                        <td class="url" contenteditable="true"><?= $info['import_url'] ?></td>
+                        <td><?= $info['description'] ?></td>
                         <td>
-                            <button type="button" data-action="/import/<?= $info['prefix'] ?>"
-                                    class="start-btn btn btn-1g btn-default">Start
-                            </button>
+                        	<input class="url text_<?= $info['prefix'] ?>" type="text" name="text_<?= $info['prefix'] ?>" value="<?= $info['import_url'] ?>" />
                         </td>
+                        <td>
+                            <?php 
+                            	$disabled = empty($info['import_url']) ? "disabled" : "";
+							?>
+							<input <?= $disabled ?> type="button" value="Start" data-action="/import/<?= $info['prefix'] ?>" class="start-btn btn btn-1g btn-default" />
+                        </td>
+                        <td class="readyForUpdate"><?= $info['ready_for_update'] === 'N' ? 'No' : 'Yes' ?></td>
                     </tr>
                     <?php
                 }
 
                 ?>
+                </form>
             </table>
         </div>
 

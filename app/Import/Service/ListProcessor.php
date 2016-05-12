@@ -4,12 +4,10 @@ use App\Import\Lists\ExclusionList;
 
 class ListProcessor
 {
-
 	/**
 	 * @var	ExclusionList	$exclusionList
 	 */
 	protected $exclusionList;
-
 
 	/**
 	 * Constructor
@@ -34,27 +32,20 @@ class ListProcessor
 			throw new \InvalidArgumentException('The exclusion list contains no data');
     }
 
-
 	/**
 	 * Insert ALL THE THINGS!
 	 */
 	public function insertRecords()
     {
-        $this->exclusionList->data = $this->exclusionList->preProcess($this->exclusionList->data);
-
-        $this->exclusionList->data = $this->convertToAssoc($this->exclusionList->data);
-
-        $this->exclusionList->data = $this->exclusionList->postProcess($this->exclusionList->data);
+        $this->exclusionList->preProcess();
+        $this->exclusionList->postProcess();
 
         $this->createNewTable();
-
         $this->populateNewTable();
-
         $this->activateNewTable();
 
         $this->exclusionList->postHook();
     }
-
 
 	/**
 	 * CREATE a new table temporarily to store the new inserts
@@ -65,30 +56,24 @@ class ListProcessor
         app('db')->statement('CREATE TABLE  `' . $this->exclusionList->dbPrefix . '_records_new` LIKE `' . $this->exclusionList->dbPrefix . '_records`');
     }
 
-
 	/**
 	 * INSERT data into the temporary table
 	 */
 	private function populateNewTable()
     {
-		$records = $this->exclusionList->data;
+        $records = $this->exclusionList->data;
 
-        app('db')->transaction(function() use($records) {
-            foreach ($records as &$record)
-            {
+        app('db')->transaction(function () use ($records) {
+            foreach ($records as &$record) {
                 $hash = $this->getHash($record);
-
                 $record['hash'] = hex2bin($hash);
-
                 app('db')->table($this->exclusionList->dbPrefix . '_records_new')
                     ->insert($record);
             }
-
         });
 
         app('db')->commit();
     }
-
 
 	/**
 	 * DROP the currently active table
@@ -106,7 +91,6 @@ class ListProcessor
         app('db')->statement('DROP TABLE IF EXISTS `' . $this->exclusionList->dbPrefix . '_records_old`');
     }
 
-
     /**
      * Get a hash of a record
      *
@@ -115,17 +99,14 @@ class ListProcessor
      */
     protected function getHash(array $record)
     {
-        if (empty($this->exclusionList->hashColumns))
-        {
+        if (empty($this->exclusionList->hashColumns)) {
             $this->exclusionList->hashColumns = $this->exclusionList->fieldNames;
         }
 
         $hashData = [];
 
-        foreach ($record as $key => $value)
-        {
-            if (in_array($key, $this->exclusionList->hashColumns))
-            {
+        foreach ($record as $key => $value) {
+            if (in_array($key, $this->exclusionList->hashColumns)) {
                 $hashData[] = $value;
             }
         }
@@ -134,22 +115,11 @@ class ListProcessor
 
         //adds the exclusion list prefix to the hash to avoid having identical hashes in different lists
         if ($this->exclusionList->shouldHashListName) {
-
             $listName = trim(strtoupper($this->exclusionList->dbPrefix));
 
             $string .= $listName;
         }
 
         return md5($string);
-    }
-
-
-    protected function convertToAssoc($data)
-    {
-        return array_map(function($item) {
-
-            return array_combine($this->exclusionList->fieldNames, $item);
-
-        }, $data);
     }
 }

@@ -10,18 +10,15 @@ use App\Import\Service\DataCsvConverter;
  */
 class CSVRetriever extends Retriever
 {
-
     /**
      * @var \App\Import\Service\DataCsvConverter
      */
     protected $dataConverter;
 
-
-	/**
-	 * @var	\GuzzleHttp\Client	$httpClient
-	 */
-	protected $httpClient;
-
+    /**
+     * @var \GuzzleHttp\Client  $httpClient
+     */
+    protected $httpClient;
 
     /**
      * Constructor
@@ -29,42 +26,39 @@ class CSVRetriever extends Retriever
      * @param    DataCsvConverter $dataConverter
      * @param    Client $httpClient
      */
-	public function __construct(DataCsvConverter $dataConverter, Client $httpClient)
+    public function __construct(DataCsvConverter $dataConverter, Client $httpClient)
     {
         $this->dataConverter = $dataConverter;
         $this->httpClient = $httpClient;
     }
 
-
     /**
-	 * Retrieve the data from a remote source
-	 *
-     * @param	ExclusionList	$list
-     * @return	ExclusionList
+     * Retrieve the data from a remote source
+     *
+     * @param   ExclusionList   $list
+     * @return  ExclusionList
      */
     public function retrieveData(ExclusionList $list)
     {
+        $data = [];
 
-        if ($this->uriIsRemote($list->uri))
-        {
-            $response = $this->httpClient->get($list->uri);
-            $contents = $response->getBody();
+        // Implement multiple file upload use comma searated
+        $uri = $this->multipleUri($list->uri);
+
+        foreach ($uri as $key => $value) {
+
+            if ($this->uriIsRemote($value)) {
+                $response = $this->httpClient->get($value, ['verify' => false]);
+                $contents = $response->getBody();
+            } else {
+                $contents = file_get_contents($value);
+            }
+
+            $data = array_merge($data, $this->dataConverter->convertData($list, $contents));
         }
-        else
-        {
-            $contents = file_get_contents($list->uri);
-        }
 
-        $list->data = $this->dataConverter->convertData($list, $contents);
-
-        if (count($list->dateColumns) > 0)
-        {
-            $list->data = $this->convertDatesToMysql($list->data, $list->dateColumns);
-        }
-
-        return $list;
+        return $data;
     }
-
 
     /**
      * @param $uri
@@ -74,5 +68,4 @@ class CSVRetriever extends Retriever
     {
         return filter_var($uri, FILTER_VALIDATE_URL);
     }
-
 }

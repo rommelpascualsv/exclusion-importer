@@ -4,9 +4,7 @@ use League\Csv\Reader;
 
 class CsvFileReader implements FileReader
 {
-
     protected $csvReader;
-
 
     public function readRecords($fileName, $options = array())
     {
@@ -16,6 +14,4 @@ class CsvFileReader implements FileReader
 
         return $csvReader->fetchAll();
     }
-
 }
-

@@ -21,4 +21,7 @@ sudo sed -i "s/display_errors = .*/display_errors = On/" /etc/php5/fpm/php.ini
 curl -sS https://getcomposer.org/installer | php
 sudo mv composer.phar /usr/local/bin/composer
 
+#install pear
+sudo apt-get install php-pear
+
 sudo service php5-fpm restart

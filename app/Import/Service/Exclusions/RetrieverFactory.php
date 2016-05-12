@@ -12,14 +12,16 @@ class RetrieverFactory
         'csv' => 'csv',
         'xls' => 'csv',
         'xlsx' => 'csv',
+        'tsv' => 'csv',
         'html' => 'html',
         'pdf' => 'pdf',
         'xml'  => 'xml',
+        'custom'  => 'custom',
     ];
 
-    public function make($type) {
+    public function make($type)
+    {
         if (array_key_exists($type, $this->retrieverMappings)) {
-
             $retrieverType =  $this->retrieverMappings[$type];
 
             return $this->getRetriever($retrieverType);
@@ -30,13 +32,13 @@ class RetrieverFactory
 
     private function getRetriever($retrieverType)
     {
-        switch($retrieverType) {
+        switch ($retrieverType) {
             case 'pdf':
                 return new PDFRetriever(new Client());
 
                 break;
 
-            case 'csv';
+            case 'csv':
                 return new CSVRetriever(
                     new DataCsvConverter(new CsvFileReader()),
                     new Client()
@@ -51,11 +53,15 @@ class RetrieverFactory
 
                 break;
 
+            case 'custom':
+                return new CustomRetriever();
+
+                break;
+
             case 'xml':
                 return new XmlRetriever();
 
                 break;
         }
     }
-
 }

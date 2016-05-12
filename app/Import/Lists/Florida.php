@@ -1,5 +1,6 @@
 <?php namespace App\Import\Lists;
 
+use \App\Import\Lists\ProviderNumberHelper as PNHelper;
 
 class Florida extends ExclusionList
 {
@@ -46,6 +47,39 @@ class Florida extends ExclusionList
 
     public $shouldHashListName = true;
 
+    protected $npiColumnName = "npi_number";
+    
+    /**
+     * @inherit preProcess
+     */
+    public function preProcess()
+    {
+    	$this->parse();
+    	parent::preProcess();
+    }
+    
+    /**
+     * Parse the input data
+     */
+    private function parse()
+    {
+    	$data = [];
+    	
+    	// iterate each row
+    	foreach ($this->data as $row) {
+    	    
+    	    $npiColumnIndex = $this->getNpiColumnIndex();
+    	    
+    	    // set npi number array
+    	    $row = PNHelper::setNpiValue($row, PNHelper::getNpiValue($row, $npiColumnIndex), $npiColumnIndex);
+    	     
+    	    $data[] = $row;
+    	}
+    
+    	// set back to global data
+    	$this->data = $data;
+    }
+    
     public function postHook()
     {
         app('db')->table('fl2_records')

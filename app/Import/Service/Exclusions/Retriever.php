@@ -1,11 +1,9 @@
-<?php namespace App\Import\Service\Exclusions;
-
+<?php namespace app\Import\Service\Exclusions;
 
 use App\Import\Lists\ExclusionList;
 
 abstract class Retriever
 {
-
     /**
      * Retrieve the data and fill the passed object's data property
      * @param ExclusionList $list
@@ -13,27 +11,13 @@ abstract class Retriever
      */
     abstract public function retrieveData(ExclusionList $list);
 
-
-    public function convertDatesToMysql($data, $dateColumns)
+    public function multipleUri($uri)
     {
-        return array_map(function($row) use ($dateColumns) {
+        $url = explode(',', $uri);
 
-            foreach ($dateColumns as $index)
-            {
-                if (strtotime($row[$index]))
-                {
-                    $date = new \DateTime($row[$index]);
-                    $row[$index] = $date->format('Y-m-d');
-                }
-                else
-                {
-                    $row[$index] = null;
-                }
-            }
+        return array_map(function ($item) {
+            return trim($item);
+        }, $url);
 
-            return $row;
-
-        }, $data);
     }
-
 }

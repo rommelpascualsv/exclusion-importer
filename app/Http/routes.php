@@ -15,6 +15,7 @@ $app->get('/', function () use ($app) {
     return view('hello');
 });
 
+# exclusion_importer routes
 $app->get('import/createOldTables', 'ImportController@createOldTables');
 $app->get('import/{listPrefix}', 'ImportController@import');
 $app->get('import', 'ImportController@index');

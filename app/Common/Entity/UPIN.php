@@ -1,18 +1,15 @@
 <?php namespace App\Common\Entity;
 
-
 /**
  * Class UPIN
  * @package SLV\Common\Entities
  */
-class UPIN {
-
-
+class UPIN 
+{
 	/**
 	 * @var	string	$value
 	 */
 	private $value;
-
 
 	/**
 	 * @param	string	$upin
@@ -26,7 +23,6 @@ class UPIN {
 		$this->value = $upin;
 	}
 
-
 	/**
 	 * @description
 	 * To string Magic Method
@@ -38,4 +34,3 @@ class UPIN {
 		return (string) $this->value;
 	}
 }
-  

@@ -40,12 +40,17 @@ class FDADebarmentList extends ExclusionList
         'term_of_debarment'
     ];
 
-    public function preProcess($data)
+    public function preProcess()
+    {
+        $this->parse();
+        parent::preProcess();
+    }
+    
+    private function parse()
     {
         $replacableStrings = [
             '^'                            => ' Mandatory Debarment',
             '%'                            => ' Permissive Debarment',
-            '*'                            => ' Hearing requested and denied',
             '#'                            => ' Acquiesced to Debarment',
             '+'                            => ' Special Termination of Debarment',
             '++'                           => ' Order to Withdraw Order of Debarment',
@@ -54,35 +59,36 @@ class FDADebarmentList extends ExclusionList
             'a.k.a.'                       => '~',
             'NMI'                          => '',
             'One person removed from list' => '',
-            '**'                           => '',
-            '***'                          => '',
             '****'                         => '',
-
+            '***'                          => '',
+            '**'                           => '',
+            '*'                            => ' Hearing requested and denied',
+            '('                            => '',
+            ')'                            => '',
+        
         ];
-
-        foreach ($data as $key => &$record) {
+        
+        foreach ($this->data as $key => &$record) {
             $stringOfRecord = implode('~', $record);
-
+        
             $newStringOfRecord = str_replace(
                 array_keys($replacableStrings),
                 array_values($replacableStrings),
                 $stringOfRecord
-            );
-
+                );
+        
             $record = explode('~', $newStringOfRecord);
-
+        
             if (trim($record[0], chr(0xC2).chr(0xA0)) == '') {
-                unset($data[$key]);
+                unset($this->data[$key]);
                 continue;
             }
-
+        
             if (count($record) == 5) {
                 array_splice($record, 1, 0, '');
             }
-
+        
             array_pop($record);
         }
-
-        return $data;
     }
 }

@@ -16,7 +16,6 @@ class XmlRetriever extends Retriever
         return $item;
     }
 
-
     /**
      * Retrieve the data and fill the passed object's data property
      *
@@ -25,33 +24,38 @@ class XmlRetriever extends Retriever
      */
     public function retrieveData(ExclusionList $list)
     {
-        $client = new Client([
-            'base_uri' => $list->uri
-        ]);
+        $datas = [];
 
-        $response = $client->request('GET', $list->urlSuffix, $list->requestOptions);
+        // Implement multiple file upload use comma searated
+        $uri = $this->multipleUri($list->uri);
 
-        $body = $response->getBody()->getContents();
+        foreach ($uri as $key => $value) {
+            $client = new Client([
+                'base_uri' => $list->uri
+            ]);
 
-        $xml = simplexml_load_string($body);
+            $response = $client->request('GET', $list->urlSuffix, $list->requestOptions);
 
-        foreach ($xml->{$list->nodes['title']}->{$list->nodes['subject']} as $node) {
-            $linesItem = [];
-            foreach ($list->nodeMap as $line) {
-                $linesItem[] = (is_array($line)) ? $list->$line[0]($node) : $this->prepareItem($node->{$line});
+            $body = $response->getBody()->getContents();
+
+            $xml = simplexml_load_string($body);
+            $data = [];
+            foreach ($xml->{$list->nodes['title']}->{$list->nodes['subject']} as $node) {
+                $linesItem = [];
+                foreach ($list->nodeMap as $line) {
+                    $linesItem[] = (is_array($line)) ? $list->$line[0]($node) : $this->prepareItem($node->{$line});
+                }
+
+                $data[] = $linesItem;
             }
 
-            $list->data[] = $linesItem;
+            if ($list->retrieveOptions['headerRow'] == 1) {
+                array_shift($data);
+            }
+
+            $datas = array_merge($datas, $data);
         }
 
-        if ($list->retrieveOptions['headerRow'] == 1) {
-            array_shift( $list->data);
-        }
-
-        if (count($list->dateColumns) > 0) {
-            $list->data = $this->convertDatesToMysql($list->data, $list->dateColumns);
-        }
-
-        return $list;
+        return $datas;
     }
 }

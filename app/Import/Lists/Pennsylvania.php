@@ -1,11 +1,9 @@
 <?php namespace App\Import\Lists;
 
-
 //TODO: unset a bunch of columns
 
 class Pennsylvania extends ExclusionList
 {
-
     public $dbPrefix = 'pa1';
 
     public $isExcel = false;
@@ -14,12 +12,10 @@ class Pennsylvania extends ExclusionList
 
     public $type = 'txt';
 
-
     public $retrieveOptions = [
         'headerRow' => 0,
         'offset' => 1
     ];
-
 
     public $fieldNames = [
         'ProviderName',
@@ -59,9 +55,9 @@ class Pennsylvania extends ExclusionList
         'IDN_NPI',
     ];
 
-
     public $dateColumns = [
-        'BeginDate' => 4,
-        'ListDate' => 7,
+        'BeginDate' => 3,
+        'EndDate' => 4,
+        'ListDate' => 6,
     ];
 }

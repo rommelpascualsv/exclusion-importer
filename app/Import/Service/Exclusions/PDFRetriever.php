@@ -5,7 +5,6 @@ use GuzzleHttp\Client;
 
 class PDFRetriever extends Retriever
 {
-
     /**
      * @param \GuzzleHttp\Client $httpClient
      */
@@ -14,31 +13,52 @@ class PDFRetriever extends Retriever
         $this->httpClient = $httpClient;
     }
 
-
     /**
      * @var    \GuzzleHttp\client $httpClient
      */
     protected $httpClient;
 
+    protected $url;
 
     public function retrieveData(ExclusionList $list)
     {
-        $folder = storage_path('app');
+        $data = [];
+        // Implement multiple file upload use comma searated
+        $uri = $this->multipleUri($list->uri);
 
-        $file = "{$folder}/{$list->dbPrefix}.pdf";
+        foreach ($uri as $key => $value) {
+            $folder = storage_path('app');
 
-        $this->httpClient->get($list->uri, ['sink' => $file]);
+            if ($this->uriIsRemote($value)) {
+                $file = "{$folder}/{$list->dbPrefix}-{$key}.pdf";
+                $this->httpClient->get($value, ['sink' => $file]);
+            } else {
+                $file = $value;
+            }
 
-        $contents = shell_exec($list->pdfToText . ' ' . $file . ' -');
-
-        $list = $list->parse($contents);
-
-        if (count($list->dateColumns) > 0)
-        {
-            $list->data = $this->convertDatesToMysql($list->data, $list->dateColumns);
+            if (strpos($list->pdfToText, "pdftotext") !== false) {
+                $contents = shell_exec($list->pdfToText . ' ' . $file . ' -');
+            } else {
+                $contents = shell_exec($list->pdfToText . ' ' . $file);
+            }
+            // Merge Data
+            $data[] = $contents;
         }
 
-        return $list;
+        // If single item return array element
+        if (count($data) === 1) {
+            return $data[0];
+        }
+
+        return $data;
     }
 
+    /**
+     * @param $uri
+     * @return mixed
+     */
+    private function uriIsRemote($uri)
+    {
+        return filter_var($uri, FILTER_VALIDATE_URL);
+    }
 }

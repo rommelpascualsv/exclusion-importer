@@ -1,6 +1,5 @@
 <?php namespace App\Import\Service\Exclusions;
 
-
 use GuzzleHttp\Client;
 use App\Import\Lists\ExclusionList;
 use App\Import\Service\DataCsvConverter;
@@ -8,18 +7,15 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class HTMLRetriever extends Retriever
 {
-
     /**
      * @var \App\Import\Service\DataCsvConverter
      */
     protected $dataConverter;
 
-
     /**
      * @var \Symfony\Component\DomCrawler\Crawler
      */
     protected $domCrawler;
-
 
     /**
      * @param Crawler $domCrawler
@@ -31,7 +27,6 @@ class HTMLRetriever extends Retriever
         $this->dataConverter = $dataConverter;
     }
 
-
     /**
      * @param ExclusionList $list
      *
@@ -39,44 +34,43 @@ class HTMLRetriever extends Retriever
      */
     public function retrieveData(ExclusionList $list)
     {
-        $client = new Client([
-            'base_uri' => $list->uri
-        ]);
+        $data = [];
 
-        $response = $client->request('GET', $list->urlSuffix, $list->requestOptions);
+        // Implement multiple file upload use comma searated
+        $uri = $this->multipleUri($list->uri);
 
-        $body = $response->getBody()->getContents();
+        foreach ($uri as $key => $value) {
+            $client = new Client([
+                'base_uri' => $list->uri
+            ]);
 
-        $this->domCrawler->addHtmlContent($body);
+            $response = $client->request('GET', $list->urlSuffix, $list->requestOptions);
 
-        $table = $this->domCrawler->filter($list->retrieveOptions['htmlFilterElement']);
+            $body = $response->getBody()->getContents();
 
-        $columnsArray = $table->filter($list->retrieveOptions['rowElement'])->each(function (Crawler $node) use ($list)
-        {
-            return $node->filter($list->retrieveOptions['columnElement'])->each(function (Crawler $node)
-            {
-                return $node->text();
+            $this->domCrawler->addHtmlContent($body);
+
+            $table = $this->domCrawler->filter($list->retrieveOptions['htmlFilterElement']);
+
+            $columnsArray = $table->filter($list->retrieveOptions['rowElement'])->each(function (Crawler $node) use ($list) {
+                return $node->filter($list->retrieveOptions['columnElement'])->each(function (Crawler $node) {
+                    return $node->text();
+                });
             });
-        });
 
-        foreach ($columnsArray as $key => $value)
-        {
-            if ( ! array_filter($value))
-                unset($columnsArray[$key]);
+            foreach ($columnsArray as $key => $value) {
+                if (! array_filter($value)) {
+                    unset($columnsArray[$key]);
+                }
+            }
+
+            if ($list->retrieveOptions['headerRow'] == 1) {
+                array_shift($columnsArray);
+            }
+            // Merge data
+            $data = array_merge($data, $columnsArray);
         }
 
-        if ($list->retrieveOptions['headerRow'] == 1) {
-            array_shift($columnsArray);
-        }
-
-        $list->data = $columnsArray;
-
-        if (count($list->dateColumns) > 0)
-        {
-            $list->data = $this->convertDatesToMysql($list->data, $list->dateColumns);
-        }
-
-        return $list;
+        return $data;
     }
-
 }

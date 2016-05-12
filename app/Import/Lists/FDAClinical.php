@@ -41,7 +41,13 @@ class FDAClinical extends ExclusionList
     ];
 
 
-    public function preProcess($data)
+    public function preProcess()
+    {
+        $this->parse();
+        parent::preProcess();
+    }
+    
+    private function parse()
     {
         $removableSuffixes = [
             ', MD',
@@ -49,19 +55,17 @@ class FDAClinical extends ExclusionList
             ', PhD',
             ', DO',
         ];
-
+        
         $removableSuffixesAsString = "/" . implode('|', $removableSuffixes) . "/";
-
-        foreach ($data as &$record) {
+        
+        foreach ($this->data as &$record) {
             $record[0] = preg_replace_callback($removableSuffixesAsString, function () {
                 return '';
             }, $record[0]);
-
-            $record[4] = preg_replace('/1/', '', $record[4]);
-
-            $record = array_slice($record, 0, 8);
+        
+                $record[4] = preg_replace('/1/', '', $record[4]);
+        
+                $record = array_slice($record, 0, 8);
         }
-
-        return $data;
     }
 }

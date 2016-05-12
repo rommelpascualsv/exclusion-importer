@@ -1,9 +1,7 @@
 <?php namespace App\Import\Lists;
 
-
 class Arkansas extends ExclusionList
 {
-
     public $dbPrefix = 'ar1';
 
     public $uri = 'https://ardhs.sharepointsite.net/ExcludedProvidersList/Excluded%20Provider%20List.html';
@@ -21,8 +19,8 @@ class Arkansas extends ExclusionList
         'htmlFilterElement' => 'table',
         'rowElement'        => 'tr',
         'columnElement'     => 'td',
-        'headerRow'         => 1,
-        'offset'            => 2
+        'headerRow'         => 0,
+        'offset'            => 1
     ];
 
     public $fieldNames = [
@@ -33,5 +31,4 @@ class Arkansas extends ExclusionList
         'State',
         'Zip'
     ];
-
 }

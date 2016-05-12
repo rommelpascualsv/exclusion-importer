@@ -1,7 +1,7 @@
 <?php namespace App\Import\OFAC;
 
-class SDN {
-
+class SDN 
+{
 	/**
 	 * OFAC SDN source data (XML)
 	 *
@@ -141,8 +141,7 @@ class SDN {
 	public function getNormalizedData($key = NULL )
 	{
 		// If no key was passed or the passed key is not valid...
-		if ($key === NULL OR !array_key_exists($key, $this->normalizedData))
-		{
+		if ($key === NULL OR !array_key_exists($key, $this->normalizedData)) {
 			// return all normalized data
 			return $this->normalizedData;
 		}
@@ -155,8 +154,7 @@ class SDN {
 	{
 		if ( ! $this->isValidSdnTable($table) ) return;
 
-		foreach ($parsedSection as $section )
-		{
+		foreach ($parsedSection as $section ) {
 			$this->normalizedData[$table][] = $section;
 		}
 	}
@@ -171,8 +169,7 @@ class SDN {
 	protected function normalizeData()
 	{
 		// Open a loop for all entries
-		foreach ($this->arrayEntriesData as $key => $sdnEntry )
-		{
+		foreach ($this->arrayEntriesData as $key => $sdnEntry ) {
 			// Save the sdn_entry_id
 			$sdnEntryId = $sdnEntry['uid'];
 
@@ -196,70 +193,60 @@ class SDN {
 			// We will parse all known nested data sets
 
 			// Parse ProgramList
-			if ( isset($sdnEntry['programList']) )
-			{
+			if ( isset($sdnEntry['programList']) ) {
 				$programLists = $this->parseSection($sdnEntry['programList'], 'program', $sdnEntryId);
 				$this->addToNormalizedData($programLists, 'sdn_program_list');
 			}
 
 			// Parse idList
-			if ( isset($sdnEntry['idList']) )
-			{
+			if ( isset($sdnEntry['idList']) ) {
 				$idLists = $this->parseSection($sdnEntry['idList'], 'id', $sdnEntryId);
 				$this->addToNormalizedData($idLists, 'sdn_id_list');
 			}
 
 			// Parse akaList
-			if ( isset($sdnEntry['akaList']) )
-			{
+			if ( isset($sdnEntry['akaList']) ) {
 				$akaLists = $this->parseSection($sdnEntry['akaList'], 'aka', $sdnEntryId);
 				$this->addToNormalizedData($akaLists, 'sdn_aka_list');
 			}
 
 			// Parse addressList
-			if ( isset($sdnEntry['addressList']) )
-			{
+			if ( isset($sdnEntry['addressList']) ) {
 				$addressLists = $this->parseSection($sdnEntry['addressList'], 'address', $sdnEntryId);
 				$this->addToNormalizedData($addressLists, 'sdn_address_list');
 			}
 
 			// parse nationalityList
-			if ( isset($sdnEntry['nationalityList']) )
-			{
+			if ( isset($sdnEntry['nationalityList']) ) {
 				$nationalityLists= $this->parseSection($sdnEntry['nationalityList'], 'nationality', $sdnEntryId);
 				$this->addToNormalizedData($nationalityLists, 'sdn_nationality_list');
 			}
 
 			// Parse citizenShipList
-			if ( isset($sdnEntry['citizenshipList']) )
-			{
+			if ( isset($sdnEntry['citizenshipList']) ) {
 				$citizenshipList = $this->parseSection($sdnEntry['citizenshipList'], 'citizenship', $sdnEntryId);
 				$this->addToNormalizedData($citizenshipList, 'sdn_citizenship_list');
 			}
 
 			// Parse dateOfBirthList
-			if ( isset($sdnEntry['dateOfBirthList']) )
-			{
+			if ( isset($sdnEntry['dateOfBirthList']) ) {
 				$dateOfBirthList = $this->parseSection($sdnEntry['dateOfBirthList'], 'dateOfBirthItem', $sdnEntryId);
 				$this->addToNormalizedData($dateOfBirthList, 'sdn_date_of_birth_list');
 			}
 
 			// Parse placeOfBirthList
-			if ( isset($sdnEntry['placeOfBirthList']) )
-			{
+			if ( isset($sdnEntry['placeOfBirthList']) ) {
 				$placeOfBirthList = $this->parseSection($sdnEntry['placeOfBirthList'], 'placeOfBirthItem', $sdnEntryId);
 				$this->addToNormalizedData($placeOfBirthList, 'sdn_place_of_birth_list');
 			}
 
 			// Parse vessel info
-			if ( isset($sdnEntry['vesselInfo']) )
-			{
+			if ( isset($sdnEntry['vesselInfo']) ) {
 				$info = isset($this->parseVesselInfo($sdnEntry['vesselInfo'], $sdnEntryId)[0]) ? $this->parseVesselInfo($sdnEntry['vesselInfo'], $sdnEntryId)[0] : null;
 				$this->normalizedData['sdn_vessel_info'][] = $info;
 			}
 
 		} // End loop
-
 	}
 
 	/**
@@ -295,23 +282,18 @@ class SDN {
 		// In order to accommodate all formats of nested data sets (section), we do a few check
 		// to find a matching scenario.
 
-		if ( is_array($section[$mainKey]) )			// The passed section is an array
-		{
-			if ( isset($section[$mainKey][0]) )			// There is a 0th index would indicate more than one array in the set+
-			{
+		if ( is_array($section[$mainKey]) )	{		// The passed section is an array
+			if ( isset($section[$mainKey][0]) )	{		// There is a 0th index would indicate more than one array in the set+
 				// Open a loop of all arrays in the set
-				foreach ($section[$mainKey] as $row )
-				{
-					if ( is_array($row) )					// The value of this set is an array
-					{
+				foreach ($section[$mainKey] as $row) {
+					if ( is_array($row) ) {					// The value of this set is an array
 						// Add the sdn_entry_id to the rowe
 						$row['sdn_entry_id'] = $mainId;
 
 						// Add the row to the main array
 						$mainArray[] = $row;
 					}
-					else									// The value of this set is a string|int|bool|etc (not array)
-					{
+					else {									// The value of this set is a string|int|bool|etc (not array)
 						// Init a new row array
 						$newRow = [];
 
@@ -326,8 +308,7 @@ class SDN {
 					}
 				}
 			}
-			else											// No 0th element exists so only one array in the set
-			{
+			else {											// No 0th element exists so only one array in the set
 				// Add the sdn_entry_id to the one array in the section
 				$section[$mainKey]['sdn_entry_id'] = $mainId;
 
@@ -335,8 +316,7 @@ class SDN {
 				$mainArray[] = $section[$mainKey];
 			}
 		}
-		else											// The passed section is not an array
-		{
+		else {											// The passed section is not an array
 			/*
 			// Init a row array
 			$row = [];
@@ -347,8 +327,6 @@ class SDN {
 			// Add the singular value in the passed section to the row
 			$row[$main_key] = $section[$main_key];
 			*/
-
-
 
 			$row = $section;
 			$row['sdn_entry_id'] = $mainId;
@@ -370,17 +348,14 @@ class SDN {
 	public function saveToDatabase($key = NULL )
 	{
 		// If no key is passed or the passed key is not valid...
-		if ( $key === NULL OR ! array_key_exists($key, $this->normalizedData) )
-		{
+		if ( $key === NULL OR ! array_key_exists($key, $this->normalizedData) ) {
 			// Iterate over _normalized_data_array and save all
-			foreach ($this->normalizedData as $key => $value )
-			{
+			foreach ($this->normalizedData as $key => $value ) {
 				// Save the current sub-set
 				$this->save($key, $value);
 			}
 		}
-		else // A valid key was passed
-		{
+		else { // A valid key was passed
 			// Save only that index in the _normalized_data_array array
 			$this->save($key, $this->normalizedData[$key]);
 		}
@@ -395,23 +370,18 @@ class SDN {
 	 */
 	protected function save($table, $data )
 	{
-		if ( PHP_SAPI === 'cli' )
-		{
+		if ( PHP_SAPI === 'cli' ) {
 			echo "| - Saving table: {$table} ................ ";
 		}
 
-		foreach ( $data as $row )
-		{
+		foreach ( $data as $row ) {
 			$sql = "REPLACE INTO `%s` ( `%s` ) VALUES ( %s )";
 
-			foreach ( $row as $key => &$column )
-			{
-				if ( $key == 'mainEntry' )
-				{
+			foreach ( $row as $key => &$column ) {
+				if ( $key == 'mainEntry' ) {
 					$column = ( $column === 'true' ) ? 1 : 0 ;
 				}
-				else
-				{
+				else {
 					$column = app('db')->connection()->getPdo()->quote($column);
 				}
 			}
@@ -426,8 +396,7 @@ class SDN {
 			app('db')->statement($query);
 		}
 
-		if ( PHP_SAPI === 'cli' )
-		{
+		if ( PHP_SAPI === 'cli' ) {
 			echo " Saved!\n";
 		}
 
@@ -439,8 +408,7 @@ class SDN {
 	 */
 	public function truncateDatabase()
 	{
-		foreach ($this->normalizedData as $key => $value )
-		{
+		foreach ($this->normalizedData as $key => $value ) {
 			app('db')->table($key)->truncate();
 		}
 	}
@@ -456,5 +424,4 @@ class SDN {
 	{
 		return array_keys($this->normalizedData);
 	}
-
 }

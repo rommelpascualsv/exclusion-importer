@@ -1,17 +1,12 @@
 <?php namespace App\Import\Lists;
 
-
 class Maine extends ExclusionList
 {
-
     public $dbPrefix = 'me1';
-
 
     public $uri = "https://mainecare.maine.gov/PrvExclRpt/November%202015/PI0008-PM_Monthly_Exclusion_Report%20(csv).csv";
 
-
     public $type = 'csv';
-
 
     public $fieldNames = [
         'entity',
@@ -25,12 +20,8 @@ class Maine extends ExclusionList
     ];
 
     public $originalFieldNames = [
-        'ReportNumber',
-        'DateRun',
-        'ReportName',
-        'AsOfDate',
-        'LastName',
-        'FirstName',
+        'textbox22',
+        'ProvFirstName',
         'MiddleInitial',
         'AliasLastName1',
         'AliasFirstName1',
@@ -42,17 +33,15 @@ class Maine extends ExclusionList
         'AliasFirstName4',
         'ProvType',
         'CaseStatus',
-        'SanctionStartDate'
+        'SancStateStart'
     ];
-
 
     public $deleteColumns = [
-        'ReportNumber',
-        'DateRun',
-        'ReportName',
-        'AsOfDate',
+        'ItemHeading1',
+        'ItemValue1',
+        'ItemHeading',
+        'ItemValue',
     ];
-
 
     public $hashColumns = [
         'entity',
@@ -63,28 +52,28 @@ class Maine extends ExclusionList
         'sanction_start_date',
     ];
 
-
     public $retrieveOptions = [
         'headerRow' => 0,
-        'offset' => 1
+        'offset' => 5
     ];
 
 
     public $dateColumns = [
-        'sanction_start_date' => 17
+        'sanction_start_date' => 13
     ];
 
-    public function preProcess($data)
+    public function preProcess()
     {
+        parent::preProcess();
 
         $finalData = [];
 
-        foreach ($data as $values) {
+        foreach ($this->data as $values) {
 
             $arrayWithKeyNames = array_combine($this->originalFieldNames, $values);
 
             $filteredArray = $this->removeBadColumns($arrayWithKeyNames);
-
+            
             unset($arrayWithKeyNames);
 
             $arrayWithEntities = $this->moveEntitiesToNewColumn($filteredArray);
@@ -104,7 +93,7 @@ class Maine extends ExclusionList
             $finalData[] = $arrayWithEntities;
         }
 
-        return $finalData;
+        $this->data = $finalData;
     }
 
 
@@ -124,9 +113,9 @@ class Maine extends ExclusionList
      */
     protected function moveEntitiesToNewColumn($filteredArray)
     {
-        if (empty($filteredArray['FirstName'])) {
-            $filteredArray['Entity'] = $filteredArray['LastName'];
-            $filteredArray['LastName'] = '';
+        if (empty($filteredArray['ProvFirstName'])) {
+            $filteredArray['Entity'] = $filteredArray['textbox22'];
+            $filteredArray['textbox22'] = '';
         } else {
             $filteredArray['Entity'] = '';
         }
@@ -170,5 +159,4 @@ class Maine extends ExclusionList
 
         return $akaName;
     }
-
 }

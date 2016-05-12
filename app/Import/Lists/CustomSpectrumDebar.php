@@ -48,9 +48,9 @@ class CustomSpectrumDebar extends ExclusionList
         'offset' => 1
     ];
 
-    public function postProcess($data)
+    public function postProcess()
     {
-        return array_map(function($record) {
+        $this->data = array_map(function($record) {
             if ($record['ssn'] == null) {
                 $record['ssn_last_four'] = null;
                 return $record;
@@ -64,7 +64,6 @@ class CustomSpectrumDebar extends ExclusionList
                 $record['ssn_last_four'] = null;
             }
             return $record;
-        }, $data);
+        }, $this->data);
     }
-
 }

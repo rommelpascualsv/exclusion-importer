@@ -1,7 +1,7 @@
 <?php namespace App\Import\OFAC\SDN;
 
-class AKAList extends Query {
-
+class AKAList extends Query 
+{
 	/**
 	 * @var		string		$table
 	 * @access	protected
@@ -49,5 +49,4 @@ class AKAList extends Query {
 	 * @access	public
 	 */
 	public $firstName;
-
 }

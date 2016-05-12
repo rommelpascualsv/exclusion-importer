@@ -1,25 +1,20 @@
 <?php namespace App\Import\Lists;
 
-
 use Symfony\Component\DomCrawler\Crawler;
+use \App\Import\Lists\ProviderNumberHelper as PNHelper;
 
 class Kentucky extends ExclusionList
 {
-
     public $dbPrefix = 'ky1';
-
 
     public $uri;
 
-
     public $type = 'xls';
-
 
     public $retrieveOptions = [
         'headerRow' => 0,
         'offset' => 1
     ];
-
 
     public $fieldNames = [
         'first_name',
@@ -41,20 +36,22 @@ class Kentucky extends ExclusionList
         'effective_date',
     ];
 
-
     /**
      * @var array
      */
     public $dateColumns = [
         'effective_date' => 4
     ];
-
-
+    
+    public $shouldHashListName = true;
+    
+    protected $npiColumnName = "npi";
+    
     public function __construct()
     {
-        $this->getUri();
+        parent::__construct();
+        $this->uri = $this->getUri();
     }
-
 
     protected function getUri()
     {
@@ -62,6 +59,37 @@ class Kentucky extends ExclusionList
 
         $link = $crawler->filter('#section1ContentPlaceholderControl > ul:nth-child(5) > li > a:nth-child(3)')->attr('href');
 
-        $this->uri = 'http://chfs.ky.gov' . $link;
+        return 'http://chfs.ky.gov' . $link;
+    }
+    
+    /**
+     * @inherit preProcess
+     */
+    public function preProcess()
+    {
+    	$this->parse();
+    	parent::preProcess();
+    }
+    
+    /**
+     * Parse the input data
+     */
+    private function parse()
+    {
+    	$data = [];
+    	 
+    	// iterate each row
+    	foreach ($this->data as $row) {
+    	    
+    	    $npiColumnIndex = $this->getNpiColumnIndex();
+    	    	
+    	    // set npi number array
+    	    $row = PNHelper::setNpiValue($row, PNHelper::getNpiValue($row, $npiColumnIndex), $npiColumnIndex);
+    	    
+    	    $data[] = $row;
+    	}
+    	 
+    	// set back to global data
+    	$this->data = $data;
     }
 }

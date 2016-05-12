@@ -44,13 +44,14 @@ class PHS extends ExclusionList
         'middle_name',
         'debarment_until',
     ];
-
-    public function preProcess($data)
-    {
-        foreach ($data as &$record) {
-            array_splice($record, 7, 2);
-        }
-
-        return $data;
-    }
+    
+    /**
+     * Columns not included in schema
+     *
+     * @var array
+     */
+    public $ignoreColumns = [
+        'retraction_of_article' => 7,
+        'correction_of_article' => 8
+    ];
 }
