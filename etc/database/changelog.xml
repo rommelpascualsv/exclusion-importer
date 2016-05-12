@@ -26,4 +26,6 @@
             UPDATE `exclusion_lists` SET is_active = 0
        </rollback>
     </changeSet>
+    <include file="./changelog/svg-393.changelog.xml" 
+              relativeToChangelogFile="true"/>
 </databaseChangeLog>
