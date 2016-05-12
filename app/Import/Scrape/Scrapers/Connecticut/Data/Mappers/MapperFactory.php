@@ -5,6 +5,13 @@ namespace App\Import\Scrape\Scrapers\Connecticut\Data\Mappers;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\AmbulatorySurgicalCentersRecoveryCareCenters\AmbulatorySurgicalCenterMapper;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\ControlledSubstancesPractitionersLabsManufacturers\ControlledSubstanceLaboratoriesMapper;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\ControlledSubstancesPractitionersLabsManufacturers\ManufacturersDrugsCosmeticsMedicalDevicesMapper;
+use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\ChildDayCareLicensingProgram\ChildDayCareCentersAndGroupDayCareHomesClosedOneYear;
+use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\ChildDayCareLicensingProgram\ChildDayCareCentersAndGroupDayCareHomesOpenedOneYear;
+use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\ChildDayCareLicensingProgram\ChildDayCareCentersAndGroupDayCareHomesTotalByDateActive;
+use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\ChildDayCareLicensingProgram\FamilyDayCareHomesClosedOneYear;
+use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\ChildDayCareLicensingProgram\FamilyDayCareHomesOpenedOneYear;
+use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\ChildDayCareLicensingProgram\FamilyDayCareHomesTotalByDateActive;
+
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\HealthcarePractitioners\PhysicianSurgeonMdDoMapper;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\HealthcarePractitioners\PodiatristMapper;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\HemodialysisCenters\HemodialysisCentersMapper;
@@ -31,6 +38,18 @@ class MapperFactory
             'controlled_substance_laboratories' => ControlledSubstanceLaboratoriesMapper::class,
             'manufacturers_of_drugs_cosmetics_and_medical_devices' => ManufacturersDrugsCosmeticsMedicalDevicesMapper::class
         ],
+	    'child_day_care_licensing_program' => [
+	        'child_day_care_centers_and_group_day_care_homes_closed_1_year' => ChildDayCareCentersAndGroupDayCareHomesClosedOneYear::class,
+	        'child_day_care_centers_and_group_day_care_homes_closed_60_days' => ChildDayCareCentersAndGroupDayCareHomesClosedOneYear::class,
+	        'child_day_care_centers_and_group_day_care_homes_opened_1_year' => ChildDayCareCentersAndGroupDayCareHomesOpenedOneYear::class,
+	        'child_day_care_centers_and_group_day_care_homes_opened_60_days' => ChildDayCareCentersAndGroupDayCareHomesOpenedOneYear::class,
+	        'child_day_care_centers_and_group_day_care_homes_total_by_date_active' => ChildDayCareCentersAndGroupDayCareHomesTotalByDateActive::class,
+	        'family_day_care_homes_closed_1_year' => FamilyDayCareHomesClosedOneYear::class,
+	        'family_day_care_homes_closed_60_days' => FamilyDayCareHomesClosedOneYear::class,
+	        'family_day_care_homes_opened_1_year' => FamilyDayCareHomesOpenedOneYear::class,
+	        'family_day_care_homes_opened_60_days' => FamilyDayCareHomesOpenedOneYear::class,
+	        'family_day_care_homes_total_by_date_active' => FamilyDayCareHomesTotalByDateActive::class
+	    ],
         'healthcare_practitioners' => [
             'acupuncturist' => PodiatristMapper::class,
             'physician_surgeon_md_do' => PhysicianSurgeonMdDoMapper::class,
