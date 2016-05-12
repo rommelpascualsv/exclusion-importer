@@ -12,8 +12,6 @@ class CTLicenseTypesTableSeeder extends Seeder
      */
     public function run()
     {
-        
-        
         DB::table('ct_license_types')->delete();
         DB::table('ct_license_types')->insert([
             ["key"=>'ambulatory_surgical_center', "name" =>"Ambulatory Surgical Center", "created_at" => Carbon::now()->format("Y-m-d H:i:s"), "updated_at" => Carbon::now()->format("Y-m-d H:i:s"), "ct_license_categories_id" => "1"],

@@ -59,7 +59,7 @@ class CsvImporter
 			return;
 		}
 		
-		$mapper = MapperFactory::createByKeys($data['category'], $data['option']);
+		$mapper = MapperFactory::createByKeys($data['category'], $data['option'], $results[0]);
 		$licenseTypeId = $this->dbFindLicenseTypeIdByKey($data['option']);
 		
 		

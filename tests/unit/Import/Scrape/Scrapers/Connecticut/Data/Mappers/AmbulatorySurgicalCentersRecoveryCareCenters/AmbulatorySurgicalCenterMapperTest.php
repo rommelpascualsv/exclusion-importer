@@ -1,9 +1,9 @@
 <?php
 
-namespace Import\Scrape\Scrapers\Connecticut\Data\Mappers;
+namespace Import\Scrape\Scrapers\Connecticut\Data\Mappers\AmbulatorySurgicalCentersRecoveryCareCenters;
 
-use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\AmbulatorySurgicalCenterMapper;
-use App\Import\Scrape\Scrapers\Connecticut\CsvImporter;
+
+use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\AmbulatorySurgicalCentersRecoveryCareCenters\AmbulatorySurgicalCenterMapper;
 
 class AmbulatorySurgicalCenterMapperTest extends \Codeception\TestCase\Test
 {
@@ -20,51 +20,24 @@ class AmbulatorySurgicalCenterMapperTest extends \Codeception\TestCase\Test
     protected function _after()
     {	
     }
-
-    // tests
-    public function testGetCsvData()
-    {
-    	$data = [
-    			'SAINT FRANCIS GI ENDOSCOPY, LLC',
-    			'360 BLOOMFIELD AVE STE 204',
-    			'WINDSOR',
-    			'CT',
-    			'06095-2700',
-    			'321',
-    			'ACTIVE',
-    			'10/30/2008',
-    			'09/30/2016'
-    	];
-    	
-    	$actual = $this->mapper->getCsvData($data);
-    	$expected = [
-    			'facility_name' => 'SAINT FRANCIS GI ENDOSCOPY, LLC',
-    			'address' => '360 BLOOMFIELD AVE STE 204',
-    			'city' => 'WINDSOR',
-    			'state' => 'CT',
-    			'zip' => '06095-2700',
-    			'license_no' => '321',
-    			'status' => 'ACTIVE',
-    			'effective_date' => '10/30/2008',
-    			'expiration_date' => '09/30/2016'
-    	];
-    	
-    	$this->assertSame($expected, $actual);
-    }
     
+    /**
+     * To test that mapper's getDbData result will give as expected given a
+     * prepared data input.
+     */
     public function testGetDbData()
     {
     	$data = [
-    			'facility_name' => 'SAINT FRANCIS GI ENDOSCOPY, LLC',
-    			'address' => '360 BLOOMFIELD AVE STE 204',
-    			'city' => 'WINDSOR',
-    			'state' => 'CT',
-    			'zip' => '06095-2700',
-    			'license_no' => '321',
-    			'status' => 'ACTIVE',
-    			'effective_date' => '10/30/2008',
-    			'expiration_date' => '09/30/2016'
-    	];
+            'FACILITY NAME' => 'SAINT FRANCIS GI ENDOSCOPY, LLC',
+            'ADDRESS' => '360 BLOOMFIELD AVE STE 204',
+            'CITY' => 'WINDSOR',
+            'STATE' => 'CT',
+            'ZIP' => '06095-2700',
+            'LICENSE NO.' => '000321',
+            'STATUS' => 'ACTIVE',
+            'EFFECTIVE DATE' => '10/30/2008',
+            'EXPIRATION DATE' => '09/30/2016',
+        ];
     	 
     	$dbData = $this->mapper->getDbData($data);
     	 
@@ -78,7 +51,7 @@ class AmbulatorySurgicalCenterMapperTest extends \Codeception\TestCase\Test
             'county' => null,
             'state' => 'CT',
             'zip' => '06095-2700',
-            'license_no' => '321',
+            'license_no' => '000321',
             'license_effective_date' => '2008-10-30',
             'license_expiration_date' => '2016-09-30',
             'license_status' => 'ACTIVE',
@@ -88,18 +61,22 @@ class AmbulatorySurgicalCenterMapperTest extends \Codeception\TestCase\Test
     	$this->assertSame($expectedDbData, $dbData);
     }
     
+    /**
+     * To test that mapper's getDbData result for empty dates will result
+     * to a null value.
+     */
     public function testGetDbDataLicenseDatesEmpty()
     {
         $data = [
-            'facility_name' => 'SAINT FRANCIS GI ENDOSCOPY, LLC',
-            'address' => '360 BLOOMFIELD AVE STE 204',
-            'city' => 'WINDSOR',
-            'state' => 'CT',
-            'zip' => '06095-2700',
-            'license_no' => '321',
-            'status' => 'ACTIVE',
-            'effective_date' => '',
-            'expiration_date' => ''
+            'FACILITY NAME' => 'SAINT FRANCIS GI ENDOSCOPY, LLC',
+            'ADDRESS' => '360 BLOOMFIELD AVE STE 204',
+            'CITY' => 'WINDSOR',
+            'STATE' => 'CT',
+            'ZIP' => '06095-2700',
+            'LICENSE NO.' => '000321',
+            'STATUS' => 'ACTIVE',
+            'EFFECTIVE DATE' => '',
+            'EXPIRATION DATE' => '',
         ];
         
         $dbData = $this->mapper->getDbData($data);
@@ -114,7 +91,7 @@ class AmbulatorySurgicalCenterMapperTest extends \Codeception\TestCase\Test
             'county' => null,
             'state' => 'CT',
             'zip' => '06095-2700',
-            'license_no' => '321',
+            'license_no' => '000321',
             'license_effective_date' => null,
             'license_expiration_date' => null,
             'license_status' => 'ACTIVE',

@@ -42,9 +42,11 @@ abstract class BaseMapper implements MapperInterface
 	
 	/**
 	 * Initialize
+	 * @param array $csvHeaders
 	 */
-	public function __construct()
+	public function __construct(array $csvHeaders = [])
 	{
+	    $this->csvHeaders = $csvHeaders;
 		$this->csvHeadersCount = count($this->csvHeaders);
 	}
 	
@@ -85,7 +87,8 @@ abstract class BaseMapper implements MapperInterface
 	 * @param array $data
 	 * @return array
 	 */
-	protected function getRosterDbData(array $data) {
+	protected function getRosterDbData(array $data)
+	{
 	    $dbData = [];
 	    
 	    foreach (static::$dbColumns as $column) {
