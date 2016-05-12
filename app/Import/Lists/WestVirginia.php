@@ -10,11 +10,11 @@ class WestVirginia extends ExclusionList
     public $dbPrefix = 'wv2';
 
     /**
+     * The parser needs to work with multiple urls in this case
+     *
      * @var string
      */
-    public $uri = 'https://www.wvmmis.com/WV%20Medicaid%20Provider%20SanctionedExclusion/WV%20Medicaid%20Exclusions%20-%20March%20Posting.pdf,'.
-                  'https://www.wvmmis.com/WV%20Medicaid%20Provider%20SanctionedExclusion/WV%20Medicaid%20Provider%20Term%20-%20Exclusion%20Info%20Other%20-%20March%202016%20Posting.pdf,'.
-                  'https://www.wvmmis.com/WV%20Medicaid%20Provider%20SanctionedExclusion/WV%20Medicaid%20Terminations%20-%20March%202016%20Posting.pdf';
+    public $uri = 'https://www.wvmmis.com/WV%20Medicaid%20Provider%20SanctionedExclusion/WV%20Medicaid%20Exclusions%20-%20March%20Posting.pdf,https://www.wvmmis.com/WV%20Medicaid%20Provider%20SanctionedExclusion/WV%20Medicaid%20Provider%20Term%20-%20Exclusion%20Info%20Other%20-%20March%202016%20Posting.pdf,https://www.wvmmis.com/WV%20Medicaid%20Provider%20SanctionedExclusion/WV%20Medicaid%20Terminations%20-%20March%202016%20Posting.pdf';
 
     public $pdfToText = 'java -Dfile.encoding=utf-8 -jar ../etc/tabula.jar -p all -u -g -r'; //'pdftotext -layout -nopgbrk';
 
