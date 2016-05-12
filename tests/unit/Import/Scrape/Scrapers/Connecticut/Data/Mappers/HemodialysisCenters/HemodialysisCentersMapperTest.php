@@ -3,7 +3,6 @@
 namespace Import\Scrape\Scrapers\Connecticut\Data\Mappers\HemodialysisCenters;
 
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\HemodialysisCenters\HemodialysisCentersMapper;
-use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MapperFactory;
 use Codeception\TestCase\Test;
 use UnitTester;
 
@@ -63,13 +62,6 @@ class HemodialysisCentersMapperTest extends Test
         ];
 
         $this->assertSame($expectedDbData, $dbData);
-    }
-
-    public function testMapperFactoryInstance()
-    {
-        $mapper = MapperFactory::createByKeys('hemodialysis_centers', 'hemodialysis_centers');
-
-        $this->assertInstanceOf(HemodialysisCentersMapper::class, $mapper);
     }
 
 }

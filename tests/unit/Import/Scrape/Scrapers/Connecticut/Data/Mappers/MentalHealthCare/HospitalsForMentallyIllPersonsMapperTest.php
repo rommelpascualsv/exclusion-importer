@@ -2,7 +2,6 @@
 
 namespace Import\Scrape\Scrapers\Connecticut\Data\Mappers\MentalHealthCare;
 
-use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MapperFactory;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MentalHealthCare\HospitalsForMentallyIllPersonsMapper;
 use Codeception\TestCase\Test;
 use UnitTester;

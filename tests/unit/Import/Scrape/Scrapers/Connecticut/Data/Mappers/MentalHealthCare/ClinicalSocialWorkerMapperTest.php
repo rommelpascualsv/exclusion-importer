@@ -3,7 +3,6 @@
 namespace Import\Scrape\Scrapers\Connecticut\Data\Mappers\MentalHealthCare;
 
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MentalHealthCare\ClinicalSocialWorkerMapper;
-use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MapperFactory;
 use Codeception\TestCase\Test;
 use UnitTester;
 

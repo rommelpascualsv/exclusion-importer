@@ -2,7 +2,6 @@
 
 namespace Import\Scrape\Scrapers\Connecticut\Data\Mappers\MedicalMarijuanaProducerDispensaryFacilityDispensaryEtc;
 
-use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MapperFactory;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MedicalMarijuanaProducerDispensaryFacilityDispensaryEtc\MedicalMarijuanaDispensaryFacilityBackerLicenseMapper;
 use Codeception\TestCase\Test;
 use UnitTester;

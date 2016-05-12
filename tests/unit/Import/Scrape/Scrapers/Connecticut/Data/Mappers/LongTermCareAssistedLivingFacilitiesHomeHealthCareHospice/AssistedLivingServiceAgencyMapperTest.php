@@ -3,7 +3,6 @@
 namespace Import\Scrape\Scrapers\Connecticut\Data\Mappers\LongTermCareAssistedLivingFacilitiesHomeHealthCareHospice;
 
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\LongTermCareAssistedLivingFacilitiesHomeHealthCareHospice\AssistedLivingServiceAgencyMapper;
-use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MapperFactory;
 use Codeception\TestCase\Test;
 use UnitTester;
 

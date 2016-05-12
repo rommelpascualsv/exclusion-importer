@@ -3,7 +3,6 @@
 namespace Import\Scrape\Scrapers\Connecticut\Data\Mappers\InfirmariesClinics;
 
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\InfirmariesClinics\FamilyPlanningClinicsMapper;
-use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MapperFactory;
 use Codeception\TestCase\Test;
 use UnitTester;
 

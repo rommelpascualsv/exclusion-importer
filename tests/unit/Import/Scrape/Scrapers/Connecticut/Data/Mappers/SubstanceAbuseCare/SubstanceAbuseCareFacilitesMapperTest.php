@@ -2,7 +2,6 @@
 
 namespace Import\Scrape\Scrapers\Connecticut\Data\Mappers\SubstanceAbuseCare;
 
-use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MapperFactory;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\SubstanceAbuseCare\SubstanceAbuseCareFacilitesMapper;
 use Codeception\TestCase\Test;
 use UnitTester;

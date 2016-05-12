@@ -2,7 +2,6 @@
 
 namespace Import\Scrape\Scrapers\Connecticut\Data\Mappers\RegisteredSanitarian;
 
-use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MapperFactory;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\RegisteredSanitarian\RegisteredSanitarianMapper;
 use Codeception\TestCase\Test;
 use UnitTester;

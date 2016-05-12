@@ -1,14 +1,13 @@
 <?php
-
 namespace Import\Scrape\Scrapers\Connecticut\Data\Mappers\HealthcarePractitioners;
 
-use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\HealthcarePractitioners\PodiatristMapper;
+use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\HealthcarePractitioners\PhysicalTherapistMapper;
 use Codeception\TestCase\Test;
 use UnitTester;
 
-class PodiatristMapperTest extends Test
-{
 
+class PhysicalTherapistMapperTest extends Test
+{
     /**
      * @var UnitTester
      */
@@ -16,7 +15,7 @@ class PodiatristMapperTest extends Test
 
     protected function _before()
     {
-        $this->mapper = new PodiatristMapper();
+        $this->mapper = new PhysicalTherapistMapper();
     }
 
     protected function _after()
@@ -31,41 +30,40 @@ class PodiatristMapperTest extends Test
     public function testGetDbData()
     {
         $data = [
-            'LICENSE NO.' => '000014',
-            'FIRST NAME' => 'JAMES',
-            'LAST NAME' => 'BLUME',
-            'ADDRESS1' => '508 BLAKE ST',
+            'LICENSE NO.' => '000280',
+            'FIRST NAME' => 'CARMELA',
+            'LAST NAME' => 'ZANES',
+            'ADDRESS1' => '256 PECK LANE  #19',
             'ADDRESS2' => '',
-            'CITY' => 'NEW HAVEN',
+            'CITY' => 'ORANGE',
             'STATE' => 'CT',
-            'ZIP' => 'O6515-1287',
-            'COUNTY' => 'New Haven',
+            'ZIP' => 'O6477',
+            'COUNTY' => '',
             'STATUS' => 'ACTIVE',
             'REASON' => 'CURRENT',
-            'ISSUE DATE' => '10/03/1955',
-            'EXPIRATION DATE' => '03/31/2017'
+            'EFFECTIVE DATE' => '07/01/2016',
+            'EXPIRATION DATE' => '06/30/2017',
         ];
 
         $dbData = $this->mapper->getDbData($data);
 
         $expectedDbData = [
-            'first_name' => 'JAMES',
-            'last_name' => 'BLUME',
+            'first_name' => 'CARMELA',
+            'last_name' => 'ZANES',
             'business_name' => null,
-            'address1' => '508 BLAKE ST',
+            'address1' => '256 PECK LANE  #19',
             'address2' => null,
-            'city' => 'NEW HAVEN',
-            'county' => 'New Haven',
+            'city' => 'ORANGE',
+            'county' => null,
             'state' => 'CT',
-            'zip' => 'O6515-1287',
-            'license_no' => '000014',
-            'license_effective_date' => '1955-10-03',
-            'license_expiration_date' => '2017-03-31',
+            'zip' => 'O6477',
+            'license_no' => '000280',
+            'license_effective_date' => '2016-07-01',
+            'license_expiration_date' => '2017-06-30',
             'license_status' => 'ACTIVE',
             'license_status_reason' => 'CURRENT'
         ];
 
         $this->assertSame($expectedDbData, $dbData);
     }
-
 }
