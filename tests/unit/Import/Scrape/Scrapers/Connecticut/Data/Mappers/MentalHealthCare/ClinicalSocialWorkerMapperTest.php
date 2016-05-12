@@ -62,6 +62,10 @@ class ClinicalSocialWorkerMapperTest extends Test
         $this->assertSame($expected, $actual);
     }
 
+    /**
+     * To test that mapper's getDbData result will give as expected given a
+     * prepared data input.
+     */
     public function testGetDbData()
     {
         $data = [

@@ -65,6 +65,10 @@ class PhysicianSurgeonMdDoMapperTest extends \Codeception\TestCase\Test
         $this->assertSame($expected, $actual);
     }
 
+    /**
+     * To test that mapper's getDbData result will give as expected given a
+     * prepared data input.
+     */
     public function testGetDbData()
     {
         $data = [
@@ -106,11 +110,11 @@ class PhysicianSurgeonMdDoMapperTest extends \Codeception\TestCase\Test
 
         $this->assertSame($expectedDbData, $dbData);
     }
-    
+
     public function testMapperFactoryInstance()
     {
         $mapper = \App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MapperFactory::createByKeys('healthcare_practitioners', 'physician_surgeon_md_do');
-        
+
         $this->assertInstanceOf(PhysicianSurgeonMdDoMapper::class, $mapper);
     }
 

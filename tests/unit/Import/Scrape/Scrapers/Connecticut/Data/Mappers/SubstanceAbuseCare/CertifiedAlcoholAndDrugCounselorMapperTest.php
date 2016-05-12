@@ -1,4 +1,5 @@
 <?php
+
 namespace Import\Scrape\Scrapers\Connecticut\Data\Mappers\SubstanceAbuseCare;
 
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MapperFactory;
@@ -6,9 +7,9 @@ use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\SubstanceAbuseCare\Certi
 use Codeception\TestCase\Test;
 use UnitTester;
 
-
 class CertifiedAlcoholAndDrugCounselorMapperTest extends Test
 {
+
     /**
      * @var UnitTester
      */
@@ -21,6 +22,7 @@ class CertifiedAlcoholAndDrugCounselorMapperTest extends Test
 
     protected function _after()
     {
+        
     }
 
     // tests
@@ -62,6 +64,10 @@ class CertifiedAlcoholAndDrugCounselorMapperTest extends Test
         $this->assertSame($expected, $actual);
     }
 
+    /**
+     * To test that mapper's getDbData result will give as expected given a
+     * prepared data input.
+     */
     public function testGetDbData()
     {
         $data = [
@@ -101,11 +107,12 @@ class CertifiedAlcoholAndDrugCounselorMapperTest extends Test
 
         $this->assertSame($expectedDbData, $dbData);
     }
-    
+
     public function testMapperFactoryInstance()
     {
         $mapper = MapperFactory::createByKeys('substance_abuse_care', 'certified_alcohol_and_drug_counselor');
-        
+
         $this->assertInstanceOf(CertifiedAlcoholAndDrugCounselorMapper::class, $mapper);
     }
+
 }

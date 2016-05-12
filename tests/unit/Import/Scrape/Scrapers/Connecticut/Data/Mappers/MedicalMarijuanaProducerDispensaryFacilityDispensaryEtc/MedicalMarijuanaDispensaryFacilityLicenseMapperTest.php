@@ -1,4 +1,5 @@
 <?php
+
 namespace Import\Scrape\Scrapers\Connecticut\Data\Mappers\MedicalMarijuanaProducerDispensaryFacilityDispensaryEtc;
 
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MapperFactory;
@@ -6,9 +7,9 @@ use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MedicalMarijuanaProducer
 use Codeception\TestCase\Test;
 use UnitTester;
 
-
 class MedicalMarijuanaDispensaryFacilityLicenseMapperTest extends Test
 {
+
     /**
      * @var UnitTester
      */
@@ -55,6 +56,10 @@ class MedicalMarijuanaDispensaryFacilityLicenseMapperTest extends Test
         $this->assertSame($expected, $actual);
     }
 
+    /**
+     * To test that mapper's getDbData result will give as expected given a
+     * prepared data input.
+     */
     public function testGetDbData()
     {
         $data = [
@@ -94,11 +99,11 @@ class MedicalMarijuanaDispensaryFacilityLicenseMapperTest extends Test
     public function testMapperFactoryInstance()
     {
         $mapper = MapperFactory::createByKeys(
-            'medical_marijuana_producer_dispensary_facility_dispensary_etc',
-            'medical_marijuana_dispensary_facility_license'
+                        'medical_marijuana_producer_dispensary_facility_dispensary_etc', 'medical_marijuana_dispensary_facility_license'
         );
-        
+
 
         $this->assertInstanceOf(MedicalMarijuanaDispensaryFacilityLicenseMapper::class, $mapper);
     }
+
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Import\Scrape\Scrapers\Connecticut\Data\Mappers\LongTermCareAssistedLivingFacilitiesHomeHealthCareHospice;
 
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\LongTermCareAssistedLivingFacilitiesHomeHealthCareHospice\NursingHomeAdministratorMapper;
@@ -6,9 +7,9 @@ use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MapperFactory;
 use Codeception\TestCase\Test;
 use UnitTester;
 
-
 class NursingHomeAdministratorMapperTest extends Test
 {
+
     /**
      * @var UnitTester
      */
@@ -63,6 +64,10 @@ class NursingHomeAdministratorMapperTest extends Test
         $this->assertSame($expected, $actual);
     }
 
+    /**
+     * To test that mapper's getDbData result will give as expected given a
+     * prepared data input.
+     */
     public function testGetDbData()
     {
         $data = [
@@ -109,4 +114,5 @@ class NursingHomeAdministratorMapperTest extends Test
 
         $this->assertInstanceOf(NursingHomeAdministratorMapper::class, $mapper);
     }
+
 }

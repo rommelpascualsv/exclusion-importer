@@ -1,4 +1,5 @@
 <?php
+
 namespace Import\Scrape\Scrapers\Connecticut\Data\Mappers\RegisteredSanitarian;
 
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MapperFactory;
@@ -6,9 +7,9 @@ use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\RegisteredSanitarian\Reg
 use Codeception\TestCase\Test;
 use UnitTester;
 
-
 class RegisteredSanitarianMapperTest extends Test
 {
+
     /**
      * @var UnitTester
      */
@@ -21,6 +22,7 @@ class RegisteredSanitarianMapperTest extends Test
 
     protected function _after()
     {
+        
     }
 
     // tests
@@ -48,6 +50,10 @@ class RegisteredSanitarianMapperTest extends Test
         $this->assertSame($expected, $actual);
     }
 
+    /**
+     * To test that mapper's getDbData result will give as expected given a
+     * prepared data input.
+     */
     public function testGetDbData()
     {
         $data = [
@@ -80,14 +86,14 @@ class RegisteredSanitarianMapperTest extends Test
 
         $this->assertSame($expectedDbData, $dbData);
     }
-    
+
     public function testMapperFactoryInstance()
     {
         $mapper = MapperFactory::createByKeys(
-                'registered_sanitarian',
-                'registered_sanitarian'
+                        'registered_sanitarian', 'registered_sanitarian'
         );
-        
+
         $this->assertInstanceOf(RegisteredSanitarianMapper::class, $mapper);
     }
+
 }

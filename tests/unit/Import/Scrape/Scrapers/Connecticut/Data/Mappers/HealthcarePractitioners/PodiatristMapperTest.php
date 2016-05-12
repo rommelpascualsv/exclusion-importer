@@ -1,4 +1,5 @@
 <?php
+
 namespace Import\Scrape\Scrapers\Connecticut\Data\Mappers\HealthcarePractitioners;
 
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\HealthcarePractitioners\PodiatristMapper;
@@ -6,9 +7,9 @@ use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MapperFactory;
 use Codeception\TestCase\Test;
 use UnitTester;
 
-
 class PodiatristMapperTest extends Test
 {
+
     /**
      * @var UnitTester
      */
@@ -21,6 +22,7 @@ class PodiatristMapperTest extends Test
 
     protected function _after()
     {
+        
     }
 
     // tests
@@ -62,6 +64,10 @@ class PodiatristMapperTest extends Test
         $this->assertSame($expected, $actual);
     }
 
+    /**
+     * To test that mapper's getDbData result will give as expected given a
+     * prepared data input.
+     */
     public function testGetDbData()
     {
         $data = [
@@ -101,11 +107,12 @@ class PodiatristMapperTest extends Test
 
         $this->assertSame($expectedDbData, $dbData);
     }
-    
+
     public function testMapperFactoryInstance()
     {
         $mapper = MapperFactory::createByKeys('healthcare_practitioners', 'podiatrist');
-        
+
         $this->assertInstanceOf(PodiatristMapper::class, $mapper);
     }
+
 }

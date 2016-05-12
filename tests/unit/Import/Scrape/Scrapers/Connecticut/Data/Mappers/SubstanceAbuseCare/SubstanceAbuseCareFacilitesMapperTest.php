@@ -1,4 +1,5 @@
 <?php
+
 namespace Import\Scrape\Scrapers\Connecticut\Data\Mappers\SubstanceAbuseCare;
 
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MapperFactory;
@@ -6,9 +7,9 @@ use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\SubstanceAbuseCare\Subst
 use Codeception\TestCase\Test;
 use UnitTester;
 
-
 class SubstanceAbuseCareFacilitesMapperTest extends Test
 {
+
     /**
      * @var UnitTester
      */
@@ -21,6 +22,7 @@ class SubstanceAbuseCareFacilitesMapperTest extends Test
 
     protected function _after()
     {
+        
     }
 
     // tests
@@ -54,6 +56,10 @@ class SubstanceAbuseCareFacilitesMapperTest extends Test
         $this->assertSame($expected, $actual);
     }
 
+    /**
+     * To test that mapper's getDbData result will give as expected given a
+     * prepared data input.
+     */
     public function testGetDbData()
     {
         $data = [
@@ -89,11 +95,12 @@ class SubstanceAbuseCareFacilitesMapperTest extends Test
 
         $this->assertSame($expectedDbData, $dbData);
     }
-    
+
     public function testMapperFactoryInstance()
     {
         $mapper = MapperFactory::createByKeys('substance_abuse_care', 'substance_abuse_care_facilites');
-        
+
         $this->assertInstanceOf(SubstanceAbuseCareFacilitesMapper::class, $mapper);
     }
+
 }

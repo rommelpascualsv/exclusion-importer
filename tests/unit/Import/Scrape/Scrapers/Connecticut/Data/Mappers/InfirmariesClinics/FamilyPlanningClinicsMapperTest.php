@@ -1,4 +1,5 @@
 <?php
+
 namespace Import\Scrape\Scrapers\Connecticut\Data\Mappers\InfirmariesClinics;
 
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\InfirmariesClinics\FamilyPlanningClinicsMapper;
@@ -6,9 +7,9 @@ use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MapperFactory;
 use Codeception\TestCase\Test;
 use UnitTester;
 
-
 class FamilyPlanningClinicsMapperTest extends Test
 {
+
     /**
      * @var UnitTester
      */
@@ -21,6 +22,7 @@ class FamilyPlanningClinicsMapperTest extends Test
 
     protected function _after()
     {
+        
     }
 
     // tests
@@ -54,6 +56,10 @@ class FamilyPlanningClinicsMapperTest extends Test
         $this->assertSame($expected, $actual);
     }
 
+    /**
+     * To test that mapper's getDbData result will give as expected given a
+     * prepared data input.
+     */
     public function testGetDbData()
     {
         $data = [
@@ -89,11 +95,12 @@ class FamilyPlanningClinicsMapperTest extends Test
 
         $this->assertSame($expectedDbData, $dbData);
     }
-    
+
     public function testMapperFactoryInstance()
     {
         $mapper = MapperFactory::createByKeys('infirmaries_clinics', 'family_planning_clinics');
-        
+
         $this->assertInstanceOf(FamilyPlanningClinicsMapper::class, $mapper);
     }
+
 }
