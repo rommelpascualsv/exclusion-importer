@@ -5,6 +5,8 @@ namespace App\Import\Scrape\Scrapers\Connecticut\Data\Mappers;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\AmbulatorySurgicalCentersRecoveryCareCenters\AmbulatorySurgicalCenterMapper;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\ControlledSubstancesPractitionersLabsManufacturers\ControlledSubstanceLaboratoriesMapper;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\ControlledSubstancesPractitionersLabsManufacturers\ManufacturersDrugsCosmeticsMedicalDevicesMapper;
+use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\HealthcarePractitioners\OccupationalTherapistMapper;
+use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\HealthcarePractitioners\PhysicalTherapistMapper;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\HealthcarePractitioners\PhysicianSurgeonMdDoMapper;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\HealthcarePractitioners\PodiatristMapper;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\HemodialysisCenters\HemodialysisCentersMapper;
@@ -32,6 +34,30 @@ class MapperFactory
             'manufacturers_of_drugs_cosmetics_and_medical_devices' => ManufacturersDrugsCosmeticsMedicalDevicesMapper::class
         ],
         'healthcare_practitioners' => [
+            'advanced_practice_registered_nurse' => PhysicalTherapistMapper::class,
+            'athletic_trainer' => PodiatristMapper::class,
+            'audiologist' => PodiatristMapper::class,
+            'chiropractor' => PodiatristMapper::class,
+            'dental_anesthesia_conscious_sedation_permit' => PhysicalTherapistMapper::class,
+            'dental_conscious_sedation_permit' => PhysicalTherapistMapper::class,
+            'dental_hygienist' => PhysicalTherapistMapper::class,
+            'dentist' => PodiatristMapper::class,
+            'dietitian_nutritionist' => PodiatristMapper::class,
+            'genetic_counselor' => PodiatristMapper::class,
+            'hearing_instrument_specialist' => PodiatristMapper::class,
+            'homeopathic_physician' => PodiatristMapper::class,
+            'licensed_practical_nurse' => PodiatristMapper::class,
+            'massage_therapist' => PodiatristMapper::class,
+            'naturopathic_physician' => PodiatristMapper::class,
+            'nurse_midwife' => PodiatristMapper::class,
+            'occupational_therapist' => OccupationalTherapistMapper::class,
+            'occupational_therapist_assistant' => PodiatristMapper::class,
+            'optician' => PodiatristMapper::class,
+            'optician_apprentice' => PodiatristMapper::class,
+            'optometrist' => PodiatristMapper::class,
+            'physical_therapist' => PhysicalTherapistMapper::class,
+            'physical_therapist_assistant' => PodiatristMapper::class,
+            'physician_assistant' => PodiatristMapper::class,
             'acupuncturist' => PodiatristMapper::class,
             'physician_surgeon_md_do' => PhysicianSurgeonMdDoMapper::class,
             'podiatrist' => PodiatristMapper::class,
