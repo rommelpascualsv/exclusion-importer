@@ -6,7 +6,7 @@ class Nevada extends ExclusionList
 {
     public $dbPrefix = 'nv1';
 
-    public $pdfToText = "java -jar ../etc/tabula.jar -p all -c 126,220,305,350,400,440,495,532,580,635,680";
+    public $pdfToText = "java -jar /vagrant/etc/tabula.jar -p all -c 126,220,305,350,400,440,495,532,580,635,680";
 
     public $uri = "http://dhcfp.nv.gov/uploadedFiles/dhcfpnvgov/content/Providers/PI/NevadaProviderExclusions.pdf";
     
