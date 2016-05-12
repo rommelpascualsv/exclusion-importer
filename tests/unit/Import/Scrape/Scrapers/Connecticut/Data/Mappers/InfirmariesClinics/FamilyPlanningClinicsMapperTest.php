@@ -25,37 +25,6 @@ class FamilyPlanningClinicsMapperTest extends Test
         
     }
 
-    // tests
-    public function testGetCsvData()
-    {
-        $data = [
-            '"PLANNED PARENTHOOD OF SOUTHERN NEW ENGLAND, INC."',
-            '100 Grand Street',
-            'New Britain',
-            'CT',
-            '06051',
-            'FP.0000038',
-            'ACTIVE',
-            '01/01/2010',
-            '12/31/2016',
-        ];
-
-        $actual = $this->mapper->getCsvData($data);
-        $expected = [
-            'FACILITY NAME' => '"PLANNED PARENTHOOD OF SOUTHERN NEW ENGLAND, INC."',
-            'ADDRESS' => '100 Grand Street',
-            'CITY' => 'New Britain',
-            'STATE' => 'CT',
-            'ZIP' => '06051',
-            'LICENSE NO.' => 'FP.0000038',
-            'STATUS' => 'ACTIVE',
-            'EFFECTIVE DATE' => '01/01/2010',
-            'EXPIRATION DATE' => '12/31/2016'
-        ];
-
-        $this->assertSame($expected, $actual);
-    }
-
     /**
      * To test that mapper's getDbData result will give as expected given a
      * prepared data input.
@@ -94,13 +63,6 @@ class FamilyPlanningClinicsMapperTest extends Test
         ];
 
         $this->assertSame($expectedDbData, $dbData);
-    }
-
-    public function testMapperFactoryInstance()
-    {
-        $mapper = MapperFactory::createByKeys('infirmaries_clinics', 'family_planning_clinics');
-
-        $this->assertInstanceOf(FamilyPlanningClinicsMapper::class, $mapper);
     }
 
 }

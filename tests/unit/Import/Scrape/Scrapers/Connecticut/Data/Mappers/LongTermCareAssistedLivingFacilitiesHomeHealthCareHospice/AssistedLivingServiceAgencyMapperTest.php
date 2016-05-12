@@ -25,37 +25,6 @@ class AssistedLivingServiceAgencyMapperTest extends Test
         
     }
 
-    // tests
-    public function testGetCsvData()
-    {
-        $data = [
-            'MASONICARE HOME HEALTH AND HOSPICE',
-            '33 N PLAINS INDUSTRIAL RD',
-            'WALLINGFORD',
-            'CT',
-            '06492-5841',
-            '000128',
-            'ACTIVE',
-            '10/30/2008',
-            '09/30/2016',
-        ];
-
-        $actual = $this->mapper->getCsvData($data);
-        $expected = [
-            'FACILITY NAME' => 'MASONICARE HOME HEALTH AND HOSPICE',
-            'ADDRESS' => '33 N PLAINS INDUSTRIAL RD',
-            'CITY' => 'WALLINGFORD',
-            'STATE' => 'CT',
-            'ZIP' => '06492-5841',
-            'LICENSE NO.' => '000128',
-            'STATUS' => 'ACTIVE',
-            'EFFECTIVE DATE' => '10/30/2008',
-            'EXPIRATION DATE' => '09/30/2016'
-        ];
-
-        $this->assertSame($expected, $actual);
-    }
-
     /**
      * To test that mapper's getDbData result will give as expected given a
      * prepared data input.
@@ -94,13 +63,6 @@ class AssistedLivingServiceAgencyMapperTest extends Test
         ];
 
         $this->assertSame($expectedDbData, $dbData);
-    }
-
-    public function testMapperFactoryInstance()
-    {
-        $mapper = MapperFactory::createByKeys('long_term_care_assisted_living_facilities_home_health_care_hospice', 'assisted_living_service_agency');
-
-        $this->assertInstanceOf(AssistedLivingServiceAgencyMapper::class, $mapper);
     }
 
 }

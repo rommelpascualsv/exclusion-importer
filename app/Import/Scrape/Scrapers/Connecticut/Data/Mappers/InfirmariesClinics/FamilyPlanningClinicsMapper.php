@@ -7,18 +7,6 @@ use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\BaseMapper;
 class FamilyPlanningClinicsMapper extends BaseMapper
 {
 
-    protected $csvHeaders = [
-        'FACILITY NAME',
-        'ADDRESS',
-        'CITY',
-        'STATE',
-        'ZIP',
-        'LICENSE NO.',
-        'STATUS',
-        'EFFECTIVE DATE',
-        'EXPIRATION DATE',
-    ];
-
     /**
      * Get db data
      * @param array $data

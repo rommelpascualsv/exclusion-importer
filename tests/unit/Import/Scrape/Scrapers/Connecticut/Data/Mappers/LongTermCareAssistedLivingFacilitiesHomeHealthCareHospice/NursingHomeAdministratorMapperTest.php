@@ -25,45 +25,6 @@ class NursingHomeAdministratorMapperTest extends Test
         
     }
 
-    // tests
-    public function testGetCsvData()
-    {
-        $data = [
-            '000050',
-            'PAULINE',
-            'GAMER',
-            '150 WESTPORT RD',
-            '',
-            'WILTON',
-            'CT',
-            'O6897',
-            'Fairfield',
-            'ACTIVE',
-            'RENEWAL APPLICATION SENT',
-            '01/01/1901',
-            '05/31/2016'
-        ];
-
-        $actual = $this->mapper->getCsvData($data);
-        $expected = [
-            'LICENSE NO.' => '000050',
-            'FIRST NAME' => 'PAULINE',
-            'LAST NAME' => 'GAMER',
-            'ADDRESS1' => '150 WESTPORT RD',
-            'ADDRESS2' => '',
-            'CITY' => 'WILTON',
-            'STATE' => 'CT',
-            'ZIP' => 'O6897',
-            'COUNTY' => 'Fairfield',
-            'STATUS' => 'ACTIVE',
-            'REASON' => 'RENEWAL APPLICATION SENT',
-            'ISSUE DATE' => '01/01/1901',
-            'EXPIRATION DATE' => '05/31/2016'
-        ];
-
-        $this->assertSame($expected, $actual);
-    }
-
     /**
      * To test that mapper's getDbData result will give as expected given a
      * prepared data input.
@@ -106,13 +67,6 @@ class NursingHomeAdministratorMapperTest extends Test
         ];
 
         $this->assertSame($expectedDbData, $dbData);
-    }
-
-    public function testMapperFactoryInstance()
-    {
-        $mapper = MapperFactory::createByKeys('long_term_care_assisted_living_facilities_home_health_care_hospice', 'nursing_home_administrator');
-
-        $this->assertInstanceOf(NursingHomeAdministratorMapper::class, $mapper);
     }
 
 }

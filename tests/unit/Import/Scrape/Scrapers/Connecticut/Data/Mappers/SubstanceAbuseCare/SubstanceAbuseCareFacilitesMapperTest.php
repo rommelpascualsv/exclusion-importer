@@ -25,37 +25,6 @@ class SubstanceAbuseCareFacilitesMapperTest extends Test
         
     }
 
-    // tests
-    public function testGetCsvData()
-    {
-        $data = [
-            '"CONNECTICUT RENAISSANCE, INC."',
-            '4 BYINGTON PL',
-            'NORWALK',
-            'CT',
-            '06850-3309',
-            '000327',
-            'ACTIVE',
-            '10/01/2009',
-            '09/30/2017',
-        ];
-
-        $actual = $this->mapper->getCsvData($data);
-        $expected = [
-            'FACILITY NAME' => '"CONNECTICUT RENAISSANCE, INC."',
-            'ADDRESS' => '4 BYINGTON PL',
-            'CITY' => 'NORWALK',
-            'STATE' => 'CT',
-            'ZIP' => '06850-3309',
-            'LICENSE NO.' => '000327',
-            'STATUS' => 'ACTIVE',
-            'EFFECTIVE DATE' => '10/01/2009',
-            'EXPIRATION DATE' => '09/30/2017'
-        ];
-
-        $this->assertSame($expected, $actual);
-    }
-
     /**
      * To test that mapper's getDbData result will give as expected given a
      * prepared data input.
@@ -94,13 +63,6 @@ class SubstanceAbuseCareFacilitesMapperTest extends Test
         ];
 
         $this->assertSame($expectedDbData, $dbData);
-    }
-
-    public function testMapperFactoryInstance()
-    {
-        $mapper = MapperFactory::createByKeys('substance_abuse_care', 'substance_abuse_care_facilites');
-
-        $this->assertInstanceOf(SubstanceAbuseCareFacilitesMapper::class, $mapper);
     }
 
 }

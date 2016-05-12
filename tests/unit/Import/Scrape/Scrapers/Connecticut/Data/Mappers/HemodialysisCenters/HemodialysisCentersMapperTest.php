@@ -25,37 +25,6 @@ class HemodialysisCentersMapperTest extends Test
         
     }
 
-    // tests
-    public function testGetCsvData()
-    {
-        $data = [
-            'BLACK ROCK DIALYSIS',
-            '427 STILLSON RD',
-            'FAIRFIELD',
-            'CT',
-            '06824-3158',
-            'HEMO.0000283',
-            'ACTIVE',
-            '10/06/2008',
-            '09/30/2016'
-        ];
-
-        $actual = $this->mapper->getCsvData($data);
-        $expected = [
-            'FACILITY NAME' => 'BLACK ROCK DIALYSIS',
-            'ADDRESS' => '427 STILLSON RD',
-            'CITY' => 'FAIRFIELD',
-            'STATE' => 'CT',
-            'ZIP' => '06824-3158',
-            'LICENSE NO.' => 'HEMO.0000283',
-            'STATUS' => 'ACTIVE',
-            'EFFECTIVE DATE' => '10/06/2008',
-            'EXPIRATION DATE' => '09/30/2016',
-        ];
-
-        $this->assertSame($expected, $actual);
-    }
-
     /**
      * To test that mapper's getDbData result will give as expected given a
      * prepared data input.

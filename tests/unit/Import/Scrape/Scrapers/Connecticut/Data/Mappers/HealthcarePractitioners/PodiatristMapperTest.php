@@ -25,45 +25,6 @@ class PodiatristMapperTest extends Test
         
     }
 
-    // tests
-    public function testGetCsvData()
-    {
-        $data = [
-            '000014',
-            'JAMES',
-            'BLUME',
-            '508 BLAKE ST',
-            '',
-            'NEW HAVEN',
-            'CT',
-            'O6515-1287',
-            'New Haven',
-            'ACTIVE',
-            'CURRENT',
-            '10/03/1955',
-            '03/31/2017'
-        ];
-
-        $actual = $this->mapper->getCsvData($data);
-        $expected = [
-            'LICENSE NO.' => '000014',
-            'FIRST NAME' => 'JAMES',
-            'LAST NAME' => 'BLUME',
-            'ADDRESS1' => '508 BLAKE ST',
-            'ADDRESS2' => '',
-            'CITY' => 'NEW HAVEN',
-            'STATE' => 'CT',
-            'ZIP' => 'O6515-1287',
-            'COUNTY' => 'New Haven',
-            'STATUS' => 'ACTIVE',
-            'REASON' => 'CURRENT',
-            'ISSUE DATE' => '10/03/1955',
-            'EXPIRATION DATE' => '03/31/2017'
-        ];
-
-        $this->assertSame($expected, $actual);
-    }
-
     /**
      * To test that mapper's getDbData result will give as expected given a
      * prepared data input.
@@ -106,13 +67,6 @@ class PodiatristMapperTest extends Test
         ];
 
         $this->assertSame($expectedDbData, $dbData);
-    }
-
-    public function testMapperFactoryInstance()
-    {
-        $mapper = MapperFactory::createByKeys('healthcare_practitioners', 'podiatrist');
-
-        $this->assertInstanceOf(PodiatristMapper::class, $mapper);
     }
 
 }

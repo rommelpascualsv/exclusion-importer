@@ -7,22 +7,6 @@ use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\BaseMapper;
 class ClinicalSocialWorkerMapper extends BaseMapper
 {
 
-    protected $csvHeaders = [
-        'LICENSE NO.',
-        'FIRST NAME',
-        'LAST NAME',
-        'ADDRESS1',
-        'ADDRESS2',
-        'CITY',
-        'STATE',
-        'ZIP',
-        'COUNTY',
-        'STATUS',
-        'REASON',
-        'ISSUE DATE',
-        'EXPIRATION DATE',
-    ];
-
     /**
      * Get db data
      * @param array $data

@@ -25,41 +25,6 @@ class MedicalMarijuanaDispensaryFacilityBackerLicenseMapperTest extends Test
         
     }
 
-    // tests
-    public function testGetCsvData()
-    {
-        $data = [
-            'MEREDITH',
-            'ELMER',
-            'EAST LYME',
-            'CT',
-            '06333',
-            'MMDB.0000010',
-            'ACTIVE',
-            '09/26/2015',
-            '09/25/2016',
-            'THAMES VALLEY ALTERNATIVE RELIEF',
-            'MMDF.0000005',
-        ];
-
-        $actual = $this->mapper->getCsvData($data);
-        $expected = [
-            'FIRST NAME' => 'MEREDITH',
-            'LAST NAME' => 'ELMER',
-            'CITY' => 'EAST LYME',
-            'STATE' => 'CT',
-            'ZIP' => '06333',
-            'LICENSE' => 'MMDB.0000010',
-            'STATUS' => 'ACTIVE',
-            'EFFECTIVE DATE' => '09/26/2015',
-            'EXPIRATION DATE' => '09/25/2016',
-            'Supervision' => 'THAMES VALLEY ALTERNATIVE RELIEF',
-            'Supervisor Credential #' => 'MMDF.0000005',
-        ];
-
-        $this->assertSame($expected, $actual);
-    }
-
     /**
      * To test that mapper's getDbData result will give as expected given a
      * prepared data input.
@@ -100,13 +65,6 @@ class MedicalMarijuanaDispensaryFacilityBackerLicenseMapperTest extends Test
         ];
 
         $this->assertSame($expectedDbData, $dbData);
-    }
-
-    public function testMapperFactoryInstance()
-    {
-        $mapper = MapperFactory::createByKeys('medical_marijuana_producer_dispensary_facility_dispensary_etc', 'medical_marijuana_dispensary_facility_backer_license');
-
-        $this->assertInstanceOf(MedicalMarijuanaDispensaryFacilityBackerLicenseMapper::class, $mapper);
     }
 
 }

@@ -7,15 +7,6 @@ use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\BaseMapper;
 class RegisteredSanitarianMapper extends BaseMapper
 {
 
-    protected $csvHeaders = [
-        'LAST NAME',
-        'FIRST NAME',
-        'LICENSE NUMBER',
-        'STATUS',
-        'ISSUE DATE',
-        'EXPIRATION DATE',
-    ];
-
     /**
      * Get db data
      * @param array $data

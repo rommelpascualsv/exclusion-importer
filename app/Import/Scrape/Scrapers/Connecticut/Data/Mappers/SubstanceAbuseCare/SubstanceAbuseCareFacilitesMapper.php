@@ -6,17 +6,6 @@ use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\BaseMapper;
 
 class SubstanceAbuseCareFacilitesMapper extends BaseMapper
 {
-    protected $csvHeaders = [
-        'FACILITY NAME',
-        'ADDRESS',
-        'CITY',
-        'STATE',
-        'ZIP',
-        'LICENSE NO.',
-        'STATUS',
-        'EFFECTIVE DATE',
-        'EXPIRATION DATE',
-    ];
 
     /**
      * Get db data
@@ -37,4 +26,5 @@ class SubstanceAbuseCareFacilitesMapper extends BaseMapper
                     'license_status' => $data['STATUS'],
         ]);
     }
+
 }

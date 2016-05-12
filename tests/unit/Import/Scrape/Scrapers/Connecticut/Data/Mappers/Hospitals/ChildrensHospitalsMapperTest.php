@@ -25,37 +25,6 @@ class ChildrensHospitalsMapperTest extends Test
         
     }
 
-    // tests
-    public function testGetCsvData()
-    {
-        $data = [
-            'CONNECTICUT CHILDREN\'S MEDICAL CENTER',
-            '282 WASHINGTON ST',
-            'HARTFORD',
-            'CT',
-            '06106-3322',
-            '0002CH',
-            'ACTIVE',
-            '01/01/2010',
-            '12/31/2017'
-        ];
-
-        $actual = $this->mapper->getCsvData($data);
-        $expected = [
-            'FACILITY NAME' => 'CONNECTICUT CHILDREN\'S MEDICAL CENTER',
-            'ADDRESS' => '282 WASHINGTON ST',
-            'CITY' => 'HARTFORD',
-            'STATE' => 'CT',
-            'ZIP' => '06106-3322',
-            'LICENSE NO.' => '0002CH',
-            'STATUS' => 'ACTIVE',
-            'EFFECTIVE DATE' => '01/01/2010',
-            'EXPIRATION DATE' => '12/31/2017',
-        ];
-
-        $this->assertSame($expected, $actual);
-    }
-
     /**
      * To test that mapper's getDbData result will give as expected given a
      * prepared data input.
@@ -94,13 +63,6 @@ class ChildrensHospitalsMapperTest extends Test
         ];
 
         $this->assertSame($expectedDbData, $dbData);
-    }
-
-    public function testMapperFactoryInstance()
-    {
-        $mapper = MapperFactory::createByKeys('hospitals', 'childrens_hospitals');
-
-        $this->assertInstanceOf(ChildrensHospitalsMapper::class, $mapper);
     }
 
 }

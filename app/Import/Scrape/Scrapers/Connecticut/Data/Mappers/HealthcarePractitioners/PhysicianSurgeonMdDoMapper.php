@@ -7,24 +7,6 @@ use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\BaseMapper;
 class PhysicianSurgeonMdDoMapper extends BaseMapper
 {
 
-    protected $csvHeaders = [
-        'LICENSE NO.',
-        'FIRST NAME',
-        'LAST NAME',
-        'ADDRESS1',
-        'ADDRESS2',
-        'CITY',
-        'STATE',
-        'ZIP',
-        'COUNTY',
-        'STATUS',
-        'REASON',
-        'ISSUE DATE',
-        'EXPIRATION DATE',
-        'DEGREE TYPE',
-        'Specialty',
-    ];
-
     /**
      * Get db data
      * @param array $data

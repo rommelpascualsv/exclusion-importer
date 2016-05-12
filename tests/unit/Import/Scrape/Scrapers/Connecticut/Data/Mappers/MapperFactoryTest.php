@@ -1,14 +1,17 @@
 <?php
 namespace Import\Scrape\Scrapers\Connecticut\Data\Mappers;
 
-
+use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\AmbulatorySurgicalCentersRecoveryCareCenters\AmbulatorySurgicalCenterMapper;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MapperFactory;
-use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\AmbulatorySurgicalCenterMapper;
+use Codeception\TestCase\Test;
+use UnitTester;
 
-class MapperFactoryTest extends \Codeception\TestCase\Test
+
+
+class MapperFactoryTest extends Test
 {
     /**
-     * @var \UnitTester
+     * @var UnitTester
      */
     protected $tester;
 

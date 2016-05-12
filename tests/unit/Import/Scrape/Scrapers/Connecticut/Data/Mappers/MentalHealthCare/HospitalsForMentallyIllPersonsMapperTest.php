@@ -1,4 +1,5 @@
 <?php
+
 namespace Import\Scrape\Scrapers\Connecticut\Data\Mappers\MentalHealthCare;
 
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MapperFactory;
@@ -6,9 +7,9 @@ use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MentalHealthCare\Hospita
 use Codeception\TestCase\Test;
 use UnitTester;
 
-
 class HospitalsForMentallyIllPersonsMapperTest extends Test
 {
+
     /**
      * @var UnitTester
      */
@@ -21,37 +22,7 @@ class HospitalsForMentallyIllPersonsMapperTest extends Test
 
     protected function _after()
     {
-    }
-
-    // tests
-    public function testGetCsvData()
-    {
-        $data = [
-            '"NATCHAUG HOSPITAL, INC."',
-            '189 STORRS RD',
-            'MANSFIELD CENTER',
-            'CT',
-            '06250',
-            'PSY.00H0003',
-            'ACTIVE',
-            '07/01/2009',
-            '06/30/2017',
-        ];
-
-        $actual = $this->mapper->getCsvData($data);
-        $expected = [
-            'FACILITY NAME' => '"NATCHAUG HOSPITAL, INC."',
-            'ADDRESS' => '189 STORRS RD',
-            'CITY' => 'MANSFIELD CENTER',
-            'STATE' => 'CT',
-            'ZIP' => '06250',
-            'LICENSE NO.' => 'PSY.00H0003',
-            'STATUS' => 'ACTIVE',
-            'EFFECTIVE DATE' => '07/01/2009',
-            'EXPIRATION DATE' => '06/30/2017',
-        ];
-
-        $this->assertSame($expected, $actual);
+        
     }
 
     /**
@@ -93,11 +64,5 @@ class HospitalsForMentallyIllPersonsMapperTest extends Test
 
         $this->assertSame($expectedDbData, $dbData);
     }
-    
-    public function testMapperFactoryInstance()
-    {
-        $mapper = MapperFactory::createByKeys('mental_health_care', 'hospitals_for_mentally_ill_persons');
-        
-        $this->assertInstanceOf(HospitalsForMentallyIllPersonsMapper::class, $mapper);
-    }
+
 }

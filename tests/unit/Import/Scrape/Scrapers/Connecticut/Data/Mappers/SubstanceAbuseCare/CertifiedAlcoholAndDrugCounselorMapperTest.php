@@ -25,45 +25,6 @@ class CertifiedAlcoholAndDrugCounselorMapperTest extends Test
         
     }
 
-    // tests
-    public function testGetCsvData()
-    {
-        $data = [
-            '000005',
-            'RONALD',
-            'BAKER',
-            '779 HOPEVILLE RD',
-            '',
-            'GRISWOLD',
-            'CT',
-            'O6351-1212',
-            '',
-            'ACTIVE',
-            'CURRENT',
-            '10/02/1998',
-            '09/30/2016',
-        ];
-
-        $actual = $this->mapper->getCsvData($data);
-        $expected = [
-            'LICENSE NO.' => '000005',
-            'FIRST NAME' => 'RONALD',
-            'LAST NAME' => 'BAKER',
-            'ADDRESS1' => '779 HOPEVILLE RD',
-            'ADDRESS2' => '',
-            'CITY' => 'GRISWOLD',
-            'STATE' => 'CT',
-            'ZIP' => 'O6351-1212',
-            'COUNTY' => '',
-            'STATUS' => 'ACTIVE',
-            'REASON' => 'CURRENT',
-            'ISSUE DATE' => '10/02/1998',
-            'EXPIRATION DATE' => '09/30/2016',
-        ];
-
-        $this->assertSame($expected, $actual);
-    }
-
     /**
      * To test that mapper's getDbData result will give as expected given a
      * prepared data input.
@@ -106,13 +67,6 @@ class CertifiedAlcoholAndDrugCounselorMapperTest extends Test
         ];
 
         $this->assertSame($expectedDbData, $dbData);
-    }
-
-    public function testMapperFactoryInstance()
-    {
-        $mapper = MapperFactory::createByKeys('substance_abuse_care', 'certified_alcohol_and_drug_counselor');
-
-        $this->assertInstanceOf(CertifiedAlcoholAndDrugCounselorMapper::class, $mapper);
     }
 
 }

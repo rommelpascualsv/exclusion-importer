@@ -25,31 +25,6 @@ class RegisteredSanitarianMapperTest extends Test
         
     }
 
-    // tests
-    public function testGetCsvData()
-    {
-        $data = [
-            'ACCARDI',
-            'PATRICK',
-            '393',
-            'ACTIVE',
-            '07/11/1985',
-            '06/30/2016',
-        ];
-
-        $actual = $this->mapper->getCsvData($data);
-        $expected = [
-            'LAST NAME' => 'ACCARDI',
-            'FIRST NAME' => 'PATRICK',
-            'LICENSE NUMBER' => '393',
-            'STATUS' => 'ACTIVE',
-            'ISSUE DATE' => '07/11/1985',
-            'EXPIRATION DATE' => '06/30/2016',
-        ];
-
-        $this->assertSame($expected, $actual);
-    }
-
     /**
      * To test that mapper's getDbData result will give as expected given a
      * prepared data input.
@@ -85,15 +60,6 @@ class RegisteredSanitarianMapperTest extends Test
         ];
 
         $this->assertSame($expectedDbData, $dbData);
-    }
-
-    public function testMapperFactoryInstance()
-    {
-        $mapper = MapperFactory::createByKeys(
-                        'registered_sanitarian', 'registered_sanitarian'
-        );
-
-        $this->assertInstanceOf(RegisteredSanitarianMapper::class, $mapper);
     }
 
 }
