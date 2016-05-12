@@ -22,6 +22,7 @@ class ListFactory
         'njcdr'             => 'NewJersey',
         'nyomig'            => 'NewYork',
         'oh1'               => 'Ohio',
+        'oig'               => 'OIG',
         'pa1'               => 'Pennsylvania',
         'sc1'               => 'SouthCarolina',
         'dc1'               => 'WashingtonDC',
@@ -46,7 +47,7 @@ class ListFactory
         'usdocdp'           => 'USDOCDeniedPersons',
         'fdadl'             => 'FDADebarmentList',
         'usdosd'            => 'USDosDebar',
-        'unsancindividuals' => 'UnSanctionsIndividuals',
+        'unsancindividuals' => 'UNSanctionsIndividuals',
         'unsancentities'    => 'UnSanctionsEntities',
         'healthmil'         => 'HealthMil',
     	'csl'               => 'ConsolidatedScreeningList'
