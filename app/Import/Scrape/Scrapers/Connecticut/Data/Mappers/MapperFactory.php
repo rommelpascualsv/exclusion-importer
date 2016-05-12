@@ -2,6 +2,9 @@
 
 namespace App\Import\Scrape\Scrapers\Connecticut\Data\Mappers;
 
+use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\AmbulatorySurgicalCentersRecoveryCareCenters\AmbulatorySurgicalCenterMapper;
+use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\ControlledSubstancesPractitionersLabsManufacturers\ControlledSubstanceLaboratoriesMapper;
+use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\ControlledSubstancesPractitionersLabsManufacturers\ManufacturersDrugsCosmeticsMedicalDevicesMapper;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\HealthcarePractitioners\PhysicianSurgeonMdDoMapper;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\HealthcarePractitioners\PodiatristMapper;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\HemodialysisCenters\HemodialysisCentersMapper;
@@ -29,7 +32,7 @@ class MapperFactory
             'manufacturers_of_drugs_cosmetics_and_medical_devices' => ManufacturersDrugsCosmeticsMedicalDevicesMapper::class
         ],
         'healthcare_practitioners' => [
-            'acupuncturist' => AcupuncturistMapper::class,
+            'acupuncturist' => PodiatristMapper::class,
             'physician_surgeon_md_do' => PhysicianSurgeonMdDoMapper::class,
             'podiatrist' => PodiatristMapper::class,
             'podiatrist_advanced_ankle_surgery_permit' => PodiatristMapper::class,
@@ -106,10 +109,10 @@ class MapperFactory
 	 * @param string $option
 	 * @return MapperInterface
 	 */
-	public static function createByKeys($category, $option)
+	public static function createByKeys($category, $option, $csvHeaders = [])
 	{
 		$class = static::$classes[$category][$option];
 		
-		return new $class;
+		return new $class($csvHeaders);
 	}
 }

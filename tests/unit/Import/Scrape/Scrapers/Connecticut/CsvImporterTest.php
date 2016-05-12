@@ -195,7 +195,7 @@ class CsvImporterTest extends \Codeception\TestCase\Test
         $timestamp = '2016-05-01 01:30:00';
          
         $this->importer->importCsv($data, $timestamp);
-         
+        
         $this->assertAmbulanceRecords();
     }
     
@@ -214,39 +214,39 @@ class CsvImporterTest extends \Codeception\TestCase\Test
         // first row
         $this->tester->seeRecord('ct_rosters', [
             'ct_license_types_id' => $this->licenseTypeIds['ambulatory_surgical_center'],
-            'first_name' => '',
-            'last_name' => '',
+            'first_name' => null,
+            'last_name' => null,
             'business_name' => 'SAINT FRANCIS GI ENDOSCOPY, LLC',
             'address1' => '360 BLOOMFIELD AVE STE 204',
-            'address2' => '',
+            'address2' => null,
             'city' => 'WINDSOR',
-            'county' => '',
+            'county' => null,
             'state' => 'CT',
             'zip' => '06095-2700',
             'license_no' => '321',
             'license_effective_date' => '2008-10-30',
             'license_expiration_date' => '2016-09-30',
             'license_status' => 'ACTIVE',
-            'license_status_reason' => ''
+            'license_status_reason' => null
         ]);
         
         // last row
         $this->tester->seeRecord('ct_rosters', [
             'ct_license_types_id' => $this->licenseTypeIds['ambulatory_surgical_center'],
-            'first_name' => '',
-            'last_name' => '',
+            'first_name' => null,
+            'last_name' => null,
             'business_name' => 'STAMFORD ASC, LLC',
             'address1' => '200 STAMFORD PL',
-            'address2' => '',
+            'address2' => null,
             'city' => 'STAMFORD',
-            'county' => '',
+            'county' => null,
             'state' => 'CT',
             'zip' => '06902-6753',
             'license_no' => '351',
             'license_effective_date' => '2016-03-31',
             'license_expiration_date' => '2017-12-31',
             'license_status' => 'ACTIVE',
-            'license_status_reason' => ''
+            'license_status_reason' => null
         ]);
     }
     
@@ -257,37 +257,37 @@ class CsvImporterTest extends \Codeception\TestCase\Test
             'ct_license_types_id' => $this->licenseTypeIds['controlled_substance_laboratories'],
             'first_name' => 'ROBERT',
             'last_name' => 'MALISON',
-            'business_name' => '',
+            'business_name' => null,
             'address1' => '34 PARK ST',
-            'address2' => '',
+            'address2' => null,
             'city' => 'NEW HAVEN',
-            'county' => '',
+            'county' => null,
             'state' => 'CT',
             'zip' => '06519-1109',
             'license_no' => 'CSL.0000432',
             'license_effective_date' => '2016-02-01',
             'license_expiration_date' => '2017-01-31',
             'license_status' => 'ACTIVE',
-            'license_status_reason' => ''
+            'license_status_reason' => null
         ]);
          
         // row 16, facility record
         $this->tester->seeRecord('ct_rosters', [
             'ct_license_types_id' => $this->licenseTypeIds['controlled_substance_laboratories'],
-            'first_name' => '',
-            'last_name' => '',
+            'first_name' => null,
+            'last_name' => null,
             'business_name' => 'NARCOTICS CONTROL OFFICER',
             'address1' => '5 RESEARCH PKWY',
-            'address2' => '',
+            'address2' => null,
             'city' => 'WALLINGFORD',
-            'county' => '',
+            'county' => null,
             'state' => 'CT',
             'zip' => '06492-1951',
             'license_no' => 'CSL.0000252',
             'license_effective_date' => '2016-02-01',
             'license_expiration_date' => '2017-01-31',
             'license_status' => 'ACTIVE',
-            'license_status_reason' => ''
+            'license_status_reason' => null
         ]);
          
         // last row, person record
@@ -295,18 +295,18 @@ class CsvImporterTest extends \Codeception\TestCase\Test
             'ct_license_types_id' => $this->licenseTypeIds['controlled_substance_laboratories'],
             'first_name' => 'SREEGANGA',
             'last_name' => 'CHANDRA',
-            'business_name' => '',
+            'business_name' => null,
             'address1' => '295 CONGRESS AVE BCMM 149',
-            'address2' => '',
+            'address2' => null,
             'city' => 'NEW HAVEN',
-            'county' => '',
+            'county' => null,
             'state' => 'CT',
             'zip' => '06519-1418',
             'license_no' => 'CSL.0001141',
             'license_effective_date' => '2016-03-08',
             'license_expiration_date' => '2017-01-31',
             'license_status' => 'ACTIVE',
-            'license_status_reason' => ''
+            'license_status_reason' => null
         ]); 
     }
     
@@ -315,39 +315,39 @@ class CsvImporterTest extends \Codeception\TestCase\Test
         // first row
         $this->tester->seeRecord('ct_rosters', [
             'ct_license_types_id' => $this->licenseTypeIds['manufacturers_of_drugs_cosmetics_and_medical_devices'],
-            'first_name' => '',
-            'last_name' => '',
+            'first_name' => null,
+            'last_name' => null,
             'business_name' => 'JOLEN CREME BLEACH CORPORATION',
             'address1' => '25 WALLS DR',
-            'address2' => '',
+            'address2' => null,
             'city' => 'FAIRFIELD',
-            'county' => '',
+            'county' => null,
             'state' => 'CT',
             'zip' => '06824-5156',
             'license_no' => 'CSM.0000025',
             'license_effective_date' => '2015-07-01',
             'license_expiration_date' => '2016-06-30',
             'license_status' => 'ACTIVE',
-            'license_status_reason' => ''
+            'license_status_reason' => null
         ]);
         
         // last row
         $this->tester->seeRecord('ct_rosters', [
             'ct_license_types_id' => $this->licenseTypeIds['manufacturers_of_drugs_cosmetics_and_medical_devices'],
-            'first_name' => '',
-            'last_name' => '',
+            'first_name' => null,
+            'last_name' => null,
             'business_name' => 'Esquire Gas Products',
             'address1' => '156 Spring St.',
-            'address2' => '',
+            'address2' => null,
             'city' => 'Enfield',
-            'county' => '',
+            'county' => null,
             'state' => 'CT',
             'zip' => '06082',
             'license_no' => 'CSM.0000893',
             'license_effective_date' => '2016-01-27',
             'license_expiration_date' => '2016-06-30',
             'license_status' => 'ACTIVE',
-            'license_status_reason' => ''
+            'license_status_reason' => null
         ]);
     }
     
@@ -358,9 +358,9 @@ class CsvImporterTest extends \Codeception\TestCase\Test
     	    'ct_license_types_id' => $this->licenseTypeIds['acupuncturist'],
     	    'first_name' => 'THOMAS',
     	    'last_name' => 'RYAN',
-    	    'business_name' => '',
+    	    'business_name' => null,
     	    'address1' => '15 MAIN STREET',
-            'address2' => '',
+            'address2' => null,
             'city' => 'EAST HAMPTON',
             'county' => 'Middlesex',
             'state' => 'CT',
@@ -377,9 +377,9 @@ class CsvImporterTest extends \Codeception\TestCase\Test
     	    'ct_license_types_id' => $this->licenseTypeIds['acupuncturist'],
     	    'first_name' => 'HAROLDO',
     	    'last_name' => 'JEZLER',
-    	    'business_name' => '',
+    	    'business_name' => null,
     	    'address1' => '145 MILTON RD',
-    	    'address2' => '',
+    	    'address2' => null,
     	    'city' => 'RYE',
     	    'county' => 'Westchester',
     	    'state' => 'NY',
