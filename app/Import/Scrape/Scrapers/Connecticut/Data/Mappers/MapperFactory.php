@@ -5,6 +5,9 @@ namespace App\Import\Scrape\Scrapers\Connecticut\Data\Mappers;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\AmbulatorySurgicalCentersRecoveryCareCenters\AmbulatorySurgicalCenterMapper;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\ControlledSubstancesPractitionersLabsManufacturers\ControlledSubstanceLaboratoriesMapper;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\ControlledSubstancesPractitionersLabsManufacturers\ManufacturersDrugsCosmeticsMedicalDevicesMapper;
+use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\EmergencyMedicalServices\AdvancedEmergencyMedicalTechnicianMapper;
+use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\EmergencyMedicalServices\CertifiedEmsOrganizationMapper;
+use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\EmergencyMedicalServices\ParamedicMapper;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\HealthcarePractitioners\OccupationalTherapistMapper;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\HealthcarePractitioners\PhysicalTherapistMapper;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\HealthcarePractitioners\PhysicianSurgeonMdDoMapper;
@@ -32,6 +35,17 @@ class MapperFactory
         'controlled_substances_practitioners_labs_manufacturers' => [
             'controlled_substance_laboratories' => ControlledSubstanceLaboratoriesMapper::class,
             'manufacturers_of_drugs_cosmetics_and_medical_devices' => ManufacturersDrugsCosmeticsMedicalDevicesMapper::class
+        ],
+        'emergency_medical_services' => [
+            'advanced_emergency_medical_technician' => AdvancedEmergencyMedicalTechnicianMapper::class,
+            'certified_ems_organization' => CertifiedEmsOrganizationMapper::class,
+            'emergency_medical_responder' => AdvancedEmergencyMedicalTechnicianMapper::class,
+            'emergency_medical_services_instructor' => AdvancedEmergencyMedicalTechnicianMapper::class,
+            'emergency_medical_technician' => AdvancedEmergencyMedicalTechnicianMapper::class,
+            'first_responder_organization' => CertifiedEmsOrganizationMapper::class,
+            'licensed_ems_organization' => CertifiedEmsOrganizationMapper::class,
+            'paramedic' => ParamedicMapper::class,
+            'supplemental_responder_ems_organization' => CertifiedEmsOrganizationMapper::class
         ],
         'healthcare_practitioners' => [
             'advanced_practice_registered_nurse' => PhysicalTherapistMapper::class,
