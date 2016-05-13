@@ -52,4 +52,6 @@
 			<modifyDataType tableName="oig_records" columnName="excldate" newDataType="DATE" />
 			<modifyDataType tableName="oig_records" columnName="reindate" newDataType="DATE" />
 	</changeSet>
+	<include file="./changelog/svg-393.changelog.xml"
+			 relativeToChangelogFile="true"/>
 </databaseChangeLog>
