@@ -67,32 +67,37 @@ class NewJersey extends ExclusionList
     public $shouldHashListName = true;
 
     protected $npiColumnName = "npi";
-    
+
     /**
      * @inherit preProcess
      */
     public function preProcess()
     {
-    	$this->parse();
-    	parent::preProcess();
+        $this->parse();
+        parent::preProcess();
     }
-    
+
     /**
      * Parse the input data
      */
     private function parse()
     {
-    	$data = [];
-    
-    	// iterate each row
-    	foreach ($this->data as $row) {
-    		$data[] = $this->handleRow($row);
-    	}
-    
-    	// set back to global data
-    	$this->data = $data;
+        $data = [];
+
+        // iterate each row
+        foreach ($this->data as $row) {
+            foreach ($row as $value) {
+                if ($value) {
+                    $data[] = $this->handleRow($row);
+                    break;
+                }
+            }
+        }
+
+        // set back to global data
+        $this->data = $data;
     }
-    
+
     /**
      * Handles the data manipulation of a record array.
      *
@@ -101,20 +106,20 @@ class NewJersey extends ExclusionList
      */
     private function handleRow($row)
     {
-    	// remove underscore from name field
-    	$row = $this->normalizeName($row);
-    	
-    	$npiColumnIndex = $this->getNpiColumnIndex();
-			 
-		// set provider number
-		$row = PNHelper::setProviderNumberValue($row, PNHelper::getProviderNumberValue($row, $npiColumnIndex));
-		
-		// set npi number array
-		$row = PNHelper::setNpiValue($row, PNHelper::getNpiValue($row, $npiColumnIndex), $npiColumnIndex);
-		
-    	return $row;
+        // remove underscore from name field
+        $row = $this->normalizeName($row);
+
+        $npiColumnIndex = $this->getNpiColumnIndex();
+
+        // set provider number
+        $row = PNHelper::setProviderNumberValue($row, PNHelper::getProviderNumberValue($row, $npiColumnIndex));
+
+        // set npi number array
+        $row = PNHelper::setNpiValue($row, PNHelper::getNpiValue($row, $npiColumnIndex), $npiColumnIndex);
+
+        return $row;
     }
-    
+
     /**
      * Normalize the name field by replacing the underscore characters with spaces.
      *
@@ -123,8 +128,8 @@ class NewJersey extends ExclusionList
      */
     private function normalizeName($row)
     {
-    	$row[1] = str_replace('_', ' ', $row[1]);
-    	
-    	return $row;
+        $row[1] = str_replace('_', ' ', $row[1]);
+
+        return $row;
     }
 }
