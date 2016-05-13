@@ -8,7 +8,7 @@ use App\Import\Lists\HashUtils;
 /**
  * Acceptance test for ImportFileService. 
  * 
- * To run, execute the following in the shell : vendor/bin/codecept run acceptance ImportFileServiceTest
+ * To run, execute the following in the shell : vendor/bin/codecept run acceptance ImportFileServiceTest --debug
  * 
  * This test will only run its assertions for states that define both an 'input' and
  * 'expected results' file. For this class to correctly run tests on a particular state, 
@@ -40,7 +40,8 @@ use App\Import\Lists\HashUtils;
  * 2. The expected results should be placed in 'tests/acceptance/files/import/expected' in 
  * a json file named <state_prefix>.json and must contain an array of objects corresponding
  * to rows that need to be verified if they were inserted correctly in the database -
- * usually, these would be the first and last rows. Only one json file is expected per state.
+ * usually, these would be the first and last rows, along with any other rows that
+ * need to be verified. Only one json file is expected per state.
  * 
  *  @example:
  *  1. New York : nyomig.json
@@ -80,19 +81,23 @@ class ImportFileServiceTest extends TestCase
         $exclusionLists = $this->getExclusionLists();
         
         foreach ($exclusionLists as $exclusionList) {
-            
+
             $prefix = $exclusionList->prefix; 
 
+            
             if (! empty($this->config['include']) &&  array_search($prefix, $this->config['include']) === false) {
                 //Do not process if the 'include' config is not empty and prefix is not in the include array
                 continue;
             }
+
+            codecept_debug('Running acceptance test for : '.$prefix);
             
             $url = $exclusionList->import_url;
             
             $importFiles = $this->getImportFilesForPrefix($prefix);
 
             if (empty($importFiles)) {
+                codecept_debug('    No input files detected for ' . $prefix . '. Skipping this state.');
                 continue;
             }
             
@@ -216,7 +221,6 @@ class ImportFileServiceTest extends TestCase
             $this->fail('Failed to decode json for '.$prefix.' : '.json_last_error_msg());
             return null;
         }   
-        
         return $rows;
     }
     

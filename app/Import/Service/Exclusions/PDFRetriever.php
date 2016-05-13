@@ -33,7 +33,7 @@ class PDFRetriever extends Retriever
             if (strpos($list->pdfToText, "pdftotext") !== false) {
                 $contents = shell_exec($list->pdfToText . ' ' . $file . ' -');
             } else {
-                $contents = shell_exec($list->pdfToText . ' ' . $file);
+                $contents = shell_exec($list->pdfToText . ' ' . $file. ' 2>/dev/null');
             }
             // Merge Data
             $data[] = $contents;
