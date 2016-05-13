@@ -181,21 +181,29 @@ class ImportFileServiceTest extends TestCase
     
     private function verifyEntriesExistInDatabase($prefix)
     {
-        $expectedResultsFilePath = $this->expectedResultsRoot.$prefix.'.json';
+        $expectedRows = $this->getExpectedRows($prefix);
         
-        $expectedResultsJson = file_get_contents($expectedResultsFilePath);
-
         $table = $this->getTableName($prefix);
         
-        $expected = json_decode($expectedResultsJson, true);
+        foreach ($expectedRows as $expectedRow) {
+            $this->seeInDatabase($table, $expectedRow);
+        }
+    }
+    
+    private function getExpectedRows($prefix)
+    {
+        $expectedResultsFilePath = $this->expectedResultsRoot.$prefix.'.json';
+        
+        $json = file_get_contents($expectedResultsFilePath);
+        
+        $rows = json_decode($json, true);
         
         if (json_last_error() !== JSON_ERROR_NONE) {
             $this->fail('Failed to decode json for '.$prefix.' : '.json_last_error_msg());
-        }
+            return null;
+        }   
         
-        foreach ($expected as $row) {
-            $this->seeInDatabase($table, $row);
-        }
+        return $rows;
     }
     
 }
