@@ -4,6 +4,7 @@ use App\Import\Lists\NewJersey;
 class NewJersyTest extends \Codeception\TestCase\Test
 {
     private $newjersy;
+    private $datacCount;
 
     protected function _before()
     {
@@ -71,5 +72,89 @@ class NewJersyTest extends \Codeception\TestCase\Test
         ];
 
         $this->assertEquals($expected, $this->newjersy->data);
+    }
+
+    public function testExcludeEmptyData()
+    {
+        $this->newjersy->data = [
+            [
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                ''
+            ],
+            [
+                '',
+                'ABDOLLAHI, MITRA  DMD',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '646 N. SARATOGA DRIVE',
+                'MOORESTOWN',
+                'NJ',
+                '8057',
+                '',
+                'MEDICAL',
+                'DISQUALIFICATION',
+                'K',
+                '54',
+                '7540',
+                '2007/11/05',
+                '2016/02/04',
+                'N'
+            ],
+            [
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                ''
+            ]
+        ];
+
+        $this->newjersy->preProcess();
+
+        $expected = 1;
+
+        $this->assertEquals($expected, count($this->newjersy->data));
     }
 }
