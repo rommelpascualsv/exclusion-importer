@@ -189,6 +189,10 @@ class ImportFileServiceTest extends TestCase
         
         $expected = json_decode($expectedResultsJson, true);
         
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            $this->fail('Failed to decode json for '.$prefix.' : '.json_last_error_msg());
+        }
+        
         foreach ($expected as $row) {
             $this->seeInDatabase($table, $row);
         }

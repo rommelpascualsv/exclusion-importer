@@ -43,29 +43,29 @@ class CSVRetriever extends Retriever
         $data = [];
 
         // Implement multiple file upload use comma searated
-        $uri = $this->multipleUri($list->uri);
+        $uri = $this->splitURI($list->uri);
 
         foreach ($uri as $key => $value) {
-
-            if ($this->uriIsRemote($value)) {
-                $response = $this->httpClient->get($value, ['verify' => false]);
-                $contents = $response->getBody();
-            } else {
-                $contents = file_get_contents($value);
-            }
+    
+            $contents = $this->getContentFrom($value);
 
             $data = array_merge($data, $this->dataConverter->convertData($list, $contents));
         }
 
         return $data;
     }
-
-    /**
-     * @param $uri
-     * @return mixed
-     */
-    private function uriIsRemote($uri)
+    
+    private function getContentFrom($uri)
     {
-        return filter_var($uri, FILTER_VALIDATE_URL);
+        $contents = '';
+        
+        if ($this->isRemoteURI($uri)) {
+            $response = $this->httpClient->get($uri, ['verify' => false]);
+            $contents = $response->getBody();
+        } else {
+            $contents = file_get_contents($uri);
+        }
+        
+        return $contents;
     }
 }

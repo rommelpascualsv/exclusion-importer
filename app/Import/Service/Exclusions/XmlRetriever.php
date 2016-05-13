@@ -27,18 +27,14 @@ class XmlRetriever extends Retriever
         $datas = [];
 
         // Implement multiple file upload use comma searated
-        $uri = $this->multipleUri($list->uri);
+        $uri = $this->splitURI($list->uri);
 
         foreach ($uri as $key => $value) {
-            $client = new Client([
-                'base_uri' => $list->uri
-            ]);
+            
+            $xmlContent = $this->getContentFrom($value, $list);
 
-            $response = $client->request('GET', $list->urlSuffix, $list->requestOptions);
-
-            $body = $response->getBody()->getContents();
-
-            $xml = simplexml_load_string($body);
+            $xml = simplexml_load_string($xmlContent);
+            
             $data = [];
             foreach ($xml->{$list->nodes['title']}->{$list->nodes['subject']} as $node) {
                 $linesItem = [];
@@ -57,5 +53,27 @@ class XmlRetriever extends Retriever
         }
 
         return $datas;
+    }
+    
+    private function getContentFrom($uri, $list)
+    {
+        $content = '';
+        
+        if ($this->isRemoteURI($uri)) {
+            
+            $client = new Client([
+                'base_uri' => $list->uri
+            ]);
+            
+            $response = $client->request('GET', $list->urlSuffix, $list->requestOptions);
+            
+            $content = $response->getBody()->getContents();  
+            
+        } else {
+            $content = file_get_contents($uri);
+        }
+        
+        return $content;
+    
     }
 }
