@@ -32,7 +32,7 @@ class Ohio extends ExclusionList
         'date_added',
         'provider_type',
         'date_revised',
-        'provider_id_2'
+        'provider_number'
     ];
 
     public $hashColumns = [
