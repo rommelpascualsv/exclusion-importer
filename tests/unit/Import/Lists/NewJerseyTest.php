@@ -1,10 +1,9 @@
 <?php
 use App\Import\Lists\NewJersey;
 
-class NewJersyTest extends \Codeception\TestCase\Test
+class NewJerseyTest extends \Codeception\TestCase\Test
 {
     private $newjersy;
-    private $datacCount;
 
     protected function _before()
     {
