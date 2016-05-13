@@ -72,7 +72,7 @@ class HeadersOrganizerTest extends \Codeception\TestCase\Test
     			]
     			
     	];
-    	$this->savePath = codecept_data_dir('scrape/extracted/connecticut/organized-headers.csv');
+    	$this->savePath = codecept_output_dir('scrape/extracted/connecticut/organized-headers.csv');
     	$this->organizer = new HeadersOrganizer($this->data, $this->savePath);
     }
 
