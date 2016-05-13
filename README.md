@@ -2,6 +2,9 @@
 Application to assist in the discovery, importing, and management of Compliance Data
 
 ### Provisioning
+Before running vagrant up, create a liquibase.properties file. You can use the liquibase.properties.sample file provided
+as a starting point.
+
 After vagrant provisioning has ran php5-dev and php mongo need to be installed
 ```sh
 $ sudo apt-get install php5-dev

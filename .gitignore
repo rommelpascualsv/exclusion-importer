@@ -9,3 +9,4 @@ tests/_output/*
 tests/_support/_generated/*
 tests/**/*Tester.php
 tests/**/*suite.yml
+build.properties
