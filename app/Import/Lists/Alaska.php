@@ -37,14 +37,6 @@ class Alaska extends ExclusionList
         'exclusion_date' => 0
     ];
 
-    /**
-     * @var institution special cases
-     */
-    private $institutions = [
-    	"ANCHORAGE ADULT DAY SVCS",
-    	"EBEN-EZER HOMECARE, LLC"
-    ];
-    
     private $headers = [
     		'"",,Alas,ka Medical Assistance Excluded Provider List,,',
     		'"",,,May 2016,,',
@@ -65,7 +57,7 @@ class Alaska extends ExclusionList
     	$this->data = str_replace($this->headers, "", $this->data);
     	
     	// remove all page numbers
-    	$this->data = preg_replace('/"",,,Page 1 of 6,,/', "", $this->data);
+    	$this->data = preg_replace('/"",,,Page \\d of \\d,,/', "", $this->data);
     	
     	$rows = preg_split('/(\r)?\n(\s+)?/', $this->data);
     	
@@ -97,28 +89,7 @@ class Alaska extends ExclusionList
      */
     private function applyOverrides($columns)
     {
-    	$columns = $this->addMissingColumn($columns);
     	$columns = $this->populateFirstMiddleName($columns);
-    	
-    	return $columns;
-    }
-    
-    /**
-     * Adds and removes the columns for specific institutions
-     * @param array $columns the column array
-     * @return array $columns the column array
-     */
-    private function addMissingColumn($columns)
-    {
-    	
-    	if (in_array($columns[1], $this->institutions)) {
-    		
-    		// remove excess column
-    		array_pop($columns);
-    		
-    		// insert missing column
-    		array_splice($columns, 2, 0, "");
-    	}
     	
     	return $columns;
     }
