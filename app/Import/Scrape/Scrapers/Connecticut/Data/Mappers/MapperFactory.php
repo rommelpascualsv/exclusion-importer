@@ -172,7 +172,7 @@ class MapperFactory
             'psychiratric_outpatient_clinics' => HospitalsForMentallyIllPersonsMapper2::class,
             'psychologist' => ClinicalSocialWorkerMapper::class,
         ],
-        'registered_sanitarian' => [
+        'registered_sanitarians' => [
             'registered_sanitarian' => RegisteredSanitarianMapper::class
         ],
         'substance_abuse_care' => [
