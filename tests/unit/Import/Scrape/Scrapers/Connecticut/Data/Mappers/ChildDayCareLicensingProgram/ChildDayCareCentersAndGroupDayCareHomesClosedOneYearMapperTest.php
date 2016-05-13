@@ -2,9 +2,9 @@
 namespace Import\Scrape\Scrapers\Connecticut\Data\Mappers\ChildDayCareLicensingProgram;
 
 
-use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\ChildDayCareLicensingProgram\ChildDayCareCentersAndGroupDayCareHomesClosedOneYear;
+use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\ChildDayCareLicensingProgram\ChildDayCareCentersAndGroupDayCareHomesClosedOneYearMapper;
 
-class ChildDayCareCentersAndGroupDayCareHomesClosedOneYearTest extends \Codeception\TestCase\Test
+class ChildDayCareCentersAndGroupDayCareHomesClosedOneYearMapperTest extends \Codeception\TestCase\Test
 {
     /**
      * @var \UnitTester
@@ -13,7 +13,7 @@ class ChildDayCareCentersAndGroupDayCareHomesClosedOneYearTest extends \Codecept
 
     protected function _before()
     {
-        $this->mapper = new ChildDayCareCentersAndGroupDayCareHomesClosedOneYear();
+        $this->mapper = new ChildDayCareCentersAndGroupDayCareHomesClosedOneYearMapper();
     }
 
     protected function _after()

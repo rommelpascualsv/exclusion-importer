@@ -4,7 +4,7 @@ namespace App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\ChildDayCareLicens
 
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\BaseMapper;
 
-class FamilyDayCareHomesClosedOneYear extends BaseMapper
+class ChildDayCareCentersAndGroupDayCareHomesOpenedOneYearMapper extends BaseMapper
 {
 	/**
 	 * Get db data
@@ -14,13 +14,12 @@ class FamilyDayCareHomesClosedOneYear extends BaseMapper
 	public function getDbData(array $data)
 	{
 	    return $this->getRosterDbData([
-	        'first_name' => $data['First Name'],
-	        'last_name' => $data['Last Name'],
+	        'business_name' => $data['Name'],
 	        'address1' => $data['Address'],
 	        'city' => $data['City'],
 	        'zip' => $data['Zip'],
 	        'license_no' => $data['License #'],
-	        'license_expiration_date' => $this->getDateFromFormat($data['Close Date'])
+	        'license_effective_date' => $this->getDateFromFormat($data['Initial License Date'])
 	    ]);
 	}
 }
