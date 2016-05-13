@@ -3,6 +3,7 @@ namespace Import\Scrape\Scrapers\Connecticut\Data;
 
 
 use App\Import\Scrape\Scrapers\Connecticut\Data\CsvDir;
+use App\Import\Scrape\Components\ScrapeFilesystemInterface;
 
 class CsvDirTest extends \Codeception\TestCase\Test
 {
@@ -10,64 +11,81 @@ class CsvDirTest extends \Codeception\TestCase\Test
      * @var \UnitTester
      */
     protected $tester;
-
+    
+    /**
+     * @var ScrapeFilesystemInterface
+     */
+    protected $filesystem;
+    
     protected function _before()
     {
+        $this->filesystem = app('scrape_test_filesystem');
     }
 
     protected function _after()
     {
     }
-
+    
+    // TESTS
+    
     /**
-     * Test if the csv directory data in CsvDirTest::getDataFromFilesystem is correct
-     * Skip test for now.
+     * Test if the csv directory data retrieved from CsvDirTest::getDataFromFilesystem 
+     * is correct
      */
-//     public function testGetDataFromFilesystem()
-//     {
-//         $csvDirData = CsvDir::getDataFromFilesystem(
-//             app('scrape_test_filesystem'),
-//             'connecticut/csv'
-//         );
+    public function testGetDataFromFilesystem()
+    {
+        $this->deleteCsvs();
+        $this->copyCsvsToOutput();
         
-//         $expectedCsvDirData = [
-//             [
-//                 'category' => 'ambulatory_surgical_centers_recovery_care_centers',
-//                 'option' => 'ambulatory_surgical_center',
-//                 'file_path' => codecept_data_dir('scrape/connecticut/csv/ambulatory_surgical_centers_recovery_care_centers/ambulatory_surgical_center.csv')
-//             ],
-//             [
-//                 'category' => 'child_day_care_licensing_program',
-//                 'option' => 'child_day_care_centers_and_group_day_care_homes_closed_1_year',
-//                 'file_path' => codecept_data_dir('scrape/connecticut/csv/child_day_care_licensing_program/child_day_care_centers_and_group_day_care_homes_closed_1_year.csv')
-//             ],
-//             [
-//                 'category' => 'child_day_care_licensing_program',
-//                 'option' => 'family_day_care_homes_total_by_date_active',
-//                 'file_path' => codecept_data_dir('scrape/connecticut/csv/child_day_care_licensing_program/family_day_care_homes_total_by_date_active.csv')
-//             ],
-//             [
-//                 'category' => 'controlled_substances_practitioners_labs_manufacturers',
-//                 'option' => 'controlled_substance_laboratories',
-//                 'file_path' => codecept_data_dir('scrape/connecticut/csv/controlled_substances_practitioners_labs_manufacturers/controlled_substance_laboratories.csv')
-//             ],
-//             [
-//                 'category' => 'controlled_substances_practitioners_labs_manufacturers',
-//                 'option' => 'manufacturers_of_drugs_cosmetics_and_medical_devices',
-//                 'file_path' => codecept_data_dir('scrape/connecticut/csv/controlled_substances_practitioners_labs_manufacturers/manufacturers_of_drugs_cosmetics_and_medical_devices.csv')
-//             ],
-//             [
-//                 'category' => 'healthcare_practitioners',
-//                 'option' => 'acupuncturist',
-//                 'file_path' => codecept_data_dir('scrape/connecticut/csv/healthcare_practitioners/acupuncturist.csv')
-//             ],
-//             [
-//                 'category' => 'infirmaries_clinics',
-//                 'option' => 'family_planning_clinics',
-//                 'file_path' => codecept_data_dir('scrape/connecticut/csv/infirmaries_clinics/family_planning_clinics.csv')
-//             ],
-//         ];
+        $csvDirData = CsvDir::getDataFromFilesystem(
+            app('scrape_test_filesystem'),
+            'connecticut/csv'
+        );
         
-//         $this->assertSame($csvDirData, $expectedCsvDirData);
-//     }
+        $expectedCsvDirData = [
+            [
+                'category' => 'ambulatory_surgical_centers_recovery_care_centers',
+                'option' => 'ambulatory_surgical_center',
+                'file_path' => codecept_output_dir('scrape/connecticut/csv/ambulatory_surgical_centers_recovery_care_centers/ambulatory_surgical_center.csv')
+            ],
+            [
+                'category' => 'controlled_substances_practitioners_labs_manufacturers',
+                'option' => 'controlled_substance_laboratories',
+                'file_path' => codecept_output_dir('scrape/connecticut/csv/controlled_substances_practitioners_labs_manufacturers/controlled_substance_laboratories.csv')
+            ],
+            [
+                'category' => 'healthcare_practitioners',
+                'option' => 'acupuncturist',
+                'file_path' => codecept_output_dir('scrape/connecticut/csv/healthcare_practitioners/acupuncturist.csv')
+            ]
+        ];
+        
+        $this->assertSame($csvDirData, $expectedCsvDirData);
+    }
+    
+    // HELPER FUNCTIONS
+    
+    protected function copyCsvsToOutput()
+    {
+        $csvs = [
+            codecept_data_dir('scrape/connecticut/csv/ambulatory_surgical_centers_recovery_care_centers/ambulatory_surgical_center.csv'),
+            codecept_data_dir('scrape/connecticut/csv/controlled_substances_practitioners_labs_manufacturers/controlled_substance_laboratories.csv'),
+            codecept_data_dir('scrape/connecticut/csv/healthcare_practitioners/acupuncturist.csv')
+        ];
+        
+        foreach ($csvs as $value) {
+            $outputFilePath = str_replace('_data', '_output', $value);
+            $outputFileDir = dirname($outputFilePath);
+            
+            if (! is_dir($outputFileDir)) {
+                mkdir($outputFileDir, 0755, true);
+            }
+            copy($value, $outputFilePath);
+        }
+    }
+    
+    protected function deleteCsvs()
+    {
+        $this->filesystem->deleteDir('connecticut');
+    }
 }
