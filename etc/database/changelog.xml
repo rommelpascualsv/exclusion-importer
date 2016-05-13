@@ -26,32 +26,10 @@
             UPDATE `exclusion_lists` SET is_active = 0
        </rollback>
     </changeSet>
-	<changeSet author="meirs" id="sv-560-1" context="prod">
-		<addColumn tableName="oig_records">
-			<column name="waiverdate" type="DATE" defaultValue="NULL" />
-		</addColumn>
-		<addColumn tableName="oig_records">
-			<column name="wvrstate" type="VARCHAR(10)" />
-		</addColumn>
-	</changeSet>
-	<changeSet author="meirs" id="sv-560-2" context="prod">
-			<modifyDataType tableName="oig_records" columnName="id" newDataType="INT(11) UNSIGNED"/>
-			<modifyDataType tableName="oig_records" columnName="lastname" newDataType="VARCHAR(100)" />
-			<modifyDataType tableName="oig_records" columnName="firstname" newDataType="VARCHAR(100)" />
-			<modifyDataType tableName="oig_records" columnName="midname" newDataType="VARCHAR(100)" />
-			<modifyDataType tableName="oig_records" columnName="busname" newDataType="VARCHAR(100)" />
-			<modifyDataType tableName="oig_records" columnName="general" newDataType="VARCHAR(100)" />
-			<modifyDataType tableName="oig_records" columnName="specialty" newDataType="VARCHAR(100)" />
-			<modifyDataType tableName="oig_records" columnName="upin" newDataType="VARCHAR(100)" />
-			<modifyDataType tableName="oig_records" columnName="dob" newDataType="DATE" />
-			<modifyDataType tableName="oig_records" columnName="address" newDataType="VARCHAR(255)" />
-			<modifyDataType tableName="oig_records" columnName="city" newDataType="VARCHAR(50)" />
-			<modifyDataType tableName="oig_records" columnName="state" newDataType="VARCHAR(25)" />
-			<modifyDataType tableName="oig_records" columnName="zip" newDataType="VARCHAR(10)" />
-			<modifyDataType tableName="oig_records" columnName="excltype" newDataType="VARCHAR(50)" />
-			<modifyDataType tableName="oig_records" columnName="excldate" newDataType="DATE" />
-			<modifyDataType tableName="oig_records" columnName="reindate" newDataType="DATE" />
-	</changeSet>
+
+	<include file="./changelog/sv-560-1.changelog.xml" relativeToChangelogFile="true" />
+	<include file="./changelog/sv-560-2.changelog.xml" relativeToChangelogFile="true" />
 	<include file="./changelog/svg-393.changelog.xml"
 			 relativeToChangelogFile="true"/>
+
 </databaseChangeLog>
