@@ -3,6 +3,7 @@
 use App\Services\ImportFileService;
 use Illuminate\Support\Facades\DB;
 use App\Import\Service\Exclusions\ListFactory;
+use App\Import\Lists\HashUtils;
 
 /**
  * Acceptance test for ImportFileService. 
@@ -95,6 +96,8 @@ class ImportFileServiceTest extends TestCase
                 continue;
             }
             
+            //Clear any existing in the table to ensure we are working the test 
+            //data from the input file
             $this->truncateTable($this->getTableName($prefix));
             
             $imported = $this->importFile($prefix, $importFiles);
@@ -171,7 +174,14 @@ class ImportFileServiceTest extends TestCase
     
     private function getFileExtensionFor($prefix)
     {
-        return ! isset($this->listFactory->listMappings[$prefix]) ? null : $this->listFactory->make($prefix)->type;
+        $exclusionListClass = $this->getExclusionListClassFor($prefix);
+        
+        return $exclusionListClass !== null ? $exclusionListClass->type : null;
+    }
+    
+    private function getExclusionListClassFor($prefix)
+    {
+        return ! isset($this->listFactory->listMappings[$prefix]) ? null : $this->listFactory->make($prefix);
     }
     
     private function truncateTable($table)
@@ -186,6 +196,10 @@ class ImportFileServiceTest extends TestCase
         $table = $this->getTableName($prefix);
         
         foreach ($expectedRows as $expectedRow) {
+            //Generate the hash and verify that it was correctly inserted in the 
+            //database as well
+            $expectedRow['hash'] = $this->generateHash($expectedRow, $prefix);
+            
             $this->seeInDatabase($table, $expectedRow);
         }
     }
@@ -204,6 +218,26 @@ class ImportFileServiceTest extends TestCase
         }   
         
         return $rows;
+    }
+    
+    private function generateHash($record, $prefix)
+    {
+        $this->normalizeDatesForHash($record);
+        
+        $hash = HashUtils::generateHash($record, $this->getExclusionListClassFor($prefix));
+        
+        return hex2bin($hash);       
+    }
+    
+    private function normalizeDatesForHash(&$record)
+    {
+       foreach ($record as $columnName => $columnValue) {
+           
+           if ($columnValue === '0000-00-00') {
+               $record[$columnName] = '';
+           }
+           
+       }
     }
     
 }
