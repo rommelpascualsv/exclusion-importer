@@ -61,9 +61,9 @@ class OIG extends ExclusionList
     ];
 
 
-    public function postProcess($data)
+    public function postProcess()
     {
-        return array_map(function ($record) {
+        $this->data = array_map(function ($record) {
             if ($record['npi'] == 0) {
                 $record['npi'] = null;
             }
@@ -73,6 +73,6 @@ class OIG extends ExclusionList
             }
 
             return $record;
-        }, $data);
+        }, $this->data);
     }
 }
