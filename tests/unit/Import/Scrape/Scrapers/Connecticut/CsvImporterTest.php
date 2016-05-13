@@ -23,10 +23,10 @@ class CsvImporterTest extends \Codeception\TestCase\Test
     ];
     
     protected $licenseTypeIds = [
-    		'ambulatory_surgical_center' => 36,
-    		'manufacturers_of_drugs_cosmetics_and_medical_devices' => 42,
-    		'controlled_substance_laboratories' => 43,
-    		'acupuncturist' => 44
+    		'ambulatory_surgical_centers_recovery_care_centers.ambulatory_surgical_center' => 36,
+    		'controlled_substances_practitioners_labs_manufacturers.manufacturers_of_drugs_cosmetics_and_medical_devices' => 42,
+    		'controlled_substances_practitioners_labs_manufacturers.controlled_substance_laboratories' => 43,
+    		'healthcare_practitioners.acupuncturist' => 44
     ];
     
     protected function _before()
@@ -95,41 +95,41 @@ class CsvImporterTest extends \Codeception\TestCase\Test
         $table = 'ct_license_types';
         
         $this->tester->haveRecord($table, [
-            'id' => $this->licenseTypeIds['ambulatory_surgical_center'],
+            'id' => $this->licenseTypeIds['ambulatory_surgical_centers_recovery_care_centers.ambulatory_surgical_center'],
             'ct_license_categories_id' => $this->categoryIds['ambulatory_surgical_centers_recovery_care_centers'],
-            'key' => 'ambulatory_surgical_center',
+            'key' => 'ambulatory_surgical_centers_recovery_care_centers.ambulatory_surgical_center',
             'name' => 'Ambulatory Surgical Center'
         ]);
          
         $this->tester->haveRecord($table, [
-            'id' => $this->licenseTypeIds['manufacturers_of_drugs_cosmetics_and_medical_devices'],
+            'id' => $this->licenseTypeIds['controlled_substances_practitioners_labs_manufacturers.manufacturers_of_drugs_cosmetics_and_medical_devices'],
             'ct_license_categories_id' => $this->categoryIds['controlled_substances_practitioners_labs_manufacturers'],
-            'key' => 'manufacturers_of_drugs_cosmetics_and_medical_devices',
+            'key' => 'controlled_substances_practitioners_labs_manufacturers.manufacturers_of_drugs_cosmetics_and_medical_devices',
             'name' => 'Manufacturers of Drugs, Cosmetics and Medical Devices'
         ]);
          
         $this->tester->haveRecord($table, [
-            'id' => $this->licenseTypeIds['controlled_substance_laboratories'],
+            'id' => $this->licenseTypeIds['controlled_substances_practitioners_labs_manufacturers.controlled_substance_laboratories'],
             'ct_license_categories_id' => $this->categoryIds['controlled_substances_practitioners_labs_manufacturers'],
-            'key' => 'controlled_substance_laboratories',
+            'key' => 'controlled_substances_practitioners_labs_manufacturers.controlled_substance_laboratories',
             'name' => 'Controlled Substance Laboratories'
         ]);
          
         $this->tester->haveRecord($table, [
-            'id' => $this->licenseTypeIds['acupuncturist'],
+            'id' => $this->licenseTypeIds['healthcare_practitioners.acupuncturist'],
             'ct_license_categories_id' => $this->categoryIds['healthcare_practitioners'],
-            'key' => 'acupuncturist',
+            'key' => 'healthcare_practitioners.acupuncturist',
             'name' => 'Acupuncturist'
         ]);
     }
     
     public function testDbFindLicenseTypeIdByKey()
     {
-        $key = 'ambulatory_surgical_center';
+        $key = 'ambulatory_surgical_centers_recovery_care_centers.ambulatory_surgical_center';
          
         $id = $this->importer->dbFindLicenseTypeIdByKey($key);
          
-        $this->assertEquals($this->licenseTypeIds['ambulatory_surgical_center'], $id);
+        $this->assertEquals($this->licenseTypeIds['ambulatory_surgical_centers_recovery_care_centers.ambulatory_surgical_center'], $id);
     }
     
     public function testDbFindLicenseTypeIdByKeyNotFound()
@@ -143,7 +143,7 @@ class CsvImporterTest extends \Codeception\TestCase\Test
     
     public function testDbInsertRoster()
     {
-        $licenseTypeId = $this->licenseTypeIds['ambulatory_surgical_center'];
+        $licenseTypeId = $this->licenseTypeIds['ambulatory_surgical_centers_recovery_care_centers.ambulatory_surgical_center'];
         $data = [
             'first_name' => '',
             'last_name' => '',
@@ -165,7 +165,7 @@ class CsvImporterTest extends \Codeception\TestCase\Test
         $this->importer->dbInsertRoster($licenseTypeId, $data, $timestamp);
     
         $this->tester->seeRecord('ct_rosters', [
-            'ct_license_types_id' => $this->licenseTypeIds['ambulatory_surgical_center'],
+            'ct_license_types_id' => $this->licenseTypeIds['ambulatory_surgical_centers_recovery_care_centers.ambulatory_surgical_center'],
             'first_name' => '',
             'last_name' => '',
             'business_name' => 'SAINT FRANCIS GI ENDOSCOPY, LLC',
@@ -213,7 +213,7 @@ class CsvImporterTest extends \Codeception\TestCase\Test
     {
         // first row
         $this->tester->seeRecord('ct_rosters', [
-            'ct_license_types_id' => $this->licenseTypeIds['ambulatory_surgical_center'],
+            'ct_license_types_id' => $this->licenseTypeIds['ambulatory_surgical_centers_recovery_care_centers.ambulatory_surgical_center'],
             'first_name' => null,
             'last_name' => null,
             'business_name' => 'SAINT FRANCIS GI ENDOSCOPY, LLC',
@@ -232,7 +232,7 @@ class CsvImporterTest extends \Codeception\TestCase\Test
         
         // last row
         $this->tester->seeRecord('ct_rosters', [
-            'ct_license_types_id' => $this->licenseTypeIds['ambulatory_surgical_center'],
+            'ct_license_types_id' => $this->licenseTypeIds['ambulatory_surgical_centers_recovery_care_centers.ambulatory_surgical_center'],
             'first_name' => null,
             'last_name' => null,
             'business_name' => 'STAMFORD ASC, LLC',
@@ -254,7 +254,7 @@ class CsvImporterTest extends \Codeception\TestCase\Test
     {
         // first row, person record
         $this->tester->seeRecord('ct_rosters', [
-            'ct_license_types_id' => $this->licenseTypeIds['controlled_substance_laboratories'],
+            'ct_license_types_id' => $this->licenseTypeIds['controlled_substances_practitioners_labs_manufacturers.controlled_substance_laboratories'],
             'first_name' => 'ROBERT',
             'last_name' => 'MALISON',
             'business_name' => null,
@@ -273,7 +273,7 @@ class CsvImporterTest extends \Codeception\TestCase\Test
          
         // row 16, facility record
         $this->tester->seeRecord('ct_rosters', [
-            'ct_license_types_id' => $this->licenseTypeIds['controlled_substance_laboratories'],
+            'ct_license_types_id' => $this->licenseTypeIds['controlled_substances_practitioners_labs_manufacturers.controlled_substance_laboratories'],
             'first_name' => null,
             'last_name' => null,
             'business_name' => 'NARCOTICS CONTROL OFFICER',
@@ -292,7 +292,7 @@ class CsvImporterTest extends \Codeception\TestCase\Test
          
         // last row, person record
         $this->tester->seeRecord('ct_rosters', [
-            'ct_license_types_id' => $this->licenseTypeIds['controlled_substance_laboratories'],
+            'ct_license_types_id' => $this->licenseTypeIds['controlled_substances_practitioners_labs_manufacturers.controlled_substance_laboratories'],
             'first_name' => 'SREEGANGA',
             'last_name' => 'CHANDRA',
             'business_name' => null,
@@ -314,7 +314,7 @@ class CsvImporterTest extends \Codeception\TestCase\Test
     {	
         // first row
         $this->tester->seeRecord('ct_rosters', [
-            'ct_license_types_id' => $this->licenseTypeIds['manufacturers_of_drugs_cosmetics_and_medical_devices'],
+            'ct_license_types_id' => $this->licenseTypeIds['controlled_substances_practitioners_labs_manufacturers.manufacturers_of_drugs_cosmetics_and_medical_devices'],
             'first_name' => null,
             'last_name' => null,
             'business_name' => 'JOLEN CREME BLEACH CORPORATION',
@@ -333,7 +333,7 @@ class CsvImporterTest extends \Codeception\TestCase\Test
         
         // last row
         $this->tester->seeRecord('ct_rosters', [
-            'ct_license_types_id' => $this->licenseTypeIds['manufacturers_of_drugs_cosmetics_and_medical_devices'],
+            'ct_license_types_id' => $this->licenseTypeIds['controlled_substances_practitioners_labs_manufacturers.manufacturers_of_drugs_cosmetics_and_medical_devices'],
             'first_name' => null,
             'last_name' => null,
             'business_name' => 'Esquire Gas Products',
@@ -355,7 +355,7 @@ class CsvImporterTest extends \Codeception\TestCase\Test
     {
     	// first row
     	$this->tester->seeRecord('ct_rosters', [
-    	    'ct_license_types_id' => $this->licenseTypeIds['acupuncturist'],
+    	    'ct_license_types_id' => $this->licenseTypeIds['healthcare_practitioners.acupuncturist'],
     	    'first_name' => 'THOMAS',
     	    'last_name' => 'RYAN',
     	    'business_name' => null,
@@ -374,7 +374,7 @@ class CsvImporterTest extends \Codeception\TestCase\Test
     	
     	// last row    	
     	$this->tester->seeRecord('ct_rosters', [
-    	    'ct_license_types_id' => $this->licenseTypeIds['acupuncturist'],
+    	    'ct_license_types_id' => $this->licenseTypeIds['healthcare_practitioners.acupuncturist'],
     	    'first_name' => 'HAROLDO',
     	    'last_name' => 'JEZLER',
     	    'business_name' => null,
