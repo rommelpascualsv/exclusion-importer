@@ -19,15 +19,14 @@ class ScrapeController extends BaseController
 //        
 //        foreach($options as $option) {
 //            $categoryId = DB::table('ct_license_categories')->where('key', $option->getCategory()->getDir())->value('id');
-//            echo '["key"=>\'', $option->getFieldName(), '\', "name" =>"', $option->getName(),'", "created_at" => Carbon::now()->format("Y-m-d H:i:s"), "updated_at" => Carbon::now()->format("Y-m-d H:i:s"), "ct_license_categories_id" => "',$categoryId,'"],<br>';
+//            echo '["key"=>\'',$option->getCategory()->getDir(),'.', $option->getFileName(), '\', "name" =>"', $option->getName(),'", "created_at" => Carbon::now()->format("Y-m-d H:i:s"), "updated_at" => Carbon::now()->format("Y-m-d H:i:s"), "ct_license_categories_id" => ',$categoryId,'],<br>';
 //            $categories[$option->getCategory()->getDir()] = $option->getCategory();
 //        }
-//        
+        
+//        $counter = 1;
 //        foreach($categories as $category) {
-//            echo '["key"=>"', $category->getDir(), '", "name" =>"', $category->getName(),'", "created_at" => Carbon::now()->format("Y-m-d H:i:s"), "updated_at" => Carbon::now()->format("Y-m-d H:i:s")],<br>';
-//        }
-//        foreach ($options as $option) {
-//            echo '["key"=>"', $option->getName(), '", "name" =>"', $option->getName(),'", "created_at" => Carbon::now()->format("Y-m-d H:i:s"), "updated_at" => Carbon::now()->format("Y-m-d H:i:s")],<br>';
+//            echo '["id" => '.$counter.', "key"=>"', $category->getDir(), '", "name" =>"', $category->getName(),'", "created_at" => Carbon::now()->format("Y-m-d H:i:s"), "updated_at" => Carbon::now()->format("Y-m-d H:i:s")],<br>';
+//            $counter++;
 //        }
 		/* dd($a); */
 		
