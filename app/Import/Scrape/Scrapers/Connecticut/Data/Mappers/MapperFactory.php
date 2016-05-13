@@ -3,21 +3,28 @@
 namespace App\Import\Scrape\Scrapers\Connecticut\Data\Mappers;
 
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\AmbulatorySurgicalCentersRecoveryCareCenters\AmbulatorySurgicalCenterMapper;
-use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\ControlledSubstancesPractitionersLabsManufacturers\ControlledSubstanceLaboratoriesMapper;
-use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\ControlledSubstancesPractitionersLabsManufacturers\ControlledSubstanceRegistrationForPractitionersMapper;
-use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\ControlledSubstancesPractitionersLabsManufacturers\ManufacturersDrugsCosmeticsMedicalDevicesMapper;
-use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\ControlledSubstancesPractitionersLabsManufacturers\WholesalersOfDrugsCosmeticsAndMedicalDevicesMapper;
-use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\EmergencyMedicalServices\AdvancedEmergencyMedicalTechnicianMapper;
-use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\EmergencyMedicalServices\CertifiedEmsOrganizationMapper;
-use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\EmergencyMedicalServices\ParamedicMapper;
-use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\HealthcarePractitioners\OccupationalTherapistMapper;
-use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\HealthcarePractitioners\PhysicalTherapistMapper;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\ChildDayCareLicensingProgram\ChildDayCareCentersAndGroupDayCareHomesClosedOneYearMapper;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\ChildDayCareLicensingProgram\ChildDayCareCentersAndGroupDayCareHomesOpenedOneYearMapper;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\ChildDayCareLicensingProgram\ChildDayCareCentersAndGroupDayCareHomesTotalByDateActiveMapper;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\ChildDayCareLicensingProgram\FamilyDayCareHomesClosedOneYearMapper;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\ChildDayCareLicensingProgram\FamilyDayCareHomesOpenedOneYearMapper;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\ChildDayCareLicensingProgram\FamilyDayCareHomesTotalByDateActiveMapper;
+use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\ControlledSubstancesPractitionersLabsManufacturers\ControlledSubstanceLaboratoriesMapper;
+use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\ControlledSubstancesPractitionersLabsManufacturers\ControlledSubstanceRegistrationForPractitionersMapper;
+use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\ControlledSubstancesPractitionersLabsManufacturers\ManufacturersDrugsCosmeticsMedicalDevicesMapper;
+use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\ControlledSubstancesPractitionersLabsManufacturers\WholesalersOfDrugsCosmeticsAndMedicalDevicesMapper;
+use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\DrugControlPharmacyPharmacistsEtc\DealersOfElectronicNicotineDeliverySystemsOrVaporProductsMapper;
+use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\DrugControlPharmacyPharmacistsEtc\NonLegendDrugPermitsMapper;
+use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\DrugControlPharmacyPharmacistsEtc\NonResidentPharmaciesMapper;
+use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\DrugControlPharmacyPharmacistsEtc\PharmaciesMapper;
+use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\DrugControlPharmacyPharmacistsEtc\PharmacistsMapper;
+use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\DrugControlPharmacyPharmacistsEtc\PharmacyTechniciansMapper;
+use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\DrugControlPharmacyPharmacistsEtc\TemporaryPermitToPracticePharmacyMapper;
+use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\EmergencyMedicalServices\AdvancedEmergencyMedicalTechnicianMapper;
+use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\EmergencyMedicalServices\CertifiedEmsOrganizationMapper;
+use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\EmergencyMedicalServices\ParamedicMapper;
+use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\HealthcarePractitioners\OccupationalTherapistMapper;
+use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\HealthcarePractitioners\PhysicalTherapistMapper;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\HealthcarePractitioners\PhysicianSurgeonMdDoMapper;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\HealthcarePractitioners\PodiatristMapper;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\HemodialysisCenters\HemodialysisCentersMapper;
@@ -57,6 +64,16 @@ class MapperFactory
 	        'family_day_care_homes_opened_1_year' => FamilyDayCareHomesOpenedOneYearMapper::class,
 	        'family_day_care_homes_opened_60_days' => FamilyDayCareHomesOpenedOneYearMapper::class,
 	        'family_day_care_homes_total_by_date_active' => FamilyDayCareHomesTotalByDateActiveMapper::class
+	    ],
+	    'drug_control_pharmacy_pharmacists_etc' => [
+            'dealers_of_electronic_nicotine_delivery_systems_or_vapor_products' => DealersOfElectronicNicotineDeliverySystemsOrVaporProductsMapper::class,
+	        'non_legend_drug_permits' => NonLegendDrugPermitsMapper::class,
+	        'non_resident_pharmacies' => NonResidentPharmaciesMapper::class,
+	        'pharmacies' => PharmaciesMapper::class,
+	        'pharmacists' => PharmacistsMapper::class,
+	        'pharmacy_interns' => PharmacistsMapper::class,
+	        'pharmacy_technicians' => PharmacyTechniciansMapper::class,
+	        'temporary_permit_to_practice_pharmacy' => TemporaryPermitToPracticePharmacyMapper::class
 	    ],
         'emergency_medical_services' => [
             'advanced_emergency_medical_technician' => AdvancedEmergencyMedicalTechnicianMapper::class,
