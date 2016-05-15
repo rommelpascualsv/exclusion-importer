@@ -2,7 +2,7 @@
 
 use App\Mappers\Njna\EntryMapper;
 
-class NjnaMapperTest extends TestCase 
+class NjnaMapperTest extends \CDM\Test\TestCase
 {
     public function test_njna_row_maps_to_database_model()
     {

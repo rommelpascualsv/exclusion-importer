@@ -1,5 +1,7 @@
 <?php
 
+namespace CDM\Test;
+
 class MongoTestCase extends TestCase {
 
 	public function setUp()

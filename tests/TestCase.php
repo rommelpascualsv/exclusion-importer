@@ -1,6 +1,10 @@
 <?php
 
-class TestCase extends Laravel\Lumen\Testing\TestCase 
+namespace CDM\Test;
+
+use Laravel\Lumen\Testing\TestCase as LaravelTestCase;
+
+class TestCase extends LaravelTestCase
 {
 	/**
 	 * Creates the application.
@@ -9,7 +13,7 @@ class TestCase extends Laravel\Lumen\Testing\TestCase
 	 */
 	public function createApplication()
     {
-        return require __DIR__.'/../bootstrap/app.php';
+        return require __DIR__ . '/../bootstrap/app.php';
     }
 
     public function setUp()

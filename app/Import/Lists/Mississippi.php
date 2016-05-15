@@ -95,7 +95,7 @@ class Mississippi extends ExclusionList
             $npi = $this->parseNPI($row[3]);
             $specialty = trim($row[4]);
             $exclusionFromDate = trim($row[5]);
-            $exclusionToDate = $this->parseExclusionToDate($row[6]);
+            $exclusionToDate = trim($this->parseExclusionToDate($row[6]));
             $terminationReason = trim($row[7]);
             $sanctionType = $this->parseSanctionType($row[8]);
             
@@ -291,14 +291,15 @@ class Mississippi extends ExclusionList
     
     /**
      * Returns the full description of the sanction type key, if it is defined
-     * in this class' sanctionTypes array, or blank if it cannot be found
+     * in this class' sanctionTypes array, or the sanction type key if it cannot 
+     * be found
      * @param unknown $sanctionTypeKey the sanction type key
      * @return string the description text of the sanction type
      */
     private function parseSanctionType($sanctionTypeKey)
     {
-        $sanctionType = $this->sanctionTypes[trim($sanctionTypeKey)];
-        return $sanctionType ? $sanctionType : '';
+        $sanctionTypeKey = trim($sanctionTypeKey);
+        return isset($this->sanctionTypes[$sanctionTypeKey]) ? $this->sanctionTypes[$sanctionTypeKey] : $sanctionTypeKey;
     }
     
     /**
