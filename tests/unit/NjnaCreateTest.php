@@ -1,8 +1,9 @@
 <?php
 
 use App\Repositories\NjnaRepository;
+use CDM\Test\MongoTestCase;
 
-class NjnaCreateTest extends MongoTestCase 
+class NjnaCreateTest extends MongoTestCase
 {
 	public function test_njna_record_creates_record_in_database()
 	{

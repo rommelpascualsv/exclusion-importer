@@ -6,7 +6,7 @@ class Nebraska extends ExclusionList
 {
     public $dbPrefix = 'ne1';
 
-    public $pdfToText = "java -Dfile.encoding=utf-8 -jar ../etc/tabula.jar -p all -u -g -r";
+    public $pdfToText = "java -Dfile.encoding=utf-8 -jar /vagrant/etc/tabula.jar -p all -u -g -r";
 
     public $uri = "http://dhhs.ne.gov/medicaid/Documents/Excluded-Providers.pdf";
     

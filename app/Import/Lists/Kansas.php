@@ -14,7 +14,7 @@ class Kansas extends ExclusionList
      */
     public $uri = 'http://www.kdheks.gov/hcf/medicaid_program_integrity/download/Termination_List.pdf';
     
-    public $pdfToText = "java -jar ../etc/tabula.jar -p all";
+    public $pdfToText = "java -jar /vagrant/etc/tabula.jar -p all";
 
     /**
      * @var string

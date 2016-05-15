@@ -1,0 +1,27 @@
+[{
+    "business" : "1 STOP PHARMACY AND FOOD MART INC",
+    "provtype" : "Pharmacy",
+    "provider_number" : "28701",
+    "provider_number_2" : "",
+    "npi" : "1275716979",
+    "county" : "",
+    "city" : "",
+    "state" : "",
+    "zip" : "",
+    "action_date" : "2009-02-03",
+    "action_type" : "Exclusion - 18NYCRR515.2",
+    "profession_desc" : ""
+},{
+    "business" : "ZWEIG IVAN H               MD",
+    "provtype" : "Physician",
+    "provider_number" : "153577",
+    "provider_number_2" : "",
+    "npi" : "",
+    "county" : "",
+    "city" : "",
+    "state" : "",
+    "zip" : "",
+    "action_date" : "1990-04-08",
+    "action_type" : "Exclusion - 18NYCRR515",
+    "profession_desc" : ""
+}]

@@ -57,7 +57,7 @@ class DataCsvConverter
 
         file_put_contents($filePath, $fileContent);
 
-        exec("ssconvert $filePath $newFilePath");
+        exec("ssconvert $filePath $newFilePath 2>/dev/null");
 
         unlink($filePath);
 
