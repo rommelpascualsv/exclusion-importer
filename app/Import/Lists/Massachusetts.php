@@ -22,6 +22,13 @@ class Massachusetts extends ExclusionList
         'reason',
         'effective_date'
     ];
+
+    public $hashColumns = [
+        'provider_name',
+        'provider_type',
+        'npi',
+        'effective_date'
+    ];
     
     public $shouldHashListName = true;
     
