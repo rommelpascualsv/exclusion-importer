@@ -2,7 +2,7 @@
 
 use App\Mappers\Nppes\ProviderMapper;
 
-class NppesMapperTest extends TestCase 
+class NppesMapperTest extends \CDM\Test\TestCase
 {
     public function test_nppes_row_maps_to_database_model()
     {

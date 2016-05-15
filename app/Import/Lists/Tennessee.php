@@ -6,7 +6,7 @@ class Tennessee extends ExclusionList
     
     //Note that the columns need to be adjusted if there are any added/deleted
     //columns or changes to the widths of the columns in the PDF
-    public $pdfToText = "java -Dfile.encoding=utf-8 -jar ../etc/tabula.jar -p all --columns 216,273,330,384,684";
+    public $pdfToText = "java -Dfile.encoding=utf-8 -jar /vagrant/etc/tabula.jar -p all --columns 216,273,330,384,684";
 
     public $uri = 'http://www.tn.gov/assets/entities/tenncare/attachments/terminatedproviderlist.pdf';
 

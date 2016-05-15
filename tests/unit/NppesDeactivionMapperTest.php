@@ -2,7 +2,7 @@
 
 use App\Mappers\Nppes\DeactivationMapper;
 
-class NppesDeactivationMapperTest extends TestCase 
+class NppesDeactivationMapperTest extends \CDM\Test\TestCase
 {
     public function test_nppes_deactivation_row_maps_to_database_model()
     {

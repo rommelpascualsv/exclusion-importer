@@ -2,7 +2,7 @@
 
 use App\Mappers\Taxonomy\EntryMapper;
 
-class TaxonomyMapperTest extends TestCase 
+class TaxonomyMapperTest extends \CDM\Test\TestCase
 {
     public function test_taxonomy_row_maps_to_database_model()
     {
