@@ -1,9 +1,12 @@
 <?php
 
+namespace CDM\Test\Acceptance;
+
 use App\Services\ImportFileService;
 use Illuminate\Support\Facades\DB;
 use App\Import\Service\Exclusions\ListFactory;
 use App\Import\Lists\HashUtils;
+use CDM\Test\TestCase;
 
 /**
  * Acceptance test for ImportFileService. 

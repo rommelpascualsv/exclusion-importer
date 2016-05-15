@@ -1,8 +1,11 @@
 <?php
 
-use App\Services\DateValidator;
+namespace Test\Unit;
 
-class DateValidatorTest extends TestCase 
+use App\Services\DateValidator;
+use CDM\Test\TestCase;
+
+class DateValidatorTest extends TestCase
 {
 
     public function test_valid_date_string_returns_true()

@@ -1,6 +1,9 @@
 <?php
 
+namespace Test\Unit;
+
 use App\Services\ImportFileService;
+use Mockery\Container;
 
 /**
  * Unit test class for File Service.
@@ -26,7 +29,7 @@ class ImportFileServiceTest extends \Codeception\TestCase\Test
     protected function _before()
     {
 
-        $this->container = new Mockery\Container;
+        $this->container = new Container;
         $this->importFileService = new ImportFileService();
     }
 
@@ -42,7 +45,7 @@ class ImportFileServiceTest extends \Codeception\TestCase\Test
     {
     	$mock = $this->container->mock("App\\Services\\ImportFileService[getUrls]");
     	$mock = $mock->shouldAllowMockingProtectedMethods();
-    	$url = new stdClass();
+    	$url = new \stdClass();
     	$url->prefix = "az1";
     	$url->import_url = "http://yahoo.com";
     	
@@ -55,7 +58,7 @@ class ImportFileServiceTest extends \Codeception\TestCase\Test
     	$mock = $this->container->mock("App\\Services\\ImportFileService[getUrls, getBlobOfFile]");
     	$mock = $mock->shouldAllowMockingProtectedMethods();
     	 
-    	$url = new stdClass();
+    	$url = new \stdClass();
     	$url->prefix = "wy1";
     	$url->import_url = "http://www.health.wyo.gov/Media.aspx?mediaId=18045";
     	 
@@ -73,7 +76,7 @@ class ImportFileServiceTest extends \Codeception\TestCase\Test
     	$mock = $this->container->mock("App\\Services\\ImportFileService[getUrls, getBlobOfFile]");
     	$mock = $mock->shouldAllowMockingProtectedMethods();
     
-    	$url = new stdClass();
+    	$url = new \stdClass();
     	$url->prefix = "wy1";
     	$url->import_url = "http://www.health.wyo.gov/Media.aspx?mediaId=18045";
     
@@ -94,7 +97,7 @@ class ImportFileServiceTest extends \Codeception\TestCase\Test
     	$mock = $this->container->mock("App\\Services\\ImportFileService[getUrls, getBlobOfFile, isPrefixExists]");
     	$mock = $mock->shouldAllowMockingProtectedMethods();
     
-    	$url = new stdClass();
+    	$url = new \stdClass();
     	$url->prefix = "wy1";
     	$url->import_url = "http://www.health.wyo.gov/Media.aspx?mediaId=18045";
     
@@ -247,7 +250,7 @@ class ImportFileServiceTest extends \Codeception\TestCase\Test
      */
     public function testUpdateStateUrl()
     {
-    	$class = new ReflectionClass('App\Services\ImportFileService');
+    	$class = new \ReflectionClass('App\Services\ImportFileService');
     	$method = $class->getMethod('updateStateUrl');
     	$method->setAccessible(true);
     	$method->invokeArgs(new ImportFileService(), array('az1', 'www.yahoo.com'));
@@ -264,7 +267,7 @@ class ImportFileServiceTest extends \Codeception\TestCase\Test
      */
     public function testGetUrl()
     {
-    	$class = new ReflectionClass('App\Services\ImportFileService');
+    	$class = new \ReflectionClass('App\Services\ImportFileService');
     	$method = $class->getMethod('getUrl');
     	$method->setAccessible(true);
     	$url = $method->invokeArgs(new ImportFileService(), array('az1'));
@@ -280,7 +283,7 @@ class ImportFileServiceTest extends \Codeception\TestCase\Test
      */
     public function testIsStateUpdateable()
     {
-    	$class = new ReflectionClass('App\Services\ImportFileService');
+    	$class = new \ReflectionClass('App\Services\ImportFileService');
     	$method = $class->getMethod('isStateUpdateable');
     	$method->setAccessible(true);
     	$result = $method->invokeArgs(new ImportFileService(), array('az1'));
