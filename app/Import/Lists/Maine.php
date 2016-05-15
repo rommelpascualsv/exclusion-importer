@@ -59,43 +59,47 @@ class Maine extends ExclusionList
 
 
     public $dateColumns = [
-        'sanction_start_date' => 13
+        'sanction_start_date' => 6
     ];
 
     public function preProcess()
     {
+        $this->parse();
         parent::preProcess();
-
-        $finalData = [];
-
-        foreach ($this->data as $values) {
-
-            $arrayWithKeyNames = array_combine($this->originalFieldNames, $values);
-
-            $filteredArray = $this->removeBadColumns($arrayWithKeyNames);
-            
-            unset($arrayWithKeyNames);
-
-            $arrayWithEntities = $this->moveEntitiesToNewColumn($filteredArray);
-
-            unset($filteredArray);
-
-            $akaColumns = array_chunk(array_slice($arrayWithEntities, 4, 8, true), 2);
-
-            $akaList = $this->createAkaList($akaColumns);
-
-            array_splice($arrayWithEntities, 4, 8, json_encode($akaList));
-
-            $arrayWithEntities['AkaList'] = $arrayWithEntities[0];
-
-            unset($arrayWithEntities[0]);
-
-            $finalData[] = $arrayWithEntities;
-        }
-
-        $this->data = $finalData;
     }
 
+    private function parse()
+    {
+
+        $finalData = [];
+        
+        foreach ($this->data as $values) {
+        
+            $arrayWithKeyNames = array_combine($this->originalFieldNames, $values);
+        
+            $filteredArray = $this->removeBadColumns($arrayWithKeyNames);
+        
+            unset($arrayWithKeyNames);
+        
+            $arrayWithEntities = $this->moveEntitiesToNewColumn($filteredArray);
+        
+            unset($filteredArray);
+        
+            $akaColumns = array_chunk(array_slice($arrayWithEntities, 4, 8, true), 2);
+        
+            $akaList = $this->createAkaList($akaColumns);
+        
+            array_splice($arrayWithEntities, 4, 8, json_encode($akaList));
+        
+            $arrayWithEntities['AkaList'] = $arrayWithEntities[0];
+        
+            unset($arrayWithEntities[0]);
+        
+            $finalData[] = array_values($arrayWithEntities);
+        }
+        
+        $this->data = $finalData;
+    }
 
     /**
      * @param $arrayWithKeyNames
