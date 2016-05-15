@@ -2,7 +2,7 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
     
     <!-- ohio -->
-    <changeSet author="sv" id="svg-394-1" context="prod">
+    <changeSet author="sv" id="svg-394-1-rename-oh1_records-provider_number-to-provider_id_2" context="prod">
         <renameColumn
             columnDataType="varchar(255) COLLATE utf8_unicode_ci NOT NULL"
             newColumnName="provider_id_2"
