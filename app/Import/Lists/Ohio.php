@@ -21,6 +21,7 @@ class Ohio extends ExclusionList
         'organization_name',
         'date_of_birth',
         'npi',
+        'provider_id_2',
         'address1',
         'address2',
         'city',
@@ -31,18 +32,17 @@ class Ohio extends ExclusionList
         'action_date',
         'date_added',
         'provider_type',
-        'date_revised',
-        'provider_number'
+        'date_revised'
     ];
 
     public $hashColumns = [
-
         'last_name',
         'first_name',
         'organization_name',
         'date_of_birth',
         'npi',
         'provider_id',
+        'provider_id_2',
         'status',
         'action_date'
     ];
@@ -50,15 +50,16 @@ class Ohio extends ExclusionList
     public $dateColumns = [
 
         'date_of_birth' => 3,
-        'action_date' => 12,
-        'date_added' => 13,
-        'date_revised' => 15,
+        'action_date' => 13,
+        'date_added' => 14,
+        'date_revised' => 16,
     ];
     
     public $shouldHashListName = true;
     
     protected $npiColumnName = "npi";
-    
+    protected $providerNumberColumnName = "provider_id_2";
+
     /**
      * @inherit preProcess
      */
@@ -74,23 +75,30 @@ class Ohio extends ExclusionList
     private function parse()
     {
     	$data = [];
-    	 
-    	// iterate each row
+
+        // iterate each row
     	foreach ($this->data as $row) {
-    		
-    	    $npiColumnIndex = $this->getNpiColumnIndex();
-    	    
+
+            $providerNumberIndex = $this->getProviderNumberColumnIndex();
+            $npiColumnIndex = $this->getNpiColumnIndex();
+
+            $row = array_merge(array_slice($row, 0, $providerNumberIndex), [''], array_slice($row, $providerNumberIndex));
+
     	    // set provider number
-    	    $row = PNHelper::setProviderNumberValue($row, PNHelper::getProviderNumberValue($row, $npiColumnIndex));
-    	    	
+    	    $row = PNHelper::setProviderNumberValue(
+                $row,
+                PNHelper::getProviderNumberValue($row, $npiColumnIndex),
+                $providerNumberIndex
+            );
+
     	    // set npi number array
     	    $row = PNHelper::setNpiValue($row, PNHelper::getNpiValue($row, $npiColumnIndex), $npiColumnIndex);
     	    	
     	    // populate the array data
     	    $data[] = $row;
     	}
-    	 
-    	// set back to global data
+
+        // set back to global data
     	$this->data = $data;
     }
 }

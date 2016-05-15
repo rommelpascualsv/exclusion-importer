@@ -33,14 +33,14 @@ class Alabama extends ExclusionList
      * The number of lines from the top of the exclusion list file preceding the 
      * start of the exclusion list data
      */
-    protected $headerOffset = 33;
+    private $headerOffset = 33;
     
     /**
      * A substring of the text at the bottom of the exclusion list file signifying
      * the end of the exclusion list data
      * @var unknown
      */
-    protected $footerIndicatorText = 'Any nurse aide listed as sanctioned'; 
+    private $footerIndicatorText = 'Any nurse aide listed as sanctioned'; 
     
     /**
      * Known titles of persons in the exclusion list (add new titles as needed)
@@ -222,6 +222,16 @@ class Alabama extends ExclusionList
         $this->data = $data;        
     }
     
+    public function setHeaderOffset($headerOffset)
+    {
+        $this->headerOffset = $headerOffset;
+    }
+    
+    public function setFooterIndicatorText($footerIndicatorText)
+    {
+        $this->footerIndicatorText = $footerIndicatorText;
+    }
+    
     /**
      * Removes the header lines from this class' data property, returning only
      * the portion that contains the exclusion list data
@@ -262,8 +272,8 @@ class Alabama extends ExclusionList
     {
         if (preg_match('/\(aka ([^\)]+)| a\.k\.a\. (.+)/', $name, $matches)) {
 
-            if ($matches[1]) return $matches[1]; //(aka ... variant)
-            if ($matches[2]) return $matches[2]; //a.k.a. variant
+            if ($matches[1]) return trim($matches[1]); //(aka ... variant)
+            if ($matches[2]) return trim($matches[2]); //a.k.a. variant
             
         }
         
@@ -278,7 +288,7 @@ class Alabama extends ExclusionList
      */
     private function trimAlias($name)
     {
-        return preg_replace('/\(aka (.+)| a\.k\.a\. (.+)/', '', $name);
+        return trim(preg_replace('/\(aka (.+)| a\.k\.a\. (.+)/', '', $name));
     }
     
     /**

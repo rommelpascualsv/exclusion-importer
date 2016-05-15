@@ -2,7 +2,7 @@
 
 use App\Repositories\TaxonomyRepository;
 
-class TaxonomyCreateTest extends MongoTestCase 
+class TaxonomyCreateTest extends \CDM\Test\MongoTestCase
 {
 	public function test_taxonomy_record_creates_record_in_database()
 	{

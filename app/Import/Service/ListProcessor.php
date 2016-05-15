@@ -1,6 +1,7 @@
 <?php namespace App\Import\Service;
 
 use App\Import\Lists\ExclusionList;
+use App\Import\Lists\HashUtils as HashUtils;
 
 class ListProcessor
 {
@@ -99,27 +100,6 @@ class ListProcessor
      */
     protected function getHash(array $record)
     {
-        if (empty($this->exclusionList->hashColumns)) {
-            $this->exclusionList->hashColumns = $this->exclusionList->fieldNames;
-        }
-
-        $hashData = [];
-
-        foreach ($record as $key => $value) {
-            if (in_array($key, $this->exclusionList->hashColumns)) {
-                $hashData[] = $value;
-            }
-        }
-
-        $string = preg_replace("/[^A-Za-z0-9]/", '', trim(strtoupper(implode('', $hashData))));
-
-        //adds the exclusion list prefix to the hash to avoid having identical hashes in different lists
-        if ($this->exclusionList->shouldHashListName) {
-            $listName = trim(strtoupper($this->exclusionList->dbPrefix));
-
-            $string .= $listName;
-        }
-
-        return md5($string);
+        return HashUtils::generateHash($record, $this->exclusionList);
     }
 }

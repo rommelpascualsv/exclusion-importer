@@ -1,0 +1,33 @@
+[{
+    "npi_number" : "", 
+    "provider_number" : "", 
+    "full_name" : "",
+    "first_name" : "Augusto", 
+    "middle_name" : "Tenmatay", 
+    "last_name" : "Abad", 
+    "generation" : "", 
+    "credentials" : "MD", 
+    "provider_type" : "Physician", 
+    "city" : "S. Williamson", 
+    "state" : "KY", 
+    "exclusion_date" : "2010-09-25", 
+    "reason_for_exclusion" : "Mandatory Exclusion - Revocation \rof License", 
+    "reinstatement_date" : null, 
+    "reinstatement_reason" : ""
+},{
+    "npi_number" : "", 
+    "provider_number" : "", 
+    "full_name" : "Peace Medical Transportation \rServices",
+    "first_name" : "", 
+    "middle_name" : "", 
+    "last_name" : "", 
+    "generation" : "", 
+    "credentials" : "Ambulance", 
+    "provider_type" : "", 
+    "city" : "", 
+    "state" : "OH", 
+    "exclusion_date" : "2014-12-23", 
+    "reason_for_exclusion" : "", 
+    "reinstatement_date" : null, 
+    "reinstatement_reason" : ""
+}]

@@ -1,0 +1,27 @@
+[{
+    "il1_id" : "11606",
+    "ProvName" : "A & C TRANSPORTATION, INC.",
+    "LIC" : "null",
+    "AFFILIATION" : "Medicar Provider (071)",
+    "ACTION_DT" : "2014-08-15",
+    "ACTION_TYPE" : "Terminated", 
+    "ADDRESS" : "430 E. 162ND ST",
+    "ADDRESS2" : "SUITE 105",
+    "CITY" : "SOUTH HOLLAND",
+    "STATE" : "IL",
+    "ZIP_CODE" : "604732258",
+    "NEW_ADDITION" : ""
+},{
+    "il1_id" : "1190",
+    "ProvName" : "ZWOLINSKI RUSSELL",
+    "LIC" : "036092886",
+    "AFFILIATION" : "Physician (010)",
+    "ACTION_DT" : "2002-08-26",
+    "ACTION_TYPE" : "Voluntary Withdrawal", 
+    "ADDRESS" : "STE 805",
+    "ADDRESS2" : "",
+    "CITY" : "CHICAGO",
+    "STATE" : "IL",
+    "ZIP_CODE" : "60604",
+    "NEW_ADDITION" : ""
+}]

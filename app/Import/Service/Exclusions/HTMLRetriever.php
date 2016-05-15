@@ -37,18 +37,13 @@ class HTMLRetriever extends Retriever
         $data = [];
 
         // Implement multiple file upload use comma searated
-        $uri = $this->multipleUri($list->uri);
+        $uri = $this->splitURI($list->uri);
 
         foreach ($uri as $key => $value) {
-            $client = new Client([
-                'base_uri' => $list->uri
-            ]);
-
-            $response = $client->request('GET', $list->urlSuffix, $list->requestOptions);
-
-            $body = $response->getBody()->getContents();
-
-            $this->domCrawler->addHtmlContent($body);
+            
+            $htmlContent = $this->getContentFrom($value, $list);
+            
+            $this->domCrawler->addHtmlContent($htmlContent);
 
             $table = $this->domCrawler->filter($list->retrieveOptions['htmlFilterElement']);
 
@@ -72,5 +67,26 @@ class HTMLRetriever extends Retriever
         }
 
         return $data;
+    }
+    
+    private function getContentFrom($uri, $list)
+    {
+        $content = '';
+        
+        if ($this->isRemoteURI($uri)) {
+            
+            $client = new Client([
+                'base_uri' => $list->uri
+            ]);
+        
+            $response = $client->request('GET', $list->urlSuffix, $list->requestOptions);
+        
+            $content = $response->getBody()->getContents();
+        
+        } else {
+            $content = file_get_contents($uri);
+        }
+        
+        return $content;
     }
 }

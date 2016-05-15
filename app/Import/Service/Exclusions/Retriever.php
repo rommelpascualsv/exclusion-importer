@@ -11,7 +11,7 @@ abstract class Retriever
      */
     abstract public function retrieveData(ExclusionList $list);
 
-    public function multipleUri($uri)
+    protected function splitURI($uri)
     {
         $url = explode(',', $uri);
 
@@ -20,4 +20,10 @@ abstract class Retriever
         }, $url);
 
     }
+    
+    protected function isRemoteURI($uri)
+    {
+        return filter_var($uri, FILTER_VALIDATE_URL);
+    }
+    
 }
