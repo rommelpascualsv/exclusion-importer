@@ -7,7 +7,7 @@
     </changeSet>
     <changeSet author="sv" id="svg-393-2-oig_records-npi-column-to-varchar">
         <modifyDataType columnName="npi"
-               newDataType="varchar(255) COLLATE utf8_unicode_ci NOT NULL"
+               newDataType="varchar(255) COLLATE utf8_unicode_ci NULL"
                tableName="oig_records"/>
     </changeSet>
 </databaseChangeLog>
