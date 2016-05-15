@@ -6,7 +6,7 @@ class Washington extends ExclusionList
 {
     public $dbPrefix = 'wa1';
 
-    public $pdfToText = 'java -Dfile.encoding=utf-8 -jar /vagrant/etc/tabula.jar -p all -u -g -r'; //'pdftotext -layout -nopgbrk';
+    public $pdfToText = 'java -Dfile.encoding=utf-8 -jar ../etc/tabula.jar -p all -u -g -r'; //'pdftotext -layout -nopgbrk';
 
     public $uri = 'http://www.hca.wa.gov/medicaid/provider/documents/termination_exclusion.pdf';
 

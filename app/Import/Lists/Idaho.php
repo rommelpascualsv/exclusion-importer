@@ -7,7 +7,7 @@ class Idaho extends ExclusionList
 
     public $uri = 'http://healthandwelfare.idaho.gov/Portals/0/Providers/Medicaid/ProviderExclusionList.pdf';
 
-    public $pdfToText = "java -Dfile.encoding=utf-8 -jar /vagrant/etc/tabula.jar -p all -u -g -r";
+    public $pdfToText = "java -Dfile.encoding=utf-8 -jar ../etc/tabula.jar -p all -u -g -r";
 
     public $type = 'pdf';
 

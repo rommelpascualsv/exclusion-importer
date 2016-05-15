@@ -7,7 +7,7 @@ class Wyoming extends ExclusionList
 
     public $dbPrefix = 'wy1';
 
-    public $pdfToText = "java -Dfile.encoding=utf-8 -jar /vagrant/etc/tabula.jar -g -p all";
+    public $pdfToText = "java -Dfile.encoding=utf-8 -jar ../etc/tabula.jar -g -p all";
 
     public $uri = 'http://www.health.wyo.gov/Media.aspx?mediaId=18376';
 
