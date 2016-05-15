@@ -7,12 +7,12 @@ use Laravel\Lumen\Routing\Controller as BaseController;
 class ImportController extends BaseController
 {
     protected $importFileService;
-    
+
     public function __construct(ImportFileServiceInterface $importFileService)
     {
         $this->importFileService = $importFileService;
     }
-    
+
     public function createOldTables()
     {
         $lists = [
@@ -85,11 +85,11 @@ class ImportController extends BaseController
     {
         return view('import')->with('exclusionLists', $this->importFileService->getExclusionList());
     }
-    
+
     public function import(Request $request, $listPrefix)
     {
         $this->initPhpSettings();
-        
+
         return $this->importFileService->importFile($request->input('url'), $listPrefix, true);
     }
 

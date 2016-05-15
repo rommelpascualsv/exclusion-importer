@@ -24,6 +24,21 @@
             <parameter name='contexts' value='prod' />
         </update>
     </target>
+
+	<target name="db:prod-update">
+
+		<update
+				command="update"
+				jar="${liquibase.jar}"
+				classpathref="${mysql.driver}"
+				changelogFile="${changelogFile}"
+				username="${username}"
+				password="${password}"
+				url="${url}">
+
+			<parameter name='contexts' value='prod' />
+		</update>
+	</target>
 	
     <!-- run all tests -->
     <target name="test" depends="loadTestData">

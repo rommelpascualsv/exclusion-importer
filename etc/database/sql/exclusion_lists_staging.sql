@@ -17,7 +17,7 @@ CREATE TABLE `ak1_records` (
   `date_created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `date_modified` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=231 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for al1_records
@@ -37,7 +37,7 @@ CREATE TABLE `al1_records` (
   KEY `provider` (`name_of_provider`) USING BTREE,
   KEY `date_created` (`date_created`) USING BTREE,
   KEY `hash` (`hash`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1545 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Table structure for ar1_records
@@ -55,7 +55,7 @@ CREATE TABLE `ar1_records` (
   `date_created` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `hash` (`hash`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1022 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Table structure for az1_records
@@ -75,7 +75,7 @@ CREATE TABLE `az1_records` (
   KEY `hash` (`hash`) USING BTREE,
   KEY `first_name` (`first_name`) USING BTREE,
   KEY `last_name_company_name` (`last_name_company_name`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Table structure for ca1_records
@@ -102,7 +102,7 @@ CREATE TABLE `ca1_records` (
   FULLTEXT KEY `first_middle` (`first_name`,`middle_name`),
   FULLTEXT KEY `last_name` (`last_name`),
   FULLTEXT KEY `business` (`business`)
-) ENGINE=InnoDB AUTO_INCREMENT=15698 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for csl_records
@@ -141,7 +141,7 @@ CREATE TABLE `csl_records` (
   `date_created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `hash` (`hash`(50)) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=7533 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Table structure for ct1_records
@@ -161,7 +161,7 @@ CREATE TABLE `ct1_records` (
   PRIMARY KEY (`id`),
   KEY `hash` (`hash`(50)) USING BTREE,
   KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for dc1_records
@@ -180,7 +180,7 @@ CREATE TABLE `dc1_records` (
   `hash` binary(16) DEFAULT NULL,
   `date_created` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for epls_records
@@ -217,7 +217,7 @@ CREATE TABLE `epls_records` (
   KEY `Last` (`Last`) USING BTREE,
   KEY `First` (`First`) USING BTREE,
   KEY `hash` (`hash`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=86570 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Table structure for exclusion_lists
@@ -232,7 +232,7 @@ CREATE TABLE `exclusion_lists` (
   `is_auto_import` int(10) unsigned DEFAULT NULL,
   `is_active` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for fdac_records
@@ -251,7 +251,7 @@ CREATE TABLE `fdac_records` (
   `hash` binary(16) DEFAULT NULL,
   `date_created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=226 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for fdadl_records
@@ -267,7 +267,7 @@ CREATE TABLE `fdadl_records` (
   `hash` longblob,
   `date_created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=139 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for fehbp_records
@@ -306,7 +306,7 @@ CREATE TABLE `files` (
   `date_created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `date_modified` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for fl2_records
@@ -334,7 +334,7 @@ CREATE TABLE `fl2_records` (
   KEY `date_created` (`date_created`),
   KEY `hash` (`hash`(50)) USING BTREE,
   KEY `provider` (`provider`)
-) ENGINE=InnoDB AUTO_INCREMENT=4355 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for ga1_records
@@ -351,7 +351,7 @@ CREATE TABLE `ga1_records` (
   `hash` binary(16) DEFAULT NULL,
   `date_created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1008 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for healthmil_records
@@ -372,7 +372,7 @@ CREATE TABLE `healthmil_records` (
   `hash` binary(16) DEFAULT NULL,
   `date_created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for hi1_records
@@ -393,7 +393,7 @@ CREATE TABLE `hi1_records` (
   KEY `last_name_or_business` (`last_name_or_business`) USING BTREE,
   KEY `first_name` (`first_name`) USING BTREE,
   KEY `middle_initial` (`middle_initial`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=170 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Table structure for ia1_records
@@ -412,7 +412,7 @@ CREATE TABLE `ia1_records` (
   `hash` binary(16) DEFAULT NULL,
   `date_created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=378 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for id1_records
@@ -429,7 +429,7 @@ CREATE TABLE `id1_records` (
   `date_created` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `name` (`name`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=122 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Table structure for il1_records
@@ -454,7 +454,7 @@ CREATE TABLE `il1_records` (
   PRIMARY KEY (`id`),
   KEY `hash` (`hash`) USING BTREE,
   KEY `ProvName` (`ProvName`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1842 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Table structure for ks1_records
@@ -473,7 +473,7 @@ CREATE TABLE `ks1_records` (
   `hash` binary(16) DEFAULT NULL,
   `date_created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for ky1_records
@@ -491,7 +491,7 @@ CREATE TABLE `ky1_records` (
   `hash` longblob NOT NULL,
   `date_created` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=153 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for la1_records
@@ -514,7 +514,7 @@ CREATE TABLE `la1_records` (
   `hash` binary(16) DEFAULT NULL,
   `date_created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2352 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for ma1_records
@@ -531,7 +531,7 @@ CREATE TABLE `ma1_records` (
   `date_created` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `npi` (`npi`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=152 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Table structure for md1_records
@@ -549,7 +549,7 @@ CREATE TABLE `md1_records` (
   `hash` binary(16) NOT NULL,
   `date_created` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1350 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Table structure for me1_records
@@ -568,7 +568,7 @@ CREATE TABLE `me1_records` (
   `hash` binary(16) DEFAULT NULL,
   `date_created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=820 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for mi1_records
@@ -593,7 +593,7 @@ CREATE TABLE `mi1_records` (
   `hash` binary(16) NOT NULL,
   `date_created` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1176 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Table structure for mn1_records
@@ -620,7 +620,7 @@ CREATE TABLE `mn1_records` (
   KEY `middle_name` (`middle_name`) USING BTREE,
   KEY `hash` (`hash`) USING BTREE,
   KEY `date_created` (`date_created`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=514 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Table structure for mo1_records
@@ -641,7 +641,7 @@ CREATE TABLE `mo1_records` (
   `date_created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `date_modified` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for ms1_records
@@ -666,7 +666,7 @@ CREATE TABLE `ms1_records` (
   `date_created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `date_modified` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for mt1_records
@@ -681,7 +681,7 @@ CREATE TABLE `mt1_records` (
   `hash` binary(16) DEFAULT NULL,
   `date_created` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for nc1_records
@@ -704,7 +704,7 @@ CREATE TABLE `nc1_records` (
   `date_created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `date_modified` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=212 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for nd1_records
@@ -728,7 +728,7 @@ CREATE TABLE `nd1_records` (
   `hash` binary(16) DEFAULT NULL,
   `date_created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=110 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for ne1_records
@@ -749,7 +749,7 @@ CREATE TABLE `ne1_records` (
   `date_created` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `provider_name` (`provider_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=155 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for njcdr_records
@@ -787,7 +787,7 @@ CREATE TABLE `njcdr_records` (
   KEY `hash` (`hash`) USING BTREE,
   KEY `firm_name` (`firm_name`) USING BTREE,
   KEY `name` (`name`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2347 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Table structure for nv1_records
@@ -812,7 +812,7 @@ CREATE TABLE `nv1_records` (
   KEY `doing_business_as` (`doing_business_as`) USING BTREE,
   KEY `legal_entity` (`legal_entity`) USING BTREE,
   KEY `ownership_of_at_least_5_percent` (`ownership_of_at_least_5_percent`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=178 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Table structure for nyomig_records
@@ -837,7 +837,7 @@ CREATE TABLE `nyomig_records` (
   PRIMARY KEY (`id`),
   KEY `business` (`business`),
   KEY `hash` (`hash`(50)) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=6036 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for oh1_records
@@ -865,7 +865,7 @@ CREATE TABLE `oh1_records` (
   `hash` binary(16) NOT NULL,
   `date_created` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=880 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for oig_records
@@ -902,7 +902,7 @@ CREATE TABLE `oig_records` (
   KEY `date_created` (`date_created`) USING BTREE,
   KEY `excldate` (`excldate`) USING BTREE,
   KEY `npi` (`npi`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=64040 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Table structure for pa1_records
@@ -941,7 +941,7 @@ CREATE TABLE `pa1_records` (
   KEY `NAM_MIDDLE_PROVR` (`NAM_MIDDLE_PROVR`) USING BTREE,
   KEY `NAM_BUSNS_MP` (`NAM_BUSNS_MP`) USING BTREE,
   KEY `NAM_PROVR_ALT` (`NAM_PROVR_ALT`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3912 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Table structure for phs_records
@@ -962,7 +962,7 @@ CREATE TABLE `phs_records` (
   `hash` binary(16) DEFAULT NULL,
   `date_created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for sam_records
@@ -1015,7 +1015,7 @@ CREATE TABLE `sam_records` (
   KEY `hash` (`hash`) USING BTREE,
   KEY `new_hash` (`new_hash`) USING BTREE,
   KEY `matching_oig_hash` (`matching_OIG_hash`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1617880 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for sc1_records
@@ -1036,7 +1036,7 @@ CREATE TABLE `sc1_records` (
   PRIMARY KEY (`id`),
   KEY `hash` (`hash`) USING BTREE,
   KEY `entity` (`entity`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=731 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Table structure for sdn_address_list
@@ -1056,7 +1056,7 @@ CREATE TABLE `sdn_address_list` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uid` (`uid`) USING BTREE,
   KEY `sdn_entry_id` (`sdn_entry_id`,`uid`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=155803 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for sdn_aka_list
@@ -1075,7 +1075,7 @@ CREATE TABLE `sdn_aka_list` (
   KEY `sdn_entry_id` (`sdn_entry_id`) USING BTREE,
   KEY `firstName` (`firstName`) USING BTREE,
   KEY `lastName` (`lastName`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=167566 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Table structure for sdn_citizenship_list
@@ -1090,7 +1090,7 @@ CREATE TABLE `sdn_citizenship_list` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uid` (`uid`) USING BTREE,
   KEY `sdn_entry_id` (`sdn_entry_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=13174 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for sdn_date_of_birth_list
@@ -1105,7 +1105,7 @@ CREATE TABLE `sdn_date_of_birth_list` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uid` (`uid`) USING BTREE,
   KEY `sdn_entry_id` (`sdn_entry_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=58538 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for sdn_entries
@@ -1124,7 +1124,7 @@ CREATE TABLE `sdn_entries` (
   UNIQUE KEY `uid` (`uid`) USING BTREE,
   KEY `firstName` (`firstName`) USING BTREE,
   KEY `lastName` (`lastName`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=129431 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Table structure for sdn_id_list
@@ -1142,7 +1142,7 @@ CREATE TABLE `sdn_id_list` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uid` (`uid`) USING BTREE,
   KEY `sdn_entry_id` (`sdn_entry_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=108408 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for sdn_import_log
@@ -1169,7 +1169,7 @@ CREATE TABLE `sdn_nationality_list` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uid` (`uid`) USING BTREE,
   KEY `sdn_entry_id` (`sdn_entry_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=17828 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for sdn_place_of_birth_list
@@ -1184,7 +1184,7 @@ CREATE TABLE `sdn_place_of_birth_list` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uid` (`uid`) USING BTREE,
   KEY `sdn_entry_id` (`sdn_entry_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=38772 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for sdn_program_list
@@ -1197,7 +1197,7 @@ CREATE TABLE `sdn_program_list` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `program` (`sdn_entry_id`,`program`) USING BTREE,
   KEY `sdn_entry_id` (`sdn_entry_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=135422 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for sdn_vessel_info
@@ -1215,7 +1215,7 @@ CREATE TABLE `sdn_vessel_info` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `vessel` (`sdn_entry_id`,`callSign`) USING BTREE,
   KEY `sdn_entry_id` (`sdn_entry_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=4255 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for tn1_records
@@ -1236,7 +1236,7 @@ CREATE TABLE `tn1_records` (
   KEY `hash` (`hash`) USING BTREE,
   KEY `last` (`last_name`) USING BTREE,
   KEY `first` (`first_name`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Table structure for tx1_records
@@ -1263,7 +1263,7 @@ CREATE TABLE `tx1_records` (
   KEY `LastName` (`last_name`),
   KEY `MidInitial` (`mid_initial`),
   KEY `hash` (`hash`(50)) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=10761 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for unsancentities_records
@@ -1285,7 +1285,7 @@ CREATE TABLE `unsancentities_records` (
   `date_created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `date_updated` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=397 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for unsancindividuals_records
@@ -1314,7 +1314,7 @@ CREATE TABLE `unsancindividuals_records` (
   `date_created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `date_updated` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=631 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for usdocdp_records
@@ -1334,7 +1334,7 @@ CREATE TABLE `usdocdp_records` (
   `hash` longblob,
   `date_created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=522 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for usdosd_records
@@ -1351,7 +1351,7 @@ CREATE TABLE `usdosd_records` (
   `date_modified` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `date_created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=517 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for wa1_records
@@ -1372,7 +1372,7 @@ CREATE TABLE `wa1_records` (
   `date_created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `date_modified` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=222 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for wv2_records
@@ -1398,7 +1398,7 @@ CREATE TABLE `wv2_records` (
   `hash` binary(16) DEFAULT NULL,
   `date_created` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1279 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for wy1_records
@@ -1422,7 +1422,7 @@ CREATE TABLE `wy1_records` (
   KEY `first_name` (`first_name`) USING BTREE,
   KEY `last_name` (`last_name`) USING BTREE,
   KEY `business_name` (`business_name`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=92 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- View structure for exclusion_search_table_view
