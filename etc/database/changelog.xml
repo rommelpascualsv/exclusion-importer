@@ -1,35 +1,38 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
-	<changeSet author="sv" id="initial_bootstrap" context="prod">
-		<sqlFile encoding="utf8"
-				 path="./sql/exclusion_lists_staging.sql"
-				 relativeToChangelogFile="true"/>
-	</changeSet>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="sv" id="initial_bootstrap" context="prod">
+        <sqlFile encoding="utf8"
+                 path="./sql/exclusion_lists_staging.sql"
+                 relativeToChangelogFile="true"/>
+    </changeSet>
     <changeSet author="sv" id="1456985528119-324" context="test">
-       <sqlFile encoding="utf8"
-               path="./sql/001_insert_files.sql"
-               relativeToChangelogFile="true"/>
-       <rollback>
+        <sqlFile encoding="utf8"
+                 path="./sql/001_insert_files.sql"
+                 relativeToChangelogFile="true"/>
+        <rollback>
             delete from files;
-       </rollback>
+        </rollback>
     </changeSet>
     <changeSet author="sv" id="1456985528119-325" context="prod">
-       <sqlFile encoding="utf8"
-               path="./sql/002_insert_exclusion_lists.sql"
-               relativeToChangelogFile="true"/>
+        <sqlFile encoding="utf8"
+                 path="./sql/002_insert_exclusion_lists.sql"
+                 relativeToChangelogFile="true"/>
     </changeSet>
     <changeSet author="sv" id="1456985528119-326" context="test">
-       <sqlFile encoding="utf8"
-               path="./sql/003_update_exclusion_lists.sql"
-               relativeToChangelogFile="true"/>
-       <rollback>
+        <sqlFile encoding="utf8"
+                 path="./sql/003_update_exclusion_lists.sql"
+                 relativeToChangelogFile="true"/>
+        <rollback>
             UPDATE `exclusion_lists` SET is_active = 0
-       </rollback>
+        </rollback>
     </changeSet>
 
-	<include file="./changelog/sv-560-1.changelog.xml" relativeToChangelogFile="true" />
-	<include file="./changelog/sv-560-2.changelog.xml" relativeToChangelogFile="true" />
-	<include file="./changelog/svg-393.changelog.xml"
-			 relativeToChangelogFile="true"/>
+    <include file="./changelog/sv-560-1.changelog.xml" relativeToChangelogFile="true"/>
+    <include file="./changelog/sv-560-2.changelog.xml" relativeToChangelogFile="true"/>
+    <include file="./changelog/svg-393.changelog.xml" relativeToChangelogFile="true"/>
+    <include file="./changelog/svg-394.changelog.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
