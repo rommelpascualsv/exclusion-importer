@@ -120,6 +120,11 @@ class NewJersey extends ExclusionList
         return $row;
     }
 
+    private function searchMatch(array $categories)
+    {
+
+    }
+
     /**
      * Normalize the name field by replacing the underscore characters with spaces.
      *
