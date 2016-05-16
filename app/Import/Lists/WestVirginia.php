@@ -161,13 +161,7 @@ class WestVirginia extends ExclusionList
     {
         $data = [];
 
-        if (is_array($this->data)) {
-            foreach ($this->data as $key => $value) {
-                $data = array_merge($data, $this->removeHeader($this->buildData($value)));
-            }
-        } else {
-            $data = $this->removeHeader($this->buildData($this->data));
-        }
+        $data = $this->removeHeader($this->buildData($this->data));
 
         $this->data = array_map(function ($row) {
 
