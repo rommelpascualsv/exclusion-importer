@@ -12,6 +12,25 @@ use Laravel\Lumen\Application;
 class ScrapeServiceProvider extends ServiceProvider
 {
     /**
+     * @var boolean
+     */
+    protected $defer = true;
+    
+    /**
+     * {@inheritDoc}
+     * @see \Illuminate\Support\ServiceProvider::provides()
+     */
+    public function provides()
+    {
+        return [
+            Client::class,
+            ConnecticutCrawler::class,
+            CategoryCollection::class,
+            OptionCollection::class
+        ];
+    }
+    
+    /**
      * Register any application services.
      *
      * @return void
@@ -22,20 +41,6 @@ class ScrapeServiceProvider extends ServiceProvider
     	$this->registerConnecticut();
     }
     
-    /** 
-     * {@inheritDoc}
-     * @see \Illuminate\Support\ServiceProvider::provides()
-     */
-    public function provides()
-    {
-    	return [
-    			Client::class,
-    			ConnecticutCrawler::class,
-    			CategoryCollection::class,
-    			OptionCollection::class
-    	];
-    }
-    
     /**
      * Register Goutte Client
      */
@@ -43,7 +48,7 @@ class ScrapeServiceProvider extends ServiceProvider
     {
     	$this->app->bind(Client::class, function() {
     		return new Client([
-    				'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
+    				'HTTP_USER_AGENT' => config('scrape.user_agent')
     		]);
     	});
     }

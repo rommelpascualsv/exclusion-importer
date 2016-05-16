@@ -16,6 +16,18 @@ class FilesystemServiceProvider extends ServiceProvider
 	 */
 	protected $defer = true;
 	
+	/**
+	 * {@inheritDoc}
+	 * @see \Illuminate\Support\ServiceProvider::provides()
+	 */
+	public function provides()
+	{
+	    return [
+	        ScrapeFilesystemInterface::class,
+	        'scrape_test_filesystem'
+	    ];
+	}
+	
     /**
      * Register any application services.
      *
@@ -24,18 +36,6 @@ class FilesystemServiceProvider extends ServiceProvider
     public function register()
     {
     	$this->registerScrapeFilesystem();
-    }
-    
-    /** 
-     * {@inheritDoc}
-     * @see \Illuminate\Support\ServiceProvider::provides()
-     */
-    public function provides()
-    {
-    	return [
-    			ScrapeFilesystemInterface::class,
-    			'scrape_test_filesystem'
-    	];
     }
     
     /**
@@ -79,38 +79,5 @@ class FilesystemServiceProvider extends ServiceProvider
     			),
     			['visibility' => AdapterInterface::VISIBILITY_PRIVATE]
     	);
-    }
-    
-    /**
-     * Get local adapter
-     * @param string $path
-     * @return Local
-     */
-    protected function getLocalAdapter($path)
-    {
-    	return new Local(
-    		$path,
-    		LOCK_EX,
-    		Local::DISALLOW_LINKS,
-    		[
-    				'file' => [
-    						'public' => 0775,
-    						'private' => 0770,
-    				],
-    				'dir' => [
-    						'public' => 0775,
-    						'private' => 0770,
-    				]
-    		]
-    	);
-    }
-    
-    /**
-     * Get config
-     * @return array
-     */
-    protected function getConfig()
-    {
-    	return ['visibility' => AdapterInterface::VISIBILITY_PRIVATE];
     }
 }
