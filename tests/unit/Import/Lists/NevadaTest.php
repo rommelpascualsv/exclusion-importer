@@ -58,26 +58,29 @@ class NevadaTest extends \Codeception\TestCase\Test
                 'legal_entity'                      => "",
                 'ownership_of_at_least_5_percent'   => "",
                 'medicaid_provider'                 => "",
-                'npi'                               => "",
+                'npi'                               => "1234567890",
                 'provider_type'                     => "",
                 'termination_date'                  => "2008-07-20",
                 'sanction_tier'                     => "Federal",
                 'sanction_period'                   => "Permanent",
                 'sanction_period_end_date'          => null,
-                'reinstatement_date'                => null
+                'reinstatement_date'                => null,
+                'provider_number'                   => ''
+                
             ],
             [
                 'doing_business_as'                 => "Elijah Akpan",
                 'legal_entity'                      => "",
                 'ownership_of_at_least_5_percent'   => "",
                 'medicaid_provider'                 => "",
-                'npi'                               => "",
+                'npi'                               => "[\"1234567890\",\"1111111111\"]",
                 'provider_type'                     => "",
                 'termination_date'                  => "2010-10-20",
                 'sanction_tier'                     => "Federal",
                 'sanction_period'                   => "Permanent",
                 'sanction_period_end_date'          => null,
-                'reinstatement_date'                => null
+                'reinstatement_date'                => null,
+                'provider_number'                   => '9090909012 101010101 Not Available 00011100'
             ]
         ];
         
@@ -92,8 +95,8 @@ class NevadaTest extends \Codeception\TestCase\Test
             '"",,"Persons with ",,,,,,,"Sanction ","Federal "' . PHP_EOL .
             '"",,"controlling inerest of ","Medicaid ",,"Provider ","Termination ","Sanction ","Sanction ","Period End ","Reinstate "' . PHP_EOL .
             'Business Name,Legal Entity,5% or more,Provider,NPI,Type,Date,Tier,Period,Date,Date' . PHP_EOL .
-            'Charlene DeMarco,,,,,,7/20/2008,Federal,Permanent,,' . PHP_EOL .
-            'Elijah Akpan,,,,,,10/20/2010,Federal,Permanent,,' . PHP_EOL .
+            'Charlene DeMarco,,,,1234567890,,7/20/2008,Federal,Permanent,,' . PHP_EOL .
+            'Elijah Akpan,,,,9090909012 101010101 Not Available 1234567890 00011100 1111111111,,10/20/2010,Federal,Permanent,,' . PHP_EOL .
             '"",,,,"Page 1 ",of 7,,,,,' . PHP_EOL;
     }
 }
