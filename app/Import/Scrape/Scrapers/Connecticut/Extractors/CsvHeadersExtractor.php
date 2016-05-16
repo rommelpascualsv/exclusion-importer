@@ -7,6 +7,7 @@ namespace App\Import\Scrape\Scrapers\Connecticut\Extractors;
 use App\Import\Scrape\Components\ScrapeFilesystemInterface;
 use League\Csv\Reader;
 use League\Csv\Writer;
+use App\Import\Scrape\Scrapers\Connecticut\Data\CsvDir;
 
 class CsvHeadersExtractor
 {
@@ -121,6 +122,12 @@ class CsvHeadersExtractor
 			return false;
 		}
 		
+		$saveFileDir = dirname($this->saveFilePath);
+		
+		if (! is_dir($saveFileDir)) {
+		    mkdir($saveFileDir);
+		}
+		
 		$writer = Writer::createFromPath($this->saveFilePath, 'w+');
 		$writer->insertAll($this->data);
 		
@@ -136,36 +143,12 @@ class CsvHeadersExtractor
 	 */
 	public static function create(
 			ScrapeFilesystemInterface $filesystem,
-			$dirPath = 'connecticut',
+			$dirPath = 'csv/connecticut',
 			$saveFilePath = 'extracted/connecticut/headers.csv'
 	) {
-		/* set files */
-		$dirPath = 'csv/' . $dirPath;
-		$directories = $filesystem->listContents($dirPath);
-		$files = [];
-		
-		foreach ($directories as $dirData) {
-			$dirFiles = $filesystem->listContents($dirData['path']);
-			
-			foreach ($dirFiles as $fileData) {
-				$files[] = [
-						'category' => $dirData['basename'],
-						'option' => $fileData['filename'],
-						'file_path' => $filesystem->getPath($fileData['path'])
-				];
-			}
-		}
-		
-		/* create save path directory */
-		$saveFileDirPath = dirname($saveFilePath);
-		
-		if (! $filesystem->has($saveFileDirPath)) {
-			$filesystem->createDir($saveFileDirPath);
-		}
-		
-		/* set save file path */
+	    $files = CsvDir::getDataFromFilesystem($filesystem, $dirPath);
 		$saveFilePath = $filesystem->getPath($saveFilePath);
-		
+	    
 		return new static($files, $saveFilePath);
 	}
 }
