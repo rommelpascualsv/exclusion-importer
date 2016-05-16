@@ -7,7 +7,7 @@ paths:
     envs: tests/_envs
 settings:
     bootstrap: _bootstrap.php
-    colors: true
+    colors: false
     memory_limit: 1024M
 extensions:
     enabled:
@@ -15,9 +15,9 @@ extensions:
 modules:
     config:
         Db:
-            dsn: 'mysql:host=127.0.0.1;dbname=exclusion_lists_staging'
-            user: 'root'
-            password: 'root'
+            dsn: ''
+            user: ''
+            password: ''
             populate: false
             cleanup: false
             reconnect: false
