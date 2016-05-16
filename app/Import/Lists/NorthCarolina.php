@@ -1,5 +1,7 @@
 <?php namespace App\Import\Lists;
 
+use \App\Import\Lists\ProviderNumberHelper as PNHelper;
+
 class NorthCarolina extends ExclusionList
 {
     public $dbPrefix = 'nc1';
@@ -38,11 +40,42 @@ class NorthCarolina extends ExclusionList
         'date_excluded' => 9
     ];
 
+    public $shouldHashListName = true;
+    
+    protected $npiColumnName = "npi";
+    
 	public function preProcess()
     {
+    	$this->parse();
         parent::preProcess();
-        $this->data = array_map(function($row) {
-            return array_slice($row, 0, -1);
-		}, $this->data);
+    }
+    
+    public function parse()
+    {
+    	//Remove table header
+    	array_shift($this->data);
+    	
+    	$this->data = array_map(function($row) {
+    		if (count($row) > 11) {
+    			unset($row[11]);
+    			return $row;
+    		}
+    		return $row;
+    	}, $this->data);
+    	
+    	$rows = $this->data;
+    		 
+    	$data = [];
+    	foreach ($rows as $key => $value) {
+			 
+			// set npi number array
+    		$npiColumnIndex = $this->getNpiColumnIndex();
+			$value = PNHelper::setNpiValue($value, PNHelper::getNpiValue($value, $npiColumnIndex), $npiColumnIndex);
+			
+			// populate the array data
+        	$data[] = $value;
+    	}
+    	
+    	$this->data = $data;
     }
 }

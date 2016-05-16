@@ -20,12 +20,8 @@ class Maine extends ExclusionList
     ];
 
     public $originalFieldNames = [
-        'ReportNumber',
-        'DateRun',
-        'ReportName',
-        'AsOfDate',
-        'LastName',
-        'FirstName',
+        'textbox22',
+        'ProvFirstName',
         'MiddleInitial',
         'AliasLastName1',
         'AliasFirstName1',
@@ -37,14 +33,14 @@ class Maine extends ExclusionList
         'AliasFirstName4',
         'ProvType',
         'CaseStatus',
-        'SanctionStartDate'
+        'SancStateStart'
     ];
 
     public $deleteColumns = [
-        'ReportNumber',
-        'DateRun',
-        'ReportName',
-        'AsOfDate',
+        'ItemHeading1',
+        'ItemValue1',
+        'ItemHeading',
+        'ItemValue',
     ];
 
     public $hashColumns = [
@@ -58,48 +54,52 @@ class Maine extends ExclusionList
 
     public $retrieveOptions = [
         'headerRow' => 0,
-        'offset' => 1
+        'offset' => 5
     ];
 
 
     public $dateColumns = [
-        'sanction_start_date' => 17
+        'sanction_start_date' => 6
     ];
 
     public function preProcess()
     {
+        $this->parse();
         parent::preProcess();
-
-        $finalData = [];
-
-        foreach ($this->data as $values) {
-
-            $arrayWithKeyNames = array_combine($this->originalFieldNames, $values);
-
-            $filteredArray = $this->removeBadColumns($arrayWithKeyNames);
-
-            unset($arrayWithKeyNames);
-
-            $arrayWithEntities = $this->moveEntitiesToNewColumn($filteredArray);
-
-            unset($filteredArray);
-
-            $akaColumns = array_chunk(array_slice($arrayWithEntities, 4, 8, true), 2);
-
-            $akaList = $this->createAkaList($akaColumns);
-
-            array_splice($arrayWithEntities, 4, 8, json_encode($akaList));
-
-            $arrayWithEntities['AkaList'] = $arrayWithEntities[0];
-
-            unset($arrayWithEntities[0]);
-
-            $finalData[] = $arrayWithEntities;
-        }
-
-        $this->data = $finalData;
     }
 
+    private function parse()
+    {
+
+        $finalData = [];
+        
+        foreach ($this->data as $values) {
+        
+            $arrayWithKeyNames = array_combine($this->originalFieldNames, $values);
+        
+            $filteredArray = $this->removeBadColumns($arrayWithKeyNames);
+        
+            unset($arrayWithKeyNames);
+        
+            $arrayWithEntities = $this->moveEntitiesToNewColumn($filteredArray);
+        
+            unset($filteredArray);
+        
+            $akaColumns = array_chunk(array_slice($arrayWithEntities, 4, 8, true), 2);
+        
+            $akaList = $this->createAkaList($akaColumns);
+        
+            array_splice($arrayWithEntities, 4, 8, json_encode($akaList));
+        
+            $arrayWithEntities['AkaList'] = $arrayWithEntities[0];
+        
+            unset($arrayWithEntities[0]);
+        
+            $finalData[] = array_values($arrayWithEntities);
+        }
+        
+        $this->data = $finalData;
+    }
 
     /**
      * @param $arrayWithKeyNames
@@ -117,9 +117,9 @@ class Maine extends ExclusionList
      */
     protected function moveEntitiesToNewColumn($filteredArray)
     {
-        if (empty($filteredArray['FirstName'])) {
-            $filteredArray['Entity'] = $filteredArray['LastName'];
-            $filteredArray['LastName'] = '';
+        if (empty($filteredArray['ProvFirstName'])) {
+            $filteredArray['Entity'] = $filteredArray['textbox22'];
+            $filteredArray['textbox22'] = '';
         } else {
             $filteredArray['Entity'] = '';
         }

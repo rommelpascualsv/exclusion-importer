@@ -15,10 +15,10 @@ class CSVRetriever extends Retriever
      */
     protected $dataConverter;
 
-	/**
-	 * @var	\GuzzleHttp\Client	$httpClient
-	 */
-	protected $httpClient;
+    /**
+     * @var \GuzzleHttp\Client  $httpClient
+     */
+    protected $httpClient;
 
     /**
      * Constructor
@@ -26,39 +26,46 @@ class CSVRetriever extends Retriever
      * @param    DataCsvConverter $dataConverter
      * @param    Client $httpClient
      */
-	public function __construct(DataCsvConverter $dataConverter, Client $httpClient)
+    public function __construct(DataCsvConverter $dataConverter, Client $httpClient)
     {
         $this->dataConverter = $dataConverter;
         $this->httpClient = $httpClient;
     }
 
     /**
-	 * Retrieve the data from a remote source
-	 *
-     * @param	ExclusionList	$list
-     * @return	ExclusionList
+     * Retrieve the data from a remote source
+     *
+     * @param   ExclusionList   $list
+     * @return  ExclusionList
      */
     public function retrieveData(ExclusionList $list)
     {
-        if ($this->uriIsRemote($list->uri)) {
-            $response = $this->httpClient->get($list->uri);
-            $contents = $response->getBody();
-        }
-        else {
-            $contents = file_get_contents($list->uri);
-        }
+        $data = [];
 
-        $data = $this->dataConverter->convertData($list, $contents);
+        // Implement multiple file upload use comma searated
+        $uri = $this->splitURI($list->uri);
+
+        foreach ($uri as $key => $value) {
+    
+            $contents = $this->getContentFrom($value);
+
+            $data = array_merge($data, $this->dataConverter->convertData($list, $contents));
+        }
 
         return $data;
     }
-
-    /**
-     * @param $uri
-     * @return mixed
-     */
-    private function uriIsRemote($uri)
+    
+    private function getContentFrom($uri)
     {
-        return filter_var($uri, FILTER_VALIDATE_URL);
+        $contents = '';
+        
+        if ($this->isRemoteURI($uri)) {
+            $response = $this->httpClient->get($uri, ['verify' => false]);
+            $contents = $response->getBody();
+        } else {
+            $contents = file_get_contents($uri);
+        }
+        
+        return $contents;
     }
 }

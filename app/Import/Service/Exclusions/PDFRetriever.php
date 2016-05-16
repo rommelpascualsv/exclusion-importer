@@ -18,16 +18,47 @@ class PDFRetriever extends Retriever
      */
     protected $httpClient;
 
+    protected $url;
+
     public function retrieveData(ExclusionList $list)
     {
-        $folder = storage_path('app');
+        $data = [];
+        // Implement multiple file upload use comma searated
+        $uri = $this->splitURI($list->uri);
 
-        $file = "{$folder}/{$list->dbPrefix}.pdf";
+        foreach ($uri as $key => $value) {
+            
+            $file = $this->getPdfFileFrom($value, $key, $list);
+            
+            if (strpos($list->pdfToText, "pdftotext") !== false) {
+                $contents = shell_exec($list->pdfToText . ' ' . $file . ' -');
+            } else {
+                $contents = shell_exec($list->pdfToText . ' ' . $file. ' 2>/dev/null');
+            }
+            // Merge Data
+            $data[] = $contents;
+        }
 
-        $this->httpClient->get($list->uri, ['sink' => $file]);
+        // If single item return array element
+        if (count($data) === 1) {
+            return $data[0];
+        }
 
-        $contents = shell_exec($list->pdfToText . ' ' . $file . ' -');
+        return $data;
+    }
 
-        return $contents;
+    private function getPdfFileFrom($uri, $fileIndex, $list)
+    {
+        $file = null;
+
+        if ($this->isRemoteURI($uri)) {
+            $folder = storage_path('app');
+            $file = "{$folder}/{$list->dbPrefix}-{$fileIndex}.pdf";
+            $this->httpClient->get($uri, ['sink' => $file]);
+        } else {
+            $file = $uri;
+        } 
+        
+        return $file;
     }
 }

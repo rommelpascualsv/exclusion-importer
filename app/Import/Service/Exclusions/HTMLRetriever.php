@@ -34,35 +34,59 @@ class HTMLRetriever extends Retriever
      */
     public function retrieveData(ExclusionList $list)
     {
-        $client = new Client([
-            'base_uri' => $list->uri
-        ]);
+        $data = [];
 
-        $response = $client->request('GET', $list->urlSuffix, $list->requestOptions);
+        // Implement multiple file upload use comma searated
+        $uri = $this->splitURI($list->uri);
 
-        $body = $response->getBody()->getContents();
+        foreach ($uri as $key => $value) {
+            
+            $htmlContent = $this->getContentFrom($value, $list);
+            
+            $this->domCrawler->addHtmlContent($htmlContent);
 
-        $this->domCrawler->addHtmlContent($body);
+            $table = $this->domCrawler->filter($list->retrieveOptions['htmlFilterElement']);
 
-        $table = $this->domCrawler->filter($list->retrieveOptions['htmlFilterElement']);
-
-        $columnsArray = $table->filter($list->retrieveOptions['rowElement'])->each(function (Crawler $node) use ($list)
-        {
-            return $node->filter($list->retrieveOptions['columnElement'])->each(function (Crawler $node)
-            {
-                return $node->text();
+            $columnsArray = $table->filter($list->retrieveOptions['rowElement'])->each(function (Crawler $node) use ($list) {
+                return $node->filter($list->retrieveOptions['columnElement'])->each(function (Crawler $node) {
+                    return $node->text();
+                });
             });
-        });
 
-        foreach ($columnsArray as $key => $value) {
-            if (! array_filter($value))
-                unset($columnsArray[$key]);
+            foreach ($columnsArray as $key => $value) {
+                if (! array_filter($value)) {
+                    unset($columnsArray[$key]);
+                }
+            }
+
+            if ($list->retrieveOptions['headerRow'] == 1) {
+                array_shift($columnsArray);
+            }
+            // Merge data
+            $data = array_merge($data, $columnsArray);
         }
 
-        if ($list->retrieveOptions['headerRow'] == 1) {
-            array_shift($columnsArray);
+        return $data;
+    }
+    
+    private function getContentFrom($uri, $list)
+    {
+        $content = '';
+        
+        if ($this->isRemoteURI($uri)) {
+            
+            $client = new Client([
+                'base_uri' => $list->uri
+            ]);
+        
+            $response = $client->request('GET', $list->urlSuffix, $list->requestOptions);
+        
+            $content = $response->getBody()->getContents();
+        
+        } else {
+            $content = file_get_contents($uri);
         }
-
-        return $columnsArray;
+        
+        return $content;
     }
 }

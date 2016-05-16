@@ -1,5 +1,7 @@
 <?php namespace App\Import\Lists;
 
+use \App\Import\Lists\ProviderNumberHelper as PNHelper;
+
 class Massachusetts extends ExclusionList
 {
     public $dbPrefix = 'ma1';
@@ -20,4 +22,47 @@ class Massachusetts extends ExclusionList
         'reason',
         'effective_date'
     ];
+
+    public $hashColumns = [
+        'provider_name',
+        'provider_type',
+        'npi',
+        'effective_date'
+    ];
+    
+    public $shouldHashListName = true;
+    
+    protected $npiColumnName = "npi";
+    
+    /**
+     * @inherit preProcess
+     */
+    public function preProcess()
+    {
+    	$this->parse();
+    	parent::preProcess();
+    }
+    
+    /**
+     * Parse the input data
+     */
+    private function parse()
+    {
+    	$data = [];
+    	 
+    	// iterate each row
+    	foreach ($this->data as $row) {
+    	    
+    	    $npiColumnIndex = $this->getNpiColumnIndex();
+    	    
+    	    // set npi number array
+    	    $row = PNHelper::setNpiValue($row, PNHelper::getNpiValue($row, $npiColumnIndex), $npiColumnIndex);
+    	    	
+    	    $data[] = $row;
+    	}
+    	 
+    	// set back to global data
+    	$this->data = $data;
+    }
+    
 }

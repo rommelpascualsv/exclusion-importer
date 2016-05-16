@@ -11,19 +11,25 @@ class ListFactory
         'ct1'               => 'Connecticut',
         'fl2'               => 'Florida',
         'hi1'               => 'Hawaii',
+        'id1'               => 'Idaho',
+        'il1'               => 'Illinois',
         'ky1'               => 'Kentucky',
         'ma1'               => 'Massachusetts',
         'md1'               => 'Maryland',
         'mi1'               => 'Michigan',
+        'ne1'               => 'Nebraska',
+        'nv1'               => 'Nevada',
         'njcdr'             => 'NewJersey',
         'nyomig'            => 'NewYork',
         'oh1'               => 'Ohio',
+        'oig'               => 'OIG',
         'pa1'               => 'Pennsylvania',
         'sc1'               => 'SouthCarolina',
         'dc1'               => 'WashingtonDC',
         'wa1'               => 'Washington',
         'ms1'               => 'Mississippi',
         'mo1'               => 'Missouri',
+        'mn1'               => 'Minnesota',
         'nd1'               => 'NorthDakota',
         'nc1'               => 'NorthCarolina',
         'wy1'               => 'Wyoming',
@@ -43,17 +49,17 @@ class ListFactory
         'usdosd'            => 'USDosDebar',
         'unsancindividuals' => 'UNSanctionsIndividuals',
         'unsancentities'    => 'UnSanctionsEntities',
-        'healthmil'    => 'HealthMil',
+        'healthmil'         => 'HealthMil',
+    	'csl'               => 'ConsolidatedScreeningList'
     ];
 
     /**
      * @param $prefix
      * @return \App\Import\Lists\ExclusionList
      */
-    public function make($prefix) 
+    public function make($prefix)
     {
         if (array_key_exists($prefix, $this->listMappings)) {
-
             $class = "App\\Import\\Lists\\{$this->listMappings[$prefix]}";
 
             return new $class;

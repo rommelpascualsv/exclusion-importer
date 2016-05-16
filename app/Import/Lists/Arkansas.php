@@ -19,8 +19,8 @@ class Arkansas extends ExclusionList
         'htmlFilterElement' => 'table',
         'rowElement'        => 'tr',
         'columnElement'     => 'td',
-        'headerRow'         => 1,
-        'offset'            => 2
+        'headerRow'         => 0,
+        'offset'            => 1
     ];
 
     public $fieldNames = [
