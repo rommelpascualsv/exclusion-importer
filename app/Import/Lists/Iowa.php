@@ -48,8 +48,16 @@ class Iowa extends ExclusionList
      */
     public function preProcess()
     {
-    	$this->parse();
+        $this->parse();
     	parent::preProcess();
+
+        array_walk_recursive($this->data, function (&$value) {
+
+            if ($value == "N/A") {
+                $value = '';
+            }
+        });
+
     }
     
     /**
