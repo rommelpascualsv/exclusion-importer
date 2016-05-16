@@ -1,18 +1,17 @@
 <?php
-namespace Console\Commands\Scrape;
+namespace Console\Commands\Scrape\Connecticut;
 
 
-use App\Console\Commands\Scrape\ScrapeConnecticut;
-use App\Import\Scrape\Components\TestFilesystem;
+use App\Console\Commands\Scrape\Connecticut\DownloadCsv;
+use App\Import\Scrape\Components\ScrapeFilesystemInterface;
 use App\Import\Scrape\Scrapers\Connecticut\CsvDownloader;
 use App\Import\Scrape\Scrapers\Connecticut\Data\CategoryCollection;
 use Goutte\Client;
 use Laravel\Lumen\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
-use App\Import\Scrape\Components\ScrapeFilesystemInterface;
 
-class ScrapeConnecticutTest extends \Codeception\TestCase\Test
+class DownloadCsvTest extends \Codeception\TestCase\Test
 {
     /**
      * @var \UnitTester
@@ -48,7 +47,7 @@ class ScrapeConnecticutTest extends \Codeception\TestCase\Test
     {
     	$this->laravel = $this->getModule('Lumen')->app;
     	$this->filesystem = app('scrape_test_filesystem');
-    	$this->command = new ScrapeConnecticut();
+    	$this->command = new DownloadCsv();
     	$this->command->setLaravel($this->laravel);
     }
 

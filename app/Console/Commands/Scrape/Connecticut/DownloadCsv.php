@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands\Scrape;
+namespace App\Console\Commands\Scrape\Connecticut;
 
 use App\Import\Scrape\Scrapers\Connecticut\CsvDownloader;
 use Illuminate\Console\Command;
@@ -11,14 +11,14 @@ use App\Import\Scrape\Scrapers\Connecticut\Data\Option;
 /**
  * Command class that handles the refreshing of records in Files table.
  */
-class ScrapeConnecticut extends Command 
+class DownloadCsv extends Command 
 {
 	/**
 	 * The name and signature of the console command.
 	 *
 	 * @var string
 	 */
-	protected $signature = 'scrape:connecticut';
+	protected $signature = 'scrape_connecticut:download_csv';
 	
 	/**
 	 * The console command description.
