@@ -1,4 +1,4 @@
-<?php
+<?php namespace Test\Unit;
 
 use App\Import\Lists\Maine;
 
