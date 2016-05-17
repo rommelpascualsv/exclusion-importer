@@ -30,6 +30,8 @@ class Mississippi extends ExclusionList
         'middle_name',
         'entity_name',
         'dba',
+        'address',
+        'address_2',
         'exclusion_from_date',
         'exclusion_to_date',
         'npi'
