@@ -47,11 +47,13 @@ class Hawaii extends ExclusionList
     
     public function parse()
     {
-        $this->data = array_map(function($row) {
+        $exclusionDateIndex = array_search("exclusion_date", $this->fieldNames);
+        
+        $this->data = array_map(function($row) use ($exclusionDateIndex) {
             
             // set blank if date is "-"
-            if ($row[5] === "-") {
-                $row[5] = "";
+            if ($row[$exclusionDateIndex] === "-") {
+                $row[$exclusionDateIndex] = "";
             }
             
             return $row;
