@@ -23,7 +23,8 @@ class Nevada extends ExclusionList
     	'sanction_tier',
     	'sanction_period',
     	'sanction_period_end_date',
-    	'reinstatement_date'
+    	'reinstatement_date',
+        'provider_number'
     ];
 
     public $retrieveOptions = [
@@ -113,9 +114,15 @@ class Nevada extends ExclusionList
         		$columns = $this->buildColumnsData($mergeData, $columns);
         	}
         	
-        	// set npi number array
+        	$columns = array_map("trim", $columns);
+        	
         	$npiColumnIndex = $this->getNpiColumnIndex();
-		    $columns = PNHelper::setNpiValue($columns, PNHelper::getNpiValue($columns, $npiColumnIndex), $npiColumnIndex);
+        	
+        	// set provider number
+        	$columns = PNHelper::setProviderNumberValue($columns, PNHelper::getProviderNumberValue($columns, $npiColumnIndex));
+        	
+        	// set npi number array
+        	$columns = PNHelper::setNpiValue($columns, PNHelper::getNpiValue($columns, $npiColumnIndex), $npiColumnIndex);
         	
 			// populate the array data
         	$data[] = $columns;
