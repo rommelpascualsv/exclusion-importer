@@ -16,7 +16,6 @@ class RetrieverFactory
         'html' => 'html',
         'pdf' => 'pdf',
         'xml'  => 'xml',
-        'custom'  => 'custom',
     ];
 
     public function make($type)
@@ -50,11 +49,6 @@ class RetrieverFactory
                     new Crawler(),
                     new DataCsvConverter(new CsvFileReader())
                 );
-
-                break;
-
-            case 'custom':
-                return new CustomRetriever();
 
                 break;
 
