@@ -113,6 +113,8 @@ class Nevada extends ExclusionList
         		$columns = $this->buildColumnsData($mergeData, $columns);
         	}
         	
+        	$columns = array_map("trim", $columns);
+        	
         	// set npi number array
         	$npiColumnIndex = $this->getNpiColumnIndex();
 		    $columns = PNHelper::setNpiValue($columns, PNHelper::getNpiValue($columns, $npiColumnIndex), $npiColumnIndex);
