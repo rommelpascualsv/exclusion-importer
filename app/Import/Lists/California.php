@@ -24,6 +24,10 @@ class California extends ExclusionList
         'npi'
     ];
     
+    public $dateColumns = [
+    		'date_of_suspension' => 8
+    ];
+    
     public $shouldHashListName = true;
     
     protected $npiColumnName = "npi";
