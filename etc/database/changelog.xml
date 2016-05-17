@@ -37,5 +37,6 @@
     <include file="./changelog/svg-404.changelog.xml" relativeToChangelogFile="true"/>
     <include file="./changelog/svg-402.changelog.xml" relativeToChangelogFile="true" />
     <include file="./changelog/svg-421-1.changelog.xml" relativeToChangelogFile="true" />
+    <include file="./changelog/svg-422-1.changelog.xml" relativeToChangelogFile="true" />
 
 </databaseChangeLog>
