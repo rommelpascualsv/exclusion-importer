@@ -38,4 +38,23 @@ class Hawaii extends ExclusionList
 
         return str_replace(' ', '%20', str_replace('..', 'http://www.med-quest.us', $link));
     }
+    
+    public function preProcess()
+    {
+        $this->parse();
+        parent::preProcess();
+    }
+    
+    public function parse()
+    {
+        $this->data = array_map(function($row) {
+            
+            // set blank if date is "-"
+            if ($row[5] === "-") {
+                $row[5] = "";
+            }
+            
+            return $row;
+        }, $this->data);
+    }
 }
