@@ -1,4 +1,4 @@
-<?php
+<?php namespace Test\Unit;
 
 use App\Import\Lists\HealthMil;
 use App\Import\Lists\HealthMil\HealthMilParser;
@@ -13,7 +13,7 @@ class HealthMilTest extends \Codeception\TestCase\Test
     protected function _before()
     {
         $this->healthMil = new HealthMil();
-        $this->healthMilParser= new HealthMilParser();
+        $this->healthMilParser = new HealthMilParser();
     }
     
     protected function _after()

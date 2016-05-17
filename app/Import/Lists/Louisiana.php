@@ -39,7 +39,7 @@ class Louisiana extends ExclusionList
         'birthdate',
         'affiliated_entity',
         'npi',
-        'exclusion_reason',
+        'state_zip',
         'effective_date',
     ];
 

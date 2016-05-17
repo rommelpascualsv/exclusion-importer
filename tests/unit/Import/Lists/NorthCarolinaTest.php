@@ -1,4 +1,5 @@
-<?php
+<?php namespace Test\Unit;
+
 use App\Import\Lists\NorthCarolina;
 
 class NorthCarolinaTest extends \Codeception\TestCase\Test
