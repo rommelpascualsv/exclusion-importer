@@ -35,12 +35,6 @@
     <include file="./changelog/svg-393.changelog.xml" relativeToChangelogFile="true"/>
     <include file="./changelog/svg-394.changelog.xml" relativeToChangelogFile="true"/>
     <include file="./changelog/svg-404.changelog.xml" relativeToChangelogFile="true"/>
-
-    <!--
-        NOTE : svg-402.changelog.xml modifies the exclusion_search_table_view.
-        Any succeeding changeSets that also modify exclusion_search_table_view
-        should be done off of the view definition in this file.
-     -->
     <include file="./changelog/svg-402.changelog.xml" relativeToChangelogFile="true" />
 
 </databaseChangeLog>
