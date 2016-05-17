@@ -50,14 +50,6 @@ class Iowa extends ExclusionList
     {
         $this->parse();
     	parent::preProcess();
-
-        array_walk_recursive($this->data, function (&$value) {
-
-            if ($value == "N/A") {
-                $value = '';
-            }
-        });
-
     }
     
     /**
@@ -71,6 +63,10 @@ class Iowa extends ExclusionList
     	foreach ($this->data as $row) {
     		
     	    $npiColumnIndex = $this->getNpiColumnIndex();
+
+            $row = array_map(function($value) {
+                return strtoupper($value) != 'N/A' ? $value : '';
+            }, $row);
 
     	    // set provider number
     	    $row = PNHelper::setProviderNumberValue($row, PNHelper::getProviderNumberValue($row, $npiColumnIndex));
