@@ -25,6 +25,10 @@ class Hawaii extends ExclusionList
         'reinstatement_date'
     ];
 
+    public $dateColumns = [
+      'exclusion_date' => 5
+    ];
+
     public function __construct()
     {
         parent::__construct();
@@ -37,5 +41,26 @@ class Hawaii extends ExclusionList
         $link = $crawler->filter('tr th div ul.bodytext li:nth-child(2) a')->attr('href');
 
         return str_replace(' ', '%20', str_replace('..', 'http://www.med-quest.us', $link));
+    }
+    
+    public function preProcess()
+    {
+        $this->parse();
+        parent::preProcess();
+    }
+    
+    public function parse()
+    {
+        $exclusionDateIndex = array_search("exclusion_date", $this->fieldNames);
+        
+        $this->data = array_map(function($row) use ($exclusionDateIndex) {
+            
+            // set blank if date is "-"
+            if ($row[$exclusionDateIndex] === "-") {
+                $row[$exclusionDateIndex] = "";
+            }
+            
+            return $row;
+        }, $this->data);
     }
 }
