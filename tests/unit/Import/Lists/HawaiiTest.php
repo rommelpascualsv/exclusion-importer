@@ -39,7 +39,7 @@ class HawaiiTest extends \Codeception\TestCase\Test
                 "middle_initial"                        => "",
                 "medicaid_provide_id_number"            => "596009",
                 "last_known_program_or_provider_type"   => "PSYCHOLOGIST",
-                "exclusion_date"                        => "2015/04/20",
+                "exclusion_date"                        => "2015-04-20",
                 "reinstatement_date"                    => "Indefinite"
             ],
             [
@@ -57,7 +57,7 @@ class HawaiiTest extends \Codeception\TestCase\Test
                 "middle_initial"                        => "",
                 "medicaid_provide_id_number"            => "67890",
                 "last_known_program_or_provider_type"   => "PEDIATRICIAN",
-                "exclusion_date"                        => "2016/01/05",
+                "exclusion_date"                        => "2016-01-05",
                 "reinstatement_date"                    => "Indefinite"
             ]
         ];

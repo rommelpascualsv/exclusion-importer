@@ -25,6 +25,10 @@ class Hawaii extends ExclusionList
         'reinstatement_date'
     ];
 
+    public $dateColumns = [
+      'exclusion_date' => 5
+    ];
+
     public function __construct()
     {
         parent::__construct();
