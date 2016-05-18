@@ -7,6 +7,7 @@ use Illuminate\Console\Command;
 use App\Exceptions\Scrape\ScrapeException;
 use App\Exceptions\Scrape\Connecticut\DownloadOptionMissingException;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Option;
+use App\Import\Scrape\ProgressTrackers\CliProgressTracker;
 
 /**
  * Command class that handles the refreshing of records in Files table.
@@ -35,6 +36,12 @@ class DownloadCsv extends Command
 	 */
 	public function handle(CsvDownloader $downloader)
 	{	
+	    $downloader->attachProgressTracker(new CliProgressTracker($this));
+	    
+	    $downloader->scrapeMainPage();
+	    
+	    return;
+	    
 		try {
 			$this->line('Crawling the Main Page...');
 			

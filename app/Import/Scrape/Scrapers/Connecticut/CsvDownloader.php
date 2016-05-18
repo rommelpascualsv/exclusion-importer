@@ -7,9 +7,12 @@ use App\Import\Scrape\Scrapers\Connecticut\Data\Option;
 use App\Import\Scrape\Scrapers\Connecticut\Data\OptionCollection;
 use Goutte\Client;
 use App\Import\Scrape\Scrapers\Page;
+use App\Import\Scrape\ProgressTrackers\TracksProgress;
 
 class CsvDownloader
-{	
+{
+    use TracksProgress;
+    
 	/**
 	 * @var string
 	 */
@@ -70,6 +73,12 @@ class CsvDownloader
 	 */
 	public function scrapeMainPage()
 	{
+	    $this->trackProgress('From Progress Tracker: Crawling the Main Page...');
+	    $this->trackInfoProgress('Info');
+	    $this->trackErrorProgress('Error');
+	    
+	    return;
+	    
 		return MainPage::scrape($this->client);
 	}
 	
