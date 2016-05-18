@@ -38,15 +38,6 @@ class NewYorkTest extends \Codeception\TestCase\Test
             ]
         ];
 
-        // similar_text('SUNSET PHARMACY', 'sunset drive hello lane', $percent);
-        // print_r($percent);
-        // exit;
-        $str = strtoupper("sunset drive hello lane");
-        if (preg_match("[SUNSET|PHARMACY]", $str) === 1) {
-            echo "it matches";
-        }
-        exit;
-
         $this->assertEquals($expected, $this->newyork->data);
     }
 }

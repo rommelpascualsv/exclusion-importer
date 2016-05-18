@@ -49,40 +49,39 @@ class Michigan extends ExclusionList
         'sanction_date_1' => 8,
         'sanction_date_2' => 10
     ];
-    
+
     protected $npiColumnName = "npi_number";
-    
+
     /**
      * @inherit preProcess
      */
     public function preProcess()
     {
-    	$this->parse();
-    	parent::preProcess();
+        $this->parse();
+        parent::preProcess();
     }
-    
+
     /**
      * Parse the input data
      */
     private function parse()
     {
-    	$data = [];
-    	 
-    	// iterate each row
-    	foreach ($this->data as $row) {
-    		
-    	    $npiColumnIndex = $this->getNpiColumnIndex();
-    	    
-    	    // set provider number
-    	    $row = PNHelper::setProviderNumberValue($row, PNHelper::getProviderNumberValue($row, $npiColumnIndex));
-    	    	
-    	    // set npi number array
-    	    $row = PNHelper::setNpiValue($row, PNHelper::getNpiValue($row, $npiColumnIndex), $npiColumnIndex);
-    	    	
-    	    $data[] = $row;
-    	}
-    	 
-    	// set back to global data
-    	$this->data = $data;
+        $data = [];
+
+        // iterate each row
+        foreach ($this->data as $row) {
+            $npiColumnIndex = $this->getNpiColumnIndex();
+
+            // set provider number
+            $row = PNHelper::setProviderNumberValue($row, PNHelper::getProviderNumberValue($row, $npiColumnIndex));
+
+            // set npi number array
+            $row = PNHelper::setNpiValue($row, PNHelper::getNpiValue($row, $npiColumnIndex), $npiColumnIndex);
+
+            $data[] = $row;
+        }
+
+        // set back to global data
+        $this->data = $data;
     }
 }

@@ -68,11 +68,17 @@ class NewJersey extends ExclusionList
 
     protected $npiColumnName = "npi";
 
+    public $match;
+
+    public $searchKey;
+
     /**
      * @inherit preProcess
      */
     public function preProcess()
     {
+        print_r($this->data);
+        exit;
         $this->parse();
         parent::preProcess();
     }
@@ -83,19 +89,57 @@ class NewJersey extends ExclusionList
     private function parse()
     {
         $data = [];
-
+        $name = [];
         // iterate each row
+
         foreach ($this->data as $row) {
-            foreach ($row as $value) {
-                if ($value) {
-                    $data[] = $this->handleRow($row);
-                    break;
-                }
+            if (array_filter($row)) {
+                // all values are empty (where "empty" means == false)
+                $name[] = $row[0];
+                $data[] = $this->handleRow($row);
             }
         }
 
-        // set back to global data
-        $this->data = $data;
+        $this->data = $this->mapSearch($name, $data);
+    }
+
+    public function mapSearch($name, $data)
+    {
+        foreach ($name as $key => $value) {
+
+            if ($value) {
+                $p = $key - 1;
+
+                foreach ($data[$p] as $k => $v) {
+
+                    if (is_string($v)) {
+                        $entity = str_replace("'S", '', strtoupper($value));
+                        if (preg_match($this->searchRegex($entity), strtoupper($v)) === 1) {
+                            $this->match = $p;
+                            break;
+                        }
+
+                    }
+
+                }
+            }
+
+            if ($this->match) {
+                $data[$this->match][0] = $value;
+                $data[$key][0] = '';
+                $this->match = null;
+            } else {
+                $data[$key][0] = $value;
+            }
+        }
+
+        return $data;
+    }
+
+    private function searchRegex($string)
+    {
+        $trim = preg_replace('!\s+!', ' ', trim($string));
+        return '[' . str_replace(' ', '|', $trim) . ']';
     }
 
     /**
@@ -118,11 +162,6 @@ class NewJersey extends ExclusionList
         $row = PNHelper::setNpiValue($row, PNHelper::getNpiValue($row, $npiColumnIndex), $npiColumnIndex);
 
         return $row;
-    }
-
-    private function searchMatch(array $categories)
-    {
-
     }
 
     /**
