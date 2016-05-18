@@ -65,7 +65,8 @@ class NevadaTest extends \Codeception\TestCase\Test
                 'sanction_period'                   => "Permanent",
                 'sanction_period_end_date'          => null,
                 'reinstatement_date'                => null,
-                'provider_number'                   => ''
+                'provider_number'                   => '',
+                'aka'                               => ''
                 
             ],
             [
@@ -80,11 +81,26 @@ class NevadaTest extends \Codeception\TestCase\Test
                 'sanction_period'                   => "Permanent",
                 'sanction_period_end_date'          => null,
                 'reinstatement_date'                => null,
-                'provider_number'                   => '9090909012 101010101 Not Available 00011100'
+                'provider_number'                   => '9090909012 101010101 Not Available 00011100',
+                'aka'                               => '["Charlie Villa","Richard Gere"]'
             ]
         ];
         
         $this->assertEquals($expected, $this->importer->data);
+    }
+    
+    public function testExtractAliasesFromNameColumn()
+    {
+        $this->importer->data = 'John Smith aka Jonathan Smith,,,,1234567890,,7/20/2008,Federal,Permanent,,' . PHP_EOL .
+                                'Charlene DeMarco aka Jane Doe & Jason Miller,,,,1234567890,,7/20/2008,Federal,Permanent,,' . PHP_EOL;
+        
+        $this->importer->preProcess();
+        
+        $this->assertEquals('["Jonathan Smith"]', $this->importer->data[0]['aka']);
+        $this->assertEquals('John Smith', $this->importer->data[0]['doing_business_as']);
+        
+        $this->assertEquals('["Jane Doe","Jason Miller"]', $this->importer->data[1]['aka']);
+        $this->assertEquals('Charlene DeMarco', $this->importer->data[1]['doing_business_as']);
     }
     
     private function getInputData()
@@ -96,7 +112,7 @@ class NevadaTest extends \Codeception\TestCase\Test
             '"",,"controlling inerest of ","Medicaid ",,"Provider ","Termination ","Sanction ","Sanction ","Period End ","Reinstate "' . PHP_EOL .
             'Business Name,Legal Entity,5% or more,Provider,NPI,Type,Date,Tier,Period,Date,Date' . PHP_EOL .
             'Charlene DeMarco,,,,1234567890,,7/20/2008,Federal,Permanent,,' . PHP_EOL .
-            'Elijah Akpan,,,,9090909012 101010101 Not Available 1234567890 00011100 1111111111,,10/20/2010,Federal,Permanent,,' . PHP_EOL .
+            'Elijah Akpan aka Charlie Villa & Richard Gere,,,,9090909012 101010101 Not Available 1234567890 00011100 1111111111,,10/20/2010,Federal,Permanent,,' . PHP_EOL .
             '"",,,,"Page 1 ",of 7,,,,,' . PHP_EOL;
     }
 }
