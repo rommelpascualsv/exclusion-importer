@@ -34,7 +34,8 @@ class HealthMil extends ExclusionList
         'first_name',
         'middle_name',
         'last_name',
-    	'title'
+    	'title',
+        'addresses'
     ];
 
     private $parser;
