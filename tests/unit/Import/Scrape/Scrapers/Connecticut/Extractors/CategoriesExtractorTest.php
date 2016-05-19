@@ -3,7 +3,6 @@ namespace Import\Scrape\Scrapers\Connecticut\Extractors;
 
 use App\Import\Scrape\Scrapers\Connecticut\Extractors\CategoriesExtractor;
 use Goutte\Client;
-use GuzzleHttp\json_decode;
 
 class CategoriesExtractorTest extends \Codeception\TestCase\Test
 {	

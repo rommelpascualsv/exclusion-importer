@@ -27,16 +27,14 @@ class ExtractCsvHeaders extends Command
 	
 	/**
 	 * Execute the console command.
+     * 
 	 * @param ScrapeFilesystemInterface $filesystem
 	 */
 	public function handle(ScrapeFilesystemInterface $filesystem)
 	{
-		$this->line('Extracting headers in downloaded csv files in ' . $filesystem->getPath('csv/connecticut') . ' ...');
-		
-		$extractor = CsvHeadersExtractor::create($filesystem);
-		$extractor->extract()->save();
-		
-		$this->info('Extracted headers in ' . count($extractor->getData()) . ' csv files.');
-		$this->info('Data saved in ' . $extractor->getSaveFilePath());
+        $extractor = CsvHeadersExtractor::create($filesystem);
+        $extractor->attachProgressTracker(new \App\Import\Scrape\ProgressTrackers\CliProgressTracker($this))
+            ->extract()
+            ->save();
 	}
 }

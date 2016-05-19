@@ -2,15 +2,17 @@
 
 namespace App\Import\Scrape\Scrapers\Connecticut\Extractors;
 
-
-
 use App\Import\Scrape\Components\ScrapeFilesystemInterface;
 use League\Csv\Reader;
 use League\Csv\Writer;
 use App\Import\Scrape\Scrapers\Connecticut\Data\CsvDir;
+use App\Import\Scrape\ProgressTrackers\TracksProgress;
 
 class CsvHeadersExtractor
 {
+    
+    use TracksProgress;
+    
 	/**
 	 * @var array
 	 */
@@ -34,6 +36,7 @@ class CsvHeadersExtractor
 	
 	/**
 	 * Get files
+     * 
 	 * @return array
 	 */
 	public function getFiles()
@@ -43,6 +46,7 @@ class CsvHeadersExtractor
 	
 	/**
 	 * Get save file path
+     * 
 	 * @return string
 	 */
 	public function getSaveFilePath()
@@ -52,6 +56,7 @@ class CsvHeadersExtractor
 	
 	/**
 	 * Get data
+     * 
 	 * @return array
 	 */
 	public function getData()
@@ -61,6 +66,7 @@ class CsvHeadersExtractor
 	
 	/**
 	 * Extract headers from path
+     * 
 	 * @param string $path
 	 * @return array
 	 */
@@ -86,6 +92,7 @@ class CsvHeadersExtractor
 	
 	/**
 	 * Get csv line
+     * 
 	 * @param array $data
 	 * @return array
 	 */
@@ -101,19 +108,26 @@ class CsvHeadersExtractor
 	
 	/**
 	 * Extract data
+     * 
 	 * @return $this
 	 */
 	public function extract()
 	{		
+        $this->trackProgress('Extracting headers in downloaded csv files in ' . $this->saveFilePath . ' ...');
+        
 		foreach ($this->files as $data) {
 			$this->data[] = $this->getCsvLine($data);
 		}
-		
+        
+        $this->trackInfoProgress('Extracted headers in ' . count($this->data) . ' csv files');
+        $this->trackInfoProgress('Extracted headers saved in ' . $this->saveFilePath);
+        
 		return $this;
 	}
 	
 	/**
 	 * Save data
+     * 
 	 * @return $this
 	 */
 	public function save()
@@ -136,6 +150,7 @@ class CsvHeadersExtractor
 	
 	/**
 	 * Create
+     * 
 	 * @param ScrapeFilesystemInterface $filesystem
 	 * @param string $dirPath
 	 * @param string $saveFilePath
