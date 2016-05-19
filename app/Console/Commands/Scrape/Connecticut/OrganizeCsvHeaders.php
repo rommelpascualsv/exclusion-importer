@@ -2,10 +2,11 @@
 
 namespace App\Console\Commands\Scrape\Connecticut;
 
-use Illuminate\Console\Command;
 use App\Import\Scrape\Components\ScrapeFilesystemInterface;
+use App\Import\Scrape\ProgressTrackers\CliProgressTracker;
 use App\Import\Scrape\Scrapers\Connecticut\Extractors\CsvHeadersExtractor;
 use App\Import\Scrape\Scrapers\Connecticut\Extractors\HeadersOrganizer;
+use Illuminate\Console\Command;
 
 /**
  * Command class that handles the refreshing of records in Files table.
@@ -32,18 +33,21 @@ class OrganizeCsvHeaders extends Command
 	 */
 	public function handle(ScrapeFilesystemInterface $filesystem)
 	{
-		$this->line('Organizing headers from all csv files in ' . $filesystem->getPath('csv/connecticut') . ' ...');
+        $progressTracker = new CliProgressTracker($this);
+        
+        $extractor = CsvHeadersExtractor::create($filesystem);
+		$headersData = $extractor
+            ->attachProgressTracker($progressTracker)
+            ->extract()
+            ->getData();
 		
-		$extractor = CsvHeadersExtractor::create($filesystem);
-		$headersData = $extractor->extract()->getData();
-		$organizer = new HeadersOrganizer(
-				$headersData,
-				$filesystem->getPath('extracted/connecticut/organized-headers.csv')
+        $organizer = new HeadersOrganizer(
+            $headersData,
+            $filesystem->getPath('extracted/connecticut/organized-headers.csv')
 		);
 		
-		$organizer->organize()->save();
-		
-		$this->info('Organized headers in ' . count($organizer->getData()) . ' csv files.');
-		$this->info('Result saved in ' . $organizer->getSavePath());
+		$organizer->attachProgressTracker($progressTracker)
+            ->organize()
+            ->save();
 	}
 }

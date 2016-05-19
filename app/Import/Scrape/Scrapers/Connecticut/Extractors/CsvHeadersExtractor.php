@@ -119,8 +119,7 @@ class CsvHeadersExtractor
 			$this->data[] = $this->getCsvLine($data);
 		}
         
-        $this->trackInfoProgress('Extracted headers in ' . count($this->data) . ' csv files');
-        $this->trackInfoProgress('Extracted headers saved in ' . $this->saveFilePath);
+        $this->trackInfoProgress('Extracted headers from ' . count($this->data) . ' csv files');
         
 		return $this;
 	}
@@ -144,6 +143,8 @@ class CsvHeadersExtractor
 		
 		$writer = Writer::createFromPath($this->saveFilePath, 'w+');
 		$writer->insertAll($this->data);
+        
+        $this->trackInfoProgress('Extracted headers saved in ' . $this->saveFilePath);
 		
 		return $this;
 	}

@@ -2,11 +2,14 @@
 
 namespace App\Import\Scrape\Scrapers\Connecticut\Extractors;
 
-
 use League\Csv\Writer;
+use App\Import\Scrape\ProgressTrackers\TracksProgress;
 
 class HeadersOrganizer
 {
+    
+    use TracksProgress;
+    
 	/**
 	 * @var array
 	 */
@@ -21,7 +24,7 @@ class HeadersOrganizer
 	 * @var array
 	 */
 	protected $result = [
-			['CATEGORY', 'OPTION']
+        ['CATEGORY', 'OPTION']
 	];
 	
 	/**
@@ -58,7 +61,9 @@ class HeadersOrganizer
 	 * @return $this
 	 */
 	public function organize()
-	{	
+	{
+        $this->trackProgress('Organizing extracted header data...');
+        
 		$headersMap = [];
 		$headersLastIndex = 0;
 		
@@ -93,6 +98,8 @@ class HeadersOrganizer
 		
 		$this->setResultHeader(array_keys($headersMap));
 		
+        $this->trackInfoProgress('Organized headers from ' . count($this->data) . ' csv files');
+        
 		return $this;
 	}
 	
@@ -109,6 +116,8 @@ class HeadersOrganizer
 		
 		$writer = Writer::createFromPath($this->savePath, 'w+');
 		$writer->insertAll($this->result);
+        
+        $this->trackInfoProgress('Organized headers saved in ' . $this->savePath);
 	}
 	
 	/**
