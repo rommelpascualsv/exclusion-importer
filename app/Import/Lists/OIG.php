@@ -64,6 +64,8 @@ class OIG extends ExclusionList
     public function postProcess()
     {
         $this->data = array_map(function ($record) {
+            $record['zip'] = str_pad($record['zip'] ,5, '0', STR_PAD_LEFT);
+
             if ($record['npi'] == 0) {
                 $record['npi'] = null;
             }
