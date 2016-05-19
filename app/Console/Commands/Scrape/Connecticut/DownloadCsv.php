@@ -36,59 +36,7 @@ class DownloadCsv extends Command
 	 */
 	public function handle(CsvDownloader $downloader)
 	{	
-	    $downloader->attachProgressTracker(new CliProgressTracker($this));
-	    
-	    $downloader->scrapeMainPage();
-	    
-	    return;
-	    
-		try {
-			$this->line('Crawling the Main Page...');
-			
-			$mainPage = $downloader->scrapeMainPage();
-			$this->info('Success (URL: ' . $mainPage->getRequestUri() . ')');
-			
-			$this->line('Submitting form to crawl the Download Options Page...');
-			
-			$downloadOptionsPage = $downloader->scrapeDownloadOptionsPage($mainPage);
-			$this->info('Success (URL: ' . $downloadOptionsPage->getRequestUri() . ')');
-			
-			$this->line('Extracting roster IDs...');
-			
-			$options = $downloader->getOptions();
-			$existingOptions = [];
-			$rosterIds = [];
-			
-			/** @var Option $option */
-			foreach ($options as $option) {
-				try {
-					$rosterId = $downloadOptionsPage->getRosterId($option);
-				} catch (DownloadOptionMissingException $e) {
-					$this->error($e->getMessage() . '. Proceeding to next option.');
-					
-					continue;
-				}
-				
-				$existingOptions[] = $option;
-				$rosterIds[] = $rosterId;
-			
-				$this->info('Got roster ID for ' . $option->getDescriptiveName());
-			}
-			
-			$this->line('Downloading files to ' . $downloader->getDownloadPath() . '...');
-			
-			foreach ($existingOptions as $i => $option) {
-				$fileName = $downloader->getFileName($option);
-					
-				$csvPage = $downloader->downloadFile([
-						'roster_id' => $rosterIds[$i],
-						'file_name' => $fileName
-				], $downloadOptionsPage);
-					
-				$this->info('Downloaded ' . $fileName . ' from ' . $csvPage->getRequestUri());
-			}
-		} catch (ScrapeException $e) {
-			$this->error($e->getMessage());
-		}
+	    $downloader->attachProgressTracker(new CliProgressTracker($this))
+            ->download();
 	}
 }

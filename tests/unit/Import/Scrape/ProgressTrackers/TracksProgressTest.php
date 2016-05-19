@@ -3,7 +3,7 @@ namespace Import\Scrape\ProgressLogers;
 
 use App\Import\Scrape\ProgressTrackers\ProgressTrackerInterface;
 
-class LogsProgressTest extends \Codeception\TestCase\Test
+class TracksProgressTest extends \Codeception\TestCase\Test
 {
     /**
      * @var \UnitTester
