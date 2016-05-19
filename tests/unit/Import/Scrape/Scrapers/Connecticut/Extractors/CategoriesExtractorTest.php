@@ -1,9 +1,7 @@
 <?php
 namespace Import\Scrape\Scrapers\Connecticut\Extractors;
-	
 
 use App\Import\Scrape\Scrapers\Connecticut\Extractors\CategoriesExtractor;
-use App\Import\Scrape\Scrapers\Connecticut\MainPage;
 use Goutte\Client;
 use GuzzleHttp\json_decode;
 
@@ -15,11 +13,6 @@ class CategoriesExtractorTest extends \Codeception\TestCase\Test
     protected $tester;
     
     /**
-     * @var MainPage
-     */
-    protected $mainPage;
-    
-    /**
      * @var CategoriesExtractor
      */
     protected $extractor;
@@ -27,19 +20,22 @@ class CategoriesExtractorTest extends \Codeception\TestCase\Test
     protected function _before()
     {
         $this->client = app(Client::class);
-        $this->mainPage = MainPage::scrape($this->client);
         $this->filesystem = app('scrape_test_filesystem');
-        $this->extractor = new CategoriesExtractor($this->mainPage, $this->filesystem);
+        $this->extractor = new CategoriesExtractor($this->filesystem);
     }
 
     protected function _after()
     {
     }
-
-    // tests
+    
+    /**
+     * Test extracting one category data from the main page
+     */
     public function testExtractCategoryData()
-    {
-        $headingNode = $this->mainPage->getPanelNodes()->eq(0);
+    {   
+        $headingNode = $this->extractor->scrapeMainPage($this->client)
+            ->getPanelNodes()
+            ->eq(0);
         $i = 0;
         
         $categoryData = $this->extractor->extractCategoryData($headingNode, $i);
@@ -67,29 +63,45 @@ class CategoriesExtractorTest extends \Codeception\TestCase\Test
         $this->assertSame($expectedCategoryData, $categoryData);
     }
     
+    /**
+     * Test extracting all the categories from the main page
+     */
     public function testExtract()
     {
-        $this->extractor->extract();
+        $this->extractor->extract($this->client);
         
         $categories = $this->extractor->getData();
         
         $this->assertCount(36, $categories);
         $this->assertArrayHasKey('accountancy', $categories);
-        $this->assertArrayHasKey('standards_home_heating_fuel_dealer_gas_stations_and_weighing_devices', $categories);
+        $this->assertArrayHasKey(
+            'standards_home_heating_fuel_dealer_gas_stations_and_weighing_devices',
+            $categories
+        );
         $this->assertArrayHasKey('youth_camp_licensing', $categories);
     }
     
+    /**
+     * Test extract to get the first option if there is a duplicate
+     */
     public function testExtractGetFirstOptionOnDuplicate()
     {
-        $this->extractor->extract();
+        $this->extractor->extract($this->client);
         
         $categories = $this->extractor->getData();
         
         $optionFieldName = $categories['healthcare_practitioners']['options']['dietitian_nutritionist']['field_name'];
         
-        $this->assertEquals('ctl00$MainContentPlaceHolder$ckbRoster110', $optionFieldName);
+        $this->assertEquals(
+            'ctl00$MainContentPlaceHolder$ckbRoster110',
+            $optionFieldName
+        );
     }
     
+    /**
+     * Test if the file is saved in the correct directory and if it contains
+     * the right contents
+     */
     public function testSave()
     {
         $filePath = codecept_output_dir('scrape/extracted/connecticut/connecticut-categories.json');
@@ -98,7 +110,7 @@ class CategoriesExtractorTest extends \Codeception\TestCase\Test
             unlink($filePath);
         }
         
-        $this->extractor->extract()->save();
+        $this->extractor->extract($this->client)->save();
         
         $this->assertFileExists($filePath);
         

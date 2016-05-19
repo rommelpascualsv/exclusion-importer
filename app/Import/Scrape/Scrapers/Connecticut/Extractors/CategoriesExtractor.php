@@ -4,10 +4,15 @@ namespace App\Import\Scrape\Scrapers\Connecticut\Extractors;
 
 use App\Import\Scrape\Components\ScrapeFilesystemInterface;
 use App\Import\Scrape\Scrapers\Connecticut\MainPage;
+use Goutte\Client;
 use Symfony\Component\DomCrawler\Crawler;
+use App\Import\Scrape\ProgressTrackers\TracksProgress;
 
 class CategoriesExtractor
 {
+    
+    use TracksProgress;
+    
     /**
      * @var MainPage
      */
@@ -30,17 +35,17 @@ class CategoriesExtractor
     
     /**
      * Initialize
-     * @param MainPage $page
+     * 
      * @param ScrapeFilesystemInterface $filesystem
      */
-    public function __construct(MainPage $page, ScrapeFilesystemInterface $filesystem)
+    public function __construct(ScrapeFilesystemInterface $filesystem)
     {
-        $this->page = $page;
         $this->filesystem = $filesystem;
     }
     
     /**
      * Get data
+     * 
      * @return array
      */
     public function getData()
@@ -50,10 +55,19 @@ class CategoriesExtractor
     
     /**
      * Extract categories
+     * 
+     * @param Client $client
      * @return $this
      */
-    public function extract()
+    public function extract(Client $client)
     {
+        $this->trackProgress('Crawling the main page...');
+        
+        $this->scrapeMainPage($client);
+        $this->trackInfoProgress('Main page crawled.');
+        
+        $this->trackProgress('Extracting the category data from the main page...');
+        
         $panelNodes = $this->page->getPanelNodes();
         $data = [];
         
@@ -62,6 +76,8 @@ class CategoriesExtractor
             
             $key = $this->getKey($categoryData['name']);
             $data[$key] = $categoryData;
+            
+            $this->trackInfoProgress('Extracted ' . $categoryData['name'] . ' data.');
         });
         
         $this->data = $data;
@@ -70,7 +86,21 @@ class CategoriesExtractor
     }
     
     /**
+     * Scrape main page and set page attribute
+     * 
+     * @param Client $client
+     * @return MainPage
+     */
+    public function scrapeMainPage(Client $client)
+    {
+        $this->page = MainPage::scrape($client);
+        
+        return $this->page;
+    }
+    
+    /**
      * Extract category data
+     * 
      * @param Crawler $panelNode
      * @param int $i
      * @return array
@@ -102,6 +132,7 @@ class CategoriesExtractor
     
     /**
      * Get key
+     * 
      * @param string $name
      * @return string
      */
@@ -112,6 +143,7 @@ class CategoriesExtractor
     
     /**
      * Underscorify text
+     * 
      * @param string $text
      * @return string
      */
@@ -133,14 +165,11 @@ class CategoriesExtractor
             static::$saveFilePath,
             json_encode($this->data, JSON_PRETTY_PRINT)
         );
-    }
-    
-    /**
-     * Get save file path
-     * @return string
-     */
-    public function getSaveFilePath()
-    {
-        return $this->filesystem->getPath(static::$saveFilePath);
+        
+        $filePath = $this->filesystem->getPath(static::$saveFilePath);
+        
+        $this->trackInfoProgress(
+            'Extracted category data saved in ' . $filePath
+        );
     }
 }
