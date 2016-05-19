@@ -30,11 +30,7 @@ class PDFRetriever extends Retriever
             
             $file = $this->getPdfFileFrom($value, $key, $list);
             
-            if (strpos($list->pdfToText, "pdftotext") !== false) {
-                $contents = shell_exec($list->pdfToText . ' ' . $file . ' -');
-            } else {
-                $contents = shell_exec($list->pdfToText . ' ' . $file. ' 2>/dev/null');
-            }
+            $contents = shell_exec($this->normalizePaths($list->pdfToText) . ' ' . $file. ' 2>/dev/null');
             // Merge Data
             $data[] = $contents;
         }
@@ -60,5 +56,14 @@ class PDFRetriever extends Retriever
         } 
         
         return $file;
+    }
+    
+    /**
+     * Converts relative paths in the cmd string to their equivalent absolute paths
+     * @param string $cmd
+     */
+    private function normalizePaths($cmd)
+    {
+        return str_replace(' ../', ' '.base_path().'/', $cmd);
     }
 }

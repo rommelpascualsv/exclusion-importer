@@ -6,6 +6,7 @@ use App\Import\Service\ListProcessor;
 use App\Services\Contracts\ImportFileServiceInterface;
 use Illuminate\Http\Request;
 use App\Response\JsonResponse;
+use App\Utils\FileUtils;
 
 /**
  * Service class that handles the import related processes.
@@ -14,6 +15,12 @@ use App\Response\JsonResponse;
 class ImportFileService implements ImportFileServiceInterface
 {
     use JsonResponse;
+    
+    private $exclusionListDownloader;
+    
+    public function __construct() {
+        $this->exclusionListDownloader = new ExclusionListHttpDownloader();
+    }
     
     /**
      * Retrieves a list of active states to show in the import page.
@@ -26,7 +33,7 @@ class ImportFileService implements ImportFileServiceInterface
         
         $states = app('db')->table('exclusion_lists')
             ->leftJoin('files', 'exclusion_lists.prefix', '=', 'files.state_prefix')
-            ->select('exclusion_lists.prefix', 'exclusion_lists.accr', 'exclusion_lists.description', 'exclusion_lists.import_url', 'files.ready_for_update')
+            ->select('exclusion_lists.prefix', 'exclusion_lists.accr', 'exclusion_lists.description', 'exclusion_lists.import_url', 'exclusion_lists.ready_for_update')
             ->whereIn('exclusion_lists.prefix', array_keys($lists))
             ->get();
         
@@ -46,36 +53,46 @@ class ImportFileService implements ImportFileServiceInterface
      *
      * @return object The object containing the result of the operation
      */
-    public function importFile($url, $listPrefix, $shouldSaveFile)
+    public function importFile($url, $listPrefix)
     {
         
         try {
             // 1. Retrieves the corresponding state object
             info("Trying to import file for " . $listPrefix);
+            
             $listObject = $this->getStateObject($url, $listPrefix);
-
-            // 2. Checks if state is updateable
-            if (empty($url) && !$this->isStateUpdateable($listPrefix)) {
+            
+            // 2. Download the raw exclusion list file(s) to a local folder
+            $latestExclusionListFiles = $this->exclusionListDownloader->downloadFiles($listObject);
+            
+            // 3. Update the blobs of the files in the database  with the latest downloaded files (if necessary)
+            $this->updateRepositoryFiles($latestExclusionListFiles, $listPrefix);
+            
+            // 4. Checks if state is updateable
+            if (! $this->isStateUpdateable($listPrefix)) {
                 info($listPrefix . ": State is already up-to-date");
-                return $this->createResponse('State is already up-to-date.', false);
+                return $this->createResponse('State is already up-to-date.', true);
             }
-
-            // 3. Retrieves data for a given file type
+            
+            if ($latestExclusionListFiles) {
+                //Set the ExclusionList's uri to the path of the locally downloaded file(s)
+                //so downstream processes would just work with a local copy instead
+                $listObject->uri = implode(",", $latestExclusionListFiles);
+            }
+            
+            // 4. Retrieves data for a given file type
             $listObject->retrieveData();
             
-            // 4. Insert records to state table
+            // 5. Insert records to state table
             $processingService = $this->getListProcessor($listObject);
             $processingService->insertRecords();
             
-            // 5.
-            if ($shouldSaveFile) {
-                // 'N' will be the value for ready_for_update as the updated records were already inserted to its corresponding state table
-                $this->saveFile($listPrefix, $url, 'N');
-            }  {
-                $this->updateReadyForUpdate($listPrefix, 'N');
-            }
+            //6. Since we already updated state records, set ready_for_update to N
+            $this->updateReadyForUpdate($listPrefix, 'N');
             
-            // 6. Return successful response
+            FileUtils::deleteFiles($latestExclusionListFiles);
+            
+            // 7. Return successful response
             return $this->createResponse('', true);
             
         } catch (\PDOException $e) {
@@ -93,6 +110,83 @@ class ImportFileService implements ImportFileServiceInterface
         }
     }
     
+    private function updateRepositoryFiles($latestExclusionListFiles, $listPrefix)
+    {
+        if (!$latestExclusionListFiles) {
+            //No latest files with which to compare the files in repository - do nothing
+            return;
+        }
+            
+        if (! $this->isRepositoryFileStale($listPrefix, $latestExclusionListFiles) && ! $this->isStateRecordsEmpty($listPrefix)) {
+            //File in database is already up-to-date - do nothing
+            return;
+        }
+        
+        //Go over each file and insert or update as necessary
+        for ($fileIndex = 0; $fileIndex < count($latestExclusionListFiles); $fileIndex++) {
+            
+            $fileContents = file_get_contents($latestExclusionListFiles[$fileIndex]);
+            
+            if ($this->hasExistingFileInRepository($listPrefix, $fileIndex)) {
+                
+                $this->updateFileInRepository($fileContents, $listPrefix, $fileIndex);
+                
+            } else {
+                
+                $this->addFileToRepository($fileContents, $listPrefix, $fileIndex);
+            }
+            
+        }
+        
+        $this->updateReadyForUpdate($listPrefix, 'Y');
+         
+    }
+    
+    /**
+     * Returns true if any of the files contained by $latestExclusionListFiles
+     * is not equal to the currently stored files in the database. Otherwise
+     * returns false if there are no files yet in the database or the contents
+     * of one of the files in $latestExclusionListFiles is not equal to 
+     * @param string $prefix the state prefix
+     * @param array $latestExclusionListFiles filenames of the files to compare
+     * with their database file counterparts
+     * @return boolean
+     */
+    private function isRepositoryFileStale($prefix, $latestExclusionListFiles)
+    {
+        
+        for ($fileIndex = 0; $fileIndex < count($latestExclusionListFiles); $fileIndex++) {
+            
+            //Put the file contents from the repository in a temporary file so we don't need to hold it in memory
+            $repositoryFileContents = $this->getFileContentsFromRepository($prefix, $fileIndex);
+            
+            if (! $repositoryFileContents) {
+                //No file was stored yet in the file repository - definitely stale
+                return true;    
+            }
+            
+            $repositoryTempFile = tempnam(sys_get_temp_dir(), $prefix);
+            
+            file_put_contents($repositoryTempFile, $repositoryFileContents, LOCK_EX);
+            
+            //Compare the latest downloaded file and the file we got from the database.
+            if (! FileUtils::contentEquals($repositoryTempFile, $latestExclusionListFiles[$fileIndex])) {
+                
+                unlink($repositoryTempFile);
+                return true ;
+            }
+            
+            unlink($repositoryTempFile);
+        }
+        
+        return false;
+    }
+    
+    private function isStateRecordsEmpty($prefix)
+    {
+        return app('db')->table($prefix . '_records')->count() === 0;
+    }
+    
     /**
      * Returns the corresponding exclusion list object for a given state prefix.
      *
@@ -103,9 +197,7 @@ class ImportFileService implements ImportFileServiceInterface
     protected function getListObject($listPrefix)
     {
         $listFactory = new ListFactory();
-        $listObject = $listFactory->make($listPrefix);
-        
-        return $listObject;
+        return $listFactory->make($listPrefix);
     }
     
     /**
@@ -157,9 +249,9 @@ class ImportFileService implements ImportFileServiceInterface
      */
     protected function isStateUpdateable($prefix)
     {
-        $record = app('db')->table('files')->where('state_prefix', $prefix)->get();
+        $record = app('db')->table('exclusion_lists')->where('prefix', $prefix)->get();
     
-        return (count($record) === 0 || $record[0]->ready_for_update === 'Y') ? true : false;
+        return ($record[0]->ready_for_update === 'Y') ? true : false;
     }
     
     /**
@@ -211,9 +303,9 @@ class ImportFileService implements ImportFileServiceInterface
      */
     private function updateReadyForUpdate($prefix, $value)
     {
-        $affected = app('db')->table('files')->where('state_prefix', $prefix)->update(['ready_for_update' => $value]);
+        $affected = app('db')->table('exclusion_lists')->where('prefix', $prefix)->update(['ready_for_update' => $value]);
     
-        info("Updating Ready For Update flag for... " . $prefix . " " . $affected . " file(s) updated");
+        info("Updating Ready For Update flag for... " . $prefix . " " . $affected . " row(s) updated");
     }
     
     /**
@@ -242,12 +334,26 @@ class ImportFileService implements ImportFileServiceInterface
                     continue;
                 }
                 
-                $saved = $this->saveFile($url->prefix, $import_url, 'Y');
-                
-                if ($saved) {
-                    $this->autoImport($import_url, $url->prefix);
+                if ($this->isStateAutoImport($prefix)) {
+                    
+                    //pass false to indicate that there's no need to save the blob to the files table as it was already saved before this
+                    info("Auto importing... " . $prefix);
+                    $this->importFile($url, $prefix, false);
+                    
+                } else {
+                    
+                    //If the list is not auto-importable, just update its file repository copy to the latest
+                    $listObject = $this->getStateObject($url, $listPrefix);
+                    
+                    $latestExclusionListFiles = $this->exclusionListDownloader->downloadFiles($listObject);
+                    
+                    $this->updateRepositoryFiles($latestExclusionListFiles, $listPrefix);
+                    
+                    FileUtils::deleteFiles($latestExclusionListFiles);
                 }
+
             } catch (\ErrorException $e) {
+                
                 error_log($e->getMessage());
                 info($import_url . " Error occured while downloading file. Continuing to next url...");
                 continue;
@@ -269,21 +375,6 @@ class ImportFileService implements ImportFileServiceInterface
     }
     
     /**
-     * If the state is auto import enabled, it will the import the record.
-     *
-     * @param unknown $url
-     * @param unknown $prefix
-     */
-    protected function autoImport($url, $prefix)
-    {
-        if ($this->isStateAutoImport($prefix)) {
-            //pass false to indicate that there's no need to save the blob to the files table as it was already saved before this
-            info("Auto importing... " . $prefix);
-            $this->importFile($url, $prefix, false);
-        }
-    }
-    
-    /**
      * Retrieves an array of import urls saved in the exclusion_lists table.
      *
      * @return array
@@ -294,99 +385,79 @@ class ImportFileService implements ImportFileServiceInterface
     }
     
     /**
-     * Checks if the state prefix already exists in Files table.
+     * Checks if the file for the given state prefix and file index already 
+     * exist in the database
      *
      * @param string $prefix The state prefix
-     *
+     * @param int $fileIndex The file index of the file to check
      * @return boolean
      */
-    protected function isPrefixExists($prefix)
+    private function hasExistingFileInRepository($prefix, $fileIndex)
     {
-        $files = app('db')->table('files')->where('state_prefix', $prefix)->get();
-    
-        return count($files) > 0;
+        return app('db')->table('files')
+                        ->where([
+                            'state_prefix' => $prefix,
+                            'img_data_index' => $fileIndex
+                        ])
+                        ->count() > 0;
     }
     
     /**
      * Retrieves the blob value from Files table for a given state prefix.
      *
      * @param string $prefix The state prefix
-     *
+     * @param int $fileIndex the zero-based index of the blob (defaults to 0 if not specified)
      * @return string The img_data of the state
      */
-    protected function getBlobOfFile($prefix)
+    private function getFileContentsFromRepository($prefix, $fileIndex)
     {
-        $files = app('db')->table('files')->where('state_prefix', $prefix)->get();
+        $files = app('db')
+                ->table('files')
+                ->where([
+                    'state_prefix'   => $prefix,
+                    'img_data_index' => $fileIndex
+                ])->get();
          
         return count($files) > 0 ? $files[0]->img_data : null;
     }
     
     /**
-     * Handles the insert/update if record in Files table.
-     *
-     * @param string $prefix the state prefix
-     * @param string $import_url the import url
-     *
-     * @return boolean true if file was inserted/updated otherwise, false
-     */
-    private function saveFile($prefix, $import_url, $updateValue)
-    {
-        // get the blob value of import file
-        $blob = $this->getData($import_url);
-        
-        info("Saving... " . $prefix);
-        // checks if state prefix already exists in Files table
-        if ($this->isPrefixExists($prefix)) {
-            // compares the import file and the one saved in Files table
-            if ($blob !== $this->getBlobOfFile($prefix)) {
-                // updates the blob column in Files table if imported file is different
-                $this->updateBlob($blob, $prefix);
-                $this->updateReadyForUpdate($prefix, $updateValue);
-                return true;
-            }
-        } else {
-            // inserts a record in Files table if state prefix is not found
-            $this->insertFile($blob, $prefix, $import_url);
-            $this->updateReadyForUpdate($prefix, $updateValue);
-            return true;
-        }
-    
-        return false;
-    }
-    
-    /**
      * Inserts a record to the files table.
      *
-     * @param string $blob The blob value of the import file
+     * @param string $fileContents The blob value of the import file
      * @param string $prefix The state prefix
-     * @param string $url The import url
      *
      * @return void
      */
-    private function insertFile($blob, $prefix, $url)
+    private function addFileToRepository($fileContents, $prefix, $fileIndex)
     {
-        $file = [];
-        $file["state_prefix"] = $prefix;
-        $file["img_data"] = $blob;
-        $file["ready_for_update"] = 'Y';
-    
-        info("Saving blob of " . $prefix . "to files table...");
-        app('db')->table('files')->insert($file);
+        info('Saving file content of ' . $prefix . '-' . $fileIndex .' to files table');
+        app('db')->table('files')
+                 ->insert([
+                    'state_prefix' => $prefix,
+                    'img_data_index' => $fileIndex,
+                    'img_data' => $fileContents 
+                 ]);
     }
     
     /**
      * Updates the blob data in files table for a given state prefix.
      *
-     * @param string $blob The blob value of the import file
+     * @param string $fileContents The contents of the 
      * @param string $prefix The state prefix
      *
      * @return void
      */
-    private function updateBlob($blob, $prefix)
+    private function updateFileInRepository($fileContents, $prefix, $fileIndex)
     {
-        $affected = app('db')->table('files')->where('state_prefix', $prefix)->update(['img_data' => $blob]);
+        $affected = app('db')->table('files')
+                             ->where([
+                                 'state_prefix' => $prefix,
+                                 'img_data_index' => $fileIndex
+                             ])
+                             ->update(['img_data' => $fileContents]);
     
-        info("Updating blob of " . $prefix . "in Files table... " . $affected . " file(s) updated");
+        info("Updated blob of " . $prefix . "in files table... " . $affected . " file(s) updated");
     }
     
     /**
@@ -412,25 +483,6 @@ class ImportFileService implements ImportFileServiceInterface
         }
     
         return in_array($arrHeadersCopy['content-type'], $filetypeArr);
-    }
-    
-    /**
-     * Retrieves data from a given url
-     *
-     * @param string $url
-     * @return mixed
-     */
-    private function getData($url)
-    {
-        $ch = curl_init();
-        $timeout = 5;
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-        $data = curl_exec($ch);
-        curl_close($ch);
-    
-        return $data;
     }
     
     private function getErrorMessageFrom(\PDOException $e)

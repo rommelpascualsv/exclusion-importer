@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    
+    <changeSet author="sv" id="svg-419-1-drop-column-ready-for-update-from-files" context="prod">
+        <dropColumn tableName="files" columnName="ready_for_update" />
+    </changeSet>
+    
+    <changeSet author="sv" id="svg-419-2-add-column-img-data-index-to-files" context="prod">
+        <addColumn tableName="files" >
+            <column name="img_data_index" type="TINYINT" afterColumn="state_prefix" defaultValue="0"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="sv" id="svg-419-3-add-column-ready-for-update-to-exclusion-lists" context="prod">
+        <addColumn tableName="exclusion_lists" >
+            <column name="ready_for_update" type="VARCHAR(2)" defaultValue="Y"/>
+        </addColumn>
+    </changeSet>
+    
+</databaseChangeLog>
