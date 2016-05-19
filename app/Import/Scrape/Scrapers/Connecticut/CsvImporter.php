@@ -2,14 +2,18 @@
 
 namespace App\Import\Scrape\Scrapers\Connecticut;
 
-use Illuminate\Database\ConnectionInterface;
-use League\Csv\Reader;
 use App\Import\Scrape\Scrapers\Connecticut\Data\Mappers\MapperFactory;
 use Carbon\Carbon;
+use Illuminate\Database\ConnectionInterface;
+use League\Csv\Reader;
+use App\Import\Scrape\ProgressTrackers\TracksProgress;
 
 class CsvImporter
 {
-	/**
+
+    use TracksProgress;
+
+    /**
 	 * @var array
 	 */
 	protected $importData;
@@ -21,6 +25,7 @@ class CsvImporter
 	
 	/**
 	 * Initialize
+     * 
 	 * @param array $importData
 	 * @param ConnectionInterface $db
 	 */
@@ -35,6 +40,8 @@ class CsvImporter
 	 */
 	public function import()
 	{
+        $this->trackProgress('Importing data from ' . count($this->importData) . ' csv files...');
+        
 		$timestamp = Carbon::now()->format('Y-m-d H:i:s');
 		
 		foreach ($this->importData as $data) {
@@ -44,11 +51,12 @@ class CsvImporter
 	
 	/**
 	 * Extract rows from a csv file and store corresponding rosters in the db
+     * 
 	 * @param array $data
 	 * @param string $timestamp
 	 */
 	public function importCsv(array $data, $timestamp)
-	{
+	{   
 		$reader = Reader::createFromPath($data['file_path']);
 		$results = $reader->fetchAll();
 		
@@ -69,10 +77,15 @@ class CsvImporter
 		    
 		    $this->dbInsertRoster($licenseTypeId, $dbData, $timestamp);
 		}
+        
+        $this->trackInfoProgress(
+            'Imported ' . ($resultsCount - 1) . ' record(s) from ' . $data['file_path']
+        );
 	}
 	
 	/**
 	 * Find license type id by key
+     * 
 	 * @param string $key
 	 * @return int|null
 	 */
@@ -88,6 +101,7 @@ class CsvImporter
 	
 	/**
 	 * Insert roster to database
+     * 
 	 * @param int $licenseTypeId
 	 * @param array $data
 	 * @param string $timestamp

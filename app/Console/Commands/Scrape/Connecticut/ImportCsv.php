@@ -3,9 +3,10 @@
 namespace App\Console\Commands\Scrape\Connecticut;
 
 use App\Import\Scrape\Components\ScrapeFilesystemInterface;
+use App\Import\Scrape\ProgressTrackers\CliProgressTracker;
 use App\Import\Scrape\Scrapers\Connecticut\CsvImporter;
-use Illuminate\Console\Command;
 use App\Import\Scrape\Scrapers\Connecticut\Data\CsvDir;
+use Illuminate\Console\Command;
 
 /**
  * Command class that handles the refreshing of records in Files table.
@@ -28,19 +29,15 @@ class ImportCsv extends Command
 	
 	/**
 	 * Execute the console command.
+     * 
 	 * @param ScrapeFilesystemInterface
 	 */
 	public function handle(ScrapeFilesystemInterface $filesystem)
 	{
 	    $importData = CsvDir::getDataFromFilesystem($filesystem);
 	    $csvImporter = new CsvImporter($importData, app('db')->connection());
-	    
-	    $this->line('Importing data from ' . count($importData) . ' csv files...');
-	    
-	    $csvImporter->import();
-	    
-	    foreach ($importData as $data) {
-	        $this->info('Imported data from ' . $data['file_path'] . '.');
-	    }
+        
+	    $csvImporter->attachProgressTracker(new CliProgressTracker($this))
+            ->import();
 	}
 }
