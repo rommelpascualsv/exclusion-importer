@@ -71,6 +71,7 @@ class ImportFileService implements ImportFileServiceInterface
             // 4. Checks if state is updateable
             if (! $this->isStateUpdateable($listPrefix)) {
                 info($listPrefix . ": State is already up-to-date");
+                FileUtils::deleteFiles($latestExclusionListFiles);
                 return $this->createResponse('State is already up-to-date.', true);
             }
             
