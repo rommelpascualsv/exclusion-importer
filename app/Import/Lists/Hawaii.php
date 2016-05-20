@@ -28,7 +28,16 @@ class Hawaii extends ExclusionList
     ];
 
     public $dateColumns = [
-      'exclusion_date' => 5
+        'exclusion_date' => 5,
+        'reinstatement_date' => 6
+    ];
+
+    public $hashColumns = [
+        'last_name_or_business',
+        'first_name',
+        'middle_initial',
+        'medicaid_provider_id_number',
+        'exclusion_date'
     ];
 
     public function __construct()
