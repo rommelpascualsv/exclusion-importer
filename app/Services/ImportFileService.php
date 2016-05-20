@@ -67,7 +67,7 @@ class ImportFileService implements ImportFileServiceInterface
             $this->updateRepositoryFiles($latestExclusionListFiles, $prefix);
             
             // 5. Checks if state is updateable
-            if (! $this->isForUpdate($prefix)) {
+            if (! $this->isForUpdate($prefix) && ! $this->isStateRecordsEmpty($prefix)) {
                 info($prefix . ": State is already up-to-date.");
                 return $this->createResponse('State is already up-to-date.', true);
             }
@@ -249,7 +249,7 @@ class ImportFileService implements ImportFileServiceInterface
             return;
         }
             
-        if (! $this->isRepositoryFileStale($prefix, $latestExclusionListFiles) && ! $this->isStateRecordsEmpty($prefix)) {
+        if (! $this->isRepositoryFileStale($prefix, $latestExclusionListFiles)) {
             //File in database is already up-to-date - do nothing
             info('Repository file(s) for ' . $prefix . ' is already up-to-date.');
             return;
