@@ -7,6 +7,11 @@ use GuzzleHttp\Client;
 
 class ExclusionListHttpDownloader
 {
+    /**
+     * The default download directory path relative to the 'storage' directory
+     */
+    const DEFAULT_DOWNLOAD_DIRECTORY = 'app/import/tmp';
+    
     private $downloadDirectory = null;
     
     private $downloadableTypes = [
@@ -16,14 +21,14 @@ class ExclusionListHttpDownloader
         'txt',
         'xls',
         'xlsx',
-        'xml',
-        'zip'
+        'xml'
+        //,'zip'
     ];
     
     public function __construct()
     {
         if (! $this->downloadDirectory) {
-            $this->setDownloadDirectory(storage_path('app/imports/latest'));
+            $this->setDownloadDirectory(storage_path(self::DEFAULT_DOWNLOAD_DIRECTORY));
         }
     }    
     
@@ -35,14 +40,17 @@ class ExclusionListHttpDownloader
             return null;    
         }
         
-        $localFilePaths = [];
-        
         $uris = $this->splitURI($exclusionList->uri);
+        
+        if (! $uris) {
+            return null;    
+        }
+        
+        $localFilePaths = [];
         
         foreach ($uris as $uriIndex => $uri) {
             
             if ($this->isRemoteURI($uri)) {
-                info('Downloading file from '. $uri . ' to ' . $this->getDownloadDirectory());
                 $localFilePaths[] = $this->downloadToDownloadDirectoryFrom($uri, $uriIndex, $exclusionList);
             } else {
                 $localFilePaths[] = $uri;
@@ -102,9 +110,10 @@ class ExclusionListHttpDownloader
     
     private function downloadToDownloadDirectoryFrom($uri, $fileIndex, ExclusionList $exclusionList)
     {
-        
         $downloadDestFile = "{$this->getDownloadDirectory()}/{$exclusionList->dbPrefix}-{$fileIndex}.{$exclusionList->type}";
-        
+
+        info('Downloading file from '. $uri . ' to ' . $downloadDestFile);
+
         $client = new Client([
             'base_uri' => $uri,
             'sink'     => $downloadDestFile,

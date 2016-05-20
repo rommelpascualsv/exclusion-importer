@@ -136,7 +136,7 @@ class ImportFileServiceTest extends TestCase
         //false to signify upstream to skip verification of results
         if (! empty($importFiles)) {
             
-            $this->importFileService->importFile($importFiles, $prefix, false);
+            $this->importFileService->importFile($importFiles, $prefix);
             
             return true;
         }
