@@ -415,10 +415,8 @@ class ImportFileService implements ImportFileServiceInterface
             FileUtils::deleteFiles($filesToDelete);     
             
         } catch (\Exception $e) {
-            
             //quietly handle exceptions here
             info('Encountered an error while trying to cleanup downloaded files : ' . $e->getMessage());
-            
         }
 
     }
