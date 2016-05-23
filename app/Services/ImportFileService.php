@@ -123,7 +123,7 @@ class ImportFileService implements ImportFileServiceInterface
             
         } finally {
             
-            $this->cleanupDownloadedExclusionListFiles($latestExclusionListFiles);
+            $this->deleteQuiety($latestExclusionListFiles);
         }
     }
     
@@ -188,7 +188,7 @@ class ImportFileService implements ImportFileServiceInterface
     
             } finally {
 
-                $this->cleanupDownloadedExclusionListFiles($latestExclusionListFiles);
+                $this->deleteQuiety($latestExclusionListFiles);
             }
         }
     }    
@@ -391,7 +391,7 @@ class ImportFileService implements ImportFileServiceInterface
         ]);
     }
 
-    private function cleanupDownloadedExclusionListFiles($exclusionListFiles)
+    private function deleteQuiety($exclusionListFiles)
     {
         if (! $exclusionListFiles) {
             return;
