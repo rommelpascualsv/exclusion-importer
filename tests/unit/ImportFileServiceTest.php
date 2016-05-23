@@ -3,291 +3,414 @@
 namespace Test\Unit;
 
 use App\Services\ImportFileService;
-use Mockery\Container;
+use Mockery;
+use CDM\Test\TestCase;
+use App\Import\Lists\ExclusionList;
+use App\Import\Lists\Tennessee;
+use App\Import\Lists\OIG;
 
 /**
- * Unit test class for File Service.
+ * Unit test for ImportFileService. 
+ * 
+ * To run, execute the following in the shell : vendor/bin/codecept run unit ImportFileServiceTest --debug
  *
  */
-class ImportFileServiceTest extends \Codeception\TestCase\Test
+class ImportFileServiceTest extends TestCase
 {
-    /**
-     * @var \UnitTester
-     */
-	protected $tester;
 
-    /**
-     * @var ImportFileService;
-     */
-    protected $importFileService;
+    private $importFileService;
+    private $exclusionListDownloader;
+    private $exclusionListRepo; 
+    private $exclusionListFilesRepo;
     
-    protected $container;
     
-    /**
-     * Instantiate the ImportFileService.
-     */
-    protected function _before()
+//     protected $container;
+    
+    public function setUp()
     {
-
-        $this->container = new Container;
-        $this->importFileService = new ImportFileService();
-    }
-
-    protected function _after()
-    {
-    	$this->container->mockery_close();
+        parent::setUp();
+        
+        $this->app->withFacades();
+        
+        $this->exclusionListFilesRepo = Mockery::mock('App\Repositories\ExclusionListFilesRepository')->shouldIgnoreMissing();
+        $this->exclusionListRepo = Mockery::mock('App\Repositories\ExclusionListRepository')->shouldIgnoreMissing();
+        $this->exclusionListDownloader = Mockery::mock('App\Services\ExclusionListHttpDownloader')->shouldIgnoreMissing();
+        
+        $this->importFileService = new ImportFileService($this->exclusionListDownloader, $this->exclusionListRepo, $this->exclusionListFilesRepo);
     }
 
-    /**
-     * Test for the refreshRecords method of ImportFileService. 
-     */
-    public function testRefreshRecordsFileNotSupported()
+    public function tearDown()
     {
-    	$mock = $this->container->mock("App\\Services\\ImportFileService[getUrls]");
-    	$mock = $mock->shouldAllowMockingProtectedMethods();
-    	$url = new \stdClass();
-    	$url->prefix = "az1";
-    	$url->import_url = "http://yahoo.com";
-    	
-    	$mock->shouldReceive("getUrls")->andReturn(array($url));
-    	$mock->refreshRecords();
+       	Mockery::close();
     }
     
-    public function testRefreshRecordsPrefixExistsWillNotUpdate()
+    public function testGetExclusionListShouldReturnActiveExclusionLists()
+    {   
+        $this->exclusionListRepo->shouldReceive('get')->once()->with(['is_active' => 1])->andReturn([
+            (object)[
+                'id' => 1,
+                'prefix' => 'oig',
+                'accr' => 'Federal OIG',
+                'description' => 'Office of the Inspector General',
+                'import_url' => 'http://www.fedoig.com',
+                'is_auto_import' => 0,
+                'is_active' => 1,
+                'ready_for_update' => 'Y'
+            ]
+        ]);
+        
+        $actual = $this->importFileService->getExclusionList();
+        
+        $expected = [
+            'oig' => [
+                'id' => 1,
+                'prefix' => 'oig',
+                'accr' => 'Federal OIG',
+                'description' => 'Office of the Inspector General',
+                'import_url' => 'http://www.fedoig.com',
+                'is_auto_import' => 0,
+                'is_active' => 1,
+                'ready_for_update' => 'Y'
+            ]
+        ];
+        
+        $this->assertEquals($expected, $actual);
+        
+    }
+
+    public function testImportFileShouldRespondWithErrorIfUrlIsEmpty()
     {
-    	$mock = $this->container->mock("App\\Services\\ImportFileService[getUrls, getBlobOfFile]");
-    	$mock = $mock->shouldAllowMockingProtectedMethods();
-    	 
-    	$url = new \stdClass();
-    	$url->prefix = "wy1";
-    	$url->import_url = "http://www.health.wyo.gov/Media.aspx?mediaId=18045";
-    	 
-    	$mock->shouldReceive("getUrls")->andReturn(array($url));
-    	
-    	$blobImgData = file_get_contents($url->import_url);
-    	
-    	$mock->shouldReceive("getBlobOfFile")->andReturn($blobImgData);
-    	
-    	$mock->refreshRecords();
+        $actual = $this->importFileService->importFile('', 'nyomig');
+        $expected = '{"success":false,"message":"No URL was specified for : nyomig"}';
+        $this->assertEquals($expected, $actual->getContent());
     }
     
-    public function testRefreshRecordsPrefixExistsWillUpdate()
+    public function testImportFileShouldCreateNewFileInRepositoryAndImportDataIfNoFileExistsYetForAnExclusionList()
     {
-    	$mock = $this->container->mock("App\\Services\\ImportFileService[getUrls, getBlobOfFile]");
-    	$mock = $mock->shouldAllowMockingProtectedMethods();
-    
-    	$url = new \stdClass();
-    	$url->prefix = "wy1";
-    	$url->import_url = "http://www.health.wyo.gov/Media.aspx?mediaId=18045";
-    
-    	$mock->shouldReceive("getUrls")->andReturn(array($url));
-    	 
-    	$otherImportUrl = "http://www.yahoo.com";
-    	$blobImgData = file_get_contents($otherImportUrl);
-    	 
-    	$mock->shouldReceive("getBlobOfFile")->andReturn($blobImgData);
-    	 
-    	$mock->refreshRecords();
-    	
-    	$this->tester->seeInDatabase('files', array('state_prefix' => 'wy1'));
+        $exclusionListTestFile = base_path('tests/unit/files/tn1-0.pdf');
+        
+        //1. Url should be updated
+        $this->exclusionListRepo->shouldReceive('update')->once()->with('tn1', ['import_url' => $exclusionListTestFile]);  
+        
+        //2. File should be downloaded
+        $this->exclusionListDownloader->shouldReceive('downloadFiles')->once()->withArgs(function($exclusionList){
+            return $exclusionList instanceof Tennessee;
+        })->andReturn([$exclusionListTestFile]);
+        
+        //3. Service should search in files repo for existing files
+        $this->exclusionListFilesRepo->shouldReceive('exists')->with('tn1', 0)->andReturn(false);
+        $this->exclusionListFilesRepo->shouldReceive('find')->once()->with('tn1', 0)->andReturn(null);
+        
+        //4. Service should add the files to the file repository
+        $this->exclusionListFilesRepo->shouldNotReceive('update');
+        $this->exclusionListFilesRepo->shouldReceive('create')->once()->with([
+            'state_prefix' => 'tn1',
+            'img_data_index' => 0,
+            'img_data' => file_get_contents($exclusionListTestFile)
+        ]);
+        
+        //5. Service should update ready_for_update flag to 'Y'
+        $this->exclusionListRepo->shouldReceive('update')->once()->with('tn1', ['ready_for_update' => 'Y']);        
+        
+        //6. Service should check if ready for update is 'Y'
+        $this->exclusionListRepo->shouldReceive('find')->once()->with('tn1')->andReturn([(object)[
+            'id' => '26', 
+            'prefix' => 'tn1',
+            'accr' => 'TennCare',
+            'description' => 'Tennesee State Medicaid Program', 
+            'import_url' => 'http://www.tn.gov/assets/entities/tenncare/attachments/terminatedproviderlist.pdf',
+            'is_auto_import' => '0',
+            'is_active' => '1',
+            'ready_for_update' => 'Y'
+        ]]);
+        
+        //7. Service should check if state_records is empty
+        $this->exclusionListRepo->shouldReceive('isExclusionListRecordsEmpty')->with('tn1')->andReturn(true);
+        
+        //8. Service should insert the individual records
+        $listProcessorMock = Mockery::mock('overload:App\Import\Service\ListProcessor'); 
+        $listProcessorMock->shouldReceive('insertRecords')->once();
+        
+        //9. Service should update ready_for_update flag to 'N'
+        $this->exclusionListRepo->shouldReceive('update')->once()->with('tn1', ['ready_for_update' => 'N']);
+        
+        $actual = $this->importFileService->importFile($exclusionListTestFile, 'tn1');
+        
+        $expected = '{"success":true,"message":""}';
+        
+        //10. Service should return a successful response
+        $this->assertEquals($expected, $actual->getContent());
+        
     }
     
-    public function testRefreshRecordsNoPrefixWillInsert()
+    public function testImportFileShouldUpdateExistingFileInRepositoryAndImportDataIfFileInRepositoryIsStale()
     {
-    	$mock = $this->container->mock("App\\Services\\ImportFileService[getUrls, getBlobOfFile, isPrefixExists]");
-    	$mock = $mock->shouldAllowMockingProtectedMethods();
+        $exclusionListTestFile = base_path('tests/unit/files/tn1-0.pdf');
+
+        //1. Url should be updated
+        $this->exclusionListRepo->shouldReceive('update')->once()->with('tn1', ['import_url' => $exclusionListTestFile]);
     
-    	$url = new \stdClass();
-    	$url->prefix = "wy1";
-    	$url->import_url = "http://www.health.wyo.gov/Media.aspx?mediaId=18045";
+        //2. File should be downloaded
+        $this->exclusionListDownloader->shouldReceive('downloadFiles')->once()->withArgs(function($exclusionList){
+            return $exclusionList instanceof Tennessee;
+        })->andReturn([$exclusionListTestFile]);
     
-    	$mock->shouldReceive("getUrls")->andReturn(array($url));
-    	 
-    	$blobImgData = file_get_contents($url->import_url);
-    	 
-    	$mock->shouldReceive("getBlobOfFile")->andReturn($blobImgData);
-    	$mock->shouldReceive("isPrefixExists")->andReturn(false);
-    	 
-    	$mock->refreshRecords();
-    	
-    	$this->tester->seeInDatabase('files', array('state_prefix' => 'wy1'));
+        //3. Service should search in files repo for existing files
+        $this->exclusionListFilesRepo->shouldReceive('exists')->with('tn1', 0)->andReturn(true);
+        $this->exclusionListFilesRepo->shouldReceive('find')->once()->with('tn1', 0)->andReturn([(object)[
+            'id' => '14',
+            'state_prefix' => 'tn1',
+            'img_data_index' => '0',
+            'img_data' => file_get_contents(base_path('tests/unit/files/tn1-0-dummy.pdf')),
+            'date_created' => '2016-05-23 09:15:40',
+            'date_modified' => '2016-05-23 09:15:40'
+        ]]);
+    
+        //4. Service should update  the file in the file repository and not create a new record
+        $this->exclusionListFilesRepo->shouldNotReceive('create');
+        $this->exclusionListFilesRepo->shouldReceive('update')->once()->with('tn1', 0, [
+            'img_data' => file_get_contents($exclusionListTestFile)
+        ]);
+        
+    
+        //5. Service should update ready_for_update flag to 'Y'
+        $this->exclusionListRepo->shouldReceive('update')->once()->with('tn1', ['ready_for_update' => 'Y']);
+    
+        //6. Service should check if ready for update is 'Y'
+        $this->exclusionListRepo->shouldReceive('find')->once()->with('tn1')->andReturn([(object)[
+            'id' => '26',
+            'prefix' => 'tn1',
+            'accr' => 'TennCare',
+            'description' => 'Tennesee State Medicaid Program',
+            'import_url' => 'http://www.tn.gov/assets/entities/tenncare/attachments/terminatedproviderlist.pdf',
+            'is_auto_import' => '0',
+            'is_active' => '1',
+            'ready_for_update' => 'Y'
+        ]]);
+    
+        //7. Service should check if state_records is empty
+        $this->exclusionListRepo->shouldReceive('isExclusionListRecordsEmpty')->with('tn1')->andReturn(true);
+    
+        //8. Service should insert the individual records
+        $listProcessorMock = Mockery::mock('overload:App\Import\Service\ListProcessor');
+        $listProcessorMock->shouldReceive('insertRecords')->once();
+    
+        //9. Service should update ready_for_update flag to 'N'
+        $this->exclusionListRepo->shouldReceive('update')->once()->with('tn1', ['ready_for_update' => 'N']);
+    
+        $actual = $this->importFileService->importFile($exclusionListTestFile, 'tn1');
+    
+        $expected = '{"success":true,"message":""}';
+    
+        //10. Service should return a successful response
+        $this->assertEquals($expected, $actual->getContent());
+    
     }
     
-    /**
-     * Test for the getExclusionList method of ImportFileService.
-     *
-     * Asserts not null for the list retrieved.
-     * Asserts if accr is equal to expected accr.
-     */
-    public function testGetExclusionList()
+    public function testImportFileShouldNotImportDataIfFileInRepositoryIsAlreadyUpToDate()
     {
-    	$list = $this->importFileService->getExclusionList();
-    	 
-    	$this->assertNotNull($list);
-    	 
-    	// checks for AZ1
-    	$this->assertEquals('AZ AHCCCS', $list["az1"]["accr"]);
-    	 
-    	// checks for NYOMIG
-    	$this->assertEquals('NY OMIG', $list["nyomig"]["accr"]);
+        $exclusionListTestFile = base_path('tests/unit/files/tn1-0.pdf');
+    
+        //1. Url should be updated
+        $this->exclusionListRepo->shouldReceive('update')->once()->with('tn1', ['import_url' => $exclusionListTestFile]);
+    
+        //2. File should be downloaded
+        $this->exclusionListDownloader->shouldReceive('downloadFiles')->once()->withArgs(function($exclusionList){
+            return $exclusionList instanceof Tennessee;
+        })->andReturn([$exclusionListTestFile]);
+    
+        //3. Service should search in files repo for existing files
+        $this->exclusionListFilesRepo->shouldReceive('exists')->with('tn1', 0)->andReturn(true);
+        $this->exclusionListFilesRepo->shouldReceive('find')->once()->with('tn1', 0)->andReturn([(object)[
+            'id' => '14',
+            'state_prefix' => 'tn1',
+            'img_data_index' => '0',
+            'img_data' => file_get_contents($exclusionListTestFile), //same as the downloaded file, so no import should take place
+            'date_created' => '2016-05-23 09:15:40',
+            'date_modified' => '2016-05-23 09:15:40'
+        ]]);
+    
+        //4. Service should not update or create any files in the file repository since it is already up to date
+        $this->exclusionListFilesRepo->shouldNotReceive('create');
+        $this->exclusionListFilesRepo->shouldNotReceive('update');
+    
+        //5. Service should check if ready for update is 'Y'
+        $this->exclusionListRepo->shouldReceive('find')->once()->with('tn1')->andReturn([(object)[
+            'id' => '26',
+            'prefix' => 'tn1',
+            'accr' => 'TennCare',
+            'description' => 'Tennesee State Medicaid Program',
+            'import_url' => 'http://www.tn.gov/assets/entities/tenncare/attachments/terminatedproviderlist.pdf',
+            'is_auto_import' => '0',
+            'is_active' => '1',
+            'ready_for_update' => 'N' //ready_for_update is 'N' when state is up to date
+        ]]);
+    
+        //6. Service should check if state_records is empty
+        $this->exclusionListRepo->shouldReceive('isExclusionListRecordsEmpty')->with('tn1')->andReturn(false);
+    
+        //7. Service should not do importing
+        $listProcessorMock = Mockery::mock('overload:App\Import\Service\ListProcessor');
+        $listProcessorMock->shouldNotReceive('insertRecords');
+    
+        //8. Service should not receive any update update ready_for_update flag to 'N'
+        $this->exclusionListRepo->shouldNotReceive('update');
+    
+        $actual = $this->importFileService->importFile($exclusionListTestFile, 'tn1');
+    
+        $expected = '{"success":true,"message":"State is already up-to-date."}';
+    
+        //9. Service should return a successful response
+        $this->assertEquals($expected, $actual->getContent());
+    
     }
     
-    /**
-     * Test for the importFile method of ImportFileService using the existing import url.
-     *
-     */
-    public function testImportFileForExistingImportUrl()
+    public function testRefreshRecordsShouldOnlyImportExclusionListsFlaggedForAutoImport()
     {
-    	// instantiate the ImportFileService
-    	$this->importFileService = $this->container->mock("App\\Services\\ImportFileService[getListObject,getListProcessor,getUrl,isStateUpdateable]");
-    	$this->importFileService = $this->importFileService->shouldAllowMockingProtectedMethods();
+        $importFileService = Mockery::mock('App\Services\ImportFileService[importFile]', [$this->exclusionListDownloader, $this->exclusionListRepo, $this->exclusionListFilesRepo]);
+        
+        //1. All exclusion lists should be queried
+        $this->exclusionListRepo->shouldReceive('get')->withNoArgs()->andReturn([
+            (object)[
+                'id' => 1,
+                'prefix' => 'oig',
+                'accr' => 'Federal OIG',
+                'description' => 'Office of the Inspector General',
+                'import_url' => 'http://www.fedoig.com',
+                'is_auto_import' => 0, //Not auto-import, so this should not be imported 
+                'is_active' => 1,
+                'ready_for_update' => 'Y'
+            ],
+            (object)[
+                'id' => 2,
+                'prefix' => 'nyomig',
+                'accr' => 'NY OMIG',
+                'description' => 'New York Office of the Medical Inspector General',
+                'import_url' => 'http://www.omig.ny.gov/data/gensplistns.php',
+                'is_auto_import' => 1, //Auto-import
+                'is_active' => 1,
+                'ready_for_update' => 'N'            
+            ]
+        ]);
+        
+        //2. The url should be searched from the exclusion_lists table
+        $this->exclusionListRepo->shouldReceive('find')->once()->with('oig')->andReturn([(object)[
+                'id' => 1,
+                'prefix' => 'oig',
+                'accr' => 'Federal OIG',
+                'description' => 'Office of the Inspector General',
+                'import_url' => 'http://www.fedoig.com',
+                'is_auto_import' => 0, //Not auto-import, so this should not be imported 
+                'is_active' => 1,
+                'ready_for_update' => 'Y'
+            ]
+        ]);        
+        $this->exclusionListRepo->shouldReceive('find')->once()->with('nyomig')->andReturn([(object)[
+                'id' => 2,
+                'prefix' => 'nyomig',
+                'accr' => 'NY OMIG',
+                'description' => 'New York Office of the Medical Inspector General',
+                'import_url' => 'http://www.omig.ny.gov/data/gensplistns.php',
+                'is_auto_import' => 1, //Auto-import
+                'is_active' => 1,
+                'ready_for_update' => 'Y'            
+            ]
+        ]);
+         
+        //3. The importFile method of ImportFileService should be called
+        $importFileService->shouldReceive('importFile')->once()->with('http://www.omig.ny.gov/data/gensplistns.php', 'nyomig');
+        
+        $importFileService->refreshRecords();
+    } 
     
-    	// mock getUrl method and return the Url
-    	$this->importFileService->shouldReceive('getUrl')->once()->andReturn("http://www.omig.ny.gov/data/gensplistns.php");
-    	 
-    	// mock isStateUpdateable and return true
-    	$this->importFileService->shouldReceive('isStateUpdateable')->once()->andReturn(true);
-    	 
-    	// mock exclusion list object to bypass retrieveData function
-    	$exclusionList = $this->container->mock("App\\Import\\Lists\\ExclusionLists");
-    	$exclusionList->shouldReceive("retrieveData")->once();
-    	$this->importFileService->shouldReceive("getListObject")->andReturn($exclusionList);
-    
-    	// mock list processor to bypass insertRecords function
-    	$listProcessor = $this->container->mock("App\\Import\\Service\\ListProcessor");
-    	$listProcessor->shouldReceive("insertRecords")->once();
-    	$this->importFileService->shouldReceive("getListProcessor")->andReturn($listProcessor);
-    	 
-    	$inputUrl = "";
-    	$listPrefix = "nyomig";
-    	 
-    	$response = $this->importFileService->importFile($inputUrl, $listPrefix, false);
-    	 
-    	$this->assertNotNull($response);
-    	$this->assertTrue($response->getData()->success);
-    }
-    
-    /**
-     * Test for the importFile method of ImportFileService using the new import url.
-     *
-     */
-    public function testImportFileForNewImportUrl()
+    public function testRefreshRecordsShouldNotImportedExclusionListsNotFlaggedForAutoImportButUpdateTheirRepositoryFiles()
     {
-    	// instantiate the ImportFileService
-    	$this->importFileService = $this->container->mock("App\\Services\\ImportFileService[getListObject,getListProcessor]");
-    	$this->importFileService = $this->importFileService->shouldAllowMockingProtectedMethods();
-    	 
-    	// mock exclusion list object to bypass retrieveData function
-    	$exclusionList = $this->container->mock("App\\Import\\Lists\\ExclusionLists");
-    	$exclusionList->shouldReceive("retrieveData")->once();
-    	$this->importFileService->shouldReceive("getListObject")->andReturn($exclusionList);
-    	 
-    	// mock list processor to bypass insertRecords function
-    	$listProcessor = $this->container->mock("App\\Import\\Service\\ListProcessor");
-    	$listProcessor->shouldReceive("insertRecords")->once();
-    	$this->importFileService->shouldReceive("getListProcessor")->andReturn($listProcessor);
+        $exclusionListTestFile = base_path('tests/unit/files/tn1-0.pdf');
     
-    	$inputUrl = "http://www.omig.ny.gov/data/gensplistns.php";
-    	$listPrefix = "nyomig";
+        $importFileService = Mockery::mock('App\Services\ImportFileService[importFile]', [$this->exclusionListDownloader, $this->exclusionListRepo, $this->exclusionListFilesRepo]);
     
-    	$response = $this->importFileService->importFile($inputUrl, $listPrefix, true);
-    
-    	$this->assertNotNull($response);
-    	$this->assertTrue($response->getData()->success);
-    }
-    
-    /**
-     * Test for the importFile method of ImportFileService using an invalid prefix value.
-     *
-     */
-    public function testImportFileForInvalidPrefix()
-    {
-    	// instantiate the ImportFileService
-    	$this->importFileService = new ImportFileService();
-    
-    	$inputUrl = "";
-    	$listPrefix = "invalidPrefix";
-    
-    	$response = $this->importFileService->importFile($inputUrl, $listPrefix, false);
-    	 
-    	$this->assertNotNull($response);
-    	$this->assertFalse($response->getData()->success);
-    	$this->assertEquals("Unsupported Exclusion List prefix", $response->getData()->message);
-    }
-    
-    /**
-     * Test for the importFile method of ImportFileService using an invalid prefix value.
-     *
-     */
-    public function testImportFileWithStateUpdateableFalse()
-    {
-    	// mock service
-    	$this->importFileService = $this->container->mock("App\\Services\\ImportFileService[getUrl, isStateUpdateable]");
-    	$this->importFileService = $this->importFileService->shouldAllowMockingProtectedMethods();
-    	 
-    	// mock getUrl method and return the Url
-    	$this->importFileService->shouldReceive('getUrl')->once()->andReturn("http://www.omig.ny.gov/data/gensplistns.php");
-    	 
-    	// mock isStateUpdateable and return true
-    	$this->importFileService->shouldReceive('isStateUpdateable')->once()->andReturn(false);
-    	 
-    	$inputUrl = "";
-    	$listPrefix = "nyomig";
-    
-    	$response = $this->importFileService->importFile($inputUrl, $listPrefix, false);
-    
-    	$this->assertNotNull($response);
-    	$this->assertFalse($response->getData()->success);
-    	$this->assertEquals("State is already up-to-date.", $response->getData()->message);
-    }
-    
-    /**
-     * Test for the updateStateUrl method of FileService.
-     * State prefix and new url are passed as parameters.
-     *
-     * Asserts that the number of updated records is one.
-     * Asserts that the updated record is found in the database.
-     */
-    public function testUpdateStateUrl()
-    {
-    	$class = new \ReflectionClass('App\Services\ImportFileService');
-    	$method = $class->getMethod('updateStateUrl');
-    	$method->setAccessible(true);
-    	$method->invokeArgs(new ImportFileService(), array('az1', 'www.yahoo.com'));
-    	 
-    	$this->tester->seeInDatabase('exclusion_lists', array('prefix' => 'az1', 'import_url' => 'www.yahoo.com'));
-    }
-    
-    /**
-     * Test for the getUrl method of FileService.
-     * State prefix is passed as parameter.
-     *
-     * Asserts not null for the url retrieved.
-     * Asserts that url is equal to expected url.
-     */
-    public function testGetUrl()
-    {
-    	$class = new \ReflectionClass('App\Services\ImportFileService');
-    	$method = $class->getMethod('getUrl');
-    	$method->setAccessible(true);
-    	$url = $method->invokeArgs(new ImportFileService(), array('az1'));
-    	 
-    	$this->assertEquals('www.yahoo.com', $url);
-    }
-    
-    /**
-     * Test for the isStateUpdateable method of FileService.
-     * State prefix is passed as parameter.
-     *
-     * Asserts that state is updateable.
-     */
-    public function testIsStateUpdateable()
-    {
-    	$class = new \ReflectionClass('App\Services\ImportFileService');
-    	$method = $class->getMethod('isStateUpdateable');
-    	$method->setAccessible(true);
-    	$result = $method->invokeArgs(new ImportFileService(), array('az1'));
-    	 
-    	$this->assertTrue($result);
-    }
+        //1. All exclusion lists should be queried
+        $this->exclusionListRepo->shouldReceive('get')->withNoArgs()->andReturn([
+            (object)[
+                'id' => 1,
+                'prefix' => 'tn1',
+                'accr' => 'TennCare',
+                'description' => 'Tennesee State Medicaid Program',
+                'import_url' => 'http://www.tn.gov/assets/entities/tenncare/attachments/terminatedproviderlist.pdf',
+                'is_auto_import' => '0',
+                'is_active' => '1',
+                'ready_for_update' => 'N' //ready_for_update is 'N' when state is up to date
+            ],
+            (object)[
+                'id' => 2,
+                'prefix' => 'nyomig',
+                'accr' => 'NY OMIG',
+                'description' => 'New York Office of the Medical Inspector General',
+                'import_url' => 'http://www.omig.ny.gov/data/gensplistns.php',
+                'is_auto_import' => 1, //Auto-import
+                'is_active' => 1,
+                'ready_for_update' => 'N'
+            ]
+        ]);
+        
+        //2. The urls should be searched from the exclusion_lists table
+        $this->exclusionListRepo->shouldReceive('find')->once()->with('tn1')->andReturn([(object)[
+                'id' => 1,
+                'prefix' => 'tn1',
+                'accr' => 'TennCare',
+                'description' => 'Tennesee State Medicaid Program',
+                'import_url' => 'http://www.tn.gov/assets/entities/tenncare/attachments/terminatedproviderlist.pdf',
+                'is_auto_import' => '0',
+                'is_active' => '1',
+                'ready_for_update' => 'N' //ready_for_update is 'N' when state is up to date
+            ]
+        ]);
+        
+        $this->exclusionListRepo->shouldReceive('find')->once()->with('nyomig')->andReturn([(object)[
+                'id' => 2,
+                'prefix' => 'nyomig',
+                'accr' => 'NY OMIG',
+                'description' => 'New York Office of the Medical Inspector General',
+                'import_url' => 'http://www.omig.ny.gov/data/gensplistns.php',
+                'is_auto_import' => 1, //Auto-import
+                'is_active' => 1,
+                'ready_for_update' => 'N'            
+            ]
+        ]);
+        
+        //3. The urls should be updated
+        $this->exclusionListRepo->shouldReceive('update')->once()->with('tn1', ['import_url' => 'http://www.tn.gov/assets/entities/tenncare/attachments/terminatedproviderlist.pdf']);
+        $this->exclusionListRepo->shouldReceive('update')->once()->with('nyomig', ['import_url' => 'http://www.omig.ny.gov/data/gensplistns.php']);
+        
+        //4. The importFile method of ImportFileService should be called only for nyomig
+        $importFileService->shouldReceive('importFile')->once()->with('http://www.omig.ny.gov/data/gensplistns.php', 'nyomig');
+        
+        //5. For tn1, which was not marked for auto-import, its file in the repository should get updated
+        $this->exclusionListDownloader->shouldReceive('downloadFiles')->withArgs(function($args){
+            return $args instanceof Tennessee;    
+        })->andReturn([$exclusionListTestFile]);
+        
+        //6. Service should search in files repo for existing files
+        $this->exclusionListFilesRepo->shouldReceive('exists')->with('tn1', 0)->andReturn(true);
+        $this->exclusionListFilesRepo->shouldReceive('find')->once()->with('tn1', 0)->andReturn([(object)[
+            'id' => '14',
+            'state_prefix' => 'tn1',
+            'img_data_index' => '0',
+            'img_data' => file_get_contents(base_path('tests/unit/files/tn1-0-dummy.pdf')),
+            'date_created' => '2016-05-23 09:15:40',
+            'date_modified' => '2016-05-23 09:15:40'
+        ]]);
+        
+        //7. Service should update  the file in the file repository and not create a new record
+        $this->exclusionListFilesRepo->shouldNotReceive('create');
+        $this->exclusionListFilesRepo->shouldReceive('update')->once()->with('tn1', 0, [
+            'img_data' => file_get_contents($exclusionListTestFile)
+        ]);
+        
+        
+        //8. Service should update ready_for_update flag to 'Y'
+        $this->exclusionListRepo->shouldReceive('update')->once()->with('tn1', ['ready_for_update' => 'Y']);
+        
+        $importFileService->refreshRecords();
+    }    
 }
