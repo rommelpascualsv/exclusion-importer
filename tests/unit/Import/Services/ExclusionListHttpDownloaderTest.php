@@ -32,7 +32,7 @@ class ExclusionListHttpDownloaderTest extends \Codeception\TestCase\Test
     public function testDefaultDownloadDirectoryIsSetAsDownloadDirectoryWhenNoDownloadDirectoryIsSet() 
     {
         $downloader = new ExclusionListHttpDownloader();
-        $this->assertEquals(storage_path('app/imports/latest'), $downloader->getDownloadDirectory());
+        $this->assertEquals(storage_path(ExclusionListHttpDownloader::DEFAULT_DOWNLOAD_DIRECTORY), $downloader->getDownloadDirectory());
     }
     
     
