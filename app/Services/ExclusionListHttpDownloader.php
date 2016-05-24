@@ -25,6 +25,13 @@ class ExclusionListHttpDownloader
         //,'zip'
     ];
     
+    /**
+     * Tthe number of seconds to wait while trying to connect to a server. Defaults
+     * to 10 seconds.
+     * @var float
+     */
+    private $connectTimeout = 10; 
+    
     public function __construct()
     {
         if (! $this->downloadDirectory) {
@@ -32,11 +39,16 @@ class ExclusionListHttpDownloader
         }
     }    
     
+    public function supports(ExclusionList $exclusionList)
+    {
+        return $exclusionList && array_search($exclusionList->type, $this->downloadableTypes) !== false;
+    }
+    
     public function downloadFiles(ExclusionList $exclusionList)
     {
         $this->createDownloadDirectoryIfNotExists();
 
-        if (! $this->isDownloadableType($exclusionList->type)) {
+        if (! $this->supports($exclusionList)) {
             return null;    
         }
         
@@ -81,6 +93,16 @@ class ExclusionListHttpDownloader
         $this->downloadableTypes = $downloadableTypes;
     }
     
+    public function getConnectTimeout()
+    {
+        return $this->connectTimeout;
+    }
+    
+    public function setConnectTimeout($connectTimeout)
+    {
+        $this->connectTimeout = $connectTimeout;
+    }
+    
     private function createDownloadDirectoryIfNotExists()
     {
         if(! is_dir($this->downloadDirectory)) {
@@ -103,11 +125,6 @@ class ExclusionListHttpDownloader
         return filter_var($uri, FILTER_VALIDATE_URL);
     }
     
-    private function isDownloadableType($type)
-    {
-        return array_search($type, $this->downloadableTypes) !== false;
-    }
-    
     private function downloadToDownloadDirectoryFrom($uri, $fileIndex, ExclusionList $exclusionList)
     {
         $downloadDestFile = "{$this->getDownloadDirectory()}/{$exclusionList->dbPrefix}-{$fileIndex}.{$exclusionList->type}";
@@ -116,14 +133,20 @@ class ExclusionListHttpDownloader
 
         $client = new Client([
             'base_uri' => $uri,
-            'sink'     => $downloadDestFile,
-            'verify'   => false
+            'sink'     => $downloadDestFile
         ]);
         
         $httpMethod = $exclusionList->requestOptions && isset($exclusionList->requestOptions['http_method']) ? $exclusionList->requestOptions['http_method'] : 'GET';
         
-        $client->request($httpMethod, $exclusionList->urlSuffix, $exclusionList->requestOptions);
+        $requestOptions = $exclusionList->requestOptions ? array_merge($this->getDefaultRequestOptions(), $exclusionList->requestOptions) : $this->getDefaultRequestOptions();
+
+        $client->request($httpMethod, $exclusionList->urlSuffix, $requestOptions);
         
         return $downloadDestFile;
+    }
+    
+    private function getDefaultRequestOptions()
+    {
+        return ['verify' => false, 'connect_timeout' => $this->connectTimeout];        
     }
 }
