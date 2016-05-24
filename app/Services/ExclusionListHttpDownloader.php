@@ -28,8 +28,8 @@ class ExclusionListHttpDownloader
         'txt',
         'xls',
         'xlsx',
-        'xml'
-        //,'zip'
+        'xml',
+        'zip'
     ];
     
     /**
