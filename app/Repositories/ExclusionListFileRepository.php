@@ -16,7 +16,7 @@ class ExclusionListFileRepository implements Repository
     {
         app('db')->table('files')->insert($record);
     
-        info('Added ' . $record['state_prefix'] . '-' . $record['img_data_index'] .' to files table');
+        info('Added ' . $record['state_prefix'] . '-' . $record['img_data_index'] .' (ver.' . $record['img_data_version'] .') to files table');
     }
     
     public function clear()

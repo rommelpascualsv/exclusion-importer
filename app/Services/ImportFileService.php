@@ -232,6 +232,11 @@ class ImportFileService implements ImportFileServiceInterface
         return $listFactory->make($listPrefix);
     }
     
+    protected function createFileVersion()
+    {
+        return date('Ymd\-Hi');            
+    }
+    
     /**
      * Updates the uri of the exclusion list with the given uri
      *
@@ -282,26 +287,20 @@ class ImportFileService implements ImportFileServiceInterface
             return;
         }
 
-        if (! $this->isRepositoryFileStale($prefix, $latestExclusionListFiles)) {
+        if (! $this->isLatestRepositoryFileStale($prefix, $latestExclusionListFiles)) {
             //File in database is already up-to-date - do nothing
-            info('Repository file(s) for ' . $prefix . ' is already up-to-date.');
+            info('Repository file(s) for ' . $prefix . ' is in sync with the latest version');
             return;
         }
-
-        //Go over each file and insert or update as necessary
+        
+        $fileVersion = $this->createFileVersion();
+        
+        //Repository file is stale - go over each file and insert them into repo as newest versions
         for ($fileIndex = 0; $fileIndex < count($latestExclusionListFiles); $fileIndex++) {
             
             $fileContents = file_get_contents($latestExclusionListFiles[$fileIndex]);
             
-            if ($this->hasExistingFileInRepository($prefix, $fileIndex)) {
-
-                $this->updateFileInRepository($fileContents, $prefix, $fileIndex);
-                
-            } else {
-
-                $this->addFileToRepository($fileContents, $prefix, $fileIndex);
-            }
-            
+            $this->addFileToRepository($fileContents, $prefix, $fileIndex, $fileVersion);
         }
         
         $this->setReadyForUpdate($prefix, 'Y');
@@ -309,26 +308,27 @@ class ImportFileService implements ImportFileServiceInterface
     
     /**
      * Returns true if any of the files contained by $latestExclusionListFiles
-     * is not equal to the currently stored files in the database. Otherwise
-     * returns false if there are no files yet in the database or the contents
-     * of one of the files in $latestExclusionListFiles is not equal to 
+     * is not equal to the latest version of the currently stored files in the 
+     * database. Otherwise returns false if there are no files yet in the database 
+     * or the contents of one of the files in $latestExclusionListFiles is not 
+     * equal to the latest version in the database.
      * @param string $prefix the state prefix
      * @param array $latestExclusionListFiles filenames of the files to compare
      * with their database file counterparts
      * @return boolean
      */
-    private function isRepositoryFileStale($prefix, $latestExclusionListFiles)
+    private function isLatestRepositoryFileStale($prefix, $latestExclusionListFiles)
     {
         for ($fileIndex = 0; $fileIndex < count($latestExclusionListFiles); $fileIndex++) {
             
-            //Put the file contents from the repository in a temporary file so we don't need to hold it in memory
-            $repositoryFileContents = $this->getFileContentsFromRepository($prefix, $fileIndex);
+            $repositoryFileContents = $this->getLatestFileContentsFromRepository($prefix, $fileIndex);
             
             if (! $repositoryFileContents) {
                 //No file was stored yet in the file repository - definitely stale
                 return true;    
             }
-            
+
+            //Put the file contents from the repository in a temporary file so we don't need to hold it in memory
             $repositoryTempFile = tempnam(sys_get_temp_dir(), $prefix);
             
             file_put_contents($repositoryTempFile, $repositoryFileContents, LOCK_EX);
@@ -359,10 +359,20 @@ class ImportFileService implements ImportFileServiceInterface
      * @param int $fileIndex the zero-based index of the blob (defaults to 0 if not specified)
      * @return string The img_data of the state
      */
-    private function getFileContentsFromRepository($prefix, $fileIndex = 0)
+    private function getLatestFileContentsFromRepository($prefix, $fileIndex = 0)
     {
-        $record = $this->exclusionListFileRepo->find([$prefix, $fileIndex]);
-        return $record ? $record[0]->img_data : null;
+        $records = $this->exclusionListFileRepo->find([$prefix, $fileIndex]);
+        
+        if (empty($records)) {
+            return null;
+        }
+        
+        //sort by descending img_data_version so we get the latest version as the first
+        usort($records, function($a, $b){
+            return strcmp($a->img_data_version, $b->img_data_version) * -1;    
+        });
+        
+        return $records[0]->img_data;
     }    
     
     private function isExclusionListRecordsEmpty($prefix)
@@ -371,44 +381,20 @@ class ImportFileService implements ImportFileServiceInterface
     }
     
     /**
-     * Checks if the file for the given state prefix and file index already
-     * exist in the database
+     * Inserts a record to the files repository.
      *
-     * @param string $prefix The state prefix
-     * @param int $fileIndex The file index of the file to check
-     * @return boolean
-     */
-    private function hasExistingFileInRepository($prefix, $fileIndex)
-    {
-        return $this->exclusionListFileRepo->contains([$prefix, $fileIndex]);
-    }  
-    
-    /**
-     * Updates the blob data in files table for a given state prefix.
-     *
-     * @param string $fileContents The contents of the
-     * @param string $prefix The state prefix
-     *
+     * @param string $fileContents The file contents
+     * @param string $prefix The exclusion list prefix
+     * @param string $fileIndex The file index
+     * @param string $version The file version
      * @return void
      */
-    private function updateFileInRepository($fileContents, $prefix, $fileIndex)
-    {
-        $this->exclusionListFileRepo->update([$prefix, $fileIndex], ['img_data' => $fileContents]);
-    }
-    
-    /**
-     * Inserts a record to the files table.
-     *
-     * @param string $fileContents The blob value of the import file
-     * @param string $prefix The state prefix
-     *
-     * @return void
-     */
-    private function addFileToRepository($fileContents, $prefix, $fileIndex)
+    private function addFileToRepository($fileContents, $prefix, $fileIndex, $fileVersion)
     {
         $this->exclusionListFileRepo->create([
             'state_prefix' => $prefix,
             'img_data_index' => $fileIndex,
+            'img_data_version' => $fileVersion,
             'img_data' => $fileContents
         ]);
     }
