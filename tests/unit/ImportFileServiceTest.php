@@ -20,10 +20,8 @@ class ImportFileServiceTest extends TestCase
     private $importFileService;
     private $exclusionListDownloader;
     private $exclusionListRepo; 
-    private $exclusionListFilesRepo;
-    
-    
-//     protected $container;
+    private $exclusionListFileRepo;
+    private $exclusionListRecordRepo;
     
     public function setUp()
     {
@@ -31,11 +29,12 @@ class ImportFileServiceTest extends TestCase
         
         $this->app->withFacades();
         
-        $this->exclusionListFilesRepo = Mockery::mock('App\Repositories\ExclusionListFilesRepository')->makePartial();
+        $this->exclusionListFileRepo = Mockery::mock('App\Repositories\ExclusionListFileRepository')->makePartial();
         $this->exclusionListRepo = Mockery::mock('App\Repositories\ExclusionListRepository')->makePartial();
+        $this->exclusionListRecordRepo = Mockery::mock('App\Repositories\ExclusionListRecordRepository')->makePartial();
         $this->exclusionListDownloader = Mockery::mock('App\Services\ExclusionListHttpDownloader')->makePartial();
         
-        $this->importFileService = new ImportFileService($this->exclusionListDownloader, $this->exclusionListRepo, $this->exclusionListFilesRepo);
+        $this->importFileService = new ImportFileService($this->exclusionListDownloader, $this->exclusionListRepo, $this->exclusionListFileRepo, $this->exclusionListRecordRepo);
     }
 
     public function tearDown()
@@ -45,7 +44,7 @@ class ImportFileServiceTest extends TestCase
     
     public function testGetExclusionListShouldReturnActiveExclusionLists()
     {   
-        $this->exclusionListRepo->shouldReceive('get')->once()->with(['is_active' => 1])->andReturn([
+        $this->exclusionListRepo->shouldReceive('query')->once()->with(['is_active' => 1])->andReturn([
             (object)[
                 'id' => 1,
                 'prefix' => 'oig',
@@ -97,12 +96,12 @@ class ImportFileServiceTest extends TestCase
         })->andReturn([$exclusionListTestFile]);
         
         //3. Service should search in files repo for existing files
-        $this->exclusionListFilesRepo->shouldReceive('exists')->with('tn1', 0)->andReturn(false);
-        $this->exclusionListFilesRepo->shouldReceive('find')->once()->with('tn1', 0)->andReturn(null);
+        $this->exclusionListFileRepo->shouldReceive('contains')->with(['tn1', 0])->andReturn(false);
+        $this->exclusionListFileRepo->shouldReceive('find')->once()->with(['tn1', 0])->andReturn(null);
         
         //4. Service should add the files to the file repository
-        $this->exclusionListFilesRepo->shouldNotReceive('update');
-        $this->exclusionListFilesRepo->shouldReceive('create')->once()->with([
+        $this->exclusionListFileRepo->shouldNotReceive('update');
+        $this->exclusionListFileRepo->shouldReceive('create')->once()->with([
             'state_prefix' => 'tn1',
             'img_data_index' => 0,
             'img_data' => file_get_contents($exclusionListTestFile)
@@ -124,7 +123,7 @@ class ImportFileServiceTest extends TestCase
         ]]);
         
         //7. Service should check if state_records is empty
-        $this->exclusionListRepo->shouldReceive('isExclusionListRecordsEmpty')->with('tn1')->andReturn(true);
+        $this->exclusionListRecordRepo->shouldReceive('size')->with('tn1')->andReturn(0);
         
         //8. Service should insert the individual records
         $listProcessorMock = Mockery::mock('overload:App\Import\Service\ListProcessor'); 
@@ -155,8 +154,8 @@ class ImportFileServiceTest extends TestCase
         })->andReturn([$exclusionListTestFile]);
     
         //3. Service should search in files repo for existing files
-        $this->exclusionListFilesRepo->shouldReceive('exists')->with('tn1', 0)->andReturn(true);
-        $this->exclusionListFilesRepo->shouldReceive('find')->once()->with('tn1', 0)->andReturn([(object)[
+        $this->exclusionListFileRepo->shouldReceive('contains')->with(['tn1', 0])->andReturn(true);
+        $this->exclusionListFileRepo->shouldReceive('find')->once()->with(['tn1', 0])->andReturn([(object)[
             'id' => '14',
             'state_prefix' => 'tn1',
             'img_data_index' => '0',
@@ -166,8 +165,8 @@ class ImportFileServiceTest extends TestCase
         ]]);
     
         //4. Service should update  the file in the file repository and not create a new record
-        $this->exclusionListFilesRepo->shouldNotReceive('create');
-        $this->exclusionListFilesRepo->shouldReceive('update')->once()->with('tn1', 0, [
+        $this->exclusionListFileRepo->shouldNotReceive('create');
+        $this->exclusionListFileRepo->shouldReceive('update')->once()->with(['tn1', 0], [
             'img_data' => file_get_contents($exclusionListTestFile)
         ]);
         
@@ -188,7 +187,7 @@ class ImportFileServiceTest extends TestCase
         ]]);
     
         //7. Service should check if state_records is empty
-        $this->exclusionListRepo->shouldReceive('isExclusionListRecordsEmpty')->with('tn1')->andReturn(true);
+        $this->exclusionListRecordRepo->shouldReceive('size')->with('tn1')->andReturn(0);
     
         //8. Service should insert the individual records
         $listProcessorMock = Mockery::mock('overload:App\Import\Service\ListProcessor');
@@ -219,8 +218,8 @@ class ImportFileServiceTest extends TestCase
         })->andReturn([$exclusionListTestFile]);
     
         // 3. Service should search in files repo for existing files
-        $this->exclusionListFilesRepo->shouldReceive('exists')->with('tn1', 0)->andReturn(true);
-        $this->exclusionListFilesRepo->shouldReceive('find')->once()->with('tn1', 0)->andReturn([(object)[
+        $this->exclusionListFileRepo->shouldReceive('contains')->with(['tn1', 0])->andReturn(true);
+        $this->exclusionListFileRepo->shouldReceive('find')->once()->with(['tn1', 0])->andReturn([(object)[
             'id' => '14',
             'state_prefix' => 'tn1',
             'img_data_index' => '0',
@@ -230,8 +229,8 @@ class ImportFileServiceTest extends TestCase
         ]]);
     
         // 4. Service should not update or create any files in the file repository since it is already up to date
-        $this->exclusionListFilesRepo->shouldNotReceive('create');
-        $this->exclusionListFilesRepo->shouldNotReceive('update');
+        $this->exclusionListFileRepo->shouldNotReceive('create');
+        $this->exclusionListFileRepo->shouldNotReceive('update');
     
         // 5. Service should check if ready for update is 'Y'
         $this->exclusionListRepo->shouldReceive('find')->once()->with('tn1')->andReturn([(object)[
@@ -246,7 +245,7 @@ class ImportFileServiceTest extends TestCase
         ]]);
     
         // 6. Service should check if state_records is empty
-        $this->exclusionListRepo->shouldReceive('isExclusionListRecordsEmpty')->with('tn1')->andReturn(false);
+        $this->exclusionListRecordRepo->shouldReceive('size')->with('tn1')->andReturn(1);
     
         // 7. Service should not do importing
         $listProcessorMock = Mockery::mock('overload:App\Import\Service\ListProcessor');
@@ -273,18 +272,18 @@ class ImportFileServiceTest extends TestCase
         $this->exclusionListDownloader->shouldNotReceive('downloadFiles');
     
         // 3. Since there is no downloaded file, there shouldn't be any searching done in the files repo
-        $this->exclusionListFilesRepo->shouldNotReceive('exists');
-        $this->exclusionListFilesRepo->shouldNotReceive('find');
+        $this->exclusionListFileRepo->shouldNotReceive('contains');
+        $this->exclusionListFileRepo->shouldNotReceive('find');
     
         // 4. Service should not update or create any files in the file repository
-        $this->exclusionListFilesRepo->shouldNotReceive('create');
-        $this->exclusionListFilesRepo->shouldNotReceive('update');
+        $this->exclusionListFileRepo->shouldNotReceive('create');
+        $this->exclusionListFileRepo->shouldNotReceive('update');
     
         // 5. Service should not check if ready for update is 'Y'
         $this->exclusionListRepo->shouldNotReceive('find')->with('az1');
         
         // 6. Service should check if state_records is empty
-        $this->exclusionListRepo->shouldReceive('isExclusionListRecordsEmpty')->with('az1')->andReturn(false);
+        $this->exclusionListRecordRepo->shouldReceive('size')->with('az1')->andReturn(0);
     
         // 7. Service should not do importing
         $listProcessorMock = Mockery::mock('overload:App\Import\Service\ListProcessor');
@@ -304,10 +303,10 @@ class ImportFileServiceTest extends TestCase
     
     public function testRefreshRecordsShouldOnlyImportExclusionListsFlaggedForAutoImport()
     {
-        $importFileService = Mockery::mock('App\Services\ImportFileService[importFile]', [$this->exclusionListDownloader, $this->exclusionListRepo, $this->exclusionListFilesRepo]);
+        $importFileService = Mockery::mock('App\Services\ImportFileService[importFile]', [$this->exclusionListDownloader, $this->exclusionListRepo, $this->exclusionListFileRepo, $this->exclusionListRecordRepo]);
         
         // 1. All exclusion lists should be queried
-        $this->exclusionListRepo->shouldReceive('get')->withNoArgs()->andReturn([
+        $this->exclusionListRepo->shouldReceive('query')->withNoArgs()->andReturn([
             (object)[
                 'id' => 2,
                 'prefix' => 'nyomig',
@@ -346,10 +345,10 @@ class ImportFileServiceTest extends TestCase
     {
         $exclusionListTestFile = base_path('tests/unit/files/tn1-0.pdf');
     
-        $importFileService = Mockery::mock('App\Services\ImportFileService[importFile]', [$this->exclusionListDownloader, $this->exclusionListRepo, $this->exclusionListFilesRepo]);
+        $importFileService = Mockery::mock('App\Services\ImportFileService[importFile]', [$this->exclusionListDownloader, $this->exclusionListRepo, $this->exclusionListFileRepo, $this->exclusionListRecordRepo]);
     
         // 1. All exclusion lists should be queried
-        $this->exclusionListRepo->shouldReceive('get')->withNoArgs()->andReturn([
+        $this->exclusionListRepo->shouldReceive('query')->withNoArgs()->andReturn([
             (object)[
                 'id' => 1,
                 'prefix' => 'tn1',
@@ -384,8 +383,8 @@ class ImportFileServiceTest extends TestCase
         })->andReturn([$exclusionListTestFile]);
         
         // 5. Service should search in files repo for existing files
-        $this->exclusionListFilesRepo->shouldReceive('exists')->with('tn1', 0)->andReturn(true);
-        $this->exclusionListFilesRepo->shouldReceive('find')->once()->with('tn1', 0)->andReturn([(object)[
+        $this->exclusionListFileRepo->shouldReceive('contains')->with(['tn1', 0])->andReturn(true);
+        $this->exclusionListFileRepo->shouldReceive('find')->once()->with(['tn1', 0])->andReturn([(object)[
             'id' => '14',
             'state_prefix' => 'tn1',
             'img_data_index' => '0',
@@ -395,8 +394,8 @@ class ImportFileServiceTest extends TestCase
         ]]);
         
         // 6. Service should update  the file in the file repository and not create a new record
-        $this->exclusionListFilesRepo->shouldNotReceive('create');
-        $this->exclusionListFilesRepo->shouldReceive('update')->once()->with('tn1', 0, [
+        $this->exclusionListFileRepo->shouldNotReceive('create');
+        $this->exclusionListFileRepo->shouldReceive('update')->once()->with(['tn1', 0], [
             'img_data' => file_get_contents($exclusionListTestFile)
         ]);
         
@@ -408,10 +407,10 @@ class ImportFileServiceTest extends TestCase
     
     public function testRefreshRecordsShouldUpdateReadyForUpdateFlagToYForNonAutoImportListsWithNonDownloadableContent()
     {
-        $importFileService = Mockery::mock('App\Services\ImportFileService[importFile]', [$this->exclusionListDownloader, $this->exclusionListRepo, $this->exclusionListFilesRepo]);
+        $importFileService = Mockery::mock('App\Services\ImportFileService[importFile]', [$this->exclusionListDownloader, $this->exclusionListRepo, $this->exclusionListFileRepo, $this->exclusionListRecordRepo]);
     
         // 1. All exclusion lists should be queried
-        $this->exclusionListRepo->shouldReceive('get')->withNoArgs()->andReturn([
+        $this->exclusionListRepo->shouldReceive('query')->withNoArgs()->andReturn([
             (object)[
                 'id' => 25,
                 'prefix' => 'az1',
@@ -445,12 +444,12 @@ class ImportFileServiceTest extends TestCase
         $this->exclusionListDownloader->shouldNotReceive('downloadFiles');
         
         // 5. Service should search in files repo for existing files
-        $this->exclusionListFilesRepo->shouldNotReceive('exists');
-        $this->exclusionListFilesRepo->shouldNotReceive('find');
+        $this->exclusionListFileRepo->shouldNotReceive('contains');
+        $this->exclusionListFileRepo->shouldNotReceive('find');
     
         // 6. Service should update  the file in the file repository and not create a new record
-        $this->exclusionListFilesRepo->shouldNotReceive('create');
-        $this->exclusionListFilesRepo->shouldNotReceive('update');
+        $this->exclusionListFileRepo->shouldNotReceive('create');
+        $this->exclusionListFileRepo->shouldNotReceive('update');
     
         // 7. Service should update ready_for_update flag to 'Y'
         $this->exclusionListRepo->shouldReceive('update')->once()->with('az1', ['ready_for_update' => 'Y']);

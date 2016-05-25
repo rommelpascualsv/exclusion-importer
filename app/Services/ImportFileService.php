@@ -8,7 +8,8 @@ use App\Response\JsonResponse;
 use App\Services\Contracts\ImportFileServiceInterface;
 use App\Utils\FileUtils;
 use App\Repositories\ExclusionListRepository;
-use App\Repositories\ExclusionListFilesRepository;
+use App\Repositories\ExclusionListFileRepository;
+use App\Repositories\ExclusionListRecordRepository;
 
 /**
  * Service class that handles the import related processes.
@@ -22,15 +23,19 @@ class ImportFileService implements ImportFileServiceInterface
     
     private $exclusionListRepo;
     
-    private $exclusionListFilesRepo;
+    private $exclusionListFileRepo;
+    
+    private $exclusionListRecordRepo;
     
     public function __construct(ExclusionListHttpDownloader $exclusionListHttpDownloader = null, 
             ExclusionListRepository $exclusionListRepo = null, 
-            ExclusionListFilesRepository $exclusionListFilesRepo = null)
+            ExclusionListFileRepository $exclusionListFilesRepo = null,
+            ExclusionListRecordRepository $exclusionListRecordRepo)
     {
         $this->exclusionListDownloader = $exclusionListHttpDownloader ? $exclusionListHttpDownloader : new ExclusionListHttpDownloader();
         $this->exclusionListRepo = $exclusionListRepo ? $exclusionListRepo : new ExclusionListRepository();
-        $this->exclusionListFilesRepo = $exclusionListFilesRepo ? $exclusionListFilesRepo : new ExclusionListFilesRepository();
+        $this->exclusionListFileRepo = $exclusionListFilesRepo ? $exclusionListFilesRepo : new ExclusionListFileRepository();
+        $this->exclusionListRecordRepo = $exclusionListRecordRepo ? $exclusionListRecordRepo : new ExclusionListRecordRepository();
     }
     
     /**
@@ -40,7 +45,7 @@ class ImportFileService implements ImportFileServiceInterface
      */ 
     public function getExclusionList()
     {
-        $activeExclusionLists = $this->exclusionListRepo->get(['is_active' => 1]);
+        $activeExclusionLists = $this->exclusionListRepo->query(['is_active' => 1]);
         
         $collection = [];
         foreach ($activeExclusionLists as $activeExclusionList) {
@@ -139,7 +144,7 @@ class ImportFileService implements ImportFileServiceInterface
      */
     public function refreshRecords()
     {
-        $exclusionLists = $this->exclusionListRepo->get();
+        $exclusionLists = $this->exclusionListRepo->query();
     
         // iterate import urls
         foreach ($exclusionLists as $exclusionList) {
@@ -185,7 +190,7 @@ class ImportFileService implements ImportFileServiceInterface
                     info('\''. $prefix . '\' is not configured for auto import. Updating file repository...');
                     
                     $latestExclusionListFiles = $this->exclusionListDownloader->downloadFiles($exclusionList);
-                    
+
                     //If the list is not auto-importable, just update its file repository copy to the latest
                     $this->updateRepositoryFiles($latestExclusionListFiles, $prefix);
                     
@@ -356,13 +361,13 @@ class ImportFileService implements ImportFileServiceInterface
      */
     private function getFileContentsFromRepository($prefix, $fileIndex = 0)
     {
-        $record = $this->exclusionListFilesRepo->find($prefix, $fileIndex);
+        $record = $this->exclusionListFileRepo->find([$prefix, $fileIndex]);
         return $record ? $record[0]->img_data : null;
     }    
     
     private function isExclusionListRecordsEmpty($prefix)
     {
-        return $this->exclusionListRepo->isExclusionListRecordsEmpty($prefix);
+        return $this->exclusionListRecordRepo->size($prefix) === 0;
     }
     
     /**
@@ -375,7 +380,7 @@ class ImportFileService implements ImportFileServiceInterface
      */
     private function hasExistingFileInRepository($prefix, $fileIndex)
     {
-        return $this->exclusionListFilesRepo->exists($prefix, $fileIndex);
+        return $this->exclusionListFileRepo->contains([$prefix, $fileIndex]);
     }  
     
     /**
@@ -388,7 +393,7 @@ class ImportFileService implements ImportFileServiceInterface
      */
     private function updateFileInRepository($fileContents, $prefix, $fileIndex)
     {
-        $this->exclusionListFilesRepo->update($prefix, $fileIndex, ['img_data' => $fileContents]);
+        $this->exclusionListFileRepo->update([$prefix, $fileIndex], ['img_data' => $fileContents]);
     }
     
     /**
@@ -401,7 +406,7 @@ class ImportFileService implements ImportFileServiceInterface
      */
     private function addFileToRepository($fileContents, $prefix, $fileIndex)
     {
-        $this->exclusionListFilesRepo->create([
+        $this->exclusionListFileRepo->create([
             'state_prefix' => $prefix,
             'img_data_index' => $fileIndex,
             'img_data' => $fileContents
