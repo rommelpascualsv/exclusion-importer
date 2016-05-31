@@ -62,4 +62,79 @@ class FileUtils
             }
         }        
     }
+
+    public static function createZip($files, $destination = '', $overwrite = false)
+    {
+        // if the zip file already exists and overwrite is false, return false
+        if (file_exists($destination) && ! $overwrite) {
+            return false;
+        }
+
+        $valid_files = [];
+        // if files were passed in...
+        if (is_array($files)) {
+            // cycle through each file
+            foreach ($files as $file) {
+                // make sure the file exists
+                if (file_exists($file)) {
+                    $valid_files[] = $file;
+                }
+            }
+        }
+        // if we have good files...
+        if (count($valid_files)) {
+            // create the archive
+            $zip = new \ZipArchive();
+            if ($zip->open($destination, $overwrite ? \ZipArchive::OVERWRITE : \ZipArchive::CREATE) !== true) {
+                return false;
+            }
+            // add the files
+            foreach ($valid_files as $file) {
+                $localName = pathinfo($file, PATHINFO_FILENAME) . '.' .pathinfo($file, PATHINFO_EXTENSION);
+                $zip->addFile($file, $localName);
+            }
+
+            $zip->close();
+            
+            // check to make sure the file exists
+            return file_exists($destination);
+        } else {
+            return false;
+        }
+    }
+    
+    /**
+     * Deletes the files specified in $files if they are under $dir. The directory
+     * and file paths must be absolute.
+     * @param string $dir
+     * @param string|array $files 
+     */
+    public static function deleteIfInDir($dir, $files)
+    {
+        if (! $files || ! $dir) {
+            return;
+        }
+         
+        try {
+            if (! is_array($files)) {
+                $files = [$files];
+            }
+    
+            $filesToDelete = [];
+    
+            foreach ($files as $file) {
+                if (strpos($file, $dir) === 0) {
+                    $filesToDelete[] = $file;
+                }
+            }
+             
+            FileUtils::deleteFiles($filesToDelete);
+    
+        } catch (\Exception $e) {
+            //quietly handle exceptions here
+            info('Encountered an error while trying to delete files in directory ' . $dir . ' : ' . $e->getMessage());
+        }
+    
+    }
+    
 }

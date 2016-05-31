@@ -12,9 +12,9 @@ class ExclusionListFileRepository implements Repository
      * Creates a record in the files table.
      * @param array $record array containing the column values to save in the table
      */
-    public function create($record)
+    public function create($record = null)
     {
-        app('db')->table('files')->insert($record);
+        return app('db')->table('files')->insert($record);
     
         info('Added ' . $record['state_prefix'] . '-' . $record['img_data_index'] .' (ver.' . $record['img_data_version'] .') to files table');
     }
@@ -26,55 +26,51 @@ class ExclusionListFileRepository implements Repository
     }
     
     /**
-     * Finds a record with the given prefix and fileIndex in the files table
-     * @param array $compositeKey the composite key of the file containing the following:
-     * $compositeKey[0] = state_prefix
-     * $compositeKey[1] = img_data_index
+     * Finds a record with the given id in the files table
+     * @param string $id the id of the row in the files table to find
      */
-    public function find($compositeKey)
+    public function find($id)
     {
-        return app('db')->table('files')->where([
-            'state_prefix'   => $compositeKey[0],
-            'img_data_index' => $compositeKey[1]
-        ])->get();
+        return app('db')->table('files')->where(['id'=> $id])->get();
     }
     
     /**
-     * Updates a record with the given prefix and fileIndex in the files table
-     * with the given data
-     * @param array $compositeKey the composite key of the file containing the following:
-     * $compositeKey[0] = state_prefix
-     * $compositeKey[1] = img_data_index
+     * Updates a record satisfying the given the criteria with the given data
+     * @param array $criteria the criteria that the rows to update must match
      * @param array $data array containing the column values to save in the table
      */
-    public function update($compositeKey, $data)
+    public function update($criteria = null, $data)
     {
-        $prefix = $compositeKey[0];
-        $fileIndex = $compositeKey[1];
+        $query =  app('db')->table('files');
         
-        $affected = app('db')->table('files')
-        ->where([
-            'state_prefix' => $prefix,
-            'img_data_index' => $fileIndex
-        ])
-        ->update($data);
+        if ($criteria) {
+            $query->where($criteria);
+        }
         
-        info('Updated file content of ' . $prefix. '-' . $fileIndex . ' in files table . ' . $affected . ' file(s) updated');
+        return $query->update($data);
     }
     
     /**
-     * Returns true if a record with the given compositeKey exists in the files table, 
+     * Returns true if a record matching the given criteria exists in the repository,
      * otherwise returns false
-     * @param array $compositeKey the composite key of the file containing the following:
-     * $compositeKey[0] = state_prefix
-     * $compositeKey[1] = img_data_index
-     * @return boolean
      */
-    public function contains($compositeKey)
+    public function contains($criteria)
     {
-        return app('db')->table('files')->where([
-            'state_prefix' => $compositeKey[0],
-            'img_data_index' => $compositeKey[1]
-        ])->count() > 0;
+        return $criteria ? app('db')->table('files')->where($criteria)->count() > 0 : false;
+    } 
+    
+    /**
+     * Returns all records matching the given criteria
+     */
+    public function query($criteria = null)
+    {
+        $query = app('db')->table('files');
+        
+        if ($criteria) {
+            $query->where($criteria);
+        }
+
+        return $query->get();    
     }    
+    
 }

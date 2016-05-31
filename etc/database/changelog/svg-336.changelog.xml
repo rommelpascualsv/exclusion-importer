@@ -1,10 +1,47 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
     
-    <changeSet author="sv" id="svg-336-1-add-column-img-data-version-to-files" context="prod">
+    <!-- files table changes -->
+    <changeSet author="sv" id="svg-336-1-drop-column-img-data-index-from-files" context="prod">
+        <dropColumn tableName="files" columnName="img_data_index" />
+    </changeSet>
+
+    <changeSet author="sv" id="svg-336-2-drop-column-date-modified-from-files" context="prod">
+        <dropColumn tableName="files" columnName="date_modified" />
+    </changeSet>
+
+    <changeSet author="sv" id="svg-336-3-add-column-date-last-downloaded-to-files" context="prod">
         <addColumn tableName="files" >
-            <column name="img_data_version" type="VARCHAR(15)" afterColumn="img_data_index" defaultValue="0"/>
+            <column name="date_last_downloaded" type="TIMESTAMP" afterColumn="date_created" />
         </addColumn>
     </changeSet>
+    
+    <changeSet author="sv" id="svg-336-4-add-column-img-type-to-files" context="prod">
+        <addColumn tableName="files" >
+            <column name="img_type" type="VARCHAR(10)" afterColumn="img_data" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="sv" id="svg-336-5-add-column-hash-to-files" context="prod">
+        <addColumn tableName="files" >
+            <column name="hash" type="VARCHAR(64)" afterColumn="img_type" />
+        </addColumn>
+    </changeSet>
+    
+    <!-- exclusion_lists table changes -->
+    <changeSet author="sv" id="svg-336-6-drop-column-ready-for-update-from-exclusion-lists" context="prod">
+        <dropColumn tableName="exclusion_lists" columnName="ready_for_update" />
+    </changeSet>
+
+    <!-- exclusion_list_versions table -->
+    <changeSet author="sv" id="svg-336-7-create-table-exclusion-list-versions">
+        <createTable tableName="exclusion_list_versions">
+            <column name="prefix" type="VARCHAR(25)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="last_imported_hash" type="VARCHAR(64)" />
+            <column name="last_imported_date" type="TIMESTAMP" />
+        </createTable>
+    </changeSet>    
     
 </databaseChangeLog>

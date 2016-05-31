@@ -10,7 +10,7 @@ class ExclusionListRepository implements Repository
     
     public function create($record)
     {
-        app('db')->table('exclusion_lists')->create($record);    
+        return app('db')->table('exclusion_lists')->insert($record);    
     }
     
     public function clear()
@@ -59,5 +59,6 @@ class ExclusionListRepository implements Repository
     {
         $result = app('db')->table('exclusion_lists')->where('prefix', $prefix)->update($data);
         info('Updated ' . $result . ' rows for ' . $prefix);
+        return $result;
     }
 }

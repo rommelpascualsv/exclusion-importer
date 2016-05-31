@@ -29,7 +29,8 @@ class ExclusionListHttpDownloader
         'xls',
         'xlsx',
         'xml',
-        'zip'
+        'zip',
+        'html'
     ];
     
     /**
@@ -79,16 +80,16 @@ class ExclusionListHttpDownloader
         }
     }    
     
-    public function supports(ExclusionList $exclusionList)
+    public function supports($type)
     {
-        return $exclusionList && array_search($exclusionList->type, $this->downloadableTypes) !== false;
+        return $type && array_search($type, $this->downloadableTypes) !== false;
     }
     
     public function downloadFiles(ExclusionList $exclusionList)
     {
         $this->createDownloadDirectoryIfNotExists();
 
-        if (! $this->supports($exclusionList)) {
+        if (! $this->supports($exclusionList->type)) {
             return null;    
         }
         
@@ -206,7 +207,7 @@ class ExclusionListHttpDownloader
         return "{$this->getDownloadDirectory()}/{$exclusionList->dbPrefix}-{$fileIndex}.{$exclusionList->type}";        
     }
     
-    private function download($uri, $downloadDestFile, $exclusionList)
+    private function download($uri, $downloadDestFile, ExclusionList $exclusionList)
     {
         $httpMethod = $exclusionList->requestOptions && isset($exclusionList->requestOptions['http_method']) ? $exclusionList->requestOptions['http_method'] : $this->defaultHttpMethod;
         
