@@ -29,5 +29,5 @@ interface ImportFileServiceInterface
 	 *
 	 * @return object The object containing the result of the operation
 	 */
-	public function importFile($url, $listPrefix, $shouldSaveFile);
+	public function importFile($url, $listPrefix);
 }

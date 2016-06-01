@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="shayat" id="svg-421-1-modify-hawaii-date-columns" context="prod">
+        <modifyDataType tableName="hi1_records" columnName="exclusion_date" newDataType="DATE NULL DEFAULT NULL" />
+    </changeSet>
+    <changeSet author="shayat" id="svg-421-2-modify-hawaii-date-columns" context="prod">
+        <modifyDataType tableName="hi1_records" columnName="reinstatement_date" newDataType="DATE NULL DEFAULT NULL" />
+    </changeSet>
+</databaseChangeLog>

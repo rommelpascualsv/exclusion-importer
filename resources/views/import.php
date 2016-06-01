@@ -66,7 +66,7 @@
                 {
                     ?>
                     <tr>
-                        <td><?= $info[0] ?></td>
+                        <td><?= $info['accr'] ?></td>
                         <td><?= $info['description'] ?></td>
                         <td>
                         	<input class="url text_<?= $info['prefix'] ?>" type="text" name="text_<?= $info['prefix'] ?>" value="<?= $info['import_url'] ?>" />
