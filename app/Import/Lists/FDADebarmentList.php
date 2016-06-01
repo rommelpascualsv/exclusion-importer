@@ -43,8 +43,6 @@ class FDADebarmentList extends ExclusionList
     {
         $this->parse();
         parent::preProcess();
-        print_r($this->data);
-        exit;
     }
 
     private function parse()
