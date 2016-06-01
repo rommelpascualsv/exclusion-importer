@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    
+    <!-- nevada -->
+    <changeSet author="sv" id="svg-424-1-add-aka-name-column" context="prod">
+        <addColumn tableName="nv1_records">
+            <column name="aka" type="varchar(255) COLLATE utf8_unicode_ci NOT NULL"/>
+        </addColumn>    
+    </changeSet>
+    
+</databaseChangeLog>
