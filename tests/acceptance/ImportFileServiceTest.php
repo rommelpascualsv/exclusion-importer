@@ -74,6 +74,8 @@ class ImportFileServiceTest extends TestCase
     {
         parent::setUp();
         $this->app->withFacades();
+        $this->withoutEvents();
+        
         $this->listFactory = new ListFactory();
         $this->importFileService = $this->app->make(ImportFileService::class);
         $this->config = $this->loadConfig();

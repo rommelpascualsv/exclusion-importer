@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use Illuminate\Database\Connection;
 /**
  * Repository for exclusion list files
  *   
@@ -15,14 +16,11 @@ class ExclusionListFileRepository implements Repository
     public function create($record = null)
     {
         return app('db')->table('files')->insert($record);
-    
-        info('Added ' . $record['state_prefix'] . '-' . $record['img_data_index'] .' (ver.' . $record['img_data_version'] .') to files table');
     }
     
     public function clear()
     {
         app('db')->table('files')->truncate();
-        info('Truncated files table');
     }
     
     /**
@@ -69,7 +67,7 @@ class ExclusionListFileRepository implements Repository
         if ($criteria) {
             $query->where($criteria);
         }
-
+        
         return $query->get();    
     }    
     

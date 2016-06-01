@@ -5,10 +5,9 @@ namespace Test\Unit;
 use App\Import\Lists\OIG;
 use App\Import\Lists\Tennessee;
 use App\Services\ImportFileService;
+use App\Utils\FileUtils;
 use CDM\Test\TestCase;
 use Mockery;
-use App\Services\FileStatuses;
-use App\Utils\FileUtils;
 
 /**
  * Unit test for ImportFileService. 
@@ -45,6 +44,8 @@ class ImportFileServiceTest extends TestCase
             $this->exclusionListRecordRepo, 
             $this->exclusionListVersionRepo
         ])->makePartial();
+        
+        $this->withoutEvents();
     }
 
     public function tearDown()
@@ -62,8 +63,7 @@ class ImportFileServiceTest extends TestCase
                 'description' => 'Office of the Inspector General',
                 'import_url' => 'http://www.fedoig.com',
                 'is_auto_import' => 0,
-                'is_active' => 1,
-                'ready_for_update' => 'Y'
+                'is_active' => 1
             ]
         ]);
         
@@ -77,8 +77,7 @@ class ImportFileServiceTest extends TestCase
                 'description' => 'Office of the Inspector General',
                 'import_url' => 'http://www.fedoig.com',
                 'is_auto_import' => 0,
-                'is_active' => 1,
-                'ready_for_update' => 'Y'
+                'is_active' => 1
             ]
         ];
         
@@ -93,7 +92,7 @@ class ImportFileServiceTest extends TestCase
         $this->assertEquals($expected, $actual->getContent());
     }
     
-    public function testImportFileShouldUpdateExclusionListStatusToFailedDownloadAndRespondWithErrorMessageIfFileDownloadFails()
+    public function testImportFileShouldRespondWithErrorMessageIfFileDownloadFails()
     {
         // Url should be updated
         $this->exclusionListRepo->shouldReceive('update')->once()->with('tn1', ['import_url' => 'http://www.tn.gov/assets/entities/tenncare/attachments/terminatedproviderlist.pdf']);
@@ -528,8 +527,7 @@ class ImportFileServiceTest extends TestCase
                 'description' => 'New York Office of the Medical Inspector General',
                 'import_url' => 'http://www.omig.ny.gov/data/gensplistns.php',
                 'is_auto_import' => 1, //Auto-import
-                'is_active' => 1,
-                'ready_for_update' => 'Y'            
+                'is_active' => 1           
             ]
         ]);
          

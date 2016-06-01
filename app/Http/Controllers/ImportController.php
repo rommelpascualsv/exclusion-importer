@@ -11,6 +11,8 @@ class ImportController extends BaseController
     public function __construct(ImportFileServiceInterface $importFileService)
     {
         $this->importFileService = $importFileService;
+
+        $this->initPhpSettings();
     }
 
     public function createOldTables()
@@ -88,8 +90,6 @@ class ImportController extends BaseController
 
     public function import(Request $request, $listPrefix)
     {
-        $this->initPhpSettings();
-
         return $this->importFileService->importFile($request->input('url'), $listPrefix);
     }
 
