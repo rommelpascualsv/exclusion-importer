@@ -24,6 +24,7 @@ class ImportFileServiceTest extends TestCase
     private $exclusionListFileRepo;
     private $exclusionListRecordRepo;
     private $exclusionListVersionRepo;
+    private $queryMock;
     
     public function setUp()
     {
@@ -44,6 +45,8 @@ class ImportFileServiceTest extends TestCase
             $this->exclusionListRecordRepo, 
             $this->exclusionListVersionRepo
         ])->makePartial();
+        
+        $this->queryMock = Mockery::mock('alias:App\Repositories\Query');
         
         $this->withoutEvents();
     }
@@ -67,6 +70,8 @@ class ImportFileServiceTest extends TestCase
             ]
         ]);
         
+        $this->queryMock->shouldReceive('create->setTable->addCriteria->setOrderBy->setOrderByDirection->execute')->once()->andReturnNull();
+        
         $actual = $this->importFileService->getExclusionList();
         
         $expected = [
@@ -77,7 +82,8 @@ class ImportFileServiceTest extends TestCase
                 'description' => 'Office of the Inspector General',
                 'import_url' => 'http://www.fedoig.com',
                 'is_auto_import' => 0,
-                'is_active' => 1
+                'is_active' => 1,
+                'update_required' => true
             ]
         ];
         
@@ -198,10 +204,7 @@ class ImportFileServiceTest extends TestCase
         $this->exclusionListFileRepo->shouldNotReceive('create');
         
         // Service should fetch the files record to update with the file contents
-        $this->exclusionListFileRepo->shouldReceive('query')->once()->with([
-            'state_prefix' => 'tn1',
-            'hash' => hash_file('sha256', $exclusionListTestFile)
-        ])->andReturn([(object)[
+        $this->queryMock->shouldReceive('create->setTable->addCriteria->execute')->once()->andReturn([(object)[
             'state_prefix' => 'tn1',
             'img_data' => file_get_contents('tests/unit/files/tn1-0-dummy.pdf'), //Not the same as the downloaded - should be updated
             'hash' => hash_file('sha256', $exclusionListTestFile),
@@ -242,10 +245,7 @@ class ImportFileServiceTest extends TestCase
         $this->exclusionListFileRepo->shouldNotReceive('create');
     
         // Service should fetch the files record to update with the file contents
-        $this->exclusionListFileRepo->shouldReceive('query')->once()->with([
-            'state_prefix' => 'tn1',
-            'hash' => hash_file('sha256', $exclusionListTestFile)
-        ])->andReturn([(object)[
+        $this->queryMock->shouldReceive('create->setTable->addCriteria->execute')->once()->andReturn([(object)[
             'state_prefix' => 'tn1',
             'img_data' => file_get_contents($exclusionListTestFile), //Same as downloaded - should not be updated
             'hash' => hash_file('sha256', $exclusionListTestFile),
@@ -296,10 +296,7 @@ class ImportFileServiceTest extends TestCase
             });
             
             // Service should fetch the files record to update with the file contents
-            $this->exclusionListFileRepo->shouldReceive('query')->once()->with([
-                'state_prefix' => 'tn1',
-                'hash' => $zipHash,
-            ])->andReturn([(object)[
+            $this->queryMock->shouldReceive('create->setTable->addCriteria->execute')->once()->andReturn([(object)[
                 'state_prefix' => 'tn1',
                 'img_data' => null, //Not the same as downloaded - should be updated
                 'hash' => $zipHash,
@@ -358,10 +355,7 @@ class ImportFileServiceTest extends TestCase
             });
             
             // Service should fetch the files record to update with the file contents
-            $this->exclusionListFileRepo->shouldReceive('query')->once()->with([
-                'state_prefix' => 'tn1',
-                'hash' => $zipHash
-            ])->andReturn([(object)[
+            $this->queryMock->shouldReceive('create->setTable->addCriteria->execute')->once()->andReturn([(object)[
                 'state_prefix' => 'tn1',
                 'img_data' => null, //Not the same as downloaded - should be updated
                 'hash' => $zipHash,
@@ -405,10 +399,7 @@ class ImportFileServiceTest extends TestCase
         ])->andReturn(true);
     
         // Service should fetch the files record to update with the file contents
-        $this->exclusionListFileRepo->shouldReceive('query')->once()->with([
-            'state_prefix' => 'tn1',
-            'hash' => $hash
-        ])->andReturn([(object)[
+        $this->queryMock->shouldReceive('create->setTable->addCriteria->execute')->once()->andReturn([(object)[
             'state_prefix' => 'tn1',
             'img_data' => file_get_contents($exclusionListTestFile), //Same as downloaded - should not be updated
             'hash' => $hash,
@@ -462,10 +453,7 @@ class ImportFileServiceTest extends TestCase
         ])->andReturn(true);
     
         // Service should fetch the files record to update with the file contents
-        $this->exclusionListFileRepo->shouldReceive('query')->once()->with([
-            'state_prefix' => 'tn1',
-            'hash' => $hash
-        ])->andReturn([(object)[
+        $this->queryMock->shouldReceive('create->setTable->addCriteria->execute')->once()->andReturn([(object)[
             'state_prefix' => 'tn1',
             'img_data' => file_get_contents($exclusionListTestFile), //Same as downloaded - should not be updated
             'hash' => $hash,
@@ -593,10 +581,7 @@ class ImportFileServiceTest extends TestCase
         });
         
         // Service should fetch the files record to update with the file contents
-        $this->exclusionListFileRepo->shouldReceive('query')->once()->with([
-            'state_prefix' => 'tn1',
-            'hash' => $hash
-        ])->andReturn([(object)[
+        $this->queryMock->shouldReceive('create->setTable->addCriteria->execute')->once()->andReturn([(object)[
             'state_prefix' => 'tn1',
             'img_data' => file_get_contents('tests/unit/files/tn1-0-dummy.pdf'), //Not the same as the downloaded - should be updated
             'hash' => $hash,
@@ -661,10 +646,7 @@ class ImportFileServiceTest extends TestCase
         $this->exclusionListFileRepo->shouldNotReceive('create');
         
         // Service should fetch the files record to update with the file contents
-        $this->exclusionListFileRepo->shouldReceive('query')->once()->with([
-            'state_prefix' => 'tn1',
-            'hash' => hash_file('sha256', $exclusionListTestFile)
-        ])->andReturn([(object)[
+        $this->queryMock->shouldReceive('create->setTable->addCriteria->execute')->once()->andReturn([(object)[
             'state_prefix' => 'tn1',
             'img_data' => file_get_contents($exclusionListTestFile), //Same as the downloaded content, no need to update
             'hash' => hash_file('sha256', $exclusionListTestFile),
