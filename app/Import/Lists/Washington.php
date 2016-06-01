@@ -194,7 +194,9 @@ class Washington extends ExclusionList
         $rows = $this->textNewLineToArray($this->data);
 
         //array offset
-        $rows = array_offset($rows, $this->retrieveOptions['offset']);
+        if (isset($this->retrieveOptions['offset'])) {
+            $rows = array_offset($rows, $this->retrieveOptions['offset']);
+        }
 
         foreach ($rows as $key => $value) {
             $this->business = '';
