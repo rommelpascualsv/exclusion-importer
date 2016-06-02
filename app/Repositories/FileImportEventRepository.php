@@ -1,7 +1,6 @@
 <?php
 namespace App\Repositories;
 
-use App\Events\FileImportEvent;
 use App\Repositories\Repository;
 
 class FileImportEventRepository implements Repository
@@ -13,7 +12,7 @@ class FileImportEventRepository implements Repository
             'event_type'  => $event->getEventType(),
             'description' => $event->getDescription(),
             'status'      => $event->getStatus(),
-            'object_id'    => $event->getObjectId()
+            'object_id'   => $event->getObjectId()
         ]);
     }
     
@@ -24,24 +23,6 @@ class FileImportEventRepository implements Repository
     
     public function find($id)
     {
-        $records = app('db')->table('events')->where(['id'=> $id])->get();
-        
-        if (! $records) {
-            return null;
-        }
-        
-        $results = [];
-        
-        foreach ($records as $record) {
-            $results[] = new FileImportEvent(
-                $record->timestamp,   
-                $record->event_type,  
-                $record->description, 
-                $record->status,      
-                $record->objectId    
-            );
-        }
-        
-        return $results;
+        //TODO : Implement me
     }
 }

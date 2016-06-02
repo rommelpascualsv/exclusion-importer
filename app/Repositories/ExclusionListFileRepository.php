@@ -2,7 +2,6 @@
 
 namespace App\Repositories;
 
-use Illuminate\Database\Connection;
 /**
  * Repository for exclusion list files
  *   
@@ -56,19 +55,5 @@ class ExclusionListFileRepository implements Repository
     {
         return $criteria ? app('db')->table('files')->where($criteria)->count() > 0 : false;
     } 
-    
-    /**
-     * Returns all records matching the given criteria
-     */
-    public function query($criteria = null)
-    {
-        $query = app('db')->table('files');
-        
-        if ($criteria) {
-            $query->where($criteria);
-        }
-        
-        return $query->get();    
-    }    
     
 }

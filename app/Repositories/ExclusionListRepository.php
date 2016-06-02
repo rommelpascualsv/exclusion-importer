@@ -28,28 +28,6 @@ class ExclusionListRepository implements Repository
     }    
     
     /**
-     * Retrieves all exclusion lists that satisfy the given criteria. If a $criteria
-     * is specified, then the returned rows are filtered by the parameters
-     * set in the criteria, otherwise returns all exclusion lists
-     * 
-     * @param array filter (optional) array of key-value pairs with which to filter 
-     * the exclusion list data
-     * @return array
-     */
-    public function query($criteria = null)
-    {
-        $query = app('db')->table('exclusion_lists');
-        
-        if ($criteria) {
-            $query->where($criteria);
-        }
-
-        return $query->get();
-    }
-    
-
-    
-    /**
      * Updates the record with the given prefix in the exclusion_lists table
      * @param string $prefix the prefix of the exclusion list whose column values
      * will be updated

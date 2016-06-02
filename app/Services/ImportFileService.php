@@ -1,10 +1,14 @@
 <?php
 namespace App\Services;
 
-use App\Events\FileImportFailed;
-use App\Events\FileImportSuccessful;
+use App\Events\FileDownloadFailed;
+use App\Events\FileDownloadSucceeded;
+use App\Events\FileParseFailed;
+use App\Events\FileParseSucceeded;
 use App\Events\FileUpdateFailed;
-use App\Events\FileUpdateSuccessful;
+use App\Events\FileUpdateSucceeded;
+use App\Events\SaveRecordsFailed;
+use App\Events\SaveRecordsSucceeded;
 use App\Import\Lists\ExclusionList;
 use App\Import\Service\Exclusions\ListFactory;
 use App\Import\Service\ListProcessor;
@@ -12,7 +16,10 @@ use App\Repositories\ExclusionListFileRepository;
 use App\Repositories\ExclusionListRecordRepository;
 use App\Repositories\ExclusionListRepository;
 use App\Repositories\ExclusionListVersionRepository;
-use App\Repositories\Query;
+use App\Repositories\GetActiveExclusionListsQuery;
+use App\Repositories\GetAllExclusionListsQuery;
+use App\Repositories\GetFilesForPrefixAndHashQuery;
+use App\Repositories\GetFilesForPrefixQuery;
 use App\Response\JsonResponse;
 use App\Services\Contracts\ImportFileServiceInterface;
 use App\Utils\ExceptionUtils;
@@ -25,6 +32,8 @@ use App\Utils\FileUtils;
 class ImportFileService implements ImportFileServiceInterface
 {
     use JsonResponse;
+    
+    const FILE_HASH_ALGO = 'sha256';
     
     private $exclusionListDownloader;
     private $exclusionListRepo;
@@ -52,12 +61,18 @@ class ImportFileService implements ImportFileServiceInterface
      */ 
     public function getExclusionList()
     {
-        $activeExclusionLists = $this->exclusionListRepo->query(['is_active' => 1]);
+        $activeExclusionLists = (new GetActiveExclusionListsQuery())->execute();
         
         $collection = [];
+        
         foreach ($activeExclusionLists as $activeExclusionList) {
+            
             $prefix = $activeExclusionList->prefix;
-            $activeExclusionList->update_required = ! $this->isExclusionListUpToDate($prefix, $this->getLatestFileHash($prefix));
+            
+            $latestRepoFile = $this->getLatestRepoFileFor($prefix);
+            
+            $activeExclusionList->update_required = ! $latestRepoFile || ! $this->isExclusionListUpToDate($prefix, $latestRepoFile->hash);
+            
             $collection[$prefix] = json_decode(json_encode($activeExclusionList), true);
         }
         return $collection;
@@ -104,7 +119,7 @@ class ImportFileService implements ImportFileServiceInterface
                     return $this->createResponse('State is already up-to-date.', true);
                 }
                 
-                if ($exclusionList->type !== 'html') {
+                if ($exclusionList->type) {
                     // Set the ExclusionList's uri to the path of the locally downloaded file(s)
                     // so downstream processes would just work with the local copies
                     $exclusionList->uri = implode(',', $exclusionListFiles);
@@ -113,15 +128,13 @@ class ImportFileService implements ImportFileServiceInterface
             
             info('Starting exclusion list import for ' . $prefix);
 
-            $exclusionList->retrieveData();
+            $this->parseRecords($exclusionList);
                 
-            $this->createListProcessor($exclusionList)->insertRecords();
+            $this->saveRecords($exclusionList);
             
             if ($hash) {
                 $this->updateImportedVersionTo($hash, $prefix);
             }
-            
-            event('file.import.successful', new FileImportSuccessful($this->now(), 'Successfully imported exclusion list', $prefix));
             
             info('Finished exclusion list import for ' . $prefix);
             
@@ -132,9 +145,7 @@ class ImportFileService implements ImportFileServiceInterface
             info('Encountered an error while trying to import exclusion list for ' . $prefix . ' : ' . $e->getMessage());
 
             $errorMessage = $this->getErrorMessageFrom($e);
-            
-            event('file.import.failed', new FileImportFailed($this->now(), 'Failed to import exclusion list : ' . $errorMessage, $prefix));
-            
+                        
             return $this->createResponse($errorMessage, false);
             
         } finally {
@@ -151,7 +162,7 @@ class ImportFileService implements ImportFileServiceInterface
      */
     public function refreshRecords()
     {
-        $exclusionLists = $this->exclusionListRepo->query();
+        $exclusionLists = (new GetAllExclusionListsQuery())->execute();
     
         foreach ($exclusionLists as $exclusionList) {
     
@@ -194,20 +205,17 @@ class ImportFileService implements ImportFileServiceInterface
                         
                     info('\''. $prefix . '\' is not configured for auto import. Updating files...');
                     
-                    $exclusionListFiles = $this->exclusionListDownloader->downloadFiles($exclusionList);
+                    $exclusionListFiles = $this->downloadExclusionListFiles($exclusionList);
 
                     //If the list is not configured for auto-import, just update its file repository copy to the latest
                     $this->updateFiles($exclusionListFiles, $prefix);
                     
-                    event('file.update.successful', new FileUpdateSuccessful($this->now(), 'Successfully updated exclusion list file', $prefix));
                 }
     
             } catch (\Exception $e) {
 
                 $errorMessage = 'An error occurred while trying to refresh ' . $prefix . ' with url ' . $importUrl . ' : ' . $e->getMessage();
-                
-                event('file.update.failed', new FileUpdateFailed($this->now(), 'Failed to update exclusion list file : '. $this->getErrorMessageFrom($e), $prefix));
-                
+                error_log($errorMessage);                
                 info($errorMessage);
     
             } finally {
@@ -240,20 +248,11 @@ class ImportFileService implements ImportFileServiceInterface
         return $listFactory->make($listPrefix);
     }
     
-    private function getLatestFileHash($prefix)
+    private function getLatestRepoFileFor($prefix)
     {
-        $files = Query::create()
-                 ->setTable('files')
-                 ->addCriteria(['state_prefix' => $prefix])
-                 ->setOrderBy('date_last_downloaded')
-                 ->setOrderByDirection('desc')
-                 ->execute();
+        $files = (new GetFilesForPrefixQuery($prefix))->execute();
         
-        if (! $files) {
-            return null;    
-        }
-        
-        return $files[0]->hash;
+        return $files ? $files[0] : null;
     }
     
     /**
@@ -298,7 +297,22 @@ class ImportFileService implements ImportFileServiceInterface
      */
     private function downloadExclusionListFiles(ExclusionList $exclusionList)
     {
-        return $this->exclusionListDownloader->downloadFiles($exclusionList);
+        $prefix = $exclusionList->dbPrefix;
+        
+        try {
+            
+            $files = $this->exclusionListDownloader->downloadFiles($exclusionList);
+            
+            event('file.download.succeeded', (new FileDownloadSucceeded())->setObjectId($prefix));
+            
+            return $files;
+            
+        } catch (\Exception $e) {
+            
+            event('file.download.failed', (new FileDownloadFailed())->setObjectId($prefix)->setDescription('Failed to download file : ' . $this->getErrorMessageFrom($e)));
+            
+            throw $e;           
+        }
     }
     
     /**
@@ -325,9 +339,14 @@ class ImportFileService implements ImportFileServiceInterface
     
             // Insert the file contents into the files repository
             $this->saveFileContents($versionFile, $hash, $prefix);
-    
+            
             return $hash;
     
+        } catch(\Exception $e) {
+
+            event('file.update.failed', (new FileUpdateFailed())->setObjectId($prefix)->setDescription('Failed to update file : ' . $this->getErrorMessageFrom($e)));
+            throw $e;
+            
         } finally {
     
             FileUtils::deleteIfInDir(sys_get_temp_dir(), $versionFile);
@@ -356,7 +375,7 @@ class ImportFileService implements ImportFileServiceInterface
         if (count($files) > 1) {
         
             $result = tempnam(sys_get_temp_dir(), $prefix);
-
+        
             $zipped = FileUtils::createZip($files, $result, true);
         
             if (! $zipped) {
@@ -366,10 +385,10 @@ class ImportFileService implements ImportFileServiceInterface
         } else {
             $result = $files[0];
         }
-
-        return $result;
+        
+        return $result;       
+        
     }
-    
     
     /**
      * Creates a hash of the file and saves it in the files repository
@@ -385,7 +404,27 @@ class ImportFileService implements ImportFileServiceInterface
             return;
         }
         
-        $hash = hash_file('sha256', $file);
+        $hash = null;
+        
+        if ($fileType === 'zip') {
+            // For zip files, we cannot rely on the hash of the zip file
+            // to determine if we need to insert a new hash in the database (since
+            // zip files having the same content can have different hashes
+            // due to creation timestamp differences). We first have to retrieve the latest
+            // file in the repo and compare its content with the downloaded zip file to 
+            // see if their contents are the same. If the contents are the same, 
+            // we return the hash of what's already in the database, otherwise we
+            // save the hash of the downloaded file in the database
+            $latestRepoFile = $this->getLatestRepoFileFor($prefix);
+            
+            if ($latestRepoFile && $this->contentEquals($latestRepoFile->img_data, $file)) {
+                $hash = $latestRepoFile->hash;
+            }
+        } 
+        
+        if (! $hash) {
+            $hash = hash_file(self::FILE_HASH_ALGO, $file);
+        }
         
         $record = [
             'state_prefix' => $prefix,
@@ -398,8 +437,15 @@ class ImportFileService implements ImportFileServiceInterface
         // to insert it in the files repository if a hash already exists
         if (! $this->exclusionListFileRepo->contains($record)) {
             
+            info('Inserting new file hash to the files repository : ' . $hash);
+            
             $record['date_last_downloaded'] = $this->now();
+            
             $this->exclusionListFileRepo->create($record);
+            
+        } else {
+            
+            info('Existing file hash found in files repository : ' . $hash);
         }
     
         return $hash;
@@ -411,32 +457,89 @@ class ImportFileService implements ImportFileServiceInterface
             return;
         }
        
-        $repositoryFile = null;
+        $record = [
+            'state_prefix' => $prefix,
+            'hash' => $hash
+        ];
+        
+        $existing = (new GetFilesForPrefixAndHashQuery($prefix, $hash))->execute();
+        
+        if (! $existing) {
+            throw new \Exception('Illegal state encountered : No existing record in files repository was found to update with file contents');
+        }
+        
+        if (! $this->contentEquals($existing[0]->img_data, $file)) {
+            
+            info('Updating file content for hash : ' . $hash);
+            
+            $this->exclusionListFileRepo->update($record, ['img_data' => file_get_contents($file)]);
+            
+            event('file.update.successful', (new FileUpdateSucceeded())->setObjectId($prefix));
+            
+        } else {
+            
+            info ('Last saved file is already up-to-date for hash : ' . $hash);
+            
+            event('file.update.successful', (new FileUpdateSucceeded())->setObjectId($prefix)->setDescription('Last saved file is already up-to-date'));
+        }
+
+    }
+    
+    private function parseRecords(ExclusionList $exclusionList)
+    {
+        $prefix = $exclusionList->dbPrefix;
         
         try {
-
-            $record = [
-                'state_prefix' => $prefix,
-                'hash' => $hash
-            ];
             
-            $existing = Query::create()->setTable('files')->addCriteria($record)->execute();
+            $exclusionList->retrieveData();
             
-            if (! $existing) {
-                throw new \Exception('Illegal state encountered : No existing record in files repository was found to update with file contents');
-            }
+            event('file.parse.succeeded', (new FileParseSucceeded())->setObjectId($prefix));
             
-            // Load the contents of the file stored in the repository in a temp file and compare that with the downloaded file
-            $repositoryFile = tempnam(sys_get_temp_dir(), $prefix);
+        } catch (\Exception $e) {
             
-            file_put_contents($repositoryFile, $existing[0]->img_data, LOCK_EX);
+            event('file.parse.failed', (new FileParseFailed())->setObjectId($prefix)->setDescription('Failed to parse file content : ' . $this->getErrorMessageFrom($e)));
+            throw $e;
+        }
+    }
+    
+    private function saveRecords(ExclusionList $exclusionList)
+    {
+        $prefix = $exclusionList->dbPrefix;
+        
+        try {
             
-            if (! FileUtils::contentEquals($repositoryFile, $file)) {
-                $this->exclusionListFileRepo->update($record, ['img_data' => file_get_contents($file)]);
-            }
+            $this->createListProcessor($exclusionList)->insertRecords();
             
+            event('file.saverecords.succeeded', (new SaveRecordsSucceeded())->setObjectId($prefix));
+            
+        } catch (\Exception $e) {
+            
+            event('file.saverecords.failed', (new SaveRecordsFailed())->setObjectId($prefix)->setDescription('Failed to save records : ' . $this->getErrorMessageFrom($e)));
+            throw $e;
+        }
+    }    
+    
+    /**
+     * Compares $content with the contents of $file
+     * @param string $content the string content to compare with the contents of
+     * the file
+     * @param string $file the file path
+     * @return boolean
+     */
+    private function contentEquals($content, $file)
+    {
+        $contentFile = null;
+    
+        try {
+            // Load $contents in a temp file and compare that with $file
+            $contentFile = tempnam(sys_get_temp_dir(), str_random(4));
+    
+            file_put_contents($contentFile, $content, LOCK_EX);
+    
+            return FileUtils::contentEquals($contentFile, $file);
+    
         } finally {
-            if ($repositoryFile) unlink($repositoryFile);
+            if ($contentFile) unlink($contentFile);
         }
     }
     
@@ -468,6 +571,5 @@ class ImportFileService implements ImportFileServiceInterface
     private function getErrorMessageFrom(\Exception $e)
     {
         return $e instanceof \PDOException ? ExceptionUtils::getJsonSerializableErrorMessage($e) : $e->getMessage();
-    }    
-
+    }
 }

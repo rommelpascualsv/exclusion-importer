@@ -3,13 +3,17 @@ namespace App\Events;
 
 use App\Events\Event;
 
-class FileImportEvent extends Event
+abstract class FileImportEvent extends Event
 {
-    const EVENTTYPE_FILE_IMPORT     = 'I';
-    const EVENTTYPE_FILE_UPDATE     = 'U';
+    const EVENTTYPE_FILE_DOWNLOAD = 'D';
+    const EVENTTYPE_FILE_UPDATE   = 'U';
+    const EVENTTYPE_FILE_PARSE    = 'P';
+    const EVENTTYPE_SAVE_RECORDS  = 'R'; 
     
-    const EVENTSTATUS_SUCCESS       = 'S';
-    const EVENTSTATUS_FAIL          = 'F';
+    const EVENTSTATUS_SUCCESS = '1';
+    const EVENTSTATUS_FAIL    = '0';
+    
+    const TS_FORMAT = 'Y-m-d H:i:s';
     
     private $timestamp;
     private $eventType;
@@ -17,13 +21,9 @@ class FileImportEvent extends Event
     private $status;
     private $objectId;
     
-    public function __construct($timestamp, $eventType, $description, $status, $objectId)
+    public function __construct()
     {
-        $this->timestamp = $timestamp;
-        $this->eventType = $eventType;
-        $this->description = $description;
-        $this->status = $status;
-        $this->objectId = $objectId;
+        $this->setTimestamp(date(self::TS_FORMAT));
     }
     
     public function getTimestamp()
@@ -31,23 +31,53 @@ class FileImportEvent extends Event
         return $this->timestamp;
     }
     
+    public function setTimestamp($timestamp)
+    {
+        $this->timestamp = $timestamp;
+        return $this;
+    }
+    
     public function getEventType()
     {
         return $this->eventType;
+    }
+    
+    public function setEventType($eventType)
+    {
+        $this->eventType = $eventType;
+        return $this;
     }
     
     public function getDescription()
     {
         return $this->description;
     }
-
+    
+    public function setDescription($description)
+    {
+        $this->description = $description;
+        return $this;
+    }
+    
     public function getStatus()
     {
         return $this->status;
+    }
+
+    public function setStatus($status)
+    {
+        $this->status = $status;
+        return $this;
     }
     
     public function getObjectId()
     {
         return $this->objectId;
+    }
+    
+    public function setObjectId($objectId)
+    {
+        $this->objectId = $objectId;
+        return $this;
     }
 }

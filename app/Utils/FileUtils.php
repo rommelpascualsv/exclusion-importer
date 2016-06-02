@@ -5,21 +5,40 @@ namespace App\Utils;
 class FileUtils
 {
     /**
-     * Compares the contents of two files to determine if they are equal or not
+     * Compares the contents of two files to determine if they are equal or not.
+     * 
      * @param string $file1 the path to the first file
      * @param string $file2 the path to the second file
      */  
     public static function contentEquals($file1, $file2)
     {
+        if ($file1 == null && $file2 != null) {
+            return false;
+        }
+        
+        if ($file1 != null && $file2 == null) {
+            return false;
+        }
+        
+        if ($file1 == null && $file2 == null) {
+            return true;
+        }
+        
         // Check if filesize is different
         if(filesize($file1) !== filesize($file2)) {
             return false;
+        }
+        
+        // For zip comparison, delegate to zipContentEquals
+        if (self::isZip($file1) && self::isZip($file2)) {
+            return self::zipContentEquals($file1, $file2);
         }
         
         $file1Resource = null;
         $file2Resource = null;
         
         try {
+                
             // Check if content is different
             $file1Resource = fopen($file1, 'rb');
             $file2Resource = fopen($file2, 'rb');
@@ -43,6 +62,53 @@ class FileUtils
         } finally {
             if ($file1Resource) fclose($file1Resource);
             if ($file2Resource) fclose($file2Resource);
+        }
+    }
+    
+    public static function zipContentEquals($file1, $file2)
+    {
+        $zip1 = null; 
+        $zip2 = null;
+
+        try {
+            
+            $zip1 = new \ZipArchive();
+            $res1 = $zip1->open($file1);
+            
+            $zip2 = new \ZipArchive();
+            $res2 = $zip2->open($file2);
+            
+            if (! $res1 || ! $res2) {
+                return false;
+            }
+            
+            // not the same number of files
+            if ($zip1->numFiles !== $zip2->numFiles) {
+                return false;
+            }
+            
+            // compare the file size and crc checksum of each file
+            for ($i = 0; $i < $zip1->numFiles; $i++) {
+                
+                $statIndex1 = $zip1->statIndex($i);
+                $statIndex2 = $zip2->statIndex($i);
+                // Compare file sizes
+                if ($statIndex1['size'] !== $statIndex2['size']) {
+                    return false;
+                }
+                //Compare crc
+                if ($statIndex1['crc'] !== $statIndex2['crc']) {
+                    return false;
+                }
+                
+            }
+            
+            return true;
+            
+        } finally {
+            
+            if ($zip1) $zip1->close();
+            if ($zip2) $zip2->close();
         }
     }
     
@@ -135,6 +201,18 @@ class FileUtils
             info('Encountered an error while trying to delete files in directory ' . $dir . ' : ' . $e->getMessage());
         }
     
+    }
+    
+    public static function isZip($file)
+    {
+        $res = null;
+        
+        try {
+            $res = zip_open($file);
+            return is_resource($res);
+        } finally {
+            if (is_resource($res)) zip_close($res);
+        }
     }
     
 }
