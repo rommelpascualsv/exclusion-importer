@@ -9,7 +9,6 @@ use App\Import\Lists\Mississippi;
 use App\Import\Lists\NewYork;
 use App\Import\Lists\Tennessee;
 use App\Import\Lists\UnSanctionsIndividuals;
-use App\Services\ExclusionListDownloader;
 use App\Services\ExclusionListHttpDownloader;
 
 /**
@@ -121,10 +120,14 @@ class ExclusionListHttpDownloaderTest extends \Codeception\TestCase\Test
     {
         $exclusionList = new Arizona();
     
+        $expected = $this->getExpectedFileNamesFor($exclusionList, 1);
+        
+        $this->deleteFiles($expected);
+        
         $files = $this->downloader->downloadFiles($exclusionList);
     
-        $this->assertNull($files);
-    
+        $this->verifyExpectedFilesExistThenDelete($expected, $files);        
+        
     }   
     
     public function testDownloadCrawlerBasedUri()
