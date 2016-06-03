@@ -16,7 +16,6 @@ use App\Repositories\ExclusionListFileRepository;
 use App\Repositories\ExclusionListRecordRepository;
 use App\Repositories\ExclusionListRepository;
 use App\Repositories\ExclusionListVersionRepository;
-use App\Repositories\GetActiveExclusionListsQuery;
 use App\Repositories\GetAllExclusionListsQuery;
 use App\Repositories\GetFilesForPrefixAndHashQuery;
 use App\Repositories\GetFilesForPrefixQuery;
@@ -40,54 +39,27 @@ class ImportFileService implements ImportFileServiceInterface
     private $exclusionListFileRepo;
     private $exclusionListRecordRepo;
     private $exclusionListVersionRepo;
-    private $getActiveExclusionListsQuery;
     private $getAllExclusionListsQuery;
     private $getFilesForPrefixAndHashQuery;
     private $getFilesForPrefixQuery;
     
-    public function __construct(ExclusionListHttpDownloader $exclusionListHttpDownloader = null, 
-            ExclusionListRepository $exclusionListRepo = null, 
-            ExclusionListFileRepository $exclusionListFilesRepo = null,
-            ExclusionListRecordRepository $exclusionListRecordRepo = null,
-            ExclusionListVersionRepository $exclusionListVersionRepo = null,
-            GetActiveExclusionListsQuery $getActiveExclusionListsQuery = null,
-            GetAllExclusionListsQuery $getAllExclusionListsQuery = null,
-            GetFilesForPrefixAndHashQuery $getFilesForPrefixAndHashQuery = null,
-            GetFilesForPrefixQuery $getFilesForPrefixQuery = null)
+    public function __construct(ExclusionListHttpDownloader $exclusionListHttpDownloader, 
+            ExclusionListRepository $exclusionListRepo, 
+            ExclusionListFileRepository $exclusionListFilesRepo,
+            ExclusionListRecordRepository $exclusionListRecordRepo,
+            ExclusionListVersionRepository $exclusionListVersionRepo,
+            GetAllExclusionListsQuery $getAllExclusionListsQuery,
+            GetFilesForPrefixAndHashQuery $getFilesForPrefixAndHashQuery,
+            GetFilesForPrefixQuery $getFilesForPrefixQuery)
     {
-        $this->exclusionListDownloader = $exclusionListHttpDownloader ? $exclusionListHttpDownloader : new ExclusionListHttpDownloader();
-        $this->exclusionListRepo = $exclusionListRepo ? $exclusionListRepo : new ExclusionListRepository();
-        $this->exclusionListFileRepo = $exclusionListFilesRepo ? $exclusionListFilesRepo : new ExclusionListFileRepository();
-        $this->exclusionListRecordRepo = $exclusionListRecordRepo ? $exclusionListRecordRepo : new ExclusionListRecordRepository();
-        $this->exclusionListVersionRepo = $exclusionListVersionRepo ? $exclusionListVersionRepo : new ExclusionListVersionRepository();
-        $this->getActiveExclusionListsQuery = $getActiveExclusionListsQuery ? $getActiveExclusionListsQuery : new GetActiveExclusionListsQuery(); 
-        $this->getAllExclusionListsQuery = $getAllExclusionListsQuery ? $getAllExclusionListsQuery : new GetAllExclusionListsQuery();
-        $this->getFilesForPrefixAndHashQuery = $getFilesForPrefixAndHashQuery ? $getFilesForPrefixAndHashQuery : new GetFilesForPrefixAndHashQuery();
-        $this->getFilesForPrefixQuery = $getFilesForPrefixQuery ? $getFilesForPrefixQuery : new GetFilesForPrefixQuery();
-    }
-    
-    /**
-     * Retrieves a list of active states to show in the import page.
-     *
-     * @return array
-     */ 
-    public function getExclusionList()
-    {
-        $activeExclusionLists = $this->getActiveExclusionListsQuery->execute();
-        
-        $collection = [];
-        
-        foreach ($activeExclusionLists as $activeExclusionList) {
-            
-            $prefix = $activeExclusionList->prefix;
-            
-            $latestRepoFile = $this->getLatestRepoFileFor($prefix);
-            
-            $activeExclusionList->update_required = ! $latestRepoFile || ! $this->isExclusionListUpToDate($prefix, $latestRepoFile->hash);
-            
-            $collection[$prefix] = json_decode(json_encode($activeExclusionList), true);
-        }
-        return $collection;
+        $this->exclusionListDownloader = $exclusionListHttpDownloader;
+        $this->exclusionListRepo = $exclusionListRepo;
+        $this->exclusionListFileRepo = $exclusionListFilesRepo;
+        $this->exclusionListRecordRepo = $exclusionListRecordRepo;
+        $this->exclusionListVersionRepo = $exclusionListVersionRepo;
+        $this->getAllExclusionListsQuery = $getAllExclusionListsQuery;
+        $this->getFilesForPrefixAndHashQuery = $getFilesForPrefixAndHashQuery;
+        $this->getFilesForPrefixQuery = $getFilesForPrefixQuery;
     }
     
     /**

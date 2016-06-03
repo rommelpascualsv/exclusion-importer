@@ -2,7 +2,6 @@
 
 namespace Test\Unit;
 
-use App\Import\Lists\OIG;
 use App\Import\Lists\Tennessee;
 use App\Services\ImportFileService;
 use App\Utils\FileUtils;
@@ -25,7 +24,6 @@ class ImportFileServiceTest extends TestCase
     private $exclusionListRecordRepo;
     private $exclusionListVersionRepo;
     
-    private $getActiveExclusionListsQuery;
     private $getAllExclusionListsQuery;
     private $getFilesForPrefixAndHashQuery;
     private $getFilesForPrefixQuery;
@@ -43,7 +41,6 @@ class ImportFileServiceTest extends TestCase
         $this->exclusionListRepo = Mockery::mock('App\Repositories\ExclusionListRepository')->makePartial();
         $this->exclusionListRecordRepo = Mockery::mock('App\Repositories\ExclusionListRecordRepository')->makePartial();
         $this->exclusionListVersionRepo = Mockery::mock('App\Repositories\ExclusionListVersionRepository')->makePartial();
-        $this->getActiveExclusionListsQuery = Mockery::mock('App\Repositories\GetActiveExclusionListsQuery');
         $this->getAllExclusionListsQuery = Mockery::mock('App\Repositories\GetAllExclusionListsQuery');
         $this->getFilesForPrefixAndHashQuery = Mockery::mock('App\Repositories\GetFilesForPrefixAndHashQuery');
         $this->getFilesForPrefixQuery = Mockery::mock('App\Repositories\GetFilesForPrefixQuery');
@@ -56,7 +53,6 @@ class ImportFileServiceTest extends TestCase
             $this->exclusionListFileRepo, 
             $this->exclusionListRecordRepo, 
             $this->exclusionListVersionRepo,
-            $this->getActiveExclusionListsQuery,
             $this->getAllExclusionListsQuery,
             $this->getFilesForPrefixAndHashQuery,
             $this->getFilesForPrefixQuery
@@ -72,42 +68,6 @@ class ImportFileServiceTest extends TestCase
        	Mockery::close();
     }
     
-    public function testGetExclusionListShouldReturnActiveExclusionLists()
-    {   
-        $this->getActiveExclusionListsQuery->shouldReceive('execute')->once()->withNoArgs()->andReturn([
-            (object)[
-                'id' => 1,
-                'prefix' => 'oig',
-                'accr' => 'Federal OIG',
-                'description' => 'Office of the Inspector General',
-                'import_url' => 'http://www.fedoig.com',
-                'is_auto_import' => 0,
-                'is_active' => 1
-            ]
-        ]);
-        
-        // Service should check check if list version is up-to-date to determine 'update_required' value
-        $this->getFilesForPrefixQuery->shouldReceive('execute')->once()->with('oig')->andReturnNull();
-        
-        $actual = $this->importFileService->getExclusionList();
-        
-        $expected = [
-            'oig' => [
-                'id' => 1,
-                'prefix' => 'oig',
-                'accr' => 'Federal OIG',
-                'description' => 'Office of the Inspector General',
-                'import_url' => 'http://www.fedoig.com',
-                'is_auto_import' => 0,
-                'is_active' => 1,
-                'update_required' => true
-            ]
-        ];
-        
-        $this->assertEquals($expected, $actual);
-        
-    }
-
     public function testImportFileShouldRespondWithErrorIfUrlIsEmpty()
     {
         $actual = $this->importFileService->importFile('', 'nyomig');
@@ -524,7 +484,6 @@ class ImportFileServiceTest extends TestCase
             $this->exclusionListFileRepo, 
             $this->exclusionListRecordRepo,
             $this->exclusionListVersionRepo,
-            $this->getActiveExclusionListsQuery,
             $this->getAllExclusionListsQuery,
             $this->getFilesForPrefixAndHashQuery,
             $this->getFilesForPrefixQuery
