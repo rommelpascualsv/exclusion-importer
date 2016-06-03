@@ -1,24 +1,12 @@
 <?php
 namespace App\Repositories;
 
-use App\Repositories\Query;
-
-class GetFilesForPrefixAndHashQuery implements Query
+class GetFilesForPrefixAndHashQuery
 {
-    private $prefix;
-    
-    private $hash;
-    
-    public function __construct($prefix, $hash)
-    {
-        $this->prefix = $prefix;
-        $this->hash = $hash;
-    }
-    
-    public function execute()
+    public function execute($prefix, $hash)
     {
         return app('db')->table('files')
-                        ->where(['state_prefix' => $this->prefix, 'hash' => $this->hash])
+                        ->where(['state_prefix' => $prefix, 'hash' => $hash])
                         ->get();
     }
 }

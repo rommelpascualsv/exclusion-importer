@@ -1,9 +1,7 @@
 <?php
 namespace App\Repositories;
 
-use App\Repositories\Query;
-
-class GetActiveExclusionListsQuery implements Query
+class GetActiveExclusionListsQuery
 {
     public function execute()
     {

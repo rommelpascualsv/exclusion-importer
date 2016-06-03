@@ -40,18 +40,30 @@ class ImportFileService implements ImportFileServiceInterface
     private $exclusionListFileRepo;
     private $exclusionListRecordRepo;
     private $exclusionListVersionRepo;
+    private $getActiveExclusionListsQuery;
+    private $getAllExclusionListsQuery;
+    private $getFilesForPrefixAndHashQuery;
+    private $getFilesForPrefixQuery;
     
     public function __construct(ExclusionListHttpDownloader $exclusionListHttpDownloader = null, 
             ExclusionListRepository $exclusionListRepo = null, 
             ExclusionListFileRepository $exclusionListFilesRepo = null,
             ExclusionListRecordRepository $exclusionListRecordRepo = null,
-            ExclusionListVersionRepository $exclusionListVersionRepo = null)
+            ExclusionListVersionRepository $exclusionListVersionRepo = null,
+            GetActiveExclusionListsQuery $getActiveExclusionListsQuery = null,
+            GetAllExclusionListsQuery $getAllExclusionListsQuery = null,
+            GetFilesForPrefixAndHashQuery $getFilesForPrefixAndHashQuery = null,
+            GetFilesForPrefixQuery $getFilesForPrefixQuery = null)
     {
         $this->exclusionListDownloader = $exclusionListHttpDownloader ? $exclusionListHttpDownloader : new ExclusionListHttpDownloader();
         $this->exclusionListRepo = $exclusionListRepo ? $exclusionListRepo : new ExclusionListRepository();
         $this->exclusionListFileRepo = $exclusionListFilesRepo ? $exclusionListFilesRepo : new ExclusionListFileRepository();
         $this->exclusionListRecordRepo = $exclusionListRecordRepo ? $exclusionListRecordRepo : new ExclusionListRecordRepository();
         $this->exclusionListVersionRepo = $exclusionListVersionRepo ? $exclusionListVersionRepo : new ExclusionListVersionRepository();
+        $this->getActiveExclusionListsQuery = $getActiveExclusionListsQuery ? $getActiveExclusionListsQuery : new GetActiveExclusionListsQuery(); 
+        $this->getAllExclusionListsQuery = $getAllExclusionListsQuery ? $getAllExclusionListsQuery : new GetAllExclusionListsQuery();
+        $this->getFilesForPrefixAndHashQuery = $getFilesForPrefixAndHashQuery ? $getFilesForPrefixAndHashQuery : new GetFilesForPrefixAndHashQuery();
+        $this->getFilesForPrefixQuery = $getFilesForPrefixQuery ? $getFilesForPrefixQuery : new GetFilesForPrefixQuery();
     }
     
     /**
@@ -61,7 +73,7 @@ class ImportFileService implements ImportFileServiceInterface
      */ 
     public function getExclusionList()
     {
-        $activeExclusionLists = (new GetActiveExclusionListsQuery())->execute();
+        $activeExclusionLists = $this->getActiveExclusionListsQuery->execute();
         
         $collection = [];
         
@@ -162,8 +174,8 @@ class ImportFileService implements ImportFileServiceInterface
      */
     public function refreshRecords()
     {
-        $exclusionLists = (new GetAllExclusionListsQuery())->execute();
-    
+        $exclusionLists = $this->getAllExclusionListsQuery->execute();
+
         foreach ($exclusionLists as $exclusionList) {
     
             $prefix = $exclusionList->prefix;
@@ -250,7 +262,7 @@ class ImportFileService implements ImportFileServiceInterface
     
     private function getLatestRepoFileFor($prefix)
     {
-        $files = (new GetFilesForPrefixQuery($prefix))->execute();
+        $files = $this->getFilesForPrefixQuery->execute($prefix);
         
         return $files ? $files[0] : null;
     }
@@ -445,6 +457,8 @@ class ImportFileService implements ImportFileServiceInterface
             
         } else {
             
+            $this->exclusionListFileRepo->update($record, ['date_last_downloaded' => $this->now()]);
+            
             info('Existing file hash found in files repository : ' . $hash);
         }
     
@@ -462,7 +476,7 @@ class ImportFileService implements ImportFileServiceInterface
             'hash' => $hash
         ];
         
-        $existing = (new GetFilesForPrefixAndHashQuery($prefix, $hash))->execute();
+        $existing = $this->getFilesForPrefixAndHashQuery->execute($prefix, $hash);
         
         if (! $existing) {
             throw new \Exception('Illegal state encountered : No existing record in files repository was found to update with file contents');

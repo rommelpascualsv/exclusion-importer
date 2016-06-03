@@ -30,6 +30,8 @@ class ImportFileServiceTest extends TestCase
     private $getFilesForPrefixAndHashQuery;
     private $getFilesForPrefixQuery;
     
+    private $listProcessorMock;
+    
     public function setUp()
     {
         parent::setUp();
@@ -41,19 +43,26 @@ class ImportFileServiceTest extends TestCase
         $this->exclusionListRepo = Mockery::mock('App\Repositories\ExclusionListRepository')->makePartial();
         $this->exclusionListRecordRepo = Mockery::mock('App\Repositories\ExclusionListRecordRepository')->makePartial();
         $this->exclusionListVersionRepo = Mockery::mock('App\Repositories\ExclusionListVersionRepository')->makePartial();
-
+        $this->getActiveExclusionListsQuery = Mockery::mock('App\Repositories\GetActiveExclusionListsQuery');
+        $this->getAllExclusionListsQuery = Mockery::mock('App\Repositories\GetAllExclusionListsQuery');
+        $this->getFilesForPrefixAndHashQuery = Mockery::mock('App\Repositories\GetFilesForPrefixAndHashQuery');
+        $this->getFilesForPrefixQuery = Mockery::mock('App\Repositories\GetFilesForPrefixQuery');
+        
+        $this->listProcessorMock = Mockery::mock('App\Import\Service\ListProcessor');
+        
         $this->importFileService = Mockery::mock('App\Services\ImportFileService', [
             $this->exclusionListDownloader, 
             $this->exclusionListRepo, 
             $this->exclusionListFileRepo, 
             $this->exclusionListRecordRepo, 
-            $this->exclusionListVersionRepo
+            $this->exclusionListVersionRepo,
+            $this->getActiveExclusionListsQuery,
+            $this->getAllExclusionListsQuery,
+            $this->getFilesForPrefixAndHashQuery,
+            $this->getFilesForPrefixQuery
         ])->makePartial();
         
-        $this->getActiveExclusionListsQuery = Mockery::mock('overload:App\Repositories\GetActiveExclusionListsQuery');
-        $this->getAllExclusionListsQuery = Mockery::mock('overload:App\Repositories\GetAllExclusionListsQuery');
-        $this->getFilesForPrefixAndHashQuery = Mockery::mock('overload:App\Repositories\GetFilesForPrefixAndHashQuery');
-        $this->getFilesForPrefixQuery = Mockery::mock('overload:App\Repositories\GetFilesForPrefixQuery');;
+        $this->importFileService->shouldAllowMockingProtectedMethods();
         
         $this->withoutEvents();
     }
@@ -65,7 +74,7 @@ class ImportFileServiceTest extends TestCase
     
     public function testGetExclusionListShouldReturnActiveExclusionLists()
     {   
-        $this->getActiveExclusionListsQuery->shouldReceive('execute')->once()->andReturn([
+        $this->getActiveExclusionListsQuery->shouldReceive('execute')->once()->withNoArgs()->andReturn([
             (object)[
                 'id' => 1,
                 'prefix' => 'oig',
@@ -77,7 +86,8 @@ class ImportFileServiceTest extends TestCase
             ]
         ]);
         
-        $this->getFilesForPrefixQuery->shouldReceive('execute')->once()->andReturnNull();
+        // Service should check check if list version is up-to-date to determine 'update_required' value
+        $this->getFilesForPrefixQuery->shouldReceive('execute')->once()->with('oig')->andReturnNull();
         
         $actual = $this->importFileService->getExclusionList();
         
@@ -119,8 +129,8 @@ class ImportFileServiceTest extends TestCase
         $this->exclusionListFileRepo->shouldNotReceive('update');
     
         // Service should not insert any records
-        $listProcessorMock = Mockery::mock('overload:App\Import\Service\ListProcessor');
-        $listProcessorMock->shouldNotReceive('insertRecords');
+        $this->importFileService->shouldReceive('createListProcessor')->andReturn($this->listProcessorMock);
+        $this->listProcessorMock->shouldNotReceive('insertRecords');
     
         $actual = $this->importFileService->importFile('http://www.tn.gov/assets/entities/tenncare/attachments/terminatedproviderlist.pdf', 'tn1');
 
@@ -200,10 +210,12 @@ class ImportFileServiceTest extends TestCase
             return $exclusionList instanceof Tennessee;
         })->andReturn([$exclusionListTestFile]);
     
+        $hash = hash_file('sha256', $exclusionListTestFile);
+        
         // Service should check if hash already exists for file in files repository
         $this->exclusionListFileRepo->shouldReceive('contains')->once()->with([
             'state_prefix' => 'tn1',
-            'hash' => hash_file('sha256', $exclusionListTestFile),
+            'hash' => $hash,
             'img_type' => 'pdf'
         ])->andReturn(true);
     
@@ -211,16 +223,16 @@ class ImportFileServiceTest extends TestCase
         $this->exclusionListFileRepo->shouldNotReceive('create');
         
         // Service should fetch the files record to update with the file contents
-        $this->getFilesForPrefixAndHashQuery->shouldReceive('execute')->once()->andReturn([(object)[
+        $this->getFilesForPrefixAndHashQuery->shouldReceive('execute')->once()->with('tn1', $hash)->andReturn([(object)[
             'state_prefix' => 'tn1',
             'img_data' => file_get_contents('tests/unit/files/tn1-0-dummy.pdf'), //Not the same as the downloaded - should be updated
-            'hash' => hash_file('sha256', $exclusionListTestFile),
+            'hash' => $hash,
             'img_type' => 'pdf'
         ]]);
         
         $this->exclusionListFileRepo->shouldReceive('update')->once()->with([
             'state_prefix' => 'tn1',
-            'hash' => hash_file('sha256', $exclusionListTestFile)
+            'hash' => $hash
         ],[
             'img_data' => file_get_contents($exclusionListTestFile)
         ]);
@@ -241,26 +253,31 @@ class ImportFileServiceTest extends TestCase
             return $exclusionList instanceof Tennessee;
         })->andReturn([$exclusionListTestFile]);
     
+        $hash = hash_file('sha256', $exclusionListTestFile);
+        
         // Service should check if hash already exists for file in files repository
         $this->exclusionListFileRepo->shouldReceive('contains')->once()->with([
             'state_prefix' => 'tn1',
-            'hash' => hash_file('sha256', $exclusionListTestFile),
+            'hash' => $hash,
             'img_type' => 'pdf'
         ])->andReturn(true);
     
         // Service should not add hash to files repository since it already exists
         $this->exclusionListFileRepo->shouldNotReceive('create');
+        
+        // Service should update last_downloaded_date of file
+        $this->exclusionListFileRepo->shouldReceive('update')->once()->withArgs(function($record, $data) use ($hash) {
+            return $record == ['state_prefix' => 'tn1', 'hash' => $hash, 'img_type' => 'pdf'] && $data['date_last_downloaded'];    
+        });
     
         // Service should fetch the files record to update with the file contents
-        $this->getFilesForPrefixAndHashQuery->shouldReceive('execute')->once()->andReturn([(object)[
+        $this->getFilesForPrefixAndHashQuery->shouldReceive('execute')->once()->with('tn1', $hash)->andReturn([(object)[
             'state_prefix' => 'tn1',
             'img_data' => file_get_contents($exclusionListTestFile), //Same as downloaded - should not be updated
-            'hash' => hash_file('sha256', $exclusionListTestFile),
+            'hash' => $hash,
             'img_type' => 'pdf'
         ]]);
     
-        $this->exclusionListFileRepo->shouldNotReceive('update');
-        
         $this->importFileService->importFile('http://www.tn.gov/assets/entities/tenncare/attachments/terminatedproviderlist.pdf', 'tn1');
     
     }    
@@ -286,41 +303,41 @@ class ImportFileServiceTest extends TestCase
             })->andReturn([$exclusionListTestFile1, $exclusionListTestFile2]);
             
             
-            $zipHash = hash_file('sha256', $exclusionListTestFileZip);
+            $hash = hash_file('sha256', $exclusionListTestFileZip);
             
             // For zip files, service should fetch the files record and check if the file content is the same as the generated zip file
             $this->getFilesForPrefixQuery->shouldReceive('execute')->once()->andReturn([(object)[
                 'state_prefix' => 'tn1',
                 'img_data' => null, //Not the same as downloaded - should be updated
-                'hash' => $zipHash,
+                'hash' => $hash,
                 'img_type' => 'zip'
             ]]);
             
             // Service should check if hash already exists for file in files repository
             $this->exclusionListFileRepo->shouldReceive('contains')->once()->with([
                 'state_prefix' => 'tn1',
-                'hash' => $zipHash,
+                'hash' => $hash,
                 'img_type' => 'zip'
             ])->andReturn(false);
             
             // Hash for zip file should be inserted since it does not yet exist
-            $this->exclusionListFileRepo->shouldReceive('create')->once()->withArgs(function($args) use ($zipHash){
+            $this->exclusionListFileRepo->shouldReceive('create')->once()->withArgs(function($args) use ($hash){
                 return $args['state_prefix'] === 'tn1' &&
-                $args['hash'] === $zipHash &&
+                $args['hash'] === $hash &&
                 $args['date_last_downloaded'] !== null;
             });
 
             // Service should fetch the files record matching the prefix and the hash to update with the file contents
-            $this->getFilesForPrefixAndHashQuery->shouldReceive('execute')->once()->andReturn([(object)[
+            $this->getFilesForPrefixAndHashQuery->shouldReceive('execute')->once()->with('tn1', $hash)->andReturn([(object)[
                 'state_prefix' => 'tn1',
                 'img_data' => null, //Not the same as downloaded - should be updated
-                'hash' => $zipHash,
+                'hash' => $hash,
                 'img_type' => 'zip'
             ]]);
         
             $this->exclusionListFileRepo->shouldReceive('update')->once()->with([
                 'state_prefix' => 'tn1',
-                'hash' => $zipHash,
+                'hash' => $hash,
             ],[
                 'img_data' => file_get_contents($exclusionListTestFileZip)
             ]);
@@ -352,36 +369,39 @@ class ImportFileServiceTest extends TestCase
                 return $exclusionList instanceof Tennessee;
             })->andReturn([$exclusionListTestFile1, $exclusionListTestFile2]);
             
-            $zipHash = hash_file('sha256', $exclusionListTestFileZip);
+            $hash = hash_file('sha256', $exclusionListTestFileZip);
             
             // For zip files, service should fetch the files record and check if the file content is the same as the generated zip file
             $this->getFilesForPrefixQuery->shouldReceive('execute')->once()->andReturn([(object)[
                 'state_prefix' => 'tn1',
                 'img_data' => file_get_contents($exclusionListTestFileZip), //same as the downloaded content, hash should not be updated
-                'hash' => $zipHash,
+                'hash' => $hash,
                 'img_type' => 'zip'
             ]]);
             
             // Service should check if hash already exists for file in files repository
             $this->exclusionListFileRepo->shouldReceive('contains')->once()->with([
                 'state_prefix' => 'tn1',
-                'hash' => $zipHash,
+                'hash' => $hash,
                 'img_type' => 'zip'
             ])->andReturn(true);
             
-            // Hash for zip file should be created since it already exists
+            // Hash for zip file should not be created since it already exists
             $this->exclusionListFileRepo->shouldNotReceive('create');
             
+            // File content in repository should not be updated since it is already up-to-date
+            $this->exclusionListFileRepo->shouldReceive('update')->once()->withArgs(function($record, $data) use ($hash) {
+                return $record == ['state_prefix' => 'tn1', 'hash' => $hash, 'img_type' => 'zip'] && $data['date_last_downloaded'];
+            });
+            
             // Service should fetch the files matching the prefix and hash to update with the file contents
-            $this->getFilesForPrefixAndHashQuery->shouldReceive('execute')->once()->andReturn([(object)[
+            $this->getFilesForPrefixAndHashQuery->shouldReceive('execute')->once()->with('tn1', $hash)->andReturn([(object)[
                 'state_prefix' => 'tn1',
                 'img_data' => file_get_contents($exclusionListTestFileZip), //same as the downloaded content, hash should not be updated
-                'hash' => $zipHash,
+                'hash' => $hash,
                 'img_type' => 'zip'
             ]]);
             
-            // File content in repository should not be updated since it is already up-to-date
-            $this->exclusionListFileRepo->shouldNotReceive('update');
         
             $this->importFileService->importFile('http://www.tn.gov/assets/entities/tenncare/attachments/terminatedproviderlist.pdf', 'tn1');
             
@@ -413,7 +433,7 @@ class ImportFileServiceTest extends TestCase
         ])->andReturn(true);
     
         // Service should fetch the files record to update with the file contents
-        $this->getFilesForPrefixAndHashQuery->shouldReceive('execute')->once()->andReturn([(object)[
+        $this->getFilesForPrefixAndHashQuery->shouldReceive('execute')->once()->with('tn1', $hash)->andReturn([(object)[
             'state_prefix' => 'tn1',
             'img_data' => file_get_contents($exclusionListTestFile), //Same as downloaded - should not be updated
             'hash' => $hash,
@@ -430,8 +450,8 @@ class ImportFileServiceTest extends TestCase
         $this->exclusionListRecordRepo->shouldReceive('size')->with('tn1')->andReturn(100);
         
         // Service should not do any list processing since the last imported hash is the same as the hash of the downloaded file
-        $listProcessorMock = Mockery::mock('overload:App\Import\Service\ListProcessor');
-        $listProcessorMock->shouldNotReceive('insertRecords');
+        $this->importFileService->shouldReceive('createListProcessor')->andReturn($this->listProcessorMock);
+        $this->listProcessorMock->shouldNotReceive('insertRecords');
         
         // Service should not update exclusion list version since it is already up-to-date
         // Service should check if the if the last imported hash is equal to the downloaded file hash
@@ -467,7 +487,7 @@ class ImportFileServiceTest extends TestCase
         ])->andReturn(true);
     
         // Service should fetch the files record to update with the file contents
-        $this->getFilesForPrefixAndHashQuery->shouldReceive('execute')->once()->andReturn([(object)[
+        $this->getFilesForPrefixAndHashQuery->shouldReceive('execute')->once()->with('tn1', $hash)->andReturn([(object)[
             'state_prefix' => 'tn1',
             'img_data' => file_get_contents($exclusionListTestFile), //Same as downloaded - should not be updated
             'hash' => $hash,
@@ -480,9 +500,9 @@ class ImportFileServiceTest extends TestCase
             'last_imported_hash' => 'some_old_hash' //Last imported hash is not equal to file hash - service should import new files
         ]]);
     
-        // Service should not do any list processing since the last imported hash is the same as the hash of the downloaded file
-        $listProcessorMock = Mockery::mock('overload:App\Import\Service\ListProcessor');
-        $listProcessorMock->shouldReceive('insertRecords')->once();
+        // Service should process list records since the last imported hash is not the same as the hash of the downloaded file
+        $this->importFileService->shouldReceive('createListProcessor')->andReturn($this->listProcessorMock);
+        $this->listProcessorMock->shouldReceive('insertRecords')->once();
     
         $this->exclusionListVersionRepo->shouldReceive('createOrUpdate')->once()->withArgs(function($prefix, $data) use ($hash) {
             return $prefix === 'tn1' && $data['last_imported_hash'] === $hash && $data['last_imported_date']; 
@@ -503,10 +523,12 @@ class ImportFileServiceTest extends TestCase
             $this->exclusionListRepo, 
             $this->exclusionListFileRepo, 
             $this->exclusionListRecordRepo,
-            $this->exclusionListVersionRepo
+            $this->exclusionListVersionRepo,
+            $this->getActiveExclusionListsQuery,
+            $this->getAllExclusionListsQuery,
+            $this->getFilesForPrefixAndHashQuery,
+            $this->getFilesForPrefixQuery
         ])->makePartial();
-        
-        $importFileService->shouldAllowMockingProtectedMethods();
         
         // All exclusion lists should be queried
         $this->getAllExclusionListsQuery->shouldReceive('execute')->once()->andReturn([
@@ -596,7 +618,7 @@ class ImportFileServiceTest extends TestCase
         });
         
         // Service should fetch the files record to update with the file contents
-        $this->getFilesForPrefixAndHashQuery->shouldReceive('execute')->once()->andReturn([(object)[
+        $this->getFilesForPrefixAndHashQuery->shouldReceive('execute')->once()->with('tn1',$hash)->andReturn([(object)[
             'state_prefix' => 'tn1',
             'img_data' => file_get_contents('tests/unit/files/tn1-0-dummy.pdf'), //Not the same as the downloaded - should be updated
             'hash' => $hash,
@@ -618,7 +640,7 @@ class ImportFileServiceTest extends TestCase
         $exclusionListTestFile = base_path('tests/unit/files/tn1-0.pdf');
     
         // All exclusion lists should be queried
-        $this->getAllExclusionListsQuery->shouldReceive('execute')->andReturn([
+        $this->getAllExclusionListsQuery->shouldReceive('execute')->once()->andReturn([
             (object)[
                 'id' => 1,
                 'prefix' => 'tn1',
@@ -650,21 +672,28 @@ class ImportFileServiceTest extends TestCase
             return $exclusionList instanceof Tennessee;
         })->andReturn([$exclusionListTestFile]);
     
+        $hash = hash_file('sha256', $exclusionListTestFile);
+        
         // Service should check if hash already exists for file in files repository
         $this->exclusionListFileRepo->shouldReceive('contains')->once()->with([
             'state_prefix' => 'tn1',
-            'hash' => hash_file('sha256', $exclusionListTestFile),
+            'hash' => $hash,
             'img_type' => 'pdf'
         ])->andReturn(true);
     
         // Service should not add hash to files repository since it already exists
         $this->exclusionListFileRepo->shouldNotReceive('create');
         
+        // Service should update date_last_downloaded in files
+        $this->exclusionListFileRepo->shouldReceive('update')->once()->withArgs(function($record, $data) use ($hash){
+            return $record == ['state_prefix' => 'tn1', 'hash' => $hash, 'img_type' => 'pdf'] && $data['date_last_downloaded'];
+        });
+        
         // Service should fetch the files record to update with the file contents
-        $this->getFilesForPrefixAndHashQuery->shouldReceive('execute')->once()->andReturn([(object)[
+        $this->getFilesForPrefixAndHashQuery->shouldReceive('execute')->once()->with('tn1', $hash)->andReturn([(object)[
             'state_prefix' => 'tn1',
             'img_data' => file_get_contents($exclusionListTestFile), //Same as the downloaded content, no need to update
-            'hash' => hash_file('sha256', $exclusionListTestFile),
+            'hash' => $hash,
             'img_type' => 'pdf'
         ]]);
         
@@ -676,7 +705,7 @@ class ImportFileServiceTest extends TestCase
     public function testRefreshRecordsShouldSkipProcessingOfNonAutoImportListsWithNonDownloadableContent()
     {
         // All exclusion lists should be queried
-        $this->getAllExclusionListsQuery->shouldReceive('execute')->andReturn([
+        $this->getAllExclusionListsQuery->shouldReceive('execute')->once()->andReturn([
             (object)[
                 'id' => 50,
                 'prefix' => 'healthmil',
