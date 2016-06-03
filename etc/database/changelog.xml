@@ -8,7 +8,7 @@
                  path="./sql/exclusion_lists_staging.sql"
                  relativeToChangelogFile="true"/>
     </changeSet>
-    <!-- 
+    <!--
     <changeSet author="sv" id="1456985528119-324" context="test">
         <sqlFile encoding="utf8"
                  path="./sql/001_insert_files.sql"
