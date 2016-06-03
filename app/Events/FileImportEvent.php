@@ -5,10 +5,10 @@ use App\Events\Event;
 
 abstract class FileImportEvent extends Event
 {
-    const EVENTTYPE_FILE_DOWNLOAD = 'D';
-    const EVENTTYPE_FILE_UPDATE   = 'U';
-    const EVENTTYPE_FILE_PARSE    = 'P';
-    const EVENTTYPE_SAVE_RECORDS  = 'R'; 
+    const EVENTTYPE_FILE_DOWNLOAD = 'file.download';
+    const EVENTTYPE_FILE_UPDATE   = 'file.update';
+    const EVENTTYPE_FILE_PARSE    = 'file.parse';
+    const EVENTTYPE_SAVE_RECORDS  = 'records.save'; 
     
     const EVENTSTATUS_SUCCESS = '1';
     const EVENTSTATUS_FAIL    = '0';

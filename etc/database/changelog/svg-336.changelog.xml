@@ -53,7 +53,7 @@
             <column name="timestamp" type="TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
-            <column name="event_type" type="CHAR">
+            <column name="event_type" type="VARCHAR(25)">
                 <constraints nullable="false"/>
             </column>
             <column name="description" type="VARCHAR(300)" />
