@@ -8,6 +8,7 @@
                  path="./sql/exclusion_lists_staging.sql"
                  relativeToChangelogFile="true"/>
     </changeSet>
+    <!-- 
     <changeSet author="sv" id="1456985528119-324" context="test">
         <sqlFile encoding="utf8"
                  path="./sql/001_insert_files.sql"
@@ -16,6 +17,7 @@
             delete from files;
         </rollback>
     </changeSet>
+     -->
     <changeSet author="sv" id="1456985528119-325" context="prod">
         <sqlFile encoding="utf8"
                  path="./sql/002_insert_exclusion_lists.sql"
