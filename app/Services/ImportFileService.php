@@ -142,7 +142,7 @@ class ImportFileService implements ImportFileServiceInterface
      * Refreshes the records whenever there are changes found in the import file.
      *
      * {@inheritDoc}
-     * @see \App\Services\Contracts\FileService::refreshRecords()
+     * @see \App\Services\Contracts\ImportFileServiceInterface::refreshRecords()
      */
     public function refreshRecords()
     {
@@ -215,8 +215,9 @@ class ImportFileService implements ImportFileServiceInterface
 
     /**
      * Retrieves the corresponding list processor based on the passed object.
-     * @param object $listObject the exclusion list object
-     * @return object the list processor object
+     *
+     * @param ExclusionList $listObject the exclusion list object
+     * @return ListProcessor the list processor object
      */
     protected function createListProcessor(ExclusionList $listObject)
     {
@@ -227,7 +228,6 @@ class ImportFileService implements ImportFileServiceInterface
      * Returns the corresponding exclusion list object for a given state prefix.
      *
      * @param string $listPrefix the state prefix
-     *
      * @return \App\Import\Lists\ExclusionList The state-specific exclusion list object
      */
     protected function createExclusionList($listPrefix)
