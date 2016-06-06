@@ -10,7 +10,7 @@ class FileImportEventPersister extends Listener
     
     public function __construct(FileImportEventRepository $eventRepo)
     {
-        $this->eventRepo = $eventRepo ? $eventRepo : new FileImportEventRepository();
+        $this->eventRepo = $eventRepo;
     }
     
     public function handle(FileImportEvent $event)
