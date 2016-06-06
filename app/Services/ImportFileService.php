@@ -64,9 +64,8 @@ class ImportFileService implements ImportFileServiceInterface
     
     /**
      * Imports the downloaded file to database
-     * @param $url The url of the exclusion list to import
-     * @param $prefix The state prefix
-     * @param $shouldSaveFile boolean to determine if the record needs to be saved in files table
+     * @param string $url The url of the exclusion list to import
+     * @param string $prefix The state prefix
      *
      * @return object The object containing the result of the operation
      */
@@ -229,7 +228,7 @@ class ImportFileService implements ImportFileServiceInterface
      *
      * @param string $listPrefix the state prefix
      *
-     * @return object The state-specific exclusion list object
+     * @return \App\Import\Lists\ExclusionList The state-specific exclusion list object
      */
     protected function createExclusionList($listPrefix)
     {
@@ -249,7 +248,7 @@ class ImportFileService implements ImportFileServiceInterface
      *
      * @param ExclusionList $exclusionList
      * @param string $url the url to update to
-     * @param boolean skipRepoUpdate true to skip updating the exclusion_lists
+     * @param boolean $skipRepoUpdate true to skip updating the exclusion_lists
      * table with the url, defaults to false
      */
     private function updateUrl(ExclusionList $exclusionList, $url, $skipRepoUpdate = false)
@@ -275,14 +274,15 @@ class ImportFileService implements ImportFileServiceInterface
     {
         return $this->exclusionListDownloader->supports($exclusionList->type);
     }
-    
+
     /**
      * Downloads the exclusion list files from the sources indicated in $exclusionList->uri
-     * to a local folder. Returns an array containing the file paths to the downloaded files, 
-     * null if there are no downloaded files, or false if an error occurs while 
+     * to a local folder. Returns an array containing the file paths to the downloaded files,
+     * null if there are no downloaded files, or false if an error occurs while
      * trying to download the files
      * @param ExclusionList $exclusionList
      * @return mixed array/boolean
+     * @throws \Exception
      */
     private function downloadExclusionListFiles(ExclusionList $exclusionList)
     {
@@ -311,7 +311,10 @@ class ImportFileService implements ImportFileServiceInterface
     /**
      * Updates the files repository with the latest file content and its corresponding
      * hash, if applicable
-     * @param exclusionListFiles
+     * @param $exclusionListFiles
+     * @param $prefix
+     * @return null|string
+     * @throws \Exception
      */
     private function updateFiles($exclusionListFiles, $prefix)
     {
@@ -387,14 +390,15 @@ class ImportFileService implements ImportFileServiceInterface
         return $result;       
         
     }
-    
+
     /**
      * Creates a hash of the file and saves it in the files repository
-     * 
+     *
      * @param string $file the path to the file whose hash will be generated and
      * saved in the file repository
+     * @param string $fileType
      * @param string $prefix the exclusion list prefix
-     * @throws Exception
+     * @return null|string
      */
     private function createAndSaveFileHash($file, $fileType, $prefix)
     {
