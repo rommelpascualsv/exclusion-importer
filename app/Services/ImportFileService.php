@@ -9,6 +9,7 @@ use App\Events\FileUpdateFailed;
 use App\Events\FileUpdateSucceeded;
 use App\Events\SaveRecordsFailed;
 use App\Events\SaveRecordsSucceeded;
+use App\Exceptions\LoggablePDOException;
 use App\Import\Lists\ExclusionList;
 use App\Import\Service\Exclusions\ListFactory;
 use App\Import\Service\ListProcessor;
@@ -21,7 +22,6 @@ use App\Repositories\GetFilesForPrefixAndHashQuery;
 use App\Repositories\GetFilesForPrefixQuery;
 use App\Response\JsonResponse;
 use App\Services\Contracts\ImportFileServiceInterface;
-use App\Utils\ExceptionUtils;
 use App\Utils\FileUtils;
 
 /**
@@ -124,13 +124,14 @@ class ImportFileService implements ImportFileServiceInterface
             
             return $this->createResponse('', true);
             
+        } catch (\PDOException $e) {
+            
+            // Wrap in a LoggablePDOException to avoid having binary data messing up the JSON serialization of the error message
+            return $this->onFileImportException($prefix, new LoggablePDOException($e));
+            
         } catch (\Exception $e) {
             
-            info('Encountered an error while trying to import exclusion list for ' . $prefix . ' : ' . $e->getMessage());
-
-            $errorMessage = $this->getErrorMessageFrom($e);
-                        
-            return $this->createResponse($errorMessage, false);
+            return $this->onFileImportException($prefix, $e);
             
         } finally {
             
@@ -159,10 +160,12 @@ class ImportFileService implements ImportFileServiceInterface
             try {
     
                 info('Refreshing records for ' . $prefix);
-               
+                
+                // Creating an instance of an ExclusionList here is needed so lists whose URIs 
+                // are updated in the constructor (i.e. via Crawlers) can update their uri field
                 $exclusionList = $this->createExclusionList($prefix);
                 
-                $this->updateUrl($exclusionList, $importUrl, true); //So that those with auto-generated URIs have a chance to crawl for their URIs
+                $this->updateUrl($exclusionList, $importUrl, true); 
                 
                 $importUrl = trim($exclusionList->uri);
     
@@ -196,19 +199,21 @@ class ImportFileService implements ImportFileServiceInterface
                     
                 }
     
+            } catch (\PDOException $e) {
+                
+                $this->onRefreshRecordsException($prefix, $importUrl, new LoggablePDOException($e));
+            
             } catch (\Exception $e) {
 
-                $errorMessage = 'An error occurred while trying to refresh ' . $prefix . ' with url ' . $importUrl . ' : ' . $e->getMessage();
-                error_log($errorMessage);                
-                info($errorMessage);
+                $this->onRefreshRecordsException($prefix, $importUrl, $e);
     
             } finally {
 
                 FileUtils::deleteIfInDir($this->exclusionListDownloader->getDownloadDirectory(), $exclusionListFiles);
             }
         }
-    }    
-    
+    }
+
     /**
      * Retrieves the corresponding list processor based on the passed object.
      * @param object $listObject the exclusion list object
@@ -287,18 +292,22 @@ class ImportFileService implements ImportFileServiceInterface
             
             $files = $this->exclusionListDownloader->downloadFiles($exclusionList);
             
-            event('file.download.succeeded', (new FileDownloadSucceeded())->setObjectId($prefix));
+            $this->onFileDownloadSucceeded($prefix);
             
             return $files;
             
+        } catch (\PDOException $e) {
+            
+            $this->onFileDownloadFailed($prefix, new LoggablePDOException($e));
+            throw $e;
+            
         } catch (\Exception $e) {
             
-            event('file.download.failed', (new FileDownloadFailed())->setObjectId($prefix)->setDescription('Failed to download file : ' . $this->getErrorMessageFrom($e)));
-            
+            $this->onFileDownloadFailed($prefix, $e);
             throw $e;           
         }
     }
-    
+
     /**
      * Updates the files repository with the latest file content and its corresponding
      * hash, if applicable
@@ -326,17 +335,22 @@ class ImportFileService implements ImportFileServiceInterface
             
             return $hash;
     
+        } catch (\PDOException $e) {
+            
+            $this->onUpdateFileFailed($prefix, new LoggablePDOException($e));
+            throw $e;
+            
         } catch(\Exception $e) {
 
-            event('file.update.failed', (new FileUpdateFailed())->setObjectId($prefix)->setDescription('Failed to update file : ' . $this->getErrorMessageFrom($e)));
+            $this->onUpdateFileFailed($prefix, $e);
             throw $e;
             
         } finally {
     
             FileUtils::deleteIfInDir(sys_get_temp_dir(), $versionFile);
         }
-    }    
-    
+    }
+
     /**
      * Generates a single zip archive of the files contained by $exclusionListFiles
      * if there are multiple files specified by $exclusionListFiles and returns
@@ -460,17 +474,17 @@ class ImportFileService implements ImportFileServiceInterface
             
             $this->exclusionListFileRepo->update($record, ['img_data' => file_get_contents($file)]);
             
-            event('file.update.successful', (new FileUpdateSucceeded())->setObjectId($prefix));
-            
+            $this->onFileUpdateSucceeded($prefix);
+
         } else {
             
             info ('Last saved file is already up-to-date for hash : ' . $hash);
             
-            event('file.update.successful', (new FileUpdateSucceeded())->setObjectId($prefix)->setDescription('Last saved file is already up-to-date'));
+            $this->onFileUpdateSucceeded($prefix, 'Last saved file is already up-to-date');
         }
 
     }
-    
+
     private function parseRecords(ExclusionList $exclusionList)
     {
         $prefix = $exclusionList->dbPrefix;
@@ -479,11 +493,16 @@ class ImportFileService implements ImportFileServiceInterface
             
             $exclusionList->retrieveData();
             
-            event('file.parse.succeeded', (new FileParseSucceeded())->setObjectId($prefix));
+            $this->onFileParseSucceeded($prefix);
+            
+        } catch (\PDOException $e) {
+            
+            $this->onFileParseFailed($prefix, new LoggablePDOException($e));
+            throw $e;
             
         } catch (\Exception $e) {
             
-            event('file.parse.failed', (new FileParseFailed())->setObjectId($prefix)->setDescription('Failed to parse file content : ' . $this->getErrorMessageFrom($e)));
+            $this->onFileParseFailed($prefix, $e);
             throw $e;
         }
     }
@@ -496,15 +515,20 @@ class ImportFileService implements ImportFileServiceInterface
             
             $this->createListProcessor($exclusionList)->insertRecords();
             
-            event('file.saverecords.succeeded', (new SaveRecordsSucceeded())->setObjectId($prefix));
+            $this->onRecordsSaveSucceeded($prefix);
+            
+        } catch (\PDOException $e) {
+            
+            $this->onRecordsSaveFailed($prefix, new LoggablePDOException($e));
+            throw $e;
             
         } catch (\Exception $e) {
             
-            event('file.saverecords.failed', (new SaveRecordsFailed())->setObjectId($prefix)->setDescription('Failed to save records : ' . $this->getErrorMessageFrom($e)));
+            $this->onRecordsSaveFailed($prefix, $e);
             throw $e;
         }
-    }    
-    
+    }
+
     /**
      * Compares $content with the contents of $file
      * @param string $content the string content to compare with the contents of
@@ -554,8 +578,63 @@ class ImportFileService implements ImportFileServiceInterface
         return date('Y-m-d H:i:s');        
     }
     
-    private function getErrorMessageFrom(\Exception $e)
+    private function onFileDownloadSucceeded($prefix)
     {
-        return $e instanceof \PDOException ? ExceptionUtils::getJsonSerializableErrorMessage($e) : $e->getMessage();
+        event('file.download.succeeded', (new FileDownloadSucceeded())->setObjectId($prefix));
     }
+    
+    private function onFileDownloadFailed($prefix, \Exception $e)
+    {
+        event('file.download.failed', (new FileDownloadFailed())->setObjectId($prefix)->setDescription('Failed to download file : ' . $e->getMessage()));
+    }
+    
+    private function onFileUpdateSucceeded($prefix, $description = null)
+    {
+        $eventPayload = (new FileUpdateSucceeded())->setObjectId($prefix);
+        
+        if ($description) {
+            $eventPayload->setDescription($description);
+        }
+        
+        event('file.update.succeeded', $eventPayload);
+    }
+    
+    private function onUpdateFileFailed($prefix, \Exception $e)
+    {
+        event('file.update.failed', (new FileUpdateFailed())->setObjectId($prefix)->setDescription('Failed to update file : ' . $e->getMessage()));
+    }
+    
+    private function onFileParseSucceeded($prefix)
+    {
+        event('file.parse.succeeded', (new FileParseSucceeded())->setObjectId($prefix));
+    }
+    
+    private function onFileParseFailed($prefix, \Exception $e)
+    {
+        event('file.parse.failed', (new FileParseFailed())->setObjectId($prefix)->setDescription('Failed to parse file content : ' . $e->getMessage()));
+    }
+    
+    private function onRecordsSaveSucceeded($prefix)
+    {
+        event('file.saverecords.succeeded', (new SaveRecordsSucceeded())->setObjectId($prefix));
+    }
+    
+    private function onRecordsSaveFailed($prefix, \Exception $e)
+    {
+        event('file.saverecords.failed', (new SaveRecordsFailed())->setObjectId($prefix)->setDescription('Failed to save records : ' . $e->getMessage()));
+    }
+    
+    private function onFileImportException($prefix, $e)
+    {
+        info('An error occurred while trying to import exclusion list for ' . $prefix . ' : ' . $e->getMessage());
+        return $this->createResponse($e->getMessage(), false);
+    }
+    
+    private function onRefreshRecordsException($prefix, $importUrl, $e)
+    {
+        $errorMessage = 'An error occurred while trying to refresh ' . $prefix . ' with url ' . $importUrl . ' : ' . $e->getMessage();
+        error_log($errorMessage);
+        info($errorMessage);
+    }    
+    
 }
