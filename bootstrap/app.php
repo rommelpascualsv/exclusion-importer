@@ -23,6 +23,14 @@ $app = new Laravel\Lumen\Application(
 
 // $app->withEloquent();
 
+// Expose error-level logging method
+if (! function_exists('error')) {
+    function error($message, $context = [])
+    {
+        return app('Psr\Log\LoggerInterface')->error($message, $context);
+    }
+}
+
 /*
 |--------------------------------------------------------------------------
 | Register Container Bindings

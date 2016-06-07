@@ -36,9 +36,7 @@ class ExclusionListRepository implements Repository
      */
     public function update($prefix, $data) 
     {
-        $result = app('db')->table('exclusion_lists')->where('prefix', $prefix)->update($data);
-        info('Updated ' . $result . ' rows for ' . $prefix);
-        return $result;
+        return app('db')->table('exclusion_lists')->where('prefix', $prefix)->update($data);
     }
     
     /**

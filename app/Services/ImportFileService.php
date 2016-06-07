@@ -472,7 +472,7 @@ class ImportFileService implements ImportFileServiceInterface
 
         } else {
             
-            info ('Last saved file is already up-to-date for hash : ' . $hash);
+            info('Last saved file is already up-to-date for hash : ' . $hash);
             
             $this->onFileUpdateSucceeded($prefix, 'Last saved file is already up-to-date');
         }
@@ -620,15 +620,13 @@ class ImportFileService implements ImportFileServiceInterface
     
     private function onFileImportException($prefix, $e)
     {
-        info('An error occurred while trying to import exclusion list for ' . $prefix . ' : ' . $e->getMessage());
-        return $this->createResponse($e->getMessage(), false);
+        error('An error occurred while trying to import exclusion list for ' . $prefix . ' : ' . $e->getMessage());
+        return $this->createResponse('Error importing exclusion list for \'' . $prefix . '\' : ' . $e->getMessage(), false);
     }
     
     private function onRefreshRecordsException($prefix, $importUrl, $e)
     {
-        $errorMessage = 'An error occurred while trying to refresh ' . $prefix . ' with url ' . $importUrl . ' : ' . $e->getMessage();
-        error_log($errorMessage);
-        info($errorMessage);
+        error('An error occurred while trying to refresh ' . $prefix . ' with url ' . $importUrl . ' : ' . $e->getMessage());
     }    
     
 }

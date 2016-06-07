@@ -198,7 +198,7 @@ class FileUtils
     
         } catch (\Exception $e) {
             //quietly handle exceptions here
-            info('Encountered an error while trying to delete files in directory ' . $dir . ' : ' . $e->getMessage());
+            error('Encountered an error while trying to delete files in directory ' . $dir . ' : ' . $e->getMessage());
         }
     
     }
