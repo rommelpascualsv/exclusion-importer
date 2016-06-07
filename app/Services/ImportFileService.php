@@ -17,9 +17,6 @@ use App\Repositories\ExclusionListFileRepository;
 use App\Repositories\ExclusionListRecordRepository;
 use App\Repositories\ExclusionListRepository;
 use App\Repositories\ExclusionListVersionRepository;
-use App\Repositories\GetAllExclusionListsQuery;
-use App\Repositories\GetFilesForPrefixAndHashQuery;
-use App\Repositories\GetFilesForPrefixQuery;
 use App\Response\JsonResponse;
 use App\Services\Contracts\ImportFileServiceInterface;
 use App\Utils\FileUtils;
@@ -39,7 +36,6 @@ class ImportFileService implements ImportFileServiceInterface
     private $exclusionListFileRepo;
     private $exclusionListRecordRepo;
     private $exclusionListVersionRepo;
-    private $getAllExclusionListsQuery;
     private $getFilesForPrefixAndHashQuery;
     private $getFilesForPrefixQuery;
     
@@ -47,19 +43,13 @@ class ImportFileService implements ImportFileServiceInterface
             ExclusionListRepository $exclusionListRepo, 
             ExclusionListFileRepository $exclusionListFilesRepo,
             ExclusionListRecordRepository $exclusionListRecordRepo,
-            ExclusionListVersionRepository $exclusionListVersionRepo,
-            GetAllExclusionListsQuery $getAllExclusionListsQuery,
-            GetFilesForPrefixAndHashQuery $getFilesForPrefixAndHashQuery,
-            GetFilesForPrefixQuery $getFilesForPrefixQuery)
+            ExclusionListVersionRepository $exclusionListVersionRepo)
     {
         $this->exclusionListDownloader = $exclusionListHttpDownloader;
         $this->exclusionListRepo = $exclusionListRepo;
         $this->exclusionListFileRepo = $exclusionListFilesRepo;
         $this->exclusionListRecordRepo = $exclusionListRecordRepo;
         $this->exclusionListVersionRepo = $exclusionListVersionRepo;
-        $this->getAllExclusionListsQuery = $getAllExclusionListsQuery;
-        $this->getFilesForPrefixAndHashQuery = $getFilesForPrefixAndHashQuery;
-        $this->getFilesForPrefixQuery = $getFilesForPrefixQuery;
     }
     
     /**
@@ -146,7 +136,7 @@ class ImportFileService implements ImportFileServiceInterface
      */
     public function refreshRecords()
     {
-        $exclusionLists = $this->getAllExclusionListsQuery->execute();
+        $exclusionLists = $this->exclusionListRepo->getAllExclusionLists();
 
         foreach ($exclusionLists as $exclusionList) {
     
@@ -238,7 +228,7 @@ class ImportFileService implements ImportFileServiceInterface
     
     private function getLatestRepoFileFor($prefix)
     {
-        $files = $this->getFilesForPrefixQuery->execute($prefix);
+        $files = $this->exclusionListFileRepo->getFilesForPrefix($prefix);
         
         return $files ? $files[0] : null;
     }
@@ -466,7 +456,7 @@ class ImportFileService implements ImportFileServiceInterface
             'hash' => $hash
         ];
         
-        $existing = $this->getFilesForPrefixAndHashQuery->execute($prefix, $hash);
+        $existing = $this->exclusionListFileRepo->getFilesForPrefixAndHash($prefix, $hash);
         
         if (! $existing) {
             throw new \Exception('Illegal state encountered : No existing record in files repository was found to update with file contents');

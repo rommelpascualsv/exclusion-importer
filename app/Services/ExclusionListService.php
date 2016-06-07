@@ -1,10 +1,10 @@
 <?php
 namespace App\Services;
 
+use App\Repositories\ExclusionListFileRepository;
+use App\Repositories\ExclusionListRepository;
 use App\Repositories\ExclusionListVersionRepository;
-use App\Repositories\GetActiveExclusionListsQuery;
 use App\Services\Contracts\ExclusionListServiceInterface;
-use App\Repositories\GetFilesForPrefixQuery;
 
 /**
  * Service class for retrieval and management of exclusion lists
@@ -12,18 +12,17 @@ use App\Repositories\GetFilesForPrefixQuery;
  */
 class ExclusionListService implements ExclusionListServiceInterface
 {
-    
     private $exclusionListVersionRepo;
-    private $getActiveExclusionListsQuery;
-    private $getFilesForPrefixQuery;
+    private $exclusionListRepo;
+    private $exclusionListFileRepo;
     
     public function __construct(ExclusionListVersionRepository $exclusionListVersionRepo,
-            GetActiveExclusionListsQuery $getActiveExclusionListsQuery,
-            GetFilesForPrefixQuery $getFilesForPrefixQuery)
+            ExclusionListRepository $exclusionListRepo,
+            ExclusionListFileRepository $exclusionListFileRepo)
     {
         $this->exclusionListVersionRepo = $exclusionListVersionRepo;
-        $this->getActiveExclusionListsQuery = $getActiveExclusionListsQuery;
-        $this->getFilesForPrefixQuery = $getFilesForPrefixQuery;
+        $this->exclusionListRepo = $exclusionListRepo;
+        $this->exclusionListFileRepo = $exclusionListFileRepo;
     }
     
     /**
@@ -32,7 +31,7 @@ class ExclusionListService implements ExclusionListServiceInterface
      */ 
     public function getActiveExclusionLists()
     {
-        $activeExclusionLists = $this->getActiveExclusionListsQuery->execute();
+        $activeExclusionLists = $this->exclusionListRepo->getActiveExclusionLists();
         
         $collection = [];
         
@@ -51,7 +50,7 @@ class ExclusionListService implements ExclusionListServiceInterface
     
     private function getLatestRepoFileFor($prefix)
     {
-        $files = $this->getFilesForPrefixQuery->execute($prefix);
+        $files = $this->exclusionListFileRepo->getFilesForPrefix($prefix);
         return $files ? $files[0] : null;
     }
     

@@ -18,8 +18,8 @@ class ExclusionListServiceTest extends TestCase
     private $service;
     
     private $exclusionListVersionRepo;
-    private $getActiveExclusionListsQuery;
-    private $getFilesForPrefixQuery;
+    private $exclusionListRepo;
+    private $exclusionListFileRepo;
     
     private $listProcessorMock;
     
@@ -30,13 +30,13 @@ class ExclusionListServiceTest extends TestCase
         $this->app->withFacades();
         
         $this->exclusionListVersionRepo = Mockery::mock('App\Repositories\ExclusionListVersionRepository')->makePartial();
-        $this->getActiveExclusionListsQuery = Mockery::mock('App\Repositories\GetActiveExclusionListsQuery');
-        $this->getFilesForPrefixQuery = Mockery::mock('App\Repositories\GetFilesForPrefixQuery');
+        $this->exclusionListRepo = Mockery::mock('App\Repositories\ExclusionListRepository')->makePartial();
+        $this->exclusionListFileRepo = Mockery::mock('App\Repositories\ExclusionListFileRepository');
         
         $this->service = Mockery::mock('App\Services\ExclusionListService', [
             $this->exclusionListVersionRepo,
-            $this->getActiveExclusionListsQuery,
-            $this->getFilesForPrefixQuery
+            $this->exclusionListRepo,
+            $this->exclusionListFileRepo
         ])->makePartial();
         
         $this->service->shouldAllowMockingProtectedMethods();
@@ -51,7 +51,7 @@ class ExclusionListServiceTest extends TestCase
     
     public function testGetExclusionListShouldReturnActiveExclusionListsWithUpdateRequiredTrueIfThereAreNoFilesForList()
     {   
-        $this->getActiveExclusionListsQuery->shouldReceive('execute')->once()->withNoArgs()->andReturn([
+        $this->exclusionListRepo->shouldReceive('getActiveExclusionLists')->once()->andReturn([
             (object)[
                 'id' => 1,
                 'prefix' => 'oig',
@@ -64,7 +64,7 @@ class ExclusionListServiceTest extends TestCase
         ]);
         
         // No file in files repo for list, update_required should be true
-        $this->getFilesForPrefixQuery->shouldReceive('execute')->once()->with('oig')->andReturnNull();
+        $this->exclusionListFileRepo->shouldReceive('getFilesForPrefix')->once()->with('oig')->andReturnNull();
         
         $actual = $this->service->getActiveExclusionLists();
         
@@ -89,7 +89,7 @@ class ExclusionListServiceTest extends TestCase
     {
         $exclusionListTestFile = base_path('tests/unit/files/tn1-0.pdf');
         
-        $this->getActiveExclusionListsQuery->shouldReceive('execute')->once()->withNoArgs()->andReturn([
+        $this->exclusionListRepo->shouldReceive('getActiveExclusionLists')->once()->andReturn([
             (object)[
                 'id' => 1,
                 'prefix' => 'tn1',
@@ -104,7 +104,7 @@ class ExclusionListServiceTest extends TestCase
         $hash = hash_file('sha256', $exclusionListTestFile);
 
         // 
-        $this->getFilesForPrefixQuery->shouldReceive('execute')->once()->with('tn1')->andReturn([(object)[
+        $this->exclusionListFileRepo->shouldReceive('getFilesForPrefix')->once()->with('tn1')->andReturn([(object)[
             'state_prefix' => 'tn1',
             'img_data' => file_get_contents($exclusionListTestFile),
             'hash' => $hash,
@@ -139,7 +139,7 @@ class ExclusionListServiceTest extends TestCase
     {
         $exclusionListTestFile = base_path('tests/unit/files/tn1-0-dummy.pdf');
     
-        $this->getActiveExclusionListsQuery->shouldReceive('execute')->once()->withNoArgs()->andReturn([
+        $this->exclusionListRepo->shouldReceive('getActiveExclusionLists')->once()->andReturn([
             (object)[
                 'id' => 1,
                 'prefix' => 'tn1',
@@ -153,7 +153,7 @@ class ExclusionListServiceTest extends TestCase
     
         $hash = hash_file('sha256', $exclusionListTestFile);
     
-        $this->getFilesForPrefixQuery->shouldReceive('execute')->once()->with('tn1')->andReturn([(object)[
+        $this->exclusionListFileRepo->shouldReceive('getFilesForPrefix')->once()->with('tn1')->andReturn([(object)[
             'state_prefix' => 'tn1',
             'img_data' => file_get_contents($exclusionListTestFile),
             'hash' => 'some_old_hash',

@@ -54,6 +54,38 @@ class ExclusionListFileRepository implements Repository
     public function contains($criteria)
     {
         return $criteria ? app('db')->table('files')->where($criteria)->count() > 0 : false;
-    } 
+    }
     
+    /**
+     * Returns all the files from the files repository associated with the given
+     * prefix
+     * @param string $prefix the prefix whose associated files will be searched
+     * @param string $orderBy [optional] the column by which the files will be sorted. 
+     * Defaults to 'date_last_downloaded' if not specified.
+     * @param string $direction [optional] the sort direction (i.e. 'asc' or 'desc'). 
+     * Defaults to 'desc' if not specified.
+     * @return array array of stdClass objects representing the files associated
+     * with the prefix.
+     */
+    public function getFilesForPrefix($prefix, $orderBy = 'date_last_downloaded', $direction = 'desc')
+    {
+        return app('db')->table('files')
+            ->where('state_prefix', $prefix)
+            ->orderBy($orderBy, $direction)
+            ->get();
+    }
+    
+    /**
+     * Returns all files associated with the given prefix and hash
+     * @param string $prefix the prefix whose associated files will be searched
+     * @param string $hash the hash whose associated files will be searched
+     * @return array array of stdClass objects representing the files associated
+     * with the prefix and hash.
+     */
+    public function getFilesForPrefixAndHash($prefix, $hash)
+    {
+        return app('db')->table('files')
+            ->where(['state_prefix' => $prefix, 'hash' => $hash])
+            ->get();
+    }
 }

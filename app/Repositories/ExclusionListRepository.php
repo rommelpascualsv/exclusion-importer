@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+
 /**
  * Repository for exclusion lists
  */
@@ -38,5 +39,23 @@ class ExclusionListRepository implements Repository
         $result = app('db')->table('exclusion_lists')->where('prefix', $prefix)->update($data);
         info('Updated ' . $result . ' rows for ' . $prefix);
         return $result;
+    }
+    
+    /**
+     * Returns all exclusion lists marked as active.
+     * @return array array of stdClass objects, each representing an exclusion list
+     */
+    public function getActiveExclusionLists()
+    {
+        return app('db')->table('exclusion_lists')->where('is_active', 1)->get();
+    }
+    
+    /**
+     * Returns all exclusion lists.
+     * @return array array of stdClass objects, each representing an exclusion list
+     */
+    public function getAllExclusionLists()
+    {
+        return app('db')->table('exclusion_lists')->get();        
     }
 }
