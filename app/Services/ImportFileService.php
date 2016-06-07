@@ -19,7 +19,6 @@ use App\Repositories\ExclusionListRepository;
 use App\Repositories\ExclusionListVersionRepository;
 use App\Response\JsonResponse;
 use App\Services\Contracts\ImportFileServiceInterface;
-use App\Utils\FileUtils;
 
 /**
  * Service class that handles the import related processes.
@@ -124,7 +123,7 @@ class ImportFileService implements ImportFileServiceInterface
             
         } finally {
             
-            FileUtils::deleteIfInDir($this->exclusionListDownloader->getDownloadDirectory(), $exclusionListFiles);
+            delete_if_in_dir($this->exclusionListDownloader->getDownloadDirectory(), $exclusionListFiles);
         }
     }
 
@@ -198,7 +197,7 @@ class ImportFileService implements ImportFileServiceInterface
     
             } finally {
 
-                FileUtils::deleteIfInDir($this->exclusionListDownloader->getDownloadDirectory(), $exclusionListFiles);
+                delete_if_in_dir($this->exclusionListDownloader->getDownloadDirectory(), $exclusionListFiles);
             }
         }
     }
@@ -340,7 +339,7 @@ class ImportFileService implements ImportFileServiceInterface
             
         } finally {
     
-            FileUtils::deleteIfInDir(sys_get_temp_dir(), $versionFile);
+            delete_if_in_dir(sys_get_temp_dir(), $versionFile);
         }
     }
 
@@ -367,7 +366,7 @@ class ImportFileService implements ImportFileServiceInterface
         
             $result = tempnam(sys_get_temp_dir(), $prefix);
         
-            $zipped = FileUtils::createZip($files, $result, true);
+            $zipped = create_zip($files, $result, true);
         
             if (! $zipped) {
                 throw new \Exception('An error occurred while creating the archive of exclusion list files for ' . $prefix);
@@ -540,7 +539,7 @@ class ImportFileService implements ImportFileServiceInterface
     
             file_put_contents($contentFile, $content, LOCK_EX);
     
-            return FileUtils::contentEquals($contentFile, $file);
+            return file_content_equals($contentFile, $file);
     
         } finally {
             if ($contentFile) unlink($contentFile);

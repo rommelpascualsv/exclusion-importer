@@ -4,7 +4,6 @@ namespace Test\Unit;
 
 use App\Import\Lists\Tennessee;
 use App\Services\ImportFileService;
-use App\Utils\FileUtils;
 use CDM\Test\TestCase;
 use Mockery;
 
@@ -85,7 +84,7 @@ class ImportFileServiceTest extends TestCase
     
         $actual = $this->importFileService->importFile('http://www.tn.gov/assets/entities/tenncare/attachments/terminatedproviderlist.pdf', 'tn1');
 
-        $expected = '{"success":false,"message":"Error downloading file"}';
+        $expected = '{"success":false,"message":"Error importing exclusion list for \'tn1\' : Error downloading file"}';
         
         //Service should return an error message
         $this->assertEquals($expected, $actual->getContent());
@@ -243,7 +242,7 @@ class ImportFileServiceTest extends TestCase
             $exclusionListTestFile2 = base_path('tests/unit/files/tn1-0-dummy.pdf');
             $exclusionListTestFileZip = tempnam('tests/unit/files', 'tn1');
             
-            FileUtils::createZip([$exclusionListTestFile1, $exclusionListTestFile2], $exclusionListTestFileZip, true);
+            create_zip([$exclusionListTestFile1, $exclusionListTestFile2], $exclusionListTestFileZip, true);
             
             // Url should be updated
             $this->exclusionListRepo->shouldReceive('update')->once()->with('tn1', ['import_url' => 'http://www.tn.gov/assets/entities/tenncare/attachments/terminatedproviderlist.pdf']);
@@ -310,7 +309,7 @@ class ImportFileServiceTest extends TestCase
             $exclusionListTestFile2 = base_path('tests/unit/files/tn1-0-dummy.pdf');
             $exclusionListTestFileZip = tempnam('tests/unit/files', 'tn1');
             
-            FileUtils::createZip([$exclusionListTestFile1, $exclusionListTestFile2], $exclusionListTestFileZip, true);
+            create_zip([$exclusionListTestFile1, $exclusionListTestFile2], $exclusionListTestFileZip, true);
             
             // Url should be updated
             $this->exclusionListRepo->shouldReceive('update')->once()->with('tn1', ['import_url' => 'http://www.tn.gov/assets/entities/tenncare/attachments/terminatedproviderlist.pdf']);
