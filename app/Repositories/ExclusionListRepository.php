@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+
 /**
  * Repository for exclusion lists
  */
@@ -10,7 +11,7 @@ class ExclusionListRepository implements Repository
     
     public function create($record)
     {
-        app('db')->table('exclusion_lists')->create($record);    
+        return app('db')->table('exclusion_lists')->insert($record);    
     }
     
     public function clear()
@@ -28,28 +29,6 @@ class ExclusionListRepository implements Repository
     }    
     
     /**
-     * Retrieves all exclusion lists that satisfy the given criteria. If a $criteria
-     * is specified, then the returned rows are filtered by the parameters
-     * set in the criteria, otherwise returns all exclusion lists
-     * 
-     * @param array filter (optional) array of key-value pairs with which to filter 
-     * the exclusion list data
-     * @return array
-     */
-    public function query($criteria = null)
-    {
-        $query = app('db')->table('exclusion_lists');
-        
-        if ($criteria) {
-            $query->where($criteria);
-        }
-
-        return $query->get();
-    }
-    
-
-    
-    /**
      * Updates the record with the given prefix in the exclusion_lists table
      * @param string $prefix the prefix of the exclusion list whose column values
      * will be updated
@@ -57,7 +36,24 @@ class ExclusionListRepository implements Repository
      */
     public function update($prefix, $data) 
     {
-        $result = app('db')->table('exclusion_lists')->where('prefix', $prefix)->update($data);
-        info('Updated ' . $result . ' rows for ' . $prefix);
+        return app('db')->table('exclusion_lists')->where('prefix', $prefix)->update($data);
+    }
+    
+    /**
+     * Returns all exclusion lists marked as active.
+     * @return array array of stdClass objects, each representing an exclusion list
+     */
+    public function getActiveExclusionLists()
+    {
+        return app('db')->table('exclusion_lists')->where('is_active', 1)->get();
+    }
+    
+    /**
+     * Returns all exclusion lists.
+     * @return array array of stdClass objects, each representing an exclusion list
+     */
+    public function getAllExclusionLists()
+    {
+        return app('db')->table('exclusion_lists')->get();        
     }
 }
