@@ -21,7 +21,6 @@ class ImportFileServiceTest extends TestCase
     private $exclusionListRepo; 
     private $exclusionListFileRepo;
     private $exclusionListRecordRepo;
-    private $exclusionListVersionRepo;
     
     private $listProcessorMock;
     
@@ -35,7 +34,6 @@ class ImportFileServiceTest extends TestCase
         $this->exclusionListFileRepo = Mockery::mock('App\Repositories\ExclusionListFileRepository')->makePartial();
         $this->exclusionListRepo = Mockery::mock('App\Repositories\ExclusionListRepository')->makePartial();
         $this->exclusionListRecordRepo = Mockery::mock('App\Repositories\ExclusionListRecordRepository')->makePartial();
-        $this->exclusionListVersionRepo = Mockery::mock('App\Repositories\ExclusionListVersionRepository')->makePartial();
         $this->getFilesForPrefixAndHashQuery = Mockery::mock('App\Repositories\GetFilesForPrefixAndHashQuery');
         
         $this->listProcessorMock = Mockery::mock('App\Import\Service\ListProcessor');
@@ -44,8 +42,7 @@ class ImportFileServiceTest extends TestCase
             $this->exclusionListDownloader, 
             $this->exclusionListRepo, 
             $this->exclusionListFileRepo, 
-            $this->exclusionListRecordRepo, 
-            $this->exclusionListVersionRepo
+            $this->exclusionListRecordRepo
         ])->makePartial();
         
         $this->importFileService->shouldAllowMockingProtectedMethods();
@@ -391,7 +388,7 @@ class ImportFileServiceTest extends TestCase
         ]]);
     
         // Service should check if the if the last imported hash is equal to the downloaded file hash
-        $this->exclusionListVersionRepo->shouldReceive('find')->once()->with('tn1')->andReturn([(object)[
+        $this->exclusionListRepo->shouldReceive('find')->once()->with('tn1')->andReturn([(object)[
             'prefix' => 'tn1',
             'last_imported_hash' => $hash //Last imported hash is equal to file hash - service should not do any new importing
         ]]);
@@ -405,7 +402,9 @@ class ImportFileServiceTest extends TestCase
         
         // Service should not update exclusion list version since it is already up-to-date
         // Service should check if the if the last imported hash is equal to the downloaded file hash
-        $this->exclusionListVersionRepo->shouldNotReceive('createOrUpdate');
+        $this->exclusionListRepo->shouldNotReceive('update')->withArgs(function($prefix, $data) use ($hash){
+            return $prefix === 'tn1' && $data['last_imported_hash'] === $hash && $data['last_imported_date'];
+        });
         
         $actual = $this->importFileService->importFile('http://www.tn.gov/assets/entities/tenncare/attachments/terminatedproviderlist.pdf', 'tn1');
 
@@ -445,7 +444,7 @@ class ImportFileServiceTest extends TestCase
         ]]);
     
         // Service should check if the if the last imported hash is equal to the downloaded file hash
-        $this->exclusionListVersionRepo->shouldReceive('find')->once()->with('tn1')->andReturn([(object)[
+        $this->exclusionListRepo->shouldReceive('find')->once()->with('tn1')->andReturn([(object)[
             'prefix' => 'tn1',
             'last_imported_hash' => 'some_old_hash' //Last imported hash is not equal to file hash - service should import new files
         ]]);
@@ -454,7 +453,7 @@ class ImportFileServiceTest extends TestCase
         $this->importFileService->shouldReceive('createListProcessor')->andReturn($this->listProcessorMock);
         $this->listProcessorMock->shouldReceive('insertRecords')->once();
     
-        $this->exclusionListVersionRepo->shouldReceive('createOrUpdate')->once()->withArgs(function($prefix, $data) use ($hash) {
+        $this->exclusionListRepo->shouldReceive('update')->once()->withArgs(function($prefix, $data) use ($hash) {
             return $prefix === 'tn1' && $data['last_imported_hash'] === $hash && $data['last_imported_date']; 
         });
         
@@ -472,8 +471,7 @@ class ImportFileServiceTest extends TestCase
             $this->exclusionListDownloader, 
             $this->exclusionListRepo, 
             $this->exclusionListFileRepo, 
-            $this->exclusionListRecordRepo,
-            $this->exclusionListVersionRepo
+            $this->exclusionListRecordRepo
         ])->makePartial();
         
         // All exclusion lists should be queried

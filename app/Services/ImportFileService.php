@@ -16,7 +16,6 @@ use App\Import\Service\ListProcessor;
 use App\Repositories\ExclusionListFileRepository;
 use App\Repositories\ExclusionListRecordRepository;
 use App\Repositories\ExclusionListRepository;
-use App\Repositories\ExclusionListVersionRepository;
 use App\Response\JsonResponse;
 use App\Services\Contracts\ImportFileServiceInterface;
 
@@ -34,21 +33,18 @@ class ImportFileService implements ImportFileServiceInterface
     private $exclusionListRepo;
     private $exclusionListFileRepo;
     private $exclusionListRecordRepo;
-    private $exclusionListVersionRepo;
     private $getFilesForPrefixAndHashQuery;
     private $getFilesForPrefixQuery;
     
     public function __construct(ExclusionListHttpDownloader $exclusionListHttpDownloader, 
             ExclusionListRepository $exclusionListRepo, 
             ExclusionListFileRepository $exclusionListFilesRepo,
-            ExclusionListRecordRepository $exclusionListRecordRepo,
-            ExclusionListVersionRepository $exclusionListVersionRepo)
+            ExclusionListRecordRepository $exclusionListRecordRepo)
     {
         $this->exclusionListDownloader = $exclusionListHttpDownloader;
         $this->exclusionListRepo = $exclusionListRepo;
         $this->exclusionListFileRepo = $exclusionListFilesRepo;
         $this->exclusionListRecordRepo = $exclusionListRecordRepo;
-        $this->exclusionListVersionRepo = $exclusionListVersionRepo;
     }
     
     /**
@@ -102,11 +98,7 @@ class ImportFileService implements ImportFileServiceInterface
 
             $this->parseRecords($exclusionList);
                 
-            $this->saveRecords($exclusionList);
-            
-            if ($hash) {
-                $this->updateImportedVersionTo($hash, $prefix);
-            }
+            $this->saveRecords($exclusionList, $hash);
             
             info('Finished exclusion list import for ' . $prefix);
             
@@ -500,7 +492,7 @@ class ImportFileService implements ImportFileServiceInterface
         }
     }
     
-    private function saveRecords(ExclusionList $exclusionList)
+    private function saveRecords(ExclusionList $exclusionList, $lastImportedHash)
     {
         $prefix = $exclusionList->dbPrefix;
         
@@ -508,7 +500,7 @@ class ImportFileService implements ImportFileServiceInterface
             
             $this->createListProcessor($exclusionList)->insertRecords();
             
-            $this->onRecordsSaveSucceeded($prefix);
+            $this->onRecordsSaveSucceeded($prefix, $lastImportedHash);
             
         } catch (\PDOException $e) {
             
@@ -548,16 +540,16 @@ class ImportFileService implements ImportFileServiceInterface
     
     private function isExclusionListUpToDate($prefix, $latestHash)
     {
-        $records = $this->exclusionListVersionRepo->find($prefix);
+        $records = $this->exclusionListRepo->find($prefix);
         
         return $records && $records[0]->last_imported_hash === $latestHash; 
     }
     
-    private function updateImportedVersionTo($hash, $prefix)
+    private function updateImportedVersionTo($lastImportedHash, $prefix, $lastImportedTS)
     {
-        $this->exclusionListVersionRepo->createOrUpdate($prefix, [
-            'last_imported_hash' => $hash,
-            'last_imported_date' => $this->now()
+        $this->exclusionListRepo->update($prefix, [
+            'last_imported_hash' => $lastImportedHash,
+            'last_imported_date' => $lastImportedTS
         ]);
     }
     
@@ -607,9 +599,14 @@ class ImportFileService implements ImportFileServiceInterface
         event('file.parse.failed', (new FileParseFailed())->setObjectId($prefix)->setDescription('Failed to parse file content : ' . $e->getMessage()));
     }
     
-    private function onRecordsSaveSucceeded($prefix)
+    private function onRecordsSaveSucceeded($prefix, $lastImportedHash)
     {
-        event('file.saverecords.succeeded', (new SaveRecordsSucceeded())->setObjectId($prefix));
+        $now = $this->now();
+        
+        $this->updateImportedVersionTo($lastImportedHash, $prefix, $now);
+        
+        event('file.saverecords.succeeded', (new SaveRecordsSucceeded())->setObjectId($prefix)->setTimestamp($now));
+        
     }
     
     private function onRecordsSaveFailed($prefix, \Exception $e)

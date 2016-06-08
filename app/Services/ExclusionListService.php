@@ -3,7 +3,6 @@ namespace App\Services;
 
 use App\Repositories\ExclusionListFileRepository;
 use App\Repositories\ExclusionListRepository;
-use App\Repositories\ExclusionListVersionRepository;
 use App\Services\Contracts\ExclusionListServiceInterface;
 
 /**
@@ -12,15 +11,13 @@ use App\Services\Contracts\ExclusionListServiceInterface;
  */
 class ExclusionListService implements ExclusionListServiceInterface
 {
-    private $exclusionListVersionRepo;
     private $exclusionListRepo;
     private $exclusionListFileRepo;
+    private $exclusionListRecordRepo;
     
-    public function __construct(ExclusionListVersionRepository $exclusionListVersionRepo,
-            ExclusionListRepository $exclusionListRepo,
+    public function __construct(ExclusionListRepository $exclusionListRepo,
             ExclusionListFileRepository $exclusionListFileRepo)
     {
-        $this->exclusionListVersionRepo = $exclusionListVersionRepo;
         $this->exclusionListRepo = $exclusionListRepo;
         $this->exclusionListFileRepo = $exclusionListFileRepo;
     }
@@ -56,7 +53,7 @@ class ExclusionListService implements ExclusionListServiceInterface
     
     private function isExclusionListUpToDate($prefix, $latestHash)
     {
-        $records = $this->exclusionListVersionRepo->find($prefix);
+        $records = $this->exclusionListRepo->find($prefix);
         return $records && $records[0]->last_imported_hash === $latestHash; 
     }
 

@@ -17,7 +17,6 @@ class ExclusionListServiceTest extends TestCase
 
     private $service;
     
-    private $exclusionListVersionRepo;
     private $exclusionListRepo;
     private $exclusionListFileRepo;
     
@@ -29,12 +28,10 @@ class ExclusionListServiceTest extends TestCase
         
         $this->app->withFacades();
         
-        $this->exclusionListVersionRepo = Mockery::mock('App\Repositories\ExclusionListVersionRepository')->makePartial();
         $this->exclusionListRepo = Mockery::mock('App\Repositories\ExclusionListRepository')->makePartial();
         $this->exclusionListFileRepo = Mockery::mock('App\Repositories\ExclusionListFileRepository');
         
         $this->service = Mockery::mock('App\Services\ExclusionListService', [
-            $this->exclusionListVersionRepo,
             $this->exclusionListRepo,
             $this->exclusionListFileRepo
         ])->makePartial();
@@ -111,7 +108,7 @@ class ExclusionListServiceTest extends TestCase
             'img_type' => 'pdf'
         ]]);
     
-        $this->exclusionListVersionRepo->shouldReceive('find')->once()->with('tn1')->andReturn([(object)[
+        $this->exclusionListRepo->shouldReceive('find')->once()->with('tn1')->andReturn([(object)[
             'prefix' => 'tn1',
             'last_imported_hash' => $hash,
             'last_imported_date' => '2016-06-03 10:29:18'
@@ -160,7 +157,7 @@ class ExclusionListServiceTest extends TestCase
             'img_type' => 'pdf'
         ]]);
     
-        $this->exclusionListVersionRepo->shouldReceive('find')->once()->with('tn1')->andReturn([(object)[
+        $this->exclusionListRepo->shouldReceive('find')->once()->with('tn1')->andReturn([(object)[
             'prefix' => 'tn1',
             'last_imported_hash' => $hash,
             'last_imported_date' => '2016-06-03 10:29:18'
