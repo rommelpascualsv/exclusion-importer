@@ -18,6 +18,7 @@ use App\Repositories\ExclusionListRecordRepository;
 use App\Repositories\ExclusionListRepository;
 use App\Response\JsonResponse;
 use App\Services\Contracts\ImportFileServiceInterface;
+use function GuzzleHttp\json_encode;
 
 /**
  * Service class that handles the import related processes.
@@ -268,14 +269,11 @@ class ImportFileService implements ImportFileServiceInterface
     private function downloadExclusionListFiles(ExclusionList $exclusionList)
     {
         $prefix = $exclusionList->dbPrefix;
+        $files = null;
         
         try {
             
             $files = $this->exclusionListDownloader->downloadFiles($exclusionList);
-            
-            $this->onFileDownloadSucceeded($prefix);
-            
-            return $files;
             
         } catch (\PDOException $e) {
             
@@ -287,6 +285,11 @@ class ImportFileService implements ImportFileServiceInterface
             $this->onFileDownloadFailed($prefix, $e);
             throw $e;           
         }
+        
+        $this->onFileDownloadSucceeded($prefix);
+        
+        return $files;
+        
     }
 
     /**
@@ -321,12 +324,12 @@ class ImportFileService implements ImportFileServiceInterface
     
         } catch (\PDOException $e) {
             
-            $this->onUpdateFileFailed($prefix, new LoggablePDOException($e));
+            $this->onFileUpdateFailed($prefix, new LoggablePDOException($e));
             throw $e;
             
         } catch(\Exception $e) {
 
-            $this->onUpdateFileFailed($prefix, $e);
+            $this->onFileUpdateFailed($prefix, $e);
             throw $e;
             
         } finally {
@@ -478,8 +481,6 @@ class ImportFileService implements ImportFileServiceInterface
             
             $exclusionList->retrieveData();
             
-            $this->onFileParseSucceeded($prefix);
-            
         } catch (\PDOException $e) {
             
             $this->onFileParseFailed($prefix, new LoggablePDOException($e));
@@ -490,6 +491,9 @@ class ImportFileService implements ImportFileServiceInterface
             $this->onFileParseFailed($prefix, $e);
             throw $e;
         }
+        
+        $this->onFileParseSucceeded($prefix);
+        
     }
     
     private function saveRecords(ExclusionList $exclusionList, $lastImportedHash)
@@ -499,8 +503,6 @@ class ImportFileService implements ImportFileServiceInterface
         try {
             
             $this->createListProcessor($exclusionList)->insertRecords();
-            
-            $this->onRecordsSaveSucceeded($prefix, $lastImportedHash);
             
         } catch (\PDOException $e) {
             
@@ -512,6 +514,9 @@ class ImportFileService implements ImportFileServiceInterface
             $this->onRecordsSaveFailed($prefix, $e);
             throw $e;
         }
+        
+        $this->onRecordsSaveSucceeded($prefix, $lastImportedHash);
+        
     }
 
     /**
@@ -584,7 +589,7 @@ class ImportFileService implements ImportFileServiceInterface
         event('file.update.succeeded', $eventPayload);
     }
     
-    private function onUpdateFileFailed($prefix, \Exception $e)
+    private function onFileUpdateFailed($prefix, \Exception $e)
     {
         event('file.update.failed', (new FileUpdateFailed())->setObjectId($prefix)->setDescription('Failed to update file : ' . $e->getMessage()));
     }
@@ -605,7 +610,10 @@ class ImportFileService implements ImportFileServiceInterface
         
         $this->updateImportedVersionTo($lastImportedHash, $prefix, $now);
         
-        event('file.saverecords.succeeded', (new SaveRecordsSucceeded())->setObjectId($prefix)->setTimestamp($now));
+        $eventPayload = (new SaveRecordsSucceeded())->setObjectId($prefix)->setTimestamp($now)->setLastImportedHash($lastImportedHash);
+        $eventPayload->setDescription(json_encode($eventPayload));
+        
+        event('file.saverecords.succeeded', $eventPayload);
         
     }
     
