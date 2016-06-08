@@ -12,7 +12,7 @@ class Iowa extends ExclusionList
 
     public $uri = "https://dhs.iowa.gov/sites/default/files/2016-01-31.PI_.term-suspend-probation.zip";
 
-    public $type = 'custom';
+    public $type = 'zip';
 
     public $shouldHashListName = true;
 

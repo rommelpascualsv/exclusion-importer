@@ -40,7 +40,7 @@ class HawaiiTest extends \Codeception\TestCase\Test
                 "medicaid_provide_id_number"            => "596009",
                 "last_known_program_or_provider_type"   => "PSYCHOLOGIST",
                 "exclusion_date"                        => "2015-04-20",
-                "reinstatement_date"                    => "Indefinite"
+                "reinstatement_date"                    => null
             ],
             [
                 "last_name_or_business"                 => "SMITH",
@@ -48,8 +48,8 @@ class HawaiiTest extends \Codeception\TestCase\Test
                 "middle_initial"                        => "",
                 "medicaid_provide_id_number"            => "12345",
                 "last_known_program_or_provider_type"   => "OB-GYNE",
-                "exclusion_date"                        => "",
-                "reinstatement_date"                    => "Indefinite"
+                "exclusion_date"                        => null,
+                "reinstatement_date"                    => null
             ],
             [
                 "last_name_or_business"                 => "DOE",
@@ -58,7 +58,7 @@ class HawaiiTest extends \Codeception\TestCase\Test
                 "medicaid_provide_id_number"            => "67890",
                 "last_known_program_or_provider_type"   => "PEDIATRICIAN",
                 "exclusion_date"                        => "2016-01-05",
-                "reinstatement_date"                    => "Indefinite"
+                "reinstatement_date"                    => null
             ]
         ];
         

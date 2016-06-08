@@ -74,6 +74,8 @@ class ImportFileServiceTest extends TestCase
     {
         parent::setUp();
         $this->app->withFacades();
+        $this->withoutEvents();
+        
         $this->listFactory = new ListFactory();
         $this->importFileService = $this->app->make(ImportFileService::class);
         $this->config = $this->loadConfig();
@@ -136,7 +138,7 @@ class ImportFileServiceTest extends TestCase
         //false to signify upstream to skip verification of results
         if (! empty($importFiles)) {
             
-            $this->importFileService->importFile($importFiles, $prefix, false);
+            $this->importFileService->importFile($importFiles, $prefix);
             
             return true;
         }

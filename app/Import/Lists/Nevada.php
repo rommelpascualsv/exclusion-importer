@@ -24,7 +24,8 @@ class Nevada extends ExclusionList
     	'sanction_period',
     	'sanction_period_end_date',
     	'reinstatement_date',
-        'provider_number'
+        'provider_number',
+        'aka'
     ];
 
     public $retrieveOptions = [
@@ -124,6 +125,9 @@ class Nevada extends ExclusionList
         	// set npi number array
         	$columns = PNHelper::setNpiValue($columns, PNHelper::getNpiValue($columns, $npiColumnIndex), $npiColumnIndex);
         	
+        	// handles the name / aka extraction
+        	$columns = $this->handleName($columns);
+        	
 			// populate the array data
         	$data[] = $columns;
         	
@@ -168,5 +172,56 @@ class Nevada extends ExclusionList
 			}
 		}
 		return $mergeData;
+    }
+    
+    /**
+     * Handles the name values in the column record
+     * 
+     * @param array $columns the column record
+     * @return array $columns the updated column record
+     */
+    private function handleName($columns)
+    {
+        $nameIndex = array_search("doing_business_as", $this->fieldNames);
+        $nameValue = $columns[$nameIndex]; 
+        
+        // re-set name
+        $columns[$nameIndex] = $this->trimAlias($nameValue);
+        
+        // set aka
+        $columns[] = $this->findAlias($nameValue);
+        
+        return $columns;
+    }
+    
+    /**
+     * Removes the alias (i.e aka ...) subtrings from the given
+     * string
+     * @param string $name
+     * @return string without the (aka ...) substrings
+     */
+    private function trimAlias($name)
+    {
+        return trim(preg_replace('/aka\s*(.+)/', '', $name));
+    }
+    
+    /**
+     * Finds the alias information from the given name
+     * @param string $name
+     * @return string
+     */
+    private function findAlias($name)
+    {
+        if(preg_match_all('/aka\s*(.+)/', $name, $matches)) {
+            
+            if ($matches[1]) {
+                
+                preg_match_all('/[^&|,\s][^&|,]*[^&|,\s]*/', $matches[1][0], $aliases);
+                
+                return json_encode(array_map('trim',$aliases[0]));
+            }
+        }
+        
+        return '';
     }
 }
