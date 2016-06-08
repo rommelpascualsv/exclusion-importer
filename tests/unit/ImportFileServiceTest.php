@@ -400,6 +400,8 @@ class ImportFileServiceTest extends TestCase
         $this->importFileService->shouldReceive('createListProcessor')->andReturn($this->listProcessorMock);
         $this->listProcessorMock->shouldNotReceive('insertRecords');
         
+        $this->exclusionListRecordRepo->shouldNotReceive('saveRecordsInProd');
+        
         // Service should not update exclusion list version since it is already up-to-date
         // Service should check if the if the last imported hash is equal to the downloaded file hash
         $this->exclusionListRepo->shouldNotReceive('update')->withArgs(function($prefix, $data) use ($hash){
@@ -457,6 +459,8 @@ class ImportFileServiceTest extends TestCase
             return $prefix === 'tn1' && $data['last_imported_hash'] === $hash && $data['last_imported_date']; 
         });
         
+        $this->exclusionListRecordRepo->shouldReceive('saveRecordsInProd')->once()->with('tn1');
+        
         $actual = $this->importFileService->importFile('http://www.tn.gov/assets/entities/tenncare/attachments/terminatedproviderlist.pdf', 'tn1');
     
         $expected = '{"success":true,"message":""}';
@@ -464,6 +468,59 @@ class ImportFileServiceTest extends TestCase
         // Service should return a response indicating that the records are already up to date
         $this->assertEquals($expected, $actual->getContent());
     } 
+    
+    public function testImportFileShouldNotUpdateLastImportedHashOfExclusionListFileIfAnErrorOccursWhileSavingRecordsInProduction()
+    {
+        $exclusionListTestFile = base_path('tests/unit/files/tn1-0.pdf');
+    
+        // Url should be updated
+        $this->exclusionListRepo->shouldReceive('update')->once()->with('tn1', ['import_url' => 'http://www.tn.gov/assets/entities/tenncare/attachments/terminatedproviderlist.pdf']);
+    
+        // Service should download files
+        $this->exclusionListDownloader->shouldReceive('downloadFiles')->once()->withArgs(function($exclusionList){
+            return $exclusionList instanceof Tennessee;
+        })->andReturn([$exclusionListTestFile]);
+    
+        $hash = hash_file('sha256', $exclusionListTestFile);
+    
+        // Service should check if hash already exists for file in files repository
+        $this->exclusionListFileRepo->shouldReceive('contains')->once()->with([
+            'state_prefix' => 'tn1',
+            'hash' => $hash,
+            'img_type' => 'pdf'
+        ])->andReturn(true);
+    
+        // Service should fetch the files record to update with the file contents
+        $this->exclusionListFileRepo->shouldReceive('getFilesForPrefixAndHash')->once()->with('tn1', $hash)->andReturn([(object)[
+            'state_prefix' => 'tn1',
+            'img_data' => file_get_contents($exclusionListTestFile), //Same as downloaded - should not be updated
+            'hash' => $hash,
+            'img_type' => 'pdf'
+        ]]);
+    
+        // Service should check if the if the last imported hash is equal to the downloaded file hash
+        $this->exclusionListRepo->shouldReceive('find')->once()->with('tn1')->andReturn([(object)[
+            'prefix' => 'tn1',
+            'last_imported_hash' => 'some_old_hash' //Last imported hash is not equal to file hash - service should import new files
+        ]]);
+    
+        // Service should process list records since the last imported hash is not the same as the hash of the downloaded file
+        $this->importFileService->shouldReceive('createListProcessor')->andReturn($this->listProcessorMock);
+        $this->listProcessorMock->shouldReceive('insertRecords')->once();
+    
+        $this->exclusionListRecordRepo->shouldReceive('saveRecordsInProd')->once()->with('tn1')->andThrow(new \Exception('Error inserting files into prod database'));
+        
+        $this->exclusionListRepo->shouldNotReceive('update')->withArgs(function($prefix, $data) use ($hash) {
+            return $prefix === 'tn1' && $data['last_imported_hash'] === $hash && $data['last_imported_date'];
+        });
+    
+        $actual = $this->importFileService->importFile('http://www.tn.gov/assets/entities/tenncare/attachments/terminatedproviderlist.pdf', 'tn1');
+
+        $expected = '{"success":false,"message":"Error importing exclusion list for \'tn1\' : Error inserting files into prod database"}';
+
+        // Service should return a response indicating that the records are already up to date
+        $this->assertEquals($expected, $actual->getContent());
+    }    
     
     public function testRefreshRecordsShouldOnlyImportExclusionListsFlaggedForAutoImport()
     {

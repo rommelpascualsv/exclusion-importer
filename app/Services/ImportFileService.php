@@ -95,13 +95,15 @@ class ImportFileService implements ImportFileServiceInterface
                 }
             }
             
-            info('Starting exclusion list import for ' . $prefix);
+            info('Parsing records for ' . $prefix);
 
             $this->parseRecords($exclusionList);
                 
+            info('Saving records for ' . $prefix);
+            
             $this->saveRecords($exclusionList, $hash);
             
-            info('Finished exclusion list import for ' . $prefix);
+            info('File import successfully completed for ' . $prefix);
             
             return $this->createResponse('', true);
             
@@ -502,7 +504,13 @@ class ImportFileService implements ImportFileServiceInterface
         
         try {
             
+            info('Saving records in staging schema for ' . $prefix);
+            
             $this->createListProcessor($exclusionList)->insertRecords();
+            
+            info('Saving records in production schema for ' . $prefix);
+            
+            $this->saveRecordsInProd($prefix);
             
         } catch (\PDOException $e) {
             
@@ -517,6 +525,11 @@ class ImportFileService implements ImportFileServiceInterface
         
         $this->onRecordsSaveSucceeded($prefix, $lastImportedHash);
         
+    }
+    
+    private function saveRecordsInProd($prefix)
+    {
+        $this->exclusionListRecordRepo->saveRecordsInProd($prefix);
     }
 
     /**
@@ -610,7 +623,14 @@ class ImportFileService implements ImportFileServiceInterface
         
         $this->updateImportedVersionTo($lastImportedHash, $prefix, $now);
         
-        $eventPayload = (new SaveRecordsSucceeded())->setObjectId($prefix)->setTimestamp($now)->setLastImportedHash($lastImportedHash);
+        $importStats = $this->exclusionListRecordRepo->getImportStats($prefix);
+        
+        $eventPayload = (new SaveRecordsSucceeded())
+            ->setObjectId($prefix)
+            ->setTimestamp($now)
+            ->setLastImportedHash($lastImportedHash)
+            ->setImportStats($importStats);
+        
         $eventPayload->setDescription(json_encode($eventPayload));
         
         event('file.saverecords.succeeded', $eventPayload);
