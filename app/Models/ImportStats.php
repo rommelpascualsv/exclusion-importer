@@ -53,21 +53,11 @@ class ImportStats implements \JsonSerializable
         return $this;
     }
     
-    public function getBrokenHashesPercentage()
-    {
-        if ($this->previousRecordCount === 0) {
-            return 0;
-        }
-        
-        return round(($this->added / $this->previousRecordCount) * 100, 1);
-    }
-    
     public function jsonSerialize()
     {
         return [
             'added' => $this->added,
             'deleted' => $this->deleted,
-            'brokenHashPct' => $this->getBrokenHashesPercentage(),
             'previousRecordCount' => $this->previousRecordCount, 
             'currentRecordCount' => $this->currentRecordCount 
         ];

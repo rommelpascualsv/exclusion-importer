@@ -51,26 +51,6 @@ class ExclusionListRecordRepository implements Repository
         return app('db')->table($prefix . '_records')->count();
     }
     
-    public function saveRecordsInProd($prefix)
-    {
-        $db = app('db');
-        
-        $prodSchemaDotPrefix    = $this->prodSchema . '.' .$prefix;
-        $stagingSchemaDotPrefix = $this->stagingSchema . '.' . $prefix;
-        $backupSchemaDotPrefix  = $this->backupSchema . '.' . $prefix;
-        
-        // Copy *_records in exclusion_lists_staging to *_records_new table in exclusion_lists
-        $db->statement('DROP TABLE IF EXISTS ' . $prodSchemaDotPrefix . '_records_new');
-        $db->statement('CREATE TABLE ' . $prodSchemaDotPrefix . '_records_new LIKE ' . $prodSchemaDotPrefix . '_records');
-        $db->statement('INSERT INTO '. $prodSchemaDotPrefix . '_records_new SELECT * FROM ' .$stagingSchemaDotPrefix . '_records');
-        
-        $db->statement('DROP TABLE IF EXISTS ' . $backupSchemaDotPrefix . '_records');
-        // Rename current *_records in exclusion_lists to *_records in exclusion_lists_backup
-        // Rename current *_records_new in exclusion_lists to *_records in exclusion_lists
-        $db->statement('RENAME TABLE ' . $prodSchemaDotPrefix .'_records TO ' . $backupSchemaDotPrefix . '_records, ' . $prodSchemaDotPrefix .'_records_new TO ' . $prodSchemaDotPrefix . '_records');
-        $db->statement('DROP TABLE IF EXISTS ' . $prodSchemaDotPrefix . '_records_new');        
-    }
-    
     public function getImportStats($prefix)
     {
         $db = app('db');
@@ -94,11 +74,31 @@ class ExclusionListRecordRepository implements Repository
         
         $importStats = (new ImportStats())->setAdded($added ? count($added) : 0)
             ->setDeleted($deleted ? count($deleted) : 0)
-            ->setPreviousRecordCount($db->connection('exclusion_lists_backup')->table($prefix.'_records')->count())
+            ->setPreviousRecordCount($db->connection('exclusion_lists')->table($prefix.'_records')->count())
             ->setCurrentRecordCount($this->size($prefix)); 
         
         return $importStats;
     }
+    
+    public function pushRecordsToProduction($prefix)
+    {
+        $db = app('db');
+    
+        $prodSchemaDotPrefix    = $this->prodSchema . '.' .$prefix;
+        $stagingSchemaDotPrefix = $this->stagingSchema . '.' . $prefix;
+        $backupSchemaDotPrefix  = $this->backupSchema . '.' . $prefix;
+    
+        // Copy *_records in exclusion_lists_staging to *_records_new table in exclusion_lists
+        $db->statement('DROP TABLE IF EXISTS ' . $prodSchemaDotPrefix . '_records_new');
+        $db->statement('CREATE TABLE ' . $prodSchemaDotPrefix . '_records_new LIKE ' . $prodSchemaDotPrefix . '_records');
+        $db->statement('INSERT INTO '. $prodSchemaDotPrefix . '_records_new SELECT * FROM ' .$stagingSchemaDotPrefix . '_records');
+    
+        $db->statement('DROP TABLE IF EXISTS ' . $backupSchemaDotPrefix . '_records');
+        // Rename current *_records in exclusion_lists to *_records in exclusion_lists_backup
+        // Rename current *_records_new in exclusion_lists to *_records in exclusion_lists
+        $db->statement('RENAME TABLE ' . $prodSchemaDotPrefix .'_records TO ' . $backupSchemaDotPrefix . '_records, ' . $prodSchemaDotPrefix .'_records_new TO ' . $prodSchemaDotPrefix . '_records');
+        $db->statement('DROP TABLE IF EXISTS ' . $prodSchemaDotPrefix . '_records_new');
+    }    
     
     public function getStagingSchema()
     {
@@ -139,17 +139,26 @@ class ExclusionListRecordRepository implements Repository
         $db = app('db');
         
         $stagingTable = $this->stagingSchema . '.' . $prefix . '_records';
-        $backupTable = $this->backupSchema . '.' . $prefix . '_records';
+        $prodTable = $this->prodSchema . '.' . $prefix . '_records';
         
-        $subQueryAlias = 't';
-        $subQuery = '(SELECT *, \'staging\' as source FROM ' . $stagingTable . ' UNION ALL 
-                      SELECT *, \'backup\'  as source FROM ' . $backupTable . ') ' . $subQueryAlias;
-        
-        $query = $db->table($subQueryAlias)
-            ->from($db->raw($subQuery))
-            ->groupBy('hash')
-            ->havingRaw('COUNT(*) = 1');
-        
-        return $query->get();
+        $stagingTableUnmatchedHashesQuery = $db->table($stagingTable)
+            ->select($db->raw('*, \'staging\' as source'))
+            ->whereNotIn('hash', function($query) use ($stagingTable, $prodTable) {
+                $query->select($stagingTable.'.hash')
+                      ->from($stagingTable)
+                      ->join($prodTable, $stagingTable.'.hash', '=', $prodTable.'.hash');
+            });
+
+        $prodTableUnmatchedHashesQuery = $db->table($prodTable)
+            ->select($db->raw('*, \'prod\' as source'))
+            ->whereNotIn('hash', function($query) use ($stagingTable, $prodTable) {
+                $query->select($prodTable.'.hash')
+                      ->from($prodTable)
+                      ->join($stagingTable, $stagingTable.'.hash', '=', $prodTable.'.hash');
+            });
+                
+        $unmatchedHashesQuery = $stagingTableUnmatchedHashesQuery->unionAll($prodTableUnmatchedHashesQuery);
+                
+        return $unmatchedHashesQuery->get();
    }
 }

@@ -16,13 +16,21 @@
         </addColumn>
     </changeSet>
     
+    <changeSet author="sv" id="svg-15-3-add-last-import-stats-to-exclusion-lists">
+        <addColumn tableName="exclusion_lists">
+            <column name="last_import_stats" type="MEDIUMTEXT" >
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
     <!-- exclusion_list_versions table changes-->
-    <changeSet author="sv" id="svg-15-3-drop-table-exclusion-list-versions">
+    <changeSet author="sv" id="svg-15-4-drop-table-exclusion-list-versions">
         <dropTable tableName="exclusion_list_versions"/>
     </changeSet>
     
     <!-- events table changes -->  
-    <changeSet author="sv" id="svg-15-4-modify-description-column-datatype-to-mediumtext-in-events-table">
+    <changeSet author="sv" id="svg-15-5-modify-description-column-datatype-to-mediumtext-in-events-table">
         <modifyDataType 
             columnName="description" 
             newDataType="MEDIUMTEXT"
