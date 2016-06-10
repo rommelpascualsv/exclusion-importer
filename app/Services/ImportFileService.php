@@ -9,7 +9,6 @@ use App\Import\Service\ListProcessor;
 use App\Repositories\ExclusionListFileRepository;
 use App\Repositories\ExclusionListRecordRepository;
 use App\Repositories\ExclusionListRepository;
-use App\Repositories\FileImportEventRepository;
 use App\Response\JsonResponse;
 use App\Services\Contracts\ImportFileServiceInterface;
 
@@ -28,19 +27,19 @@ class ImportFileService implements ImportFileServiceInterface
     private $exclusionListRepo;
     private $exclusionListFileRepo;
     private $exclusionListRecordRepo;
-    private $fileImportEventRepo;
+    private $exclusionListStatusHelper;
     
     public function __construct(ExclusionListHttpDownloader $exclusionListHttpDownloader, 
             ExclusionListRepository $exclusionListRepo, 
             ExclusionListFileRepository $exclusionListFilesRepo,
             ExclusionListRecordRepository $exclusionListRecordRepo,
-            FileImportEventRepository $fileImportEventRepo)
+            ExclusionListStatusHelper $exclusionListStatusHelper)
     {
         $this->exclusionListDownloader = $exclusionListHttpDownloader;
         $this->exclusionListRepo = $exclusionListRepo;
         $this->exclusionListFileRepo = $exclusionListFilesRepo;
         $this->exclusionListRecordRepo = $exclusionListRecordRepo;
-        $this->fileImportEventRepo = $fileImportEventRepo;
+        $this->exclusionListStatusHelper = $exclusionListStatusHelper;
     }
     
     /**
@@ -78,9 +77,11 @@ class ImportFileService implements ImportFileServiceInterface
                 // Update the files table with the downloaded file content and its corresponding hash
                 $hash = $this->updateFiles($exclusionListFiles, $prefix);
                 
-                if (! $this->isRecordsUpdateRequired($prefix, $hash)) {
-                    info($prefix . ": State is already up-to-date.");
-                    return $this->createResponse('State is already up-to-date.', true);
+                if (! $this->exclusionListStatusHelper->isUpdateRequired($prefix, $hash)) {
+                    
+                    $message = 'Exclusion list for \'' . $prefix. '\' is already up-to-date';
+                    info($message);
+                    return $this->createResponse($message, true);
                 }
                 
                 if ($exclusionList->type) {
@@ -96,15 +97,15 @@ class ImportFileService implements ImportFileServiceInterface
                 
             info('Saving records for ' . $prefix);
             
-            $importStats = $this->saveRecords($exclusionList, $hash);
+            $importResults = $this->saveRecords($exclusionList, $hash);
             
-            info('File import successfully completed for ' . $prefix . ' in staging server. Import stats : ' . json_encode($importStats));
+            info('File import successfully completed for ' . $prefix . ' in staging server. Import stats : ' . json_encode($importResults));
             
             //$this->exclusionListRecordRepo->pushRecordsToProduction($prefix);
             
             return $this->createResponse('', true, [
                 'prefix' => $prefix,
-                'importStats' => $importStats
+                'importResults' => $importResults
             ]);
             
         } catch (\PDOException $e) {
@@ -544,32 +545,6 @@ class ImportFileService implements ImportFileServiceInterface
         }
     }
     
-    private function isRecordsUpdateRequired($prefix, $latestHash)
-    {
-        return ! $this->isLastImportedHashEqualTo($latestHash, $prefix) ||
-            ! $this->isLastEventSuccessful($prefix) ||
-            $this->isExclusionListRecordsEmpty($prefix);        
-    }
-    
-    private function isLastImportedHashEqualTo($hash, $prefix)
-    {
-        $records = $this->exclusionListRepo->find($prefix);
-        
-        return $records && $records[0]->last_imported_hash === $hash;
-    }
-    
-    private function isLastEventSuccessful($prefix)
-    {
-         $event = $this->fileImportEventRepo->findLatestEventOfPrefix($prefix);
-         
-         return $event && $event->getStatus() === FileImportEvent::EVENTSTATUS_SUCCESS;
-    }
-    
-    private function isExclusionListRecordsEmpty($prefix)
-    {
-        return $this->exclusionListRecordRepo->size($prefix) === 0;
-    }
-    
     private function now()
     {
         return date('Y-m-d H:i:s');        
@@ -619,10 +594,11 @@ class ImportFileService implements ImportFileServiceInterface
 
         $importResults = [
             'fileHash' => $lastImportedHash,
-            'importStats' => $importStats
+            'importStats' => $importStats,
+            'importTS' => $now
         ];
 
-        $this->updateExclusionListWith(array_merge($importResults, ['importTS' => $now]), $prefix);
+        $this->updateExclusionListWith($importResults, $prefix);
         
         event('file.saverecords.succeeded', FileImportEvent::newSaveRecordsSucceeded()
             ->setObjectId($prefix)
@@ -630,7 +606,7 @@ class ImportFileService implements ImportFileServiceInterface
             ->setDescription(json_encode($importResults))
         );
         
-        return $importStats;
+        return $importResults;
         
     }
     

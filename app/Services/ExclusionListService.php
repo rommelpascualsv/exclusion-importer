@@ -1,9 +1,9 @@
 <?php
 namespace App\Services;
 
-use App\Repositories\ExclusionListFileRepository;
-use App\Repositories\ExclusionListRepository;
 use App\Services\Contracts\ExclusionListServiceInterface;
+use App\Repositories\ExclusionListRepository;
+use App\Repositories\ExclusionListFileRepository;
 
 /**
  * Service class for retrieval and management of exclusion lists
@@ -13,15 +13,17 @@ class ExclusionListService implements ExclusionListServiceInterface
 {
     private $exclusionListRepo;
     private $exclusionListFileRepo;
-    private $exclusionListRecordRepo;
+    private $exclusionListStatusHelper;
     
     public function __construct(ExclusionListRepository $exclusionListRepo,
-            ExclusionListFileRepository $exclusionListFileRepo)
+        ExclusionListFileRepository $exclusionListFileRepo, 
+        ExclusionListStatusHelper $exclusionListStatusHelper)
     {
         $this->exclusionListRepo = $exclusionListRepo;
         $this->exclusionListFileRepo = $exclusionListFileRepo;
+        $this->exclusionListStatusHelper = $exclusionListStatusHelper;
+        
     }
-    
     /**
      * Retrieves the list of active states
      * @return array
@@ -36,25 +38,17 @@ class ExclusionListService implements ExclusionListServiceInterface
             
             $prefix = $activeExclusionList->prefix;
             
-            $latestRepoFile = $this->getLatestRepoFileFor($prefix);
-            
-            $activeExclusionList->update_required = ! $latestRepoFile || ! $this->isExclusionListUpToDate($prefix, $latestRepoFile->hash);
-            
+            $activeExclusionList->update_required = $this->exclusionListStatusHelper->isUpdateRequired($prefix, $this->getLatestFileHashFor($prefix));
+
             $collection[$prefix] = json_decode(json_encode($activeExclusionList), true);
         }
         return $collection;
     }
     
-    private function getLatestRepoFileFor($prefix)
+    private function getLatestFileHashFor($prefix)
     {
         $files = $this->exclusionListFileRepo->getFilesForPrefix($prefix);
-        return $files ? $files[0] : null;
-    }
-    
-    private function isExclusionListUpToDate($prefix, $latestHash)
-    {
-        $records = $this->exclusionListRepo->find($prefix);
-        return $records && $records[0]->last_imported_hash === $latestHash; 
-    }
 
+        return $files ? $files[0]->hash : null;
+    }
 }
