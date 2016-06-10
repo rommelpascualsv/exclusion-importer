@@ -3,11 +3,18 @@
                    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
-    <changeSet author="sv" id="initial_bootstrap" context="prod">
+    <changeSet author="sv" id="initial_bootstrap_cdm" context="cdm">
         <sqlFile encoding="utf8"
                  path="./sql/exclusion_lists_staging.sql"
                  relativeToChangelogFile="true"/>
     </changeSet>
+
+    <changeSet author="sv" id="initial_bootstrap_prod" context="prod">
+        <sqlFile encoding="utf8"
+                 path="./sql/exclusion_lists.sql"
+                 relativeToChangelogFile="true"/>
+    </changeSet>
+
     <!-- 
     <changeSet author="sv" id="1456985528119-324" context="test">
         <sqlFile encoding="utf8"
@@ -18,11 +25,13 @@
         </rollback>
     </changeSet>
      -->
-    <changeSet author="sv" id="1456985528119-325" context="prod">
+     
+    <changeSet author="sv" id="1456985528119-325" context="cdm">
         <sqlFile encoding="utf8"
                  path="./sql/002_insert_exclusion_lists.sql"
                  relativeToChangelogFile="true"/>
     </changeSet>
+    
     <changeSet author="sv" id="1456985528119-326" context="test">
         <sqlFile encoding="utf8"
                  path="./sql/003_update_exclusion_lists.sql"
@@ -46,4 +55,5 @@
     <include file="./changelog/svg-433-1-fix-view-for-csl-columns.changelog.xml" relativeToChangelogFile="true" />
     <include file="./changelog/svg-336-store-previous-versions-of-blobs.changelog.xml" relativeToChangelogFile="true" />
     <include file="./changelog/svg-15-add-import-stats.changelog.xml" relativeToChangelogFile="true" />
+    
 </databaseChangeLog>

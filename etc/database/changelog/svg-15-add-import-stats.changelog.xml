@@ -2,13 +2,13 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
     
     <!-- exclusion_lists table changes -->
-    <changeSet author="sv" id="svg-15-1-add-last-imported-hash-column-to-exclusion-lists">
+    <changeSet author="sv" id="svg-15-1-add-last-imported-hash-column-to-exclusion-lists" context="cdm">
         <addColumn tableName="exclusion_lists">
             <column name="last_imported_hash" type="VARCHAR(64)" />
         </addColumn>
     </changeSet>
 
-    <changeSet author="sv" id="svg-15-2-add-last-imported-date-column-to-exclusion-lists">
+    <changeSet author="sv" id="svg-15-2-add-last-imported-date-column-to-exclusion-lists" context="cdm">
         <addColumn tableName="exclusion_lists">
             <column name="last_imported_date" type="TIMESTAMP" >
                 <constraints nullable="true"/>
@@ -16,7 +16,7 @@
         </addColumn>
     </changeSet>
     
-    <changeSet author="sv" id="svg-15-3-add-last-import-stats-to-exclusion-lists">
+    <changeSet author="sv" id="svg-15-3-add-last-import-stats-to-exclusion-lists" context="cdm">
         <addColumn tableName="exclusion_lists">
             <column name="last_import_stats" type="MEDIUMTEXT" >
                 <constraints nullable="true"/>
@@ -25,16 +25,16 @@
     </changeSet>
 
     <!-- exclusion_list_versions table changes-->
-    <changeSet author="sv" id="svg-15-4-drop-table-exclusion-list-versions">
+    <changeSet author="sv" id="svg-15-4-drop-table-exclusion-list-versions" context="cdm">
         <dropTable tableName="exclusion_list_versions"/>
     </changeSet>
     
     <!-- events table changes -->  
-    <changeSet author="sv" id="svg-15-5-modify-description-column-datatype-to-mediumtext-in-events-table">
+    <changeSet author="sv" id="svg-15-5-modify-description-column-datatype-to-mediumtext-in-events-table" context="cdm">
         <modifyDataType 
             columnName="description" 
             newDataType="MEDIUMTEXT"
             tableName="events" />
     </changeSet>
-         
+
 </databaseChangeLog>
