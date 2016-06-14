@@ -47,7 +47,7 @@ class FileImportEvent extends Event
         $instance = (new FileImportEvent())
             ->setEventType(self::EVENTTYPE_FILE_DOWNLOAD)
             ->setStatus(self::EVENTSTATUS_SUCCESS)
-            ->setDescription(self::DEFAULT_FILE_DOWNLOAD_SUCCESS_DESCRIPTION);
+            ->setDescription(json_encode(['message' => self::DEFAULT_FILE_DOWNLOAD_SUCCESS_DESCRIPTION]));
     
         return $instance;
     }
@@ -66,7 +66,7 @@ class FileImportEvent extends Event
         $instance = (new FileImportEvent())
             ->setEventType(self::EVENTTYPE_FILE_PARSE)
             ->setStatus(self::EVENTSTATUS_SUCCESS)
-            ->setDescription(self::DEFAULT_FILE_PARSE_SUCCESS_DESCRIPTION);
+            ->setDescription(json_encode(['message' => self::DEFAULT_FILE_PARSE_SUCCESS_DESCRIPTION]));
             
         return $instance;
     }
@@ -85,7 +85,7 @@ class FileImportEvent extends Event
         $instance = (new FileImportEvent())
             ->setEventType(self::EVENTTYPE_FILE_UPDATE)
             ->setStatus(self::EVENTSTATUS_SUCCESS)
-            ->setDescription(self::DEFAULT_FILE_UPDATE_SUCCESS_DESCRIPTION);
+            ->setDescription(json_encode(['message' => self::DEFAULT_FILE_UPDATE_SUCCESS_DESCRIPTION]));
         
         return $instance;
     }
@@ -104,7 +104,7 @@ class FileImportEvent extends Event
         $instance = (new FileImportEvent())
             ->setEventType(self::EVENTTYPE_SAVE_RECORDS)
             ->setStatus(self::EVENTSTATUS_SUCCESS)
-            ->setDescription(self::DEFAULT_SAVE_RECORDS_SUCCESS_DESCRIPTION);
+            ->setDescription(json_encode(['message' => self::DEFAULT_SAVE_RECORDS_SUCCESS_DESCRIPTION]));
         
         return $instance;
     }

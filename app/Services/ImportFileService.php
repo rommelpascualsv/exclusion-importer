@@ -557,7 +557,10 @@ class ImportFileService implements ImportFileServiceInterface
     
     private function onFileDownloadFailed($prefix, \Exception $e)
     {
-        event('file.download.failed', FileImportEvent::newFileDownloadFailed()->setObjectId($prefix)->setDescription('Failed to download file : ' . $e->getMessage()));
+        event('file.download.failed', FileImportEvent::newFileDownloadFailed()
+            ->setObjectId($prefix)
+            ->setDescription(json_encode([get_class($e) => 'Failed to download file : ' . $e->getMessage()]))
+        );
     }
     
     private function onFileUpdateSucceeded($prefix, $description = null)
@@ -565,7 +568,7 @@ class ImportFileService implements ImportFileServiceInterface
         $eventPayload = FileImportEvent::newFileUpdateSucceeded()->setObjectId($prefix);
         
         if ($description) {
-            $eventPayload->setDescription($description);
+            $eventPayload->setDescription(json_encode(['message' => $description]));
         }
         
         event('file.update.succeeded', $eventPayload);
@@ -573,7 +576,10 @@ class ImportFileService implements ImportFileServiceInterface
     
     private function onFileUpdateFailed($prefix, \Exception $e)
     {
-        event('file.update.failed', FileImportEvent::newFileUpdateFailed()->setObjectId($prefix)->setDescription('Failed to update file : ' . $e->getMessage()));
+        event('file.update.failed', FileImportEvent::newFileUpdateFailed()
+            ->setObjectId($prefix)
+            ->setDescription(json_encode([get_class($e) => 'Failed to update file : ' . $e->getMessage()]))
+        );
     }
     
     private function onFileParseSucceeded($prefix)
@@ -583,7 +589,10 @@ class ImportFileService implements ImportFileServiceInterface
     
     private function onFileParseFailed($prefix, \Exception $e)
     {
-        event('file.parse.failed', FileImportEvent::newFileParseFailed()->setObjectId($prefix)->setDescription('Failed to parse file content : ' . $e->getMessage()));
+        event('file.parse.failed', FileImportEvent::newFileParseFailed()
+            ->setObjectId($prefix)
+            ->setDescription(json_encode([get_class($e) => 'Failed to parse file content : ' . $e->getMessage()]))
+       );
     }
     
     private function onRecordsSaveSucceeded($prefix, $lastImportedHash)
@@ -621,7 +630,10 @@ class ImportFileService implements ImportFileServiceInterface
     
     private function onRecordsSaveFailed($prefix, \Exception $e)
     {
-        event('file.saverecords.failed', FileImportEvent::newSaveRecordsFailed()->setObjectId($prefix)->setDescription('Failed to save records : ' . $e->getMessage()));
+        event('file.saverecords.failed', FileImportEvent::newSaveRecordsFailed()
+            ->setObjectId($prefix)
+            ->setDescription(json_encode([get_class($e) => 'Failed to save records : ' . $e->getMessage()]))
+        );
     }
     
     private function onFileImportException($prefix, $e)
