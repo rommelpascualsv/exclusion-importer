@@ -57,17 +57,43 @@
                     <th>List</th>
                     <th>Description</th>
                     <th>URL</th>
-                    <th>Start Update</th>
-                    <th>Update Required</th>
+                    <th class="text-center" style="width:110px;">Start Update</th>
+                    <th class="text-center">Update<br>Required</th>
                 </tr>
                 <form name="importForm" method="get">
                 <?php
                 foreach ($exclusionLists as $prefix => $info)
                 {
-                    ?>
+                    $lastImportedDate = $info['last_imported_date'] ? $info['last_imported_date'] : '--';
+                    $lastImportStats = $info['last_import_stats'] ? json_decode($info['last_import_stats']) : null;
+                    
+                    $added = $lastImportStats ? $lastImportStats->added : 0;
+                    $deleted = $lastImportStats ? $lastImportStats->deleted : 0;
+                    $previousRecordCount = $lastImportStats ? $lastImportStats->previousRecordCount : 0;
+                    $currentRecordCount = $lastImportStats ? $lastImportStats->currentRecordCount : 0;                  
+                ?>
                     <tr>
                         <td><?= $info['accr'] ?></td>
-                        <td><?= $info['description'] ?></td>
+                        <td>
+                        	<?= $info['description'] ?>
+                        	<br />
+                        	<span class="small import-stat">
+                        		Last imported on <span id="<?= $info['prefix'] ?>-last-import-ts"><?= $lastImportedDate ?></span>
+                       		</span>
+                       		<br />
+                       		<span class="small import-stat">
+                        		Staging : <span id="<?= $info['prefix'] ?>-current-record-count"><?= $currentRecordCount ?></span>
+                       		</span>
+							<span class="small import-stat">
+                        		Prod : <span id="<?= $info['prefix'] ?>-previous-record-count"><?= $previousRecordCount ?></span>
+                       		</span>                       		
+                       		<span class="small import-stat">
+                        		Added : <span id="<?= $info['prefix'] ?>-added"><?= $added ?></span>
+                       		</span>
+							<span class="small import-stat">
+                        		Deleted : <span id="<?= $info['prefix'] ?>-deleted"><?= $deleted ?></span>
+                       		</span>
+                        </td>
                         <td>
                         	<input class="url text_<?= $info['prefix'] ?>" type="text" name="text_<?= $info['prefix'] ?>" value="<?= $info['import_url'] ?>" />
                         </td>
@@ -77,7 +103,7 @@
 							?>
 							<input <?= $disabled ?> type="button" value="Start" data-action="/import/<?= $info['prefix'] ?>" class="start-btn btn btn-1g btn-default" />
                         </td>
-                        <td class="readyForUpdate"><?= $info['update_required'] ? 'Yes' : 'No' ?></td>
+                        <td class="readyForUpdate text-center"><?= $info['update_required'] ? 'Yes' : 'No' ?></td>
                     </tr>
                     <?php
                 }

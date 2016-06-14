@@ -16,3 +16,12 @@ body {
   color: #660000;
   font-weight: bold;
 }
+
+.import-stat {
+    color : #777;
+    margin-right: 10px;
+}
+
+.start-btn {
+    width : 107px;
+}

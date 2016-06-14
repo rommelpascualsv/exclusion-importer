@@ -1,14 +1,7 @@
 <?php
 namespace App\Services;
 
-use App\Events\FileDownloadFailed;
-use App\Events\FileDownloadSucceeded;
-use App\Events\FileParseFailed;
-use App\Events\FileParseSucceeded;
-use App\Events\FileUpdateFailed;
-use App\Events\FileUpdateSucceeded;
-use App\Events\SaveRecordsFailed;
-use App\Events\SaveRecordsSucceeded;
+use App\Events\FileImportEvent;
 use App\Exceptions\LoggablePDOException;
 use App\Import\Lists\ExclusionList;
 use App\Import\Service\Exclusions\ListFactory;
@@ -16,9 +9,9 @@ use App\Import\Service\ListProcessor;
 use App\Repositories\ExclusionListFileRepository;
 use App\Repositories\ExclusionListRecordRepository;
 use App\Repositories\ExclusionListRepository;
-use App\Repositories\ExclusionListVersionRepository;
 use App\Response\JsonResponse;
 use App\Services\Contracts\ImportFileServiceInterface;
+
 
 /**
  * Service class that handles the import related processes.
@@ -34,21 +27,19 @@ class ImportFileService implements ImportFileServiceInterface
     private $exclusionListRepo;
     private $exclusionListFileRepo;
     private $exclusionListRecordRepo;
-    private $exclusionListVersionRepo;
-    private $getFilesForPrefixAndHashQuery;
-    private $getFilesForPrefixQuery;
+    private $exclusionListStatusHelper;
     
     public function __construct(ExclusionListHttpDownloader $exclusionListHttpDownloader, 
             ExclusionListRepository $exclusionListRepo, 
             ExclusionListFileRepository $exclusionListFilesRepo,
             ExclusionListRecordRepository $exclusionListRecordRepo,
-            ExclusionListVersionRepository $exclusionListVersionRepo)
+            ExclusionListStatusHelper $exclusionListStatusHelper)
     {
         $this->exclusionListDownloader = $exclusionListHttpDownloader;
         $this->exclusionListRepo = $exclusionListRepo;
         $this->exclusionListFileRepo = $exclusionListFilesRepo;
         $this->exclusionListRecordRepo = $exclusionListRecordRepo;
-        $this->exclusionListVersionRepo = $exclusionListVersionRepo;
+        $this->exclusionListStatusHelper = $exclusionListStatusHelper;
     }
     
     /**
@@ -86,9 +77,11 @@ class ImportFileService implements ImportFileServiceInterface
                 // Update the files table with the downloaded file content and its corresponding hash
                 $hash = $this->updateFiles($exclusionListFiles, $prefix);
                 
-                if ($hash && $this->isExclusionListUpToDate($prefix, $hash) && ! $this->isExclusionListRecordsEmpty($prefix)) {
-                    info($prefix . ": State is already up-to-date.");
-                    return $this->createResponse('State is already up-to-date.', true);
+                if (! $this->exclusionListStatusHelper->isUpdateRequired($prefix, $hash)) {
+                    
+                    $message = 'Exclusion list for \'' . $prefix. '\' is already up-to-date';
+                    info($message);
+                    return $this->createResponse($message, true);
                 }
                 
                 if ($exclusionList->type) {
@@ -98,19 +91,22 @@ class ImportFileService implements ImportFileServiceInterface
                 }
             }
             
-            info('Starting exclusion list import for ' . $prefix);
+            info('Parsing records for ' . $prefix);
 
             $this->parseRecords($exclusionList);
                 
-            $this->saveRecords($exclusionList);
+            info('Saving records for ' . $prefix);
             
-            if ($hash) {
-                $this->updateImportedVersionTo($hash, $prefix);
-            }
+            $importResults = $this->saveRecords($exclusionList, $hash);
             
-            info('Finished exclusion list import for ' . $prefix);
+            info('File import successfully completed for ' . $prefix . ' in staging server. Import stats : ' . json_encode($importResults));
             
-            return $this->createResponse('', true);
+            //$this->exclusionListRecordRepo->pushRecordsToProduction($prefix);
+            
+            return $this->createResponse('', true, [
+                'prefix' => $prefix,
+                'importResults' => $importResults
+            ]);
             
         } catch (\PDOException $e) {
             
@@ -295,6 +291,7 @@ class ImportFileService implements ImportFileServiceInterface
             $this->onFileDownloadFailed($prefix, $e);
             throw $e;           
         }
+        
     }
 
     /**
@@ -329,12 +326,12 @@ class ImportFileService implements ImportFileServiceInterface
     
         } catch (\PDOException $e) {
             
-            $this->onUpdateFileFailed($prefix, new LoggablePDOException($e));
+            $this->onFileUpdateFailed($prefix, new LoggablePDOException($e));
             throw $e;
             
         } catch(\Exception $e) {
 
-            $this->onUpdateFileFailed($prefix, $e);
+            $this->onFileUpdateFailed($prefix, $e);
             throw $e;
             
         } finally {
@@ -428,7 +425,7 @@ class ImportFileService implements ImportFileServiceInterface
         // to insert it in the files repository if a hash already exists
         if (! $this->exclusionListFileRepo->contains($record)) {
             
-            info('Inserting new file hash to the files repository : ' . $hash);
+            info('Inserting new file hash to the files repository for \''. $prefix .'\' : ' . $hash);
             
             $record['date_last_downloaded'] = $this->now();
             
@@ -438,7 +435,7 @@ class ImportFileService implements ImportFileServiceInterface
             
             $this->exclusionListFileRepo->update($record, ['date_last_downloaded' => $this->now()]);
             
-            info('Existing file hash found in files repository : ' . $hash);
+            info('Existing file hash found in files repository for \''. $prefix .'\' : ' . $hash);
         }
     
         return $hash;
@@ -498,9 +495,10 @@ class ImportFileService implements ImportFileServiceInterface
             $this->onFileParseFailed($prefix, $e);
             throw $e;
         }
+        
     }
     
-    private function saveRecords(ExclusionList $exclusionList)
+    private function saveRecords(ExclusionList $exclusionList, $lastImportedHash)
     {
         $prefix = $exclusionList->dbPrefix;
         
@@ -508,7 +506,7 @@ class ImportFileService implements ImportFileServiceInterface
             
             $this->createListProcessor($exclusionList)->insertRecords();
             
-            $this->onRecordsSaveSucceeded($prefix);
+            return $this->onRecordsSaveSucceeded($prefix, $lastImportedHash);
             
         } catch (\PDOException $e) {
             
@@ -520,12 +518,13 @@ class ImportFileService implements ImportFileServiceInterface
             $this->onRecordsSaveFailed($prefix, $e);
             throw $e;
         }
+        
     }
-
+    
     /**
      * Compares $content with the contents of $file
-     * @param string $content the string content to compare with the contents of
-     * the file
+     * 
+     * @param string $content the string content to compare with the contents of the file
      * @param string $file the file path
      * @return boolean
      */
@@ -546,26 +545,6 @@ class ImportFileService implements ImportFileServiceInterface
         }
     }
     
-    private function isExclusionListUpToDate($prefix, $latestHash)
-    {
-        $records = $this->exclusionListVersionRepo->find($prefix);
-        
-        return $records && $records[0]->last_imported_hash === $latestHash; 
-    }
-    
-    private function updateImportedVersionTo($hash, $prefix)
-    {
-        $this->exclusionListVersionRepo->createOrUpdate($prefix, [
-            'last_imported_hash' => $hash,
-            'last_imported_date' => $this->now()
-        ]);
-    }
-    
-    private function isExclusionListRecordsEmpty($prefix)
-    {
-        return $this->exclusionListRecordRepo->size($prefix) === 0;
-    }
-    
     private function now()
     {
         return date('Y-m-d H:i:s');        
@@ -573,48 +552,88 @@ class ImportFileService implements ImportFileServiceInterface
     
     private function onFileDownloadSucceeded($prefix)
     {
-        event('file.download.succeeded', (new FileDownloadSucceeded())->setObjectId($prefix));
+        event('file.download.succeeded', FileImportEvent::newFileDownloadSucceeded()->setObjectId($prefix));
     }
     
     private function onFileDownloadFailed($prefix, \Exception $e)
     {
-        event('file.download.failed', (new FileDownloadFailed())->setObjectId($prefix)->setDescription('Failed to download file : ' . $e->getMessage()));
+        event('file.download.failed', FileImportEvent::newFileDownloadFailed()
+            ->setObjectId($prefix)
+            ->setDescription(json_encode([get_class($e) => 'Failed to download file : ' . $e->getMessage()]))
+        );
     }
     
     private function onFileUpdateSucceeded($prefix, $description = null)
     {
-        $eventPayload = (new FileUpdateSucceeded())->setObjectId($prefix);
+        $eventPayload = FileImportEvent::newFileUpdateSucceeded()->setObjectId($prefix);
         
         if ($description) {
-            $eventPayload->setDescription($description);
+            $eventPayload->setDescription(json_encode(['message' => $description]));
         }
         
         event('file.update.succeeded', $eventPayload);
     }
     
-    private function onUpdateFileFailed($prefix, \Exception $e)
+    private function onFileUpdateFailed($prefix, \Exception $e)
     {
-        event('file.update.failed', (new FileUpdateFailed())->setObjectId($prefix)->setDescription('Failed to update file : ' . $e->getMessage()));
+        event('file.update.failed', FileImportEvent::newFileUpdateFailed()
+            ->setObjectId($prefix)
+            ->setDescription(json_encode([get_class($e) => 'Failed to update file : ' . $e->getMessage()]))
+        );
     }
     
     private function onFileParseSucceeded($prefix)
     {
-        event('file.parse.succeeded', (new FileParseSucceeded())->setObjectId($prefix));
+        event('file.parse.succeeded', FileImportEvent::newFileParseSucceeded()->setObjectId($prefix));
     }
     
     private function onFileParseFailed($prefix, \Exception $e)
     {
-        event('file.parse.failed', (new FileParseFailed())->setObjectId($prefix)->setDescription('Failed to parse file content : ' . $e->getMessage()));
+        event('file.parse.failed', FileImportEvent::newFileParseFailed()
+            ->setObjectId($prefix)
+            ->setDescription(json_encode([get_class($e) => 'Failed to parse file content : ' . $e->getMessage()]))
+       );
     }
     
-    private function onRecordsSaveSucceeded($prefix)
+    private function onRecordsSaveSucceeded($prefix, $lastImportedHash)
     {
-        event('file.saverecords.succeeded', (new SaveRecordsSucceeded())->setObjectId($prefix));
+        $now = $this->now();
+        
+        $importStats = $this->exclusionListRecordRepo->getImportStats($prefix);
+
+        $importResults = [
+            'fileHash' => $lastImportedHash,
+            'importStats' => $importStats,
+            'importTS' => $now
+        ];
+
+        $this->updateExclusionListWith($importResults, $prefix);
+        
+        event('file.saverecords.succeeded', FileImportEvent::newSaveRecordsSucceeded()
+            ->setObjectId($prefix)
+            ->setTimestamp($now)
+            ->setDescription(json_encode($importResults))
+        );
+        
+        return $importResults;
+        
     }
+    
+    private function updateExclusionListWith($importResults, $prefix)
+    {
+        $this->exclusionListRepo->update($prefix, [
+            'last_imported_hash'  => $importResults['fileHash'],
+            'last_imported_date'  => $importResults['importTS'],
+            'last_import_stats' => json_encode($importResults['importStats'])
+        ]);
+    }    
     
     private function onRecordsSaveFailed($prefix, \Exception $e)
     {
-        event('file.saverecords.failed', (new SaveRecordsFailed())->setObjectId($prefix)->setDescription('Failed to save records : ' . $e->getMessage()));
+        event('file.saverecords.failed', FileImportEvent::newSaveRecordsFailed()
+            ->setObjectId($prefix)
+            ->setDescription(json_encode([get_class($e) => 'Failed to save records : ' . $e->getMessage()]))
+        );
     }
     
     private function onFileImportException($prefix, $e)

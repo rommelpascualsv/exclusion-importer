@@ -82,9 +82,9 @@ class ImportController extends BaseController
             'healthmil_records',
         ];
         foreach ($lists as $list) {
-            app('db')->statement('DROP TABLE IF EXISTS `' . $list . '_older`');
-            app('db')->statement('CREATE TABLE  `' . $list . '_older` LIKE `' . $list . '`');
-            app('db')->statement('INSERT  INTO `' . $list . '_older` SELECT * FROM `' . $list . '`');
+            app('db')->statement('DROP TABLE IF EXISTS `exclusion_lists_backup`.`' . $list . '_older`');
+            app('db')->statement('CREATE TABLE `exclusion_lists_backup`.`' . $list . '_older` LIKE `exclusion_lists_staging`.`' . $list . '`');
+            app('db')->statement('INSERT INTO `exclusion_lists_backup`.`' . $list . '_older` SELECT * FROM `exclusion_lists_staging`.`' . $list . '`');
         }
 	}
 
