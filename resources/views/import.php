@@ -82,10 +82,10 @@
                        		</span>
                        		<br />
                        		<span class="small import-stat">
-                        		Current : <span id="<?= $info['prefix'] ?>-current-record-count"><?= $currentRecordCount ?></span>
+                        		Staging : <span id="<?= $info['prefix'] ?>-current-record-count"><?= $currentRecordCount ?></span>
                        		</span>
 							<span class="small import-stat">
-                        		Previous : <span id="<?= $info['prefix'] ?>-previous-record-count"><?= $previousRecordCount ?></span>
+                        		Prod : <span id="<?= $info['prefix'] ?>-previous-record-count"><?= $previousRecordCount ?></span>
                        		</span>                       		
                        		<span class="small import-stat">
                         		Added : <span id="<?= $info['prefix'] ?>-added"><?= $added ?></span>
