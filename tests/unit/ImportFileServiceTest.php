@@ -2,7 +2,6 @@
 
 namespace Test\Unit;
 
-use App\Events\FileImportEvent;
 use App\Import\Lists\Tennessee;
 use App\Services\ImportFileService;
 use CDM\Test\TestCase;

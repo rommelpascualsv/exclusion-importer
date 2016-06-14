@@ -51,11 +51,27 @@ class ExclusionListRecordRepository implements Repository
         return app('db')->table($prefix . '_records')->count();
     }
     
-    public function getImportStats($prefix)
+    /**
+     * Returns an App\\Models\\ImportStats object containing metrics for
+     * how many records will potentially get affected if records in the target 
+     * table are updated with records from the source table. 
+     * 
+     * @param string $prefix The exclusion list prefix whose import stats will
+     * be returned. Required.
+     * @param string $source [optional] the source table name. Defaults to 
+     * 'exclusion_lists_staging.<prefix>_records' if not specified.
+     * @param string $target [optional] the target table name. Defaults to 
+     * 'exclusion_lists.<prefix>_records if not specified.
+     * @return \App\Models\ImportStats
+     */
+    public function getImportStats($prefix, $source = null, $target = null)
     {
         $db = app('db');
         
-        $addedOrDeletedRecords = $this->getRecordsWithUnmatchedHashes($prefix);
+        $source = $source ?: $this->stagingSchema . '.' . $prefix . '_records';
+        $target = $target ?: $this->prodSchema . '.' . $prefix . '_records';
+        
+        $addedOrDeletedRecords = $this->getRecordsWithUnmatchedHashes($prefix, $source, $target);
         
         $deleted = [];
         $added   = [];
@@ -74,8 +90,8 @@ class ExclusionListRecordRepository implements Repository
         
         $importStats = (new ImportStats())->setAdded($added ? count($added) : 0)
             ->setDeleted($deleted ? count($deleted) : 0)
-            ->setPreviousRecordCount($db->connection('exclusion_lists')->table($prefix.'_records')->count())
-            ->setCurrentRecordCount($this->size($prefix)); 
+            ->setPreviousRecordCount($db->table($target)->count())
+            ->setCurrentRecordCount($db->table($source)->count()); 
         
         return $importStats;
     }
@@ -134,31 +150,36 @@ class ExclusionListRecordRepository implements Repository
         return $this;
     }    
     
-    private function getRecordsWithUnmatchedHashes($prefix)
+    /**
+     * Returns all records from source without a matching 'hash' column value in
+     * target and vice versa.
+     * 
+     * @param string $prefix the exclusion list version prefix
+     * @param string $source the source table name
+     * @param string $target the target table name
+     */
+    private function getRecordsWithUnmatchedHashes($prefix, $source, $target)
     {
         $db = app('db');
         
-        $stagingTable = $this->stagingSchema . '.' . $prefix . '_records';
-        $prodTable = $this->prodSchema . '.' . $prefix . '_records';
-        
-        $stagingTableUnmatchedHashesQuery = $db->table($stagingTable)
+        $stagingTableUnmatchedHashesQuery = $db->table($source)
             ->select($db->raw('*, \'staging\' as source'))
-            ->whereNotIn('hash', function($query) use ($stagingTable, $prodTable) {
-                $query->select($stagingTable.'.hash')
-                      ->from($stagingTable)
-                      ->join($prodTable, $stagingTable.'.hash', '=', $prodTable.'.hash');
+            ->whereNotIn('hash', function($query) use ($source, $target) {
+                $query->select($source.'.hash')
+                      ->from($source)
+                      ->join($target, $source.'.hash', '=', $target.'.hash');
             });
 
-        $prodTableUnmatchedHashesQuery = $db->table($prodTable)
+        $prodTableUnmatchedHashesQuery = $db->table($target)
             ->select($db->raw('*, \'prod\' as source'))
-            ->whereNotIn('hash', function($query) use ($stagingTable, $prodTable) {
-                $query->select($prodTable.'.hash')
-                      ->from($prodTable)
-                      ->join($stagingTable, $stagingTable.'.hash', '=', $prodTable.'.hash');
+            ->whereNotIn('hash', function($query) use ($source, $target) {
+                $query->select($target.'.hash')
+                      ->from($target)
+                      ->join($source, $source.'.hash', '=', $target.'.hash');
             });
                 
         $unmatchedHashesQuery = $stagingTableUnmatchedHashesQuery->unionAll($prodTableUnmatchedHashesQuery);
-                
+
         return $unmatchedHashesQuery->get();
    }
 }
