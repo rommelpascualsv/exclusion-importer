@@ -16,7 +16,15 @@ class NewJersey extends ExclusionList
     public $hashColumns = [
         'firm_name',
         'name',
+        'firm_street',
+        'firm_city',
+        'firm_state',
+        'firm_zip',
         'npi',
+        'street',
+        'city',
+        'state',
+        'zip',
         'effective_date',
         'expiration_date',
         'permanent_debarment'

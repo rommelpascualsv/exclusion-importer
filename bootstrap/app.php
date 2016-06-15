@@ -23,6 +23,14 @@ $app = new Laravel\Lumen\Application(
 
 // $app->withEloquent();
 
+// Expose error-level logging method
+if (! function_exists('error')) {
+    function error($message, $context = [])
+    {
+        return app('Psr\Log\LoggerInterface')->error($message, $context);
+    }
+}
+
 /*
 |--------------------------------------------------------------------------
 | Register Container Bindings
@@ -79,9 +87,9 @@ $app->singleton(
 */
 
 // $app->register(App\Providers\AppServiceProvider::class);
-// $app->register(App\Providers\EventServiceProvider::class);
+$app->register(App\Providers\EventServiceProvider::class);
 $app->register('App\Providers\MongoServiceProvider');
-$app->register(App\Providers\ImportFileServiceProvider::class);
+$app->register(App\Providers\ExclusionListMgmtServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------

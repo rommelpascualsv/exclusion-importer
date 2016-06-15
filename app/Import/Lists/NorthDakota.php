@@ -53,6 +53,7 @@ class NorthDakota extends ExclusionList
         'business_name_address',
         'medicaid_provider_id',
         'medicaid_provider_number',
+        'state',
         'npi',
         'exclusion_date'
     ];

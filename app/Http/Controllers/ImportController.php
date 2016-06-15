@@ -1,18 +1,25 @@
 <?php namespace App\Http\Controllers;
 
+use App\Services\Contracts\ExclusionListServiceInterface;
 use App\Services\Contracts\ImportFileServiceInterface;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
 class ImportController extends BaseController
 {
-    protected $importFileService;
-    
-    public function __construct(ImportFileServiceInterface $importFileService)
+    private $exclusionListService;
+    private $importFileService;
+
+    public function __construct(ExclusionListServiceInterface $exclusionListService,
+        ImportFileServiceInterface $importFileService)
     {
+        $this->exclusionListService = $exclusionListService;
+        
         $this->importFileService = $importFileService;
+
+        $this->initPhpSettings();
     }
-    
+
     public function createOldTables()
     {
         $lists = [
@@ -83,14 +90,12 @@ class ImportController extends BaseController
 
     public function index()
     {
-        return view('import')->with('exclusionLists', $this->importFileService->getExclusionList());
+        return view('import')->with('exclusionLists', $this->exclusionListService->getActiveExclusionLists());
     }
-    
+
     public function import(Request $request, $listPrefix)
     {
-        $this->initPhpSettings();
-        
-        return $this->importFileService->importFile($request->input('url'), $listPrefix, true);
+        return $this->importFileService->importFile($request->input('url'), $listPrefix);
     }
 
     private function initPhpSettings()

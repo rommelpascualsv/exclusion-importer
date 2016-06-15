@@ -28,13 +28,11 @@ class HealthMil extends ExclusionList
 
     public $hashColumns = [
         'date_excluded',
-        'term',
-        'exclusion_date',
         'companies',
-        'firstName',
-        'middleName',
-        'lastName',
-    	'title'
+        'first_name',
+        'middle_name',
+        'last_name',
+        'addresses'
     ];
 
     private $parser;

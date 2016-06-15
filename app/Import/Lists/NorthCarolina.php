@@ -32,6 +32,10 @@ class NorthCarolina extends ExclusionList
     public $hashColumns = [
         'first_name',
         'last_name',
+        'address_1',
+        'city',
+        'state',
+        'zip',
         'npi',
         'date_excluded'
     ];

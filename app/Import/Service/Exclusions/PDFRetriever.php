@@ -24,23 +24,13 @@ class PDFRetriever extends Retriever
     {
         $data = [];
         // Implement multiple file upload use comma searated
-        $uri = $this->multipleUri($list->uri);
+        $uri = $this->splitURI($list->uri);
 
         foreach ($uri as $key => $value) {
-            $folder = storage_path('app');
-
-            if ($this->uriIsRemote($value)) {
-                $file = "{$folder}/{$list->dbPrefix}-{$key}.pdf";
-                $this->httpClient->get($value, ['sink' => $file]);
-            } else {
-                $file = $value;
-            }
-
-            if (strpos($list->pdfToText, "pdftotext") !== false) {
-                $contents = shell_exec($list->pdfToText . ' ' . $file . ' -');
-            } else {
-                $contents = shell_exec($list->pdfToText . ' ' . $file);
-            }
+            
+            $file = $this->getPdfFileFrom($value, $key, $list);
+            
+            $contents = shell_exec($this->normalizePaths($list->pdfToText) . ' ' . $file. ' 2>/dev/null');
             // Merge Data
             $data[] = $contents;
         }
@@ -53,12 +43,27 @@ class PDFRetriever extends Retriever
         return $data;
     }
 
-    /**
-     * @param $uri
-     * @return mixed
-     */
-    private function uriIsRemote($uri)
+    private function getPdfFileFrom($uri, $fileIndex, $list)
     {
-        return filter_var($uri, FILTER_VALIDATE_URL);
+        $file = null;
+
+        if ($this->isRemoteURI($uri)) {
+            $folder = storage_path('app');
+            $file = "{$folder}/{$list->dbPrefix}-{$fileIndex}.pdf";
+            $this->httpClient->get($uri, ['sink' => $file]);
+        } else {
+            $file = $uri;
+        } 
+        
+        return $file;
+    }
+    
+    /**
+     * Converts relative paths in the cmd string to their equivalent absolute paths
+     * @param string $cmd
+     */
+    private function normalizePaths($cmd)
+    {
+        return str_replace(' ../', ' '.base_path().'/', $cmd);
     }
 }

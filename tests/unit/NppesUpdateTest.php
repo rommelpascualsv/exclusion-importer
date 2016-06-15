@@ -2,7 +2,7 @@
 
 use App\Repositories\NppesRepository;
 
-class NppesUpdateTest extends MongoTestCase 
+class NppesUpdateTest extends \CDM\Test\MongoTestCase
 {
 	public function test_nppes_record_updates_record_database()
 	{

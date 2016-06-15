@@ -38,12 +38,6 @@
             "tests/"
         ]
     },
-    "config": {
-        "preferred-install": "dist",
-        "github-oauth": {
-            "github.com": "848f2429933e83bb54d53fc24ad9dd96b51b35ae"
-        }
-    },
     "repositories": [
         {
             "type": "vcs",

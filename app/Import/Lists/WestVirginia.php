@@ -84,7 +84,7 @@ class WestVirginia extends ExclusionList
     }
 
     /**
-     * @param string csv
+     * @param string $string
      * @return array
      */
     public function lineToaArray($string)
