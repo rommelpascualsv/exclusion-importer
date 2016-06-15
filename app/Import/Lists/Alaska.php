@@ -119,8 +119,11 @@ class Alaska extends ExclusionList
      */
     private function isHeader($value)
     {
-    	
-    	$value = str_replace("\r", "", $value);
-        return strpos($value, '"EXCLUSION') === 0 || strpos ($value, 'DATE LAST NAME') === 0 || strpos ($value, 'EXCLUSION REASON') === 0;
+
+        $value = str_replace("\r", "", $value);
+
+        return strpos($value, '"EXCLUSION') === 0
+            || strpos ($value, 'DATE LAST NAME') === 0
+            || strpos ($value, 'EXCLUSION REASON') === 0;
     }
 }
