@@ -4,7 +4,7 @@ class Alaska extends ExclusionList
 {
     public $dbPrefix = 'ak1';
 
-    public $pdfToText = "java -Dfile.encoding=utf-8 -jar ../etc/tabula.jar -p 2-7 -c 89,215,308,546,598,753";
+    public $pdfToText = "java -Dfile.encoding=utf-8 -jar ../etc/tabula.jar -p 2-7 -r -u -g";
 
     public $uri = "http://dhss.alaska.gov/Commissioner/Documents/PDF/AlaskaExcludedProviderList.pdf";
     
@@ -119,12 +119,11 @@ class Alaska extends ExclusionList
      */
     private function isHeader($value)
     {
-    	
-    	$value = str_replace("\r", "", $value);
-    	if ('"EXCLUSION DATE",LAST NAME,FIRST NAME,PROVIDER TYPE,"EXCLUSION AUTHORITY",EXCLUSION REASON' === $value) {
-    		return true;
-    	}
-    	
-    	return false;
+
+        $value = str_replace("\r", "", $value);
+
+        return strpos($value, '"EXCLUSION') === 0
+            || strpos ($value, 'DATE LAST NAME') === 0
+            || strpos ($value, 'EXCLUSION REASON') === 0;
     }
 }
