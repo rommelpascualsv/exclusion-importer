@@ -47,5 +47,6 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('updateFiles')->daily();
+        $schedule->command('njcredential:import')->weekly();
     }
 }
