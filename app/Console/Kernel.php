@@ -34,7 +34,8 @@ class Kernel extends ConsoleKernel
 
         '\App\Console\Commands\MICna\Seed',
         '\App\Console\Commands\MICna\Clear',
-    	'\App\Console\Commands\UpdateFiles'
+    	'\App\Console\Commands\UpdateFiles',
+        \App\Console\Commands\NJCredential\Import::class
     ];
 
     /**

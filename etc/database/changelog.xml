@@ -55,5 +55,6 @@
     <include file="./changelog/svg-433-1-fix-view-for-csl-columns.changelog.xml" relativeToChangelogFile="true" />
     <include file="./changelog/svg-336-store-previous-versions-of-blobs.changelog.xml" relativeToChangelogFile="true" />
     <include file="./changelog/svg-15-add-import-stats.changelog.xml" relativeToChangelogFile="true" />
-    
+    <include file="./changelog/svg-484-credential-databases-table.changelog.xml" relativeToChangelogFile="true" />
+
 </databaseChangeLog>
