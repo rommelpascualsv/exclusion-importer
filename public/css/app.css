@@ -22,6 +22,21 @@ body {
     margin-right: 10px;
 }
 
-.start-btn {
+.start-btn,#fileupload-btn {
     width : 107px;
+}
+
+.icon-upload {
+    background: url('../images/cloud-upload.png') no-repeat 0px 10px;
+    height: 30px;
+    width: 30px;
+    cursor: pointer;
+}
+
+#fileupload-message, #fileupload-progress, #fileupload-file {
+    margin-top: 10px;    
+}
+
+.modal-dialog.fileupload {
+    width: 400px; 
 }

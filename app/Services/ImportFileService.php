@@ -55,8 +55,6 @@ class ImportFileService implements ImportFileServiceInterface
         
         try {
             
-            info('Trying to import file for ' . $prefix);
-            
             if (! trim($url)) {
                 return $this->createResponse('No URL was specified for : ' . $prefix, false);
             }
@@ -66,6 +64,8 @@ class ImportFileService implements ImportFileServiceInterface
             
             // Update the uri of the exclusion list
             $this->updateUrl($exclusionList, $url);
+            
+            info('Trying to import file for ' . $prefix . ' from ' . $exclusionList->uri);
             
             $hash = null;
             

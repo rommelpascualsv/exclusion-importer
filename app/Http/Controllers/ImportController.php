@@ -4,18 +4,25 @@ use App\Services\Contracts\ExclusionListServiceInterface;
 use App\Services\Contracts\ImportFileServiceInterface;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller as BaseController;
+use App\Response\JsonResponse;
+use App\Services\Contracts\FileUploadServiceInterface;
+use App\Services\FileUploadException;
 
 class ImportController extends BaseController
 {
     private $exclusionListService;
     private $importFileService;
-
+    private $fileUploadService;
+    
+    use JsonResponse;
+    
     public function __construct(ExclusionListServiceInterface $exclusionListService,
-        ImportFileServiceInterface $importFileService)
+        ImportFileServiceInterface $importFileService,
+        FileUploadServiceInterface $fileUploadService)
     {
         $this->exclusionListService = $exclusionListService;
-        
         $this->importFileService = $importFileService;
+        $this->fileUploadService = $fileUploadService;
 
         $this->initPhpSettings();
     }
@@ -97,10 +104,59 @@ class ImportController extends BaseController
     {
         return $this->importFileService->importFile($request->input('url'), $listPrefix);
     }
+    
+    public function upload(Request $request)
+    {   
+        $prefix = trim($request->input('prefix'));
+        
+        try {
+            
+            if (empty($prefix)) {
+                throw new FileUploadException('No exclusion list was specified in the request');
+            }
+            
+            if (! $request->hasFile('file')) {
+                throw new FileUploadException('No file was detected in the request');
+            }
+            
+            $file = $request->file('file');
+            
+            if (! $file->isValid()) {
+                throw new FileUploadException('The uploaded file is not valid');
+            }            
+            
+            $fileUrl = $this->fileUploadService->uploadFile($file, $prefix);
+            
+            $fileImportResponse = $this->importFileService->importFile($fileUrl, $prefix);
+            
+            return $this->createFileUploadResponseFrom($fileImportResponse, $fileUrl, $prefix);
+            
+        } catch (\Exception $e) {
+            
+            return $this->createResponse('Failed to upload / import file : ' . $e->getMessage(), false, ['prefix' => $prefix]);
+        }
+    }
 
     private function initPhpSettings()
     {
         ini_set('memory_limit', '1024M');
         ini_set('max_execution_time', '300');
+    }
+    
+    private function createFileUploadResponseFrom(\Illuminate\Http\JsonResponse $fileImportResponseJson, 
+        $fileUrl, $prefix)
+    {
+        $fileImportResponse = $fileImportResponseJson->getData(true);
+        
+        $fileImportResponseData = isset($fileImportResponse['data']) ? $fileImportResponse['data'] : [];
+        
+        $fileUploadResponseData = [
+            'prefix' => $prefix,
+            'url' => $fileUrl
+        ];
+        
+        $responseData = array_merge($fileImportResponseData, $fileUploadResponseData);
+        
+        return $this->createResponse($fileImportResponse['message'], $fileImportResponse['success'], $responseData);
     }
 }

@@ -16,6 +16,8 @@ sudo sed -i "s/listen\.mode.*/listen.mode = 0666/" /etc/php5/fpm/pool.d/www.conf
 # PHP Error Reporting Config
 sudo sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php5/fpm/php.ini
 sudo sed -i "s/display_errors = .*/display_errors = On/" /etc/php5/fpm/php.ini
+sudo sed -i "s/upload_max_filesize = .*/upload_max_filesize = 128M/" /etc/php5/fpm/php.ini
+sudo sed -i "s/post_max_size = .*/post_max_size = 128M/" /etc/php5/fpm/php.ini
 
 # composer
 curl -sS https://getcomposer.org/installer | php
