@@ -46,7 +46,7 @@ return [
 
     'connections' => [
         
-        # primary - exclusion_lists_staging
+        # primary - exclusion_lists_cdm
         'mysql' => [
             'driver'    => 'mysql',
             'host'      => env('DB_HOST', 'localhost'),

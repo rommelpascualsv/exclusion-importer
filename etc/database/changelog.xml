@@ -5,7 +5,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
     <changeSet author="sv" id="initial_bootstrap_cdm" context="cdm">
         <sqlFile encoding="utf8"
-                 path="./sql/exclusion_lists_staging.sql"
+                 path="./sql/exclusion_lists_cdm.sql"
                  relativeToChangelogFile="true"/>
     </changeSet>
 

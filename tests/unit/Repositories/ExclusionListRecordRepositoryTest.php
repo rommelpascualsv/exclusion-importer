@@ -58,7 +58,7 @@ class ExclusionListRecordRepositoryTest extends TestCase
         
         DB::table('exclusion_list_repo_test_staging')->insert($stagingRecords);
         
-        $actual = $this->repo->getImportStats('tn1', 'exclusion_lists_staging.exclusion_list_repo_test_staging', 'exclusion_lists_staging.exclusion_list_repo_test_prod');
+        $actual = $this->repo->getImportStats('tn1', 'exclusion_lists_cdm.exclusion_list_repo_test_staging', 'exclusion_lists_cdm.exclusion_list_repo_test_prod');
         
         $expected = (new ImportStats())->setAdded(1)->setDeleted(0)->setCurrentRecordCount(4)->setPreviousRecordCount(3);
         
@@ -84,7 +84,7 @@ class ExclusionListRecordRepositoryTest extends TestCase
     
         DB::table('exclusion_list_repo_test_staging')->insert($stagingRecords);
     
-        $actual = $this->repo->getImportStats('tn1', 'exclusion_lists_staging.exclusion_list_repo_test_staging', 'exclusion_lists_staging.exclusion_list_repo_test_prod');
+        $actual = $this->repo->getImportStats('tn1', 'exclusion_lists_cdm.exclusion_list_repo_test_staging', 'exclusion_lists_cdm.exclusion_list_repo_test_prod');
     
         $expected = (new ImportStats())->setAdded(0)->setDeleted(1)->setCurrentRecordCount(2)->setPreviousRecordCount(3);
     
@@ -111,7 +111,7 @@ class ExclusionListRecordRepositoryTest extends TestCase
     
         DB::table('exclusion_list_repo_test_staging')->insert($stagingRecords);
     
-        $actual = $this->repo->getImportStats('tn1', 'exclusion_lists_staging.exclusion_list_repo_test_staging', 'exclusion_lists_staging.exclusion_list_repo_test_prod');
+        $actual = $this->repo->getImportStats('tn1', 'exclusion_lists_cdm.exclusion_list_repo_test_staging', 'exclusion_lists_cdm.exclusion_list_repo_test_prod');
     
         $expected = (new ImportStats())->setAdded(1)->setDeleted(1)->setCurrentRecordCount(3)->setPreviousRecordCount(3);
     
@@ -140,7 +140,7 @@ class ExclusionListRecordRepositoryTest extends TestCase
     
         DB::table('exclusion_list_repo_test_staging')->insert($stagingRecords);
     
-        $actual = $this->repo->getImportStats('tn1', 'exclusion_lists_staging.exclusion_list_repo_test_staging', 'exclusion_lists_staging.exclusion_list_repo_test_prod');
+        $actual = $this->repo->getImportStats('tn1', 'exclusion_lists_cdm.exclusion_list_repo_test_staging', 'exclusion_lists_cdm.exclusion_list_repo_test_prod');
     
         $expected = (new ImportStats())->setAdded(2)->setDeleted(0)->setCurrentRecordCount(5)->setPreviousRecordCount(3);
     
@@ -151,22 +151,22 @@ class ExclusionListRecordRepositoryTest extends TestCase
     {
         
         // Create test 'staging' table
-        DB::statement('DROP TABLE IF EXISTS `exclusion_lists_staging`.`exclusion_list_repo_test_staging`');
-        DB::statement('CREATE TABLE `exclusion_lists_staging`.`exclusion_list_repo_test_staging` LIKE `tn1_records`');
+        DB::statement('DROP TABLE IF EXISTS `exclusion_lists_cdm`.`exclusion_list_repo_test_staging`');
+        DB::statement('CREATE TABLE `exclusion_lists_cdm`.`exclusion_list_repo_test_staging` LIKE `tn1_records`');
         
         // Create test 'prod' table
-        DB::statement('DROP TABLE IF EXISTS `exclusion_lists_staging`.`exclusion_list_repo_test_prod`');
-        DB::statement('CREATE TABLE `exclusion_lists_staging`.`exclusion_list_repo_test_prod` LIKE `tn1_records`');
+        DB::statement('DROP TABLE IF EXISTS `exclusion_lists_cdm`.`exclusion_list_repo_test_prod`');
+        DB::statement('CREATE TABLE `exclusion_lists_cdm`.`exclusion_list_repo_test_prod` LIKE `tn1_records`');
         
     }  
     
     private function dropTestingTables()
     {
         // Drop test 'staging' table
-        DB::statement('DROP TABLE IF EXISTS `exclusion_lists_staging`.`exclusion_list_repo_test_staging`');
+        DB::statement('DROP TABLE IF EXISTS `exclusion_lists_cdm`.`exclusion_list_repo_test_staging`');
         
         // Drop test 'prod' table
-        DB::statement('DROP TABLE IF EXISTS `exclusion_lists_staging`.`exclusion_list_repo_test_prod`');
+        DB::statement('DROP TABLE IF EXISTS `exclusion_lists_cdm`.`exclusion_list_repo_test_prod`');
     }
     
     private function addHashTo($records)

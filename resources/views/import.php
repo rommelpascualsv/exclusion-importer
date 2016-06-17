@@ -113,7 +113,7 @@
                        		</span>
                        		<br />
                        		<span class="small import-stat">
-                        		Staging : <span id="<?= $info['prefix'] ?>-current-record-count"><?= $currentRecordCount ?></span>
+                        		CDM : <span id="<?= $info['prefix'] ?>-current-record-count"><?= $currentRecordCount ?></span>
                        		</span>
 							<span class="small import-stat">
                         		Prod : <span id="<?= $info['prefix'] ?>-previous-record-count"><?= $previousRecordCount ?></span>
