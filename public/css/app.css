@@ -26,11 +26,15 @@ body {
     width : 107px;
 }
 
-.icon-upload {
-    background: url('../images/cloud-upload.png') no-repeat 0px 10px;
-    height: 30px;
-    width: 30px;
+.icon-upload-cloud-outline {
     cursor: pointer;
+    font-size: 30px;
+    color: #31b0d5;
+}
+
+.icon-upload-cloud-outline.disabled {
+    cursor: default;
+    color: #ccc;
 }
 
 #fileupload-message, #fileupload-progress, #fileupload-file {

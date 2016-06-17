@@ -5,7 +5,8 @@
     <title>SLV - Utilities</title>
     <link rel="stylesheet" href="/css/app.css">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
-
+	<link rel="stylesheet" href="/fontello/css/fontello.css">
+	<link rel="stylesheet" href="/fontello/css/animation.css">
     <script src="/js/jquery-1.12.0.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/simpleUpload.min.js"></script>
@@ -133,8 +134,8 @@
 							?>
 							<input <?= $disabled ?> type="button" value="Start" data-action="/import/<?= $info['prefix'] ?>" class="start-btn btn btn-1g btn-default" data-prefix="<?= $info['prefix'] ?>"/>
                         </td>
-                        <td data-prefix="<?= $info['prefix'] ?>" data-accr="<?= $info['accr'] ?>" class="icon-upload"></td>
-                        <td class="readyForUpdate text-center"><?= $info['update_required'] ? 'Yes' : 'No' ?></td>
+                        <td><i data-prefix="<?= $info['prefix'] ?>" data-accr="<?= $info['accr'] ?>" class="icon-upload-cloud-outline"></i></td>
+                        <td data-prefix="<?= $info['prefix'] ?>" class="readyForUpdate text-center"><?= $info['update_required'] ? 'Yes' : 'No' ?></td>
                     </tr>
                     <?php
                 }

@@ -26,24 +26,32 @@ $(document).ready(function() {
                 if (!prefix) {
                 	
                     setFileUploadMessage('No prefix in the request');
-                    disableUploadButton(false);                   
+                    disableUploadButton(false);
+                    disableUploadIcon(prefix, false);
                     return false;
                     
                 } else {
                 	
                     setUploadButtonToRunningState();
                     
-                    setStartButtonToRunningState(prefix);                    
+                    setStartButtonToRunningState(prefix);
+                    
+                    disableUploadIcon(prefix);
                 }
                 
             },
             
             progress: function(progress) {
-            	 if (progress == 100) {
-                    $('#fileupload-progress').html('Importing data...');
-            	 } else {
-            	 	$('#fileupload-progress').html('Upload Progress : ' + Math.round(progress) + '%');
-            	 }
+            	
+            	var html;
+            	
+            	if (progress == 100) {
+            		html = 'Importing file data... <i class="icon-spinner animate-spin"></i>';
+            	} else {
+                    html = 'Uploading : ' + Math.round(progress) + '%';
+            	}
+                
+                $('#fileupload-progress').html(html);            	 
             },
             
             success: function(responseData) {
@@ -58,14 +66,17 @@ $(document).ready(function() {
                 
                 setUploadButtonToInitialState();
                 
+                disableUploadIcon(prefix, false);
+                
                 if (success) {
                 	
                     setFileUploadMessage(message && message !== '' ?  message : 'Successfully uploaded and imported file!', 'info');
                     
                     setStartButtonToDoneState(prefix);
                     
-                    // Update the url
-                    $('#text_' + prefix).val(url);
+                    setUrl(prefix, url);
+                    
+                    setUpdateRequired(prefix, 'No');
                     
                 } else {
                 	
@@ -84,6 +95,8 @@ $(document).ready(function() {
             	setFileUploadMessage(error ? error.message : 'An error occurred while uploading the file', 'error');
             	
                 setStartButtonToInitialState(prefix, startButtonDisabled);
+                
+                disableUploadIcon(prefix, false);
             }
 
         });
@@ -113,9 +126,22 @@ function showFileUploadDialog(prefix, accr) {
  * @param {String} category 'info' or 'error'
  */
 function setFileUploadMessage(message, category) {
+	
+	var iconCls = 'icon-info-circled-alt';
+	
+	if (category === 'error') {
+		iconCls = ' icon-warning-empty';
+	}
+	
 	$('#fileupload-message')
-	   .text(message)
-	   .toggleClass('text-info', category === 'info' || !category)
+	   .html('<table style="width:100%;padding:0px;">' +
+	   		     '<tr>' +
+	   		         '<td style="vertical-align:top;width:20px;"><i class="' + iconCls + '"></i></td>' +
+	   		         '<td>' + message + '</td>' +
+                 '</tr>' +
+             '</table>'
+       )
+       .toggleClass('text-info', category === 'info' || !category)
 	   .toggleClass('text-danger', category === 'error');
 }
 
