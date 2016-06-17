@@ -52,11 +52,6 @@ class ImportFileServiceTest extends TestCase
         $this->withoutEvents();
     }
 
-    public function tearDown()
-    {
-       	Mockery::close();
-    }
-    
     public function testImportFileShouldRespondWithErrorIfUrlIsEmpty()
     {
         $actual = $this->importFileService->importFile('', 'nyomig');
