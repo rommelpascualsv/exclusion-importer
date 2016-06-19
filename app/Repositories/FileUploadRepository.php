@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Utils\FileSystemUtils;
 class FileUploadRepository implements Repository
 {
     const DEFAULT_UPLOAD_ROOT_DIRECTORY = 'exclusion-lists';
@@ -21,7 +22,7 @@ class FileUploadRepository implements Repository
         
         $this->fileSystem->put($file, $record['contents']);
         
-        return $this->fileSystem->getAdapter()->applyPathPrefix($file);
+        return FileSystemUtils::url($file);
     }
     
     public function clear()

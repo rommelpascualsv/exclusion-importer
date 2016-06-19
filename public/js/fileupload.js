@@ -46,7 +46,7 @@ $(document).ready(function() {
             	var html;
             	
             	if (progress == 100) {
-            		html = 'Importing file data... <i class="icon-spinner animate-spin"></i>';
+            		html = 'Saving file and importing data... <i class="icon-spinner animate-spin"></i>';
             	} else {
                     html = 'Uploading : ' + Math.round(progress) + '%';
             	}
