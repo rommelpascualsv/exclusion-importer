@@ -17,41 +17,29 @@ $(document).ready(function() {
                 prefix : prefix
             },
             
-            start: function(file) {
+            init : function(totalUploads) {
 
-                clearProgress();
+            	clearProgress();
                 
                 clearFileUploadMessage();
                 
                 if (!prefix) {
-                	
+                    
                     setFileUploadMessage('No prefix in the request');
                     disableUploadButton(false);
                     disableUploadIcon(prefix, false);
                     return false;
                     
                 } else {
-                	
-                    setUploadButtonToRunningState();
                     
-                    setStartButtonToRunningState(prefix);
+                	setProgress('Please wait. Uploading files... <i class="icon-spinner animate-spin"></i>')
+                	
+                	setUploadButtonToRunningState();
+                    
+                    setStartButtonToUploadingState(prefix);
                     
                     disableUploadIcon(prefix);
-                }
-                
-            },
-            
-            progress: function(progress) {
-            	
-            	var html;
-            	
-            	if (progress == 100) {
-            		html = 'Saving file and importing data... <i class="icon-spinner animate-spin"></i>';
-            	} else {
-                    html = 'Uploading : ' + Math.round(progress) + '%';
-            	}
-                
-                $('#fileupload-progress').html(html);            	 
+                }                
             },
             
             success: function(responseData) {
@@ -62,33 +50,54 @@ $(document).ready(function() {
                     prefix = data.prefix || '',
                     url = data.url || '';
                 
+                // Note : 'this' is an object that is specific to each file and can 
+                // be used to store and retrieve data related to that file (refer
+                // to http://simpleupload.michaelcbrook.com/#docs for more details)
+                
+                if (success) {
+
+                    this.importUrl = url;
+                    
+                } else {
+                	
+                    this.upload.cancel();
+                    
+                    this.upload.state = 'error';
+                    
+                    clearProgress();
+                    
+                	setFileUploadMessage(message, 'error');
+                    
+                    setStartButtonToErrorState(prefix);
+                }
+            },
+            
+            finish: function() {
+            	
                 clearProgress();
                 
                 setUploadButtonToInitialState();
                 
                 disableUploadIcon(prefix, false);
                 
-                if (success) {
-                	
-                    setFileUploadMessage(message && message !== '' ?  message : 'Successfully uploaded and imported file!', 'info');
-                    
-                    setStartButtonToDoneState(prefix);
-                    
-                    setUrl(prefix, url);
-                    
-                    setUpdateRequired(prefix, 'No');
-                    
-                } else {
-                	
-                    setFileUploadMessage(message, 'error');
-                    
-                    setStartButtonToErrorState(prefix);
+                var url = getImportUrlFrom(this.files);
+                
+                if (!url) {
+                	return;
                 }
-            },
+                
+                setUrl(prefix, url);
+                
+                importFile(prefix, url);
+                
+                hideFileUploadDialog();
+            },            
 
             error: function(error) {
                 
-                clearProgress();            	
+                this.upload.cancel();
+
+            	clearProgress();            	
                 
                 setUploadButtonToInitialState();
 
@@ -97,6 +106,7 @@ $(document).ready(function() {
                 setStartButtonToInitialState(prefix, startButtonDisabled);
                 
                 disableUploadIcon(prefix, false);
+                
             }
 
         });
@@ -119,30 +129,47 @@ function showFileUploadDialog(prefix, accr) {
     $('#fileupload-modal').modal(); 
 }
 
+function hideFileUploadDialog() {
+	$('#fileupload-modal').modal('toggle');
+}
+
 /**
- * Sets the message to display in the file upload modal's status message container
+ * Sets the message to display in the file upload modal's status message container,
+ * if the file upload dialog is visible. If the file upload dialog is not visible,
+ * displays the message in the alert modal
  * 
  * @param {String} message the message to display
  * @param {String} category 'info' or 'error'
  */
 function setFileUploadMessage(message, category) {
 	
-	var iconCls = 'icon-info-circled-alt';
 	
-	if (category === 'error') {
-		iconCls = ' icon-warning-empty';
+	if ($('#fileupload-modal').is(':visible')) {
+		
+        var iconCls = 'icon-info-circled-alt';
+        
+        if (category === 'error') {
+            iconCls = ' icon-warning-empty';
+        }
+        
+        $('#fileupload-message')
+           .html('<table style="width:100%;padding:0px;">' +
+                     '<tr>' +
+                         '<td style="vertical-align:top;width:20px;"><i class="' + iconCls + '"></i></td>' +
+                         '<td>' + message + '</td>' +
+                     '</tr>' +
+                 '</table>'
+           )
+           .toggleClass('text-info', category === 'info' || !category)
+           .toggleClass('text-danger', category === 'error');
+           
+	} else {
+		
+		// Since the file upload dialog is not visible, show the message in the 
+		// alert modal
+		showMessage(category === 'error' ? 'Error' : 'Info', message);
 	}
-	
-	$('#fileupload-message')
-	   .html('<table style="width:100%;padding:0px;">' +
-	   		     '<tr>' +
-	   		         '<td style="vertical-align:top;width:20px;"><i class="' + iconCls + '"></i></td>' +
-	   		         '<td>' + message + '</td>' +
-                 '</tr>' +
-             '</table>'
-       )
-       .toggleClass('text-info', category === 'info' || !category)
-	   .toggleClass('text-danger', category === 'error');
+
 }
 
 /**
@@ -176,7 +203,56 @@ function clearFileUploadMessage() {
     $('#fileupload-message').text('')
 }
 
+
+function setProgress(html) {
+    $('#fileupload-progress').html(html); 	
+}
+
 function clearProgress() {
     $('#fileupload-progress').html('');
 }
 
+function getImportUrlFrom(files) {
+	if (! files) {
+		return null;
+	}
+	
+	var importUrls;
+	
+    $.each(files, function(index, file) {
+        
+        if (file.upload.state === 'error') {
+            return null;
+        }
+        
+        if (!importUrls) {
+            importUrls = [];
+        }
+        
+        importUrls.push(file.importUrl);
+    });
+    
+    return importUrls ? importUrls.join() : null;	
+}
+
+function setUrl(prefix, value) {
+    $('#text_' + prefix).val(value);    
+}
+
+function setStartButtonToUploadingState(prefix) {
+    $('.start-btn[data-prefix=' + prefix + ']')
+        .removeClass('btn-danger')
+        .removeClass('btn-success')
+        .addClass('btn-default')
+        .attr('value', 'Uploading...')
+        .attr('disabled', true);
+}
+
+function setStartButtonToInitialState(prefix, disabled) {
+    $('.start-btn[data-prefix=' + prefix + ']')
+        .removeClass('btn-danger')
+        .removeClass('btn-success')
+        .addClass('btn-default')
+        .attr('value', 'Start')
+        .attr('disabled', disabled);
+}

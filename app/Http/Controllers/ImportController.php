@@ -1,12 +1,12 @@
 <?php namespace App\Http\Controllers;
 
+use App\Response\JsonResponse;
 use App\Services\Contracts\ExclusionListServiceInterface;
+use App\Services\Contracts\FileUploadServiceInterface;
 use App\Services\Contracts\ImportFileServiceInterface;
+use App\Services\FileUploadException;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller as BaseController;
-use App\Response\JsonResponse;
-use App\Services\Contracts\FileUploadServiceInterface;
-use App\Services\FileUploadException;
 
 class ImportController extends BaseController
 {
@@ -127,13 +127,14 @@ class ImportController extends BaseController
             
             $fileUrl = $this->fileUploadService->uploadFile($file, $prefix);
             
-            $fileImportResponse = $this->importFileService->importFile($fileUrl, $prefix);
-            
-            return $this->createFileUploadResponseFrom($fileImportResponse, $fileUrl, $prefix);
+            return $this->createResponse('', true, [
+                'prefix' => $prefix,
+                'url' => $fileUrl
+            ]);            
             
         } catch (\Exception $e) {
             
-            return $this->createResponse('Failed to upload / import file : ' . $e->getMessage(), false, ['prefix' => $prefix]);
+            return $this->createResponse('Failed to upload file : ' . $e->getMessage(), false, ['prefix' => $prefix]);
         }
     }
 
@@ -142,21 +143,5 @@ class ImportController extends BaseController
         ini_set('memory_limit', '1024M');
         ini_set('max_execution_time', '300');
     }
-    
-    private function createFileUploadResponseFrom(\Illuminate\Http\JsonResponse $fileImportResponseJson, 
-        $fileUrl, $prefix)
-    {
-        $fileImportResponse = $fileImportResponseJson->getData(true);
-        
-        $fileImportResponseData = isset($fileImportResponse['data']) ? $fileImportResponse['data'] : [];
-        
-        $fileUploadResponseData = [
-            'prefix' => $prefix,
-            'url' => $fileUrl
-        ];
-        
-        $responseData = array_merge($fileImportResponseData, $fileUploadResponseData);
-        
-        return $this->createResponse($fileImportResponse['message'], $fileImportResponse['success'], $responseData);
-    }
+
 }

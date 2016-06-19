@@ -5,23 +5,11 @@ $(document).ready(function() {
     });
     
     $('.start-btn').click(function() {
-    	
         var $btn = $(this),
-            altUrl = $btn.parents('tr').children("td").children("input").val(),
-            url = $btn.data('action'),
+            url = $btn.parents('tr').children("td").children("input").val(),
             prefix = $btn.attr('data-prefix');
-    
-        if (altUrl) {
-            url += "?url=" + encodeURIComponent(altUrl);
-        }
-    
-        setStartButtonToRunningState(prefix);
-        
-        disableUploadIcon(prefix);
-    
-        $.get(url, onFileImportResponse.bind(this, prefix)).fail(function(xhr, statusTxt) {
-            showMessage('Failed to import file : ' + (statusTxt || '') + (xhr && xhr.responseText ? (' - ' + xhr.responseText) : ''));
-        });
+     
+        importFile(prefix, url);
     });
     
     $('.icon-upload-cloud-outline').click(function() {
@@ -37,6 +25,19 @@ $(document).ready(function() {
     
     $('.url').keyup(toggleButton);
 });
+
+function importFile(prefix, url) {
+
+    importUrl = '/import/' + prefix + '?url=' + encodeURIComponent(url);
+
+    setStartButtonToRunningState(prefix);
+    
+    disableUploadIcon(prefix);
+
+    $.get(importUrl, onFileImportResponse.bind(this, prefix)).fail(function(xhr, statusTxt) {
+        showMessage('Failed to import file : ' + (statusTxt || '') + (xhr && xhr.responseText ? (' - ' + xhr.responseText) : ''));
+    });
+}
 
 
 function onFileImportResponse(prefix, responseData) {
@@ -91,16 +92,6 @@ function toggleButton() {
     }
 }
 
-function setStartButtonToInitialState(prefix, disabled) {
-    $('.start-btn[data-prefix=' + prefix + ']')
-        .removeClass('btn-danger')
-        .removeClass('btn-success')
-        .addClass('btn-default')
-        .attr('value', 'Start')
-        .attr('disabled', disabled);
-}
-
-
 function setStartButtonToRunningState(prefix) {
     $('.start-btn[data-prefix=' + prefix + ']')
         .removeClass('btn-danger')
@@ -123,10 +114,6 @@ function setStartButtonToErrorState(prefix) {
         .addClass('btn-danger')
         .attr('value', 'Error')
         .attr('disabled', true);
-}
-
-function setUrl(prefix, value) {
-    $('#text_' + prefix).val(value);	
 }
 
 function disableUploadIcon(prefix, disable) {

@@ -61,7 +61,7 @@
                 </div>
                 <div class="modal-body">
                 	<div id="fileupload-file-label"></div>
-                    <input type="file" name="file" id="fileupload-file">
+                    <input type="file" name="file" id="fileupload-file" multiple>
                     <div id="fileupload-progress" class="small"></div>
 					<div id="fileupload-message" class="small"></div>   
 					<input type="hidden" id="fileupload-prefix" />                 
@@ -132,7 +132,7 @@
                             <?php 
                             	$disabled = empty($info['import_url']) || ! $info['update_required'] ? "disabled" : "";
 							?>
-							<input <?= $disabled ?> type="button" value="Start" data-action="/import/<?= $info['prefix'] ?>" class="start-btn btn btn-1g btn-default" data-prefix="<?= $info['prefix'] ?>"/>
+							<input <?= $disabled ?> type="button" value="Start" class="start-btn btn btn-1g btn-default" data-prefix="<?= $info['prefix'] ?>"/>
                         </td>
                         <td><i data-prefix="<?= $info['prefix'] ?>" data-accr="<?= $info['accr'] ?>" class="icon-upload-cloud-outline"></i></td>
                         <td data-prefix="<?= $info['prefix'] ?>" class="readyForUpdate text-center"><?= $info['update_required'] ? 'Yes' : 'No' ?></td>

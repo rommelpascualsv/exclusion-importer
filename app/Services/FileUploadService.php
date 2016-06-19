@@ -21,10 +21,12 @@ class FileUploadService implements FileUploadServiceInterface
     {
         try {
             
-            $filePath = $this->createFilePathFrom($file, $prefix);
+            $fileName = $this->getFileNameOf($file);
             
+            $filePath = $this->getFilePathFrom($fileName, $prefix);
+           
             if ($this->fileUploadRepo->contains($filePath)) {
-                throw new FileUploadException('A file with the same name already exists in the upload directory');
+                throw new FileUploadException('A file with the same name (' . $fileName . ') already exists in the upload directory.');
             }
             
             info('Saving uploaded file for ' . $prefix . ' to ' . $filePath);
@@ -42,9 +44,13 @@ class FileUploadService implements FileUploadServiceInterface
         }
     }
     
-    private function createFilePathFrom(\SplFileInfo $file, $prefix)
+    private function getFileNameOf(\SplFileInfo $file) 
     {
-        $fileName = $file instanceof UploadedFile ? $file->getClientOriginalName() : $file->getFilename();
+        return $file instanceof UploadedFile ? $file->getClientOriginalName() : $file->getFilename();
+    }
+    
+    private function getFilePathFrom($fileName, $prefix)
+    {
         return $prefix . DIRECTORY_SEPARATOR . $fileName;
     }
     
