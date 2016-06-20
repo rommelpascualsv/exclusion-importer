@@ -63,8 +63,9 @@
                 	<div id="fileupload-file-label"></div>
                     <input type="file" name="file" id="fileupload-file" multiple>
                     <div id="fileupload-progress" class="small"></div>
-					<div id="fileupload-message" class="small"></div>   
-					<input type="hidden" id="fileupload-prefix" />                 
+					<div id="fileupload-message" class="small"></div>
+					<span class="note">* This dialog will close automatically once the file is uploaded successfully</span>   
+					<input type="hidden" id="fileupload-prefix" /> 
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" id="fileupload-btn">Upload</button>

@@ -44,3 +44,7 @@ body {
 .modal-dialog.fileupload {
     width: 400px; 
 }
+
+.note {
+    font-size: 11px; 
+}
