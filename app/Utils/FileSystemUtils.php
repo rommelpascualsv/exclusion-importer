@@ -28,7 +28,7 @@ class FileSystemUtils
             return $adapter->applyPathPrefix($path);
             
         } else {
-            throw new RuntimeException('Current file system driver does not support retrieving URLs.');
+            throw new \RuntimeException('Current file system driver does not support retrieving URLs.');
         }
     }
 }

@@ -32,7 +32,7 @@ $(document).ready(function() {
                     
                 } else {
                     
-                	setProgress('Please wait. Uploading files... <i class="icon-spinner animate-spin"></i>')
+                	setProgress('Please wait. Uploading files... <i class="icon-spinner animate-spin"></i>');
                 	
                 	setUploadButtonToRunningState();
                     
@@ -153,7 +153,7 @@ function setFileUploadMessage(message, category) {
         }
         
         $('#fileupload-message')
-           .html('<table style="width:100%;padding:0px;">' +
+           .html('<table style="width:100%;padding:0">' +
                      '<tr>' +
                          '<td style="vertical-align:top;width:20px;"><i class="' + iconCls + '"></i></td>' +
                          '<td>' + message + '</td>' +

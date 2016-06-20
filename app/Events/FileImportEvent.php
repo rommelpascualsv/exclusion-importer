@@ -1,8 +1,6 @@
 <?php 
 namespace App\Events;
 
-use App\Events\Event;
-
 class FileImportEvent extends Event
 {
     const EVENTTYPE_FILE_UPLOAD   = 'file.upload';

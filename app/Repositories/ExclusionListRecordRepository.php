@@ -14,7 +14,6 @@ class ExclusionListRecordRepository implements Repository
     const DEFAULT_PROD_SCHEMA    = 'exclusion_lists';
     const DEFAULT_BACKUP_SCHEMA  = 'exclusion_lists_backup';
     
-    private $listFactory;
     private $stagingSchema;
     private $prodSchema;
     private $backupSchema;
