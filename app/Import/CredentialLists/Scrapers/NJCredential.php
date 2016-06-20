@@ -70,13 +70,13 @@ class NJCredential
      */
     public function getProfessions($response)
     {
-        $html = (string) $response->getBody();
+        $html = (string)$response->getBody();
         $this->scraper->setDom($html);
 
         $professions = [];
         $professionsNode = $this->scraper->xPathQuery("//select[@name='t_web_lookup__profession_name']/option");
         foreach ($professionsNode as $key => $optionNode) {
-            if($value = $optionNode->getAttribute('value')) {
+            if ($value = $optionNode->getAttribute('value')) {
                 $professions[] = $value;
             }
         }
@@ -92,7 +92,7 @@ class NJCredential
      */
     public function getProfessionTypeAndStatusList($response)
     {
-        $html = (string) $response->getBody();
+        $html = (string)$response->getBody();
         $this->scraper->setDom($html);
 
         $licenseTypeList = [];
@@ -100,14 +100,14 @@ class NJCredential
 
         $licenseTypeNode = $this->scraper->xPathQuery("//select[@name='t_web_lookup__license_type_name']/option");
         foreach ($licenseTypeNode as $key => $optionNode) {
-            if($value = $optionNode->getAttribute('value')) {
+            if ($value = $optionNode->getAttribute('value')) {
                 $licenseTypeList[] = $value;
             }
         }
 
         $licenseStatusNode = $this->scraper->xPathQuery("//select[@name='t_web_lookup__license_status_name']/option");
         foreach ($licenseStatusNode as $key => $optionNode) {
-            if($value = $optionNode->getAttribute('value')) {
+            if ($value = $optionNode->getAttribute('value')) {
                 $licenseStatusList[] = $value;
             }
         }
@@ -125,7 +125,7 @@ class NJCredential
      */
     public function selectProfession($response, $professionName)
     {
-        $html = (string) $response->getBody();
+        $html = (string)$response->getBody();
         $this->scraper->setDom($html);
 
         $postData = $this->getHiddenInputFields();
@@ -143,9 +143,10 @@ class NJCredential
      * @param string $licenseType
      * @return \Guzzle\Http\Message\Response|null
      */
-    public function selectProfessionLicense($response, $professionName, $licenseType) {
+    public function selectProfessionLicense($response, $professionName, $licenseType)
+    {
 
-        $html = (string) $response->getBody();
+        $html = (string)$response->getBody();
         $this->scraper->setDom($html);
 
         // Post FormData.
@@ -153,7 +154,8 @@ class NJCredential
         $postData['selectname'] = "OAG Services from A - Z";
         $postData['t_web_lookup__profession_name'] = $professionName;
         $postData['t_web_lookup__license_type_name'] = $licenseType;
-        $response = $this->scraper->fetchPostResource('Verification_4_6/Verification_Bulk_4_6/Search.aspx?facility=N', $postData,$this->headers);
+        $response = $this->scraper->fetchPostResource('Verification_4_6/Verification_Bulk_4_6/Search.aspx?facility=N',
+            $postData, $this->headers);
         return $response;
     }
 
@@ -168,7 +170,7 @@ class NJCredential
      */
     public function fillForm($response, $professionName, $licenseType, $licenseStatus)
     {
-        $html = (string) $response->getBody();
+        $html = (string)$response->getBody();
         $this->scraper->setDom($html);
 
         // Post FormData.
@@ -190,11 +192,11 @@ class NJCredential
      */
     public function isTableDataExists($response)
     {
-        $html = (string) $response->getBody();
+        $html = (string)$response->getBody();
         $this->scraper->setDom($html);
 
         $tableNode = $this->scraper->xPathQuery("//table[@id='datagrid_results']/tr");
-        if($tableNode->length > 2) {
+        if ($tableNode->length > 2) {
             return $response;
         }
         return false;
@@ -208,13 +210,14 @@ class NJCredential
      */
     public function continueDownloadPage($response)
     {
-        $html = (string) $response->getBody();
+        $html = (string)$response->getBody();
         $this->scraper->setDom($html);
 
         $postData = $this->getHiddenInputFields();
         $postData['selectname'] = 'OAG Services from A - Z';
         $postData['btnBulkDownLoad'] = 'Download List';
-        $response = $this->scraper->fetchPostResource('Verification_4_6/Verification_Bulk_4_6/SearchResults.aspx', $postData,$this->headers);
+        $response = $this->scraper->fetchPostResource('Verification_4_6/Verification_Bulk_4_6/SearchResults.aspx',
+            $postData, $this->headers);
         return $response;
     }
 
@@ -227,12 +230,13 @@ class NJCredential
      */
     public function finalDownloadPage($response)
     {
-        $html = (string) $response->getBody();
+        $html = (string)$response->getBody();
         $this->scraper->setDom($html);
 
         $postData = $this->getHiddenInputFields();
         $postData['btnContinue'] = 'Continue';
-        $response = $this->scraper->fetchPostResource('Verification_4_6/Verification_Bulk_4_6/Confirmation.aspx?from_page=SearchResults.aspx', $postData,$this->headers);
+        $response = $this->scraper->fetchPostResource('Verification_4_6/Verification_Bulk_4_6/Confirmation.aspx?from_page=SearchResults.aspx',
+            $postData, $this->headers);
         return $response;
     }
 
@@ -242,16 +246,22 @@ class NJCredential
      * @param \Guzzle\Http\Message\Response $response
      * @return \Guzzle\Http\Message\Response | null $response
      */
-    public function getFileData($response) {
+    public function getFileData($response)
+    {
 
-        $html = (string) $response->getBody();
+        $html = (string)$response->getBody();
         $this->scraper->setDom($html);
 
         $postData = $this->getHiddenInputFields();
         $postData['selectname'] = "Continue";
         $postData['sch_button'] = "Download";
         $postData['filetype'] = "delimitedtext";
-        $response = $this->scraper->fetchPostResource('Verification_4_6/Verification_Bulk_4_6/PrefDetails.aspx', $postData,$this->headers);
+        $response = $this->scraper->fetchPostResource(
+            'Verification_4_6/Verification_Bulk_4_6/PrefDetails.aspx',
+            $postData,
+            $this->headers
+        );
+
         return $response;
     }
 
@@ -267,7 +277,7 @@ class NJCredential
         $inputNodes = $this->scraper->xPathQuery("//form[@id='TheForm']/input");
 
         foreach ($inputNodes as $node) {
-            $name =  $node->getAttribute('name');
+            $name = $node->getAttribute('name');
             $inputArray[$name] = $node->getAttribute('value');
         }
         return $inputArray;

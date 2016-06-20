@@ -60,8 +60,8 @@ class NJCredentialFileMaker
         $professions = $this->parser->getProfessions($initialResponse);
         foreach ($professions as $professionName) {
             $formPageResponse = $this->parser->selectProfession($initialResponse, $professionName);
-            if(!$formPageResponse) {
-                $this->output('red', 'Failed to select '. $professionName);
+            if (! $formPageResponse) {
+                $this->output('red', 'Failed to select ' . $professionName);
                 continue;
             }
 
@@ -83,13 +83,13 @@ class NJCredentialFileMaker
     {
         foreach ($professions as $professionName => $professionLicenseList) {
             $formPageResponse = $this->parser->selectProfession($initialResponse, $professionName);
-            if(!$formPageResponse) {
-                $this->output('red', 'Failed to select '. $professionName);
+            if (! $formPageResponse) {
+                $this->output('red', 'Failed to select ' . $professionName);
                 continue;
             }
 
             foreach ($professionLicenseList as $licenseType => $licenseStatusList) {
-                foreach ($licenseStatusList as  $licenseStatus) {
+                foreach ($licenseStatusList as $licenseStatus) {
                     $this->makeRequests($formPageResponse, $professionName, $licenseType, $licenseStatus);
                 }
             }
@@ -105,60 +105,65 @@ class NJCredentialFileMaker
     private function makeRequests($formPageResponse, $professionName, $licenseType, $licenseStatus)
     {
         $professionResponse = $this->parser->selectProfessionLicense($formPageResponse, $professionName, $licenseType);
-        if(!$formPageResponse) {
-            $this->output('red', 'Select profession license request failed for '. $professionName .' '. $licenseType);
+        if (! $formPageResponse) {
+            $this->output('red',
+                'Select profession license request failed for ' . $professionName . ' ' . $licenseType);
             return;
         }
 
-        $currentStatus = $professionName.' of type '. $licenseType. ' having status '. $licenseStatus;
+        $currentStatus = $professionName . ' of type ' . $licenseType . ' having status ' . $licenseStatus;
         $this->output('black', 'Scraping: ' . $currentStatus);
 
         // Majority of the time we get error here due file creation on the server side at runtime.
         // So, if we get an error we track this and wait for sometime and move to the next profession.
         $response = $this->parser->fillForm($professionResponse, $professionName, $licenseType, $licenseStatus);
-        if(! $response) {
+        if (! $response) {
             $this->output('red', 'Fill form request failed for ' . $currentStatus);
-            $this->retryList = array_merge_recursive($this->retryList, [$professionName => [$licenseType => [$licenseStatus]]]);
+            $this->retryList = array_merge_recursive($this->retryList,
+                [$professionName => [$licenseType => [$licenseStatus]]]);
             return;
         }
 
         $response = $this->parser->isTableDataExists($response);
-        if(! $response) {
-            $this->output('green', 'Empty results for '. $currentStatus);
+        if (! $response) {
+            $this->output('green', 'Empty results for ' . $currentStatus);
             return;
         }
 
         $response = $this->parser->continueDownloadPage($response);
-        if(! $response) {
-            $this->output('red', 'Continue download page request failed for '. $currentStatus);
-            $this->retryList = array_merge_recursive($this->retryList, [$professionName => [$licenseType => [$licenseStatus]]]);
+        if (! $response) {
+            $this->output('red', 'Continue download page request failed for ' . $currentStatus);
+            $this->retryList = array_merge_recursive($this->retryList,
+                [$professionName => [$licenseType => [$licenseStatus]]]);
             return;
         }
 
         $response = $this->parser->finalDownloadPage($response);
-        if(! $response) {
+        if (! $response) {
             $this->output('red', 'Download page request failed for ' . $currentStatus);
-            $this->retryList = array_merge_recursive($this->retryList, [$professionName => [$licenseType => [$licenseStatus]]]);
+            $this->retryList = array_merge_recursive($this->retryList,
+                [$professionName => [$licenseType => [$licenseStatus]]]);
             return;
         }
 
         $response = $this->parser->getFileData($response);
-        if(! $response) {
+        if (! $response) {
             $this->output('red', 'Download file request failed for ');
-            $this->retryList = array_merge_recursive($this->retryList, [$professionName => [$licenseType => [$licenseStatus]]]);
+            $this->retryList = array_merge_recursive($this->retryList,
+                [$professionName => [$licenseType => [$licenseStatus]]]);
             return;
         }
 
-        $fileData = (string) $response->getBody();
+        $fileData = (string)$response->getBody();
         $this->makeCSVFile($fileData, $professionName, $licenseType);
         $this->output('green', 'Data appended to file');
-        $this->output('blue', '### Item done: Going to sleep for '. self::DOWNLOAD_WAIT . ' seconds ###');
+        $this->output('blue', '### Item done: Going to sleep for ' . self::DOWNLOAD_WAIT . ' seconds ###');
         sleep(self::DOWNLOAD_WAIT);
     }
 
     private function makeCSVFileHeader()
     {
-        $fileHandler = fopen($this->dataFilePath,'w');
+        $fileHandler = fopen($this->dataFilePath, 'w');
         $header = explode(',', trim(self::FILE_HEADER));
         fputcsv($fileHandler, $header);
     }
@@ -173,12 +178,12 @@ class NJCredentialFileMaker
      */
     private function makeCSVFile($fileData, $professionName, $licenseType)
     {
-        $fileHandler = fopen($this->dataFilePath,'a');
+        $fileHandler = fopen($this->dataFilePath, 'a');
 
-        $append = $professionName. '|' . $licenseType .'|';
+        $append = $professionName . '|' . $licenseType . '|';
         $fileLines = explode(PHP_EOL, trim($fileData));
-        foreach($fileLines as $lineNumber => $line) {
-            if($lineNumber !== 0) {
+        foreach ($fileLines as $lineNumber => $line) {
+            if ($lineNumber !== 0) {
                 $data = $append . $line;
                 $val = explode('|', rtrim($data, '|'));
                 fputcsv($fileHandler, $val);
@@ -192,13 +197,13 @@ class NJCredentialFileMaker
      */
     private function makeReScrapeFile($fileData)
     {
-        $fileHandler = fopen($this->reScrapeFilePath,'w+');
+        $fileHandler = fopen($this->reScrapeFilePath, 'w+');
         fwrite($fileHandler, serialize($fileData));
     }
 
     private function getReScrapeFileData()
     {
-        if(file_exists($this->reScrapeFilePath)) {
+        if (file_exists($this->reScrapeFilePath)) {
             $fileData = unserialize(file_get_contents($this->reScrapeFilePath));
             return $fileData;
         }
@@ -212,8 +217,8 @@ class NJCredentialFileMaker
     private function output($color, $text)
     {
         // to fill the buffer for flushing
-        echo str_pad(' ',4096);
-        echo '<b style="color:'.$color.'">['.date('h:i:s', time()).'] '.$text.'</b><br/>';
+        echo str_pad(' ', 4096);
+        echo '<b style="color:' . $color . '">[' . date('h:i:s', time()) . '] ' . $text . '</b><br/>';
         flush();
     }
 }
