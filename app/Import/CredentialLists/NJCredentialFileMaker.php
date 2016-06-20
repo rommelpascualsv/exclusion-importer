@@ -180,16 +180,19 @@ class NJCredentialFileMaker
     {
         $fileHandler = fopen($this->dataFilePath, 'a');
 
-        $append = $professionName . '|' . $licenseType . '|';
-        $fileLines = explode(PHP_EOL, trim($fileData));
-        foreach ($fileLines as $lineNumber => $line) {
-            if ($lineNumber !== 0) {
-                $data = $append . $line;
-                $val = explode('|', rtrim($data, '|'));
-                fputcsv($fileHandler, $val);
+        try {
+            $append = $professionName . '|' . $licenseType . '|';
+            $fileLines = explode(PHP_EOL, trim($fileData));
+            foreach ($fileLines as $lineNumber => $line) {
+                if ($lineNumber !== 0) {
+                    $data = $append . $line;
+                    $val = explode('|', rtrim($data, '|'));
+                    fputcsv($fileHandler, $val);
+                }
             }
+        } finally {
+            fclose($fileHandler);
         }
-        fclose($fileHandler);
     }
 
     /**
