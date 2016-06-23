@@ -4,7 +4,7 @@ namespace App\Import\CredentialLists;
 
 use App\Import\CredentialLists\Scrapers\NJCredential;
 
-class NJCredentialFileMaker
+class NJCredentialFileMaker extends CredentialFileMaker
 {
     const DOWNLOAD_WAIT = 5;
 
@@ -21,11 +21,16 @@ class NJCredentialFileMaker
 
     private $retryList = [];
 
-    public function __construct($dataFilePath, $reScrapeFilePath)
+    public function __construct($dataFilePath)
     {
         $this->parser = new NJCredential();
         $this->dataFilePath = $dataFilePath;
-        $this->reScrapeFilePath = $reScrapeFilePath;
+        $this->reScrapeFilePath = $this->getRescrapeFilePath($dataFilePath);
+    }
+
+    protected function getRescrapeFilePath($dataFilePath)
+    {
+        return $dataFilePath . '.rescrape';
     }
 
     /**
