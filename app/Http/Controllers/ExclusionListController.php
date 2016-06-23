@@ -8,7 +8,7 @@ use App\Services\FileUploadException;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
-class ImportController extends BaseController
+class ExclusionListController extends BaseController
 {
     private $exclusionListService;
     private $importFileService;

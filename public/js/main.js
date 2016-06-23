@@ -1,7 +1,7 @@
 $(document).ready(function() {
 	
     $('.create-tables-btn').click(function() {
-        $.get("/import/createOldTables");
+        $.post("/exclusion-lists/create-old-tables");
     });
     
     $('.start-btn').click(function() {
@@ -26,17 +26,17 @@ $(document).ready(function() {
     $('.url').keyup(toggleButton);
 });
 
-function importFile(prefix, url) {
-
-    importUrl = '/import/' + prefix + '?url=' + encodeURIComponent(url);
+function importFile(prefix, exclusionListUrl) {
 
     setStartButtonToRunningState(prefix);
     
     disableUploadIcon(prefix);
+    
+    var url = '/exclusion-lists/import/' + prefix,
+        data = {url : exclusionListUrl},
+        callback = onFileImportResponse.bind(this, prefix);
 
-    $.get(importUrl, onFileImportResponse.bind(this, prefix)).fail(function(xhr, statusTxt) {
-        showMessage('Failed to import file : ' + (statusTxt || '') + (xhr && xhr.responseText ? (' - ' + xhr.responseText) : ''));
-    });
+    $.post(url, data, callback).fail(onFileImportFail);
 }
 
 
@@ -79,6 +79,10 @@ function onFileImportResponse(prefix, responseData) {
     $('#' + prefix + '-previous-record-count').html(previousRecordCount);
     $('#' + prefix + '-added').html(added);
     $('#' + prefix + '-deleted').html(deleted);
+}
+
+function onFileImportFail(xhr, statusTxt) {
+    showMessage('Failed to import file : ' + (statusTxt || '') + (xhr && xhr.responseText ? (' - ' + xhr.responseText) : ''));
 }
 
 function toggleButton() {

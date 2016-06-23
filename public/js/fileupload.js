@@ -7,7 +7,7 @@ $(document).ready(function() {
             // Need to remember the initial state of the 'Start' button in the main screen so we can restore it later
             startButtonDisabled = $('.start-btn[data-prefix=' + prefix + ']').is(':disabled');
         
-        fileInput.simpleUpload('/import/upload', {
+        fileInput.simpleUpload('/exclusion-lists/upload', {
 
             allowedExts : ["csv", "pdf", "tsv", "txt", "xls", "xlsx", "xml", "zip", "html"],
             allowedTypes: ["text/csv", "application/pdf", "text/tab-separated-values", "text/plain", "application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/xml", "application/zip", "text/html"],

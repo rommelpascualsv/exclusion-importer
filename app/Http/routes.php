@@ -16,8 +16,9 @@ $app->get('/', function () use ($app) {
 });
 
 # exclusion_importer routes
-$app->get('import/createOldTables', 'ImportController@createOldTables');
-$app->get('import/{listPrefix}', 'ImportController@import');
-$app->get('import', 'ImportController@index');
-$app->post('import/upload', 'ImportController@upload');
+$app->get('import', 'ExclusionListController@index');
+$app->get('exclusion-lists', 'ExclusionListController@index');
+$app->post('exclusion-lists/create-old-tables', 'ExclusionListController@createOldTables');
+$app->post('exclusion-lists/import/{listPrefix}', 'ExclusionListController@import');
+$app->post('exclusion-lists/upload', 'ExclusionListController@upload');
 
