@@ -1,5 +1,7 @@
 <?php namespace App\Import\Lists;
 
+use App\Import\Lists\ProviderNumberHelper as PNHelper;
+
 class Vermont extends ExclusionList
 {
     public $dbPrefix = 'vt1';
@@ -46,7 +48,6 @@ class Vermont extends ExclusionList
     
     protected function parse()
     {
-        
         $data = [];
     
         foreach ($this->data as $row) {
@@ -54,32 +55,14 @@ class Vermont extends ExclusionList
             if (! $row || $this->isHeader($row)) {
                 continue;
             }
-
-            $providerId = trim($row[0]);
-            $npi = trim($row[1]);
-            $fullName = trim($row[2]);
-            $city = trim($row[3]);
-            $state = trim($row[4]);
-            $statusCode = trim($row[5]);
-            $statusDesc = trim($row[6]);
-            $statusEffectiveDate = trim($row[7]);
-            $statusEndDate = trim($row[8]);
-            $providerType = trim($row[9]);
-    
-            $npi = [$npi]; //Downstream processing expects NPI to be an array, so we wrap it in an array
-    
-            $data[] = [
-                $providerId,
-                $npi,
-                $fullName,
-                $city,
-                $state,
-                $statusCode,
-                $statusDesc,
-                $statusEffectiveDate,
-                $statusEndDate,
-                $providerType
-            ];
+            
+            $row = array_map('trim', $row);
+            
+            $npiColumnIndex = $this->getNpiColumnIndex();
+            
+            $row = PNHelper::setNpiValue($row, PNHelper::getNpiValue($row, $npiColumnIndex), $npiColumnIndex);
+            
+            $data[] = $row;
         }
     
         $this->data = $data;
