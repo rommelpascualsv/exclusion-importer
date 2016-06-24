@@ -6,7 +6,7 @@ use App\Exceptions\LoggablePDOException;
 use App\Import\Lists\ExclusionList;
 use App\Import\Service\Exclusions\ListFactory;
 use App\Import\Service\ListProcessor;
-use App\Repositories\ExclusionListFileRepository;
+use App\Repositories\FileRepository;
 use App\Repositories\ExclusionListRecordRepository;
 use App\Repositories\ExclusionListRepository;
 use App\Response\JsonResponse;
@@ -29,11 +29,11 @@ class ImportFileService implements ImportFileServiceInterface
     private $exclusionListRecordRepo;
     private $exclusionListStatusHelper;
     
-    public function __construct(ExclusionListHttpDownloader $exclusionListHttpDownloader, 
-            ExclusionListRepository $exclusionListRepo, 
-            ExclusionListFileRepository $exclusionListFilesRepo,
-            ExclusionListRecordRepository $exclusionListRecordRepo,
-            ExclusionListStatusHelper $exclusionListStatusHelper)
+    public function __construct(ExclusionListHttpDownloader $exclusionListHttpDownloader,
+                                ExclusionListRepository $exclusionListRepo,
+                                FileRepository $exclusionListFilesRepo,
+                                ExclusionListRecordRepository $exclusionListRecordRepo,
+                                ExclusionListStatusHelper $exclusionListStatusHelper)
     {
         $this->exclusionListDownloader = $exclusionListHttpDownloader;
         $this->exclusionListRepo = $exclusionListRepo;

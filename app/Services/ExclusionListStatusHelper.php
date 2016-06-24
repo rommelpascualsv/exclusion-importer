@@ -1,7 +1,7 @@
 <?php
 namespace App\Services;
 
-use App\Repositories\ExclusionListFileRepository;
+use App\Repositories\FileRepository;
 use App\Repositories\ExclusionListRecordRepository;
 use App\Repositories\FileImportEventRepository;
 use App\Events\FileImportEvent;
@@ -15,9 +15,9 @@ class ExclusionListStatusHelper
     private $fileImportEventRepo;
     
     public function __construct(ExclusionListRepository $exclusionListRepo,
-        ExclusionListFileRepository $exclusionListFileRepo,
-        ExclusionListRecordRepository $exclusionListRecordRepo,
-        FileImportEventRepository $fileImportEventRepo)
+                                FileRepository $exclusionListFileRepo,
+                                ExclusionListRecordRepository $exclusionListRecordRepo,
+                                FileImportEventRepository $fileImportEventRepo)
     {
         $this->exclusionListRepo = $exclusionListRepo;
         $this->exclusionListFileRepo = $exclusionListFileRepo;

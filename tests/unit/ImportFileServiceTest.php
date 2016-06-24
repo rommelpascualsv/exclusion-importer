@@ -32,7 +32,7 @@ class ImportFileServiceTest extends TestCase
         $this->app->withFacades();
         
         $this->exclusionListDownloader = Mockery::mock('App\Services\ExclusionListHttpDownloader')->makePartial();
-        $this->exclusionListFileRepo = Mockery::mock('App\Repositories\ExclusionListFileRepository')->makePartial();
+        $this->exclusionListFileRepo = Mockery::mock('App\Repositories\FileRepository')->makePartial();
         $this->exclusionListRepo = Mockery::mock('App\Repositories\ExclusionListRepository')->makePartial();
         $this->exclusionListRecordRepo = Mockery::mock('App\Repositories\ExclusionListRecordRepository')->makePartial();
         $this->exclusionListStatusHelper = Mockery::mock('App\Services\ExclusionListStatusHelper')->makePartial();

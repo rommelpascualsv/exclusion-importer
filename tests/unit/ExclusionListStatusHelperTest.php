@@ -4,7 +4,7 @@ namespace Test\Unit;
 
 use CDM\Test\TestCase;
 use App\Services\ExclusionListStatusHelper;
-use App\Repositories\ExclusionListFileRepository;
+use App\Repositories\FileRepository;
 use App\Repositories\ExclusionListRepository;
 use App\Repositories\FileImportEventRepository;
 use Mockery;
@@ -26,7 +26,7 @@ class ExclusionListStatusHelperTest extends TestCase
         $this->app->withFacades();
     
         $this->exclusionListRepo = Mockery::mock('App\Repositories\ExclusionListRepository')->makePartial();
-        $this->exclusionListFileRepo = Mockery::mock('App\Repositories\ExclusionListFileRepository');
+        $this->exclusionListFileRepo = Mockery::mock('App\Repositories\FileRepository');
         $this->exclusionListRecordRepo = Mockery::mock('App\Repositories\ExclusionListRecordRepository')->makePartial();
         $this->fileImportEventRepo = Mockery::mock('App\Repositories\FileImportEventRepository')->makePartial();
         
