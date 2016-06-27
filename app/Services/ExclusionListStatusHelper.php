@@ -1,11 +1,12 @@
 <?php
 namespace App\Services;
 
-use App\Repositories\FileRepository;
+use App\Events\Event;
+use App\Events\FileImportEventFactory;
+use App\Repositories\EventRepository;
 use App\Repositories\ExclusionListRecordRepository;
-use App\Repositories\FileImportEventRepository;
-use App\Events\FileImportEvent;
 use App\Repositories\ExclusionListRepository;
+use App\Repositories\FileRepository;
 
 class ExclusionListStatusHelper
 {
@@ -17,7 +18,7 @@ class ExclusionListStatusHelper
     public function __construct(ExclusionListRepository $exclusionListRepo,
                                 FileRepository $exclusionListFileRepo,
                                 ExclusionListRecordRepository $exclusionListRecordRepo,
-                                FileImportEventRepository $fileImportEventRepo)
+                                EventRepository $fileImportEventRepo)
     {
         $this->exclusionListRepo = $exclusionListRepo;
         $this->exclusionListFileRepo = $exclusionListFileRepo;
@@ -41,9 +42,9 @@ class ExclusionListStatusHelper
     
     private function isLastEventSuccessful($prefix)
     {
-        $event = $this->fileImportEventRepo->findLatestEventOfPrefix($prefix);
+        $event = $this->fileImportEventRepo->findLatestEventOfObjectId($prefix, FileImportEventFactory::EVENT_TYPES);
          
-        return $event && $event->getStatus() === FileImportEvent::EVENTSTATUS_SUCCESS;
+        return $event && $event->getStatus() === Event::EVENTSTATUS_SUCCESS;
     }
     
     private function isExclusionListRecordsEmpty($prefix)

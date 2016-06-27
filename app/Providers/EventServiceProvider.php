@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Listeners\EventPersister;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -12,8 +13,7 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'file.*' => [
-            'App\Listeners\FileImportEventPersister'
-        ],
+        'file.*' => [EventPersister::class],
+        'credential.*' => [EventPersister::class]
     ];
 }

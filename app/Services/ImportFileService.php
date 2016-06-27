@@ -1,7 +1,7 @@
 <?php
 namespace App\Services;
 
-use App\Events\FileImportEvent;
+use App\Events\FileImportEventFactory;
 use App\Exceptions\LoggablePDOException;
 use App\Import\Lists\ExclusionList;
 use App\Import\Service\Exclusions\ListFactory;
@@ -552,12 +552,12 @@ class ImportFileService implements ImportFileServiceInterface
     
     private function onFileDownloadSucceeded($prefix)
     {
-        event('file.download.succeeded', FileImportEvent::newFileDownloadSucceeded()->setObjectId($prefix));
+        event('file.download.succeeded', FileImportEventFactory::newFileDownloadSucceeded()->setObjectId($prefix));
     }
     
     private function onFileDownloadFailed($prefix, \Exception $e)
     {
-        event('file.download.failed', FileImportEvent::newFileDownloadFailed()
+        event('file.download.failed', FileImportEventFactory::newFileDownloadFailed()
             ->setObjectId($prefix)
             ->setDescription(json_encode([get_class($e) => 'Failed to download file : ' . $e->getMessage()]))
         );
@@ -565,7 +565,7 @@ class ImportFileService implements ImportFileServiceInterface
     
     private function onFileUpdateSucceeded($prefix, $description = null)
     {
-        $eventPayload = FileImportEvent::newFileUpdateSucceeded()->setObjectId($prefix);
+        $eventPayload = FileImportEventFactory::newFileUpdateSucceeded()->setObjectId($prefix);
         
         if ($description) {
             $eventPayload->setDescription(json_encode(['message' => $description]));
@@ -576,7 +576,7 @@ class ImportFileService implements ImportFileServiceInterface
     
     private function onFileUpdateFailed($prefix, \Exception $e)
     {
-        event('file.update.failed', FileImportEvent::newFileUpdateFailed()
+        event('file.update.failed', FileImportEventFactory::newFileUpdateFailed()
             ->setObjectId($prefix)
             ->setDescription(json_encode([get_class($e) => 'Failed to update file : ' . $e->getMessage()]))
         );
@@ -584,12 +584,12 @@ class ImportFileService implements ImportFileServiceInterface
     
     private function onFileParseSucceeded($prefix)
     {
-        event('file.parse.succeeded', FileImportEvent::newFileParseSucceeded()->setObjectId($prefix));
+        event('file.parse.succeeded', FileImportEventFactory::newFileParseSucceeded()->setObjectId($prefix));
     }
     
     private function onFileParseFailed($prefix, \Exception $e)
     {
-        event('file.parse.failed', FileImportEvent::newFileParseFailed()
+        event('file.parse.failed', FileImportEventFactory::newFileParseFailed()
             ->setObjectId($prefix)
             ->setDescription(json_encode([get_class($e) => 'Failed to parse file content : ' . $e->getMessage()]))
        );
@@ -609,7 +609,7 @@ class ImportFileService implements ImportFileServiceInterface
 
         $this->updateExclusionListWith($importResults, $prefix);
         
-        event('file.saverecords.succeeded', FileImportEvent::newSaveRecordsSucceeded()
+        event('file.saverecords.succeeded', FileImportEventFactory::newSaveRecordsSucceeded()
             ->setObjectId($prefix)
             ->setTimestamp($now)
             ->setDescription(json_encode($importResults))
@@ -630,19 +630,19 @@ class ImportFileService implements ImportFileServiceInterface
     
     private function onRecordsSaveFailed($prefix, \Exception $e)
     {
-        event('file.saverecords.failed', FileImportEvent::newSaveRecordsFailed()
+        event('file.saverecords.failed', FileImportEventFactory::newSaveRecordsFailed()
             ->setObjectId($prefix)
             ->setDescription(json_encode([get_class($e) => 'Failed to save records : ' . $e->getMessage()]))
         );
     }
     
-    private function onFileImportException($prefix, $e)
+    private function onFileImportException($prefix, \Exception $e)
     {
         error('An error occurred while trying to import exclusion list for ' . $prefix . ' : ' . $e->getMessage());
         return $this->createResponse('Error importing exclusion list for \'' . $prefix . '\' : ' . $e->getMessage(), false);
     }
     
-    private function onRefreshRecordsException($prefix, $importUrl, $e)
+    private function onRefreshRecordsException($prefix, $importUrl, \Exception $e)
     {
         error('An error occurred while trying to refresh ' . $prefix . ' with url ' . $importUrl . ' : ' . $e->getMessage());
     }    

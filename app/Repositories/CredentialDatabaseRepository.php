@@ -2,6 +2,8 @@
 
 namespace App\Repositories;
 
+use App\Models\CredentialDatabase;
+
 class CredentialDatabaseRepository implements Repository
 {
 
@@ -12,7 +14,7 @@ class CredentialDatabaseRepository implements Repository
 
     public function clear()
     {
-        // TODO: Implement clear() method.
+        app('db')->table('credential_databases')->truncate();
     }
 
     public function find($prefix)
@@ -22,6 +24,24 @@ class CredentialDatabaseRepository implements Repository
                    ->where('prefix', $prefix)
                    ->get();
 
-        return head($results);
+        $record = head($results);
+
+        if ($record) {
+
+            $credentialDatabase = new CredentialDatabase();
+
+            $credentialDatabase->setId($record->id)
+                ->setPrefix($record->prefix)
+                ->setDescription($record->description)
+                ->setSourceUri($record->source_uri)
+                ->setAutoSeed($record->auto_seed)
+                ->setLastImportHash($record->last_import_hash)
+                ->setLastImportDate($record->last_import_date);
+
+            return $credentialDatabase;
+        }
+
+        return null;
+        
     }
 }

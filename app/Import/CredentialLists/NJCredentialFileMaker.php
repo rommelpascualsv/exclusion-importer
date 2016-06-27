@@ -21,24 +21,22 @@ class NJCredentialFileMaker extends CredentialFileMaker
 
     private $retryList = [];
 
-    public function __construct($dataFilePath)
+    public function __construct($sourceUri)
     {
-        $this->parser = new NJCredential();
-        $this->dataFilePath = $dataFilePath;
-        $this->reScrapeFilePath = $this->getRescrapeFilePath($dataFilePath);
-    }
-
-    protected function getRescrapeFilePath($dataFilePath)
-    {
-        return $dataFilePath . '.rescrape';
+        $this->parser = new NJCredential($sourceUri);
     }
 
     /**
      * Starting point for building a file.
      */
-    public function buildFile()
+    public function buildFile($destinationFilePath)
     {
+        $this->dataFilePath = $destinationFilePath;
+
+        $this->reScrapeFilePath = $this->getRescrapeFilePath($destinationFilePath);
+
         $initialResponse = $this->parser->crawlFormPage();
+
         if (! $initialResponse) {
             $this->output('red', 'Failed to crawl form page.');
             return;
@@ -55,6 +53,16 @@ class NJCredentialFileMaker extends CredentialFileMaker
         }
 
         $this->makeReScrapeFile($this->retryList);
+    }
+
+    public function getFileType()
+    {
+        return 'csv';
+    }
+
+    private function getRescrapeFilePath($dataFilePath)
+    {
+        return $dataFilePath . '.rescrape';
     }
 
     /**
