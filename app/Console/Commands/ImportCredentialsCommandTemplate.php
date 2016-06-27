@@ -16,6 +16,9 @@ abstract class ImportCredentialsCommandTemplate extends Command
                                 CredentialDatabaseRepository $credentialDBRepo)
     {
         parent::__construct();
+
+        ini_set('memory_limit', '2048M');
+
         $this->credentialListService = $credentialListService;
         $this->credentialDBRepo = $credentialDBRepo;
     }

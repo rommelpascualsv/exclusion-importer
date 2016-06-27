@@ -23,6 +23,7 @@ class NJCredentialFileMaker extends CredentialFileMaker
 
     public function __construct($sourceUri)
     {
+        parent::__construct($sourceUri);
         $this->parser = new NJCredential($sourceUri);
     }
 
