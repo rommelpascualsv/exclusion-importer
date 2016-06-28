@@ -7,11 +7,9 @@ use App\Import\CredentialLists\CredentialFileMakerFactory;
 use App\Repositories\FileRepository;
 use App\Seeders\Seeder;
 use App\Seeders\SeederFactory;
-use CDM\Test\TestCase;
 use App\Services\CredentialListService;
-use League\Flysystem\Exception;
+use CDM\Test\TestCase;
 use Mockery;
-use App\Import\CredentialLists\NJCredentialFileMaker;
 
 class CredentialListServiceTest extends TestCase
 {
