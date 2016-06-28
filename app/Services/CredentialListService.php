@@ -5,25 +5,22 @@ namespace App\Services;
 use App\Events\CredentialEventFactory;
 use App\Exceptions\LoggablePDOException;
 use App\Import\CredentialLists\CredentialFileMakerFactory;
-use App\Repositories\FileRepository;
 use App\Seeders\SeederFactory;
 use App\Services\Contracts\CredentialListServiceInterface;
 
 class CredentialListService implements CredentialListServiceInterface
 {
-    const FILE_HASH_ALGO = 'sha256';
-
     private $credentialFileMakerFactory;
-    private $fileRepo;
     private $seederFactory;
+    private $fileHelper;
 
     public function __construct(CredentialFileMakerFactory $credentialFileMakerFactory,
-                                FileRepository $fileRepo,
-                                SeederFactory $seederFactory)
+                                SeederFactory $seederFactory,
+                                FileHelper $fileHelper)
     {
         $this->credentialFileMakerFactory = $credentialFileMakerFactory;
-        $this->fileRepo = $fileRepo;
         $this->seederFactory = $seederFactory;
+        $this->fileHelper = $fileHelper;
     }
 
     public function createCredentialDatabaseFile($prefix, $sourceUri, $destinationFile)
@@ -113,31 +110,13 @@ class CredentialListService implements CredentialListServiceInterface
     {
         try {
 
-            $hash = hash_file(self::FILE_HASH_ALGO, $credentialFile);
+            // Save the file hash first...
+            $hash = $this->fileHelper->createAndSaveFileHash($credentialFile, $fileType, $prefix);
 
-            $record = [
-                'state_prefix' => $prefix,
-                'hash' => $hash,
-                'img_type' => $fileType,
-                'img_data' => file_get_contents($credentialFile)
-            ];
+            // Then save the actual contents of the file
+            $updated = $this->fileHelper->saveFileContents($credentialFile, $hash, $prefix);
 
-            if (! $this->fileRepo->contains($record)) {
-
-                info('Inserting new file to the files repository for \''. $prefix .'\' : ' . $hash);
-
-                $record['date_last_downloaded'] = $this->now();
-
-                $this->fileRepo->create($record);
-
-            } else {
-
-                info('Existing file hash found in files repository for \''. $prefix .'\' : ' . $hash);
-
-                $this->fileRepo->update($record, ['date_last_downloaded' => $this->now()]);
-            }
-
-            $this->onFileSaveSucceeded($prefix, $hash);
+            $this->onFileSaveSucceeded($prefix, $updated ? ['fileHash' => $hash] : ['message' => 'Last saved file is already up-to-date']);
 
             return $hash;
 
@@ -166,12 +145,15 @@ class CredentialListService implements CredentialListServiceInterface
         );
     }
 
-    private function onFileSaveSucceeded($prefix, $hash)
+    private function onFileSaveSucceeded($prefix, $results = null)
     {
-        event('credential.file.save.succeeded', CredentialEventFactory::newFileSaveSucceeded()
-            ->setObjectId($prefix)
-            ->setDescription(json_encode(['hash' => $hash]))
-        );
+        $eventPayload = CredentialEventFactory::newFileSaveSucceeded()->setObjectId($prefix);
+
+        if ($results) {
+            $eventPayload->setDescription(json_encode($results));
+        }
+
+        event('credential.file.save.succeeded', $eventPayload);
     }
 
     private function onFileSaveFailed($prefix, \Exception $e)
@@ -206,10 +188,5 @@ class CredentialListService implements CredentialListServiceInterface
     private function onCredentialSeedingException($prefix, \Exception $e)
     {
         error('An error occurred while trying to seed credentials for ' . $prefix . ' : ' . $e->getMessage());
-    }
-
-    private function now()
-    {
-        return date('Y-m-d H:i:s');
     }
 }
