@@ -56,11 +56,6 @@ class NJCredentialFileMaker extends CredentialFileMaker
         $this->makeReScrapeFile($this->retryList);
     }
 
-    public function getFileType()
-    {
-        return 'csv';
-    }
-
     private function getRescrapeFilePath($dataFilePath)
     {
         return $dataFilePath . '.rescrape';

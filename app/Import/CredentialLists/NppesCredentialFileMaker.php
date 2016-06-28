@@ -43,11 +43,6 @@ class NppesCredentialFileMaker extends CredentialFileMaker
 
     }
 
-    public function getFileType()
-    {
-        return 'csv';
-    }
-
     private function createSourceFile()
     {
         return tempnam(sys_get_temp_dir(), str_random(4));

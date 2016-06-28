@@ -6,7 +6,7 @@ use App\Repositories\CredentialDatabaseRepository;
 use App\Services\CredentialListService;
 use Illuminate\Console\Command;
 
-abstract class ImportCredentialsCommandTemplate extends Command
+abstract class BaseImportCredentials extends Command
 {
 
     private $credentialListService;

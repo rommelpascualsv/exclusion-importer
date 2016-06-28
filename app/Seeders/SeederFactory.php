@@ -19,14 +19,14 @@ class SeederFactory
      */
     public function createSeeder($prefix)
     {
-        if ($prefix === 'njcredential') {
-            return $this->app->make(\App\Seeders\NJCredential\CreateSeeder::class);
+        if ('njcredential' === $prefix) {
+            return $this->app->make(\App\Seeders\NJCredential\UpdateSeeder::class);
 
-        } else if ($prefix === 'njna') {
+        } else if ('njna' === $prefix) {
             return $this->app->make(\App\Seeders\Njna\CreateSeeder::class);
             
-        } else if ($prefix === 'nppes') {
-            return $this->app->make(\App\Seeders\Nppes\CreateSeeder::class);
+        } else if ('nppes' === $prefix) {
+            return $this->app->make(\App\Seeders\Nppes\UpdateSeeder::class);
         }
 
         throw new \RuntimeException('No appropriate credential seeder found for ' . $prefix);

@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands\Nppes;
 
-use App\Console\Commands\ImportCredentialsCommandTemplate;
+use App\Console\Commands\BaseImportCredentials;
 
-class Import extends ImportCredentialsCommandTemplate
+class Import extends BaseImportCredentials
 {
     protected $name = 'nppes:import';
 

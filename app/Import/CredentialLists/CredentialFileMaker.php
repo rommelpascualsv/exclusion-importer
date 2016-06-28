@@ -13,5 +13,8 @@ abstract class CredentialFileMaker
 
     public abstract function buildFile($destinationFilePath);
 
-    public abstract function getFileType();
+    public function getFileType()
+    {
+        return 'csv';
+    }
 }
