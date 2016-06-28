@@ -2,85 +2,168 @@
 
 namespace Test\Unit;
 
+use App\Import\CredentialLists\CredentialFileMaker;
+use App\Import\CredentialLists\CredentialFileMakerFactory;
+use App\Repositories\FileRepository;
+use App\Seeders\Seeder;
+use App\Seeders\SeederFactory;
 use CDM\Test\TestCase;
 use App\Services\CredentialListService;
+use League\Flysystem\Exception;
 use Mockery;
 use App\Import\CredentialLists\NJCredentialFileMaker;
 
 class CredentialListServiceTest extends TestCase
 {
+    /**
+     * @var CredentialListService
+     */
     private $service;
-    private $credentialDBRepo;
     private $credentialFileMakerFactory;
-    
+    private $fileRepo;
+    private $seederFactory;
+    private $mockCredentialFileMaker;
+    private $mockSeeder;
+    private $tempFile;
+
     public function setUp()
     {
         parent::setUp();
     
         $this->app->withFacades();
         
-        $this->credentialDBRepo = Mockery::mock('App\Repositories\CredentialDatabaseRepository')->makePartial();
-        $this->credentialFileMakerFactory = Mockery::mock('App\Import\CredentialLists\CredentialFileMakerFactory')->makePartial();
-        
-        $this->service = new CredentialListService($this->credentialDBRepo,
-            $this->credentialFileMakerFactory
+        $this->credentialFileMakerFactory = Mockery::mock(CredentialFileMakerFactory::class)->makePartial();
+        $this->fileRepo = Mockery::mock(FileRepository::class)->makePartial();
+        $this->seederFactory = Mockery::mock(SeederFactory::class)->makePartial();
+        $this->mockCredentialFileMaker = Mockery::mock(CredentialFileMaker::class)->makePartial();
+        $this->mockSeeder = Mockery::mock(Seeder::class);
+
+        $this->service = new CredentialListService(
+            $this->credentialFileMakerFactory,
+            $this->fileRepo,
+            $this->seederFactory
         );
+
+        $this->tempFile = tempnam(sys_get_temp_dir(), str_random(4));
     }
-    
-    /**
-     * @expectedException App\Services\CredentialListServiceException
-     */
-    public function testGenerateCredentialListShouldThrowExceptionWhenNoPrefixIsPassed() 
+
+    public function tearDown()
     {
-        $this->service->generateCredentialListFile(null);    
+        if ($this->tempFile && file_exists($this->tempFile)) {
+            unlink($this->tempFile);
+        }
+
+        parent::tearDown();
+
     }
-    
-    /**
-     * @expectedException App\Services\CredentialListServiceException
-     */
-    public function testGenerateCredentialListShouldThrowExceptionWhenDestinationFilePathForPrefixIsNotSpecifiedInArgsOrRepo()
+
+    public function testGenerateCredentialListShouldInsertCredentialFileToFilesRepoIfFileDoesNotYetExistInRepo()
     {
-        $this->credentialDBRepo->shouldReceive('find')->once()->with('njcredential')->andReturn(null);
-        
-        $this->service->generateCredentialListFile('njcredential');
+        $this->credentialFileMakerFactory->shouldReceive('createCredentialFileMaker')->once()
+            ->with('njcredential', 'http://www.njcredential.com')->andReturn($this->mockCredentialFileMaker);
+
+        $this->mockCredentialFileMaker->shouldReceive('buildFile')->once()->with($this->tempFile);
+
+        $hash = hash_file(CredentialListService::FILE_HASH_ALGO, $this->tempFile);
+        $fileContents = file_get_contents($this->tempFile);
+
+        $record = [
+            'state_prefix' => 'njcredential',
+            'hash' => $hash,
+            'img_type' => 'csv',
+            'img_data' => $fileContents
+        ];
+
+        $this->fileRepo->shouldReceive('contains')->once()->with($record)->andReturnFalse();
+
+        $this->fileRepo->shouldReceive('create')->once()->withArgs(function($args) use ($hash, $fileContents){
+            return $args['state_prefix'] === 'njcredential' &&
+                   $args['hash'] === $hash &&
+                   $args['img_data'] === $fileContents &&
+                   $args['date_last_downloaded'] !== null;
+        });
+
+        $this->fileRepo->shouldNotReceive('update');
+
+        $actual = $this->service->createCredentialDatabaseFile('njcredential', 'http://www.njcredential.com', $this->tempFile);
+        $expected = $hash;
+
+        $this->assertEquals($expected, $actual);
     }
-    
-    public function testGenerateCredentialListShouldUseDestinationPathSpecifiedInArgsToInstantiateCredentialFileMaker()
+
+    public function testGenerateCredentialListShouldJustUpdateLastDownloadDateOfCrednentialFileIfFileAlreadyExistsInRepo()
     {
-        $this->credentialDBRepo->shouldNotReceive('find');
-        
-        $this->credentialFileMakerFactory->shouldReceive('createCredentialFileMaker')
-            ->once()
-            ->with('njcredential', 'njcredential.csv')
-            ->andReturn(Mockery::mock('App\Import\CredentialLists\NJCredentialFileMaker')->shouldIgnoreMissing());
-        
-        $this->service->generateCredentialListFile('njcredential', 'njcredential.csv');
-    }  
-    
-    public function testGenerateCredentialListShouldUseDestinationPathSpecifiedInRepoToInstantiateCredentialFileMaker()
-    {
-        $this->credentialDBRepo->shouldReceive('find')->once()->with('njcredential')->andReturn((object)[
-            'storage_path' => 'repo-storage/njcredential.csv'     
-        ]);
-    
-        $this->credentialFileMakerFactory->shouldReceive('createCredentialFileMaker')
-        ->once()
-        ->with('njcredential', 'repo-storage/njcredential.csv')
-        ->andReturn(Mockery::mock('App\Import\CredentialLists\NJCredentialFileMaker')->shouldIgnoreMissing());
-    
-        $this->service->generateCredentialListFile('njcredential');
-    }  
-    
+        $this->credentialFileMakerFactory->shouldReceive('createCredentialFileMaker')->once()
+            ->with('njcredential', 'http://www.njcredential.com')->andReturn($this->mockCredentialFileMaker);
+
+        $this->mockCredentialFileMaker->shouldReceive('buildFile')->once()->with($this->tempFile);
+
+        $hash = hash_file(CredentialListService::FILE_HASH_ALGO, $this->tempFile);
+        $fileContents = file_get_contents($this->tempFile);
+
+        $record = [
+            'state_prefix' => 'njcredential',
+            'hash' => $hash,
+            'img_type' => 'csv',
+            'img_data' => $fileContents
+        ];
+
+        $this->fileRepo->shouldReceive('contains')->once()->with($record)->andReturnTrue();
+
+        $this->fileRepo->shouldReceive('update')->once()->withArgs(function($arg1, $arg2) use ($record){
+            return $arg1 == $record && $arg2['date_last_downloaded'] !== null;
+        });
+
+        $this->fileRepo->shouldNotReceive('create');
+
+        $actual = $this->service->createCredentialDatabaseFile('njcredential', 'http://www.njcredential.com', $this->tempFile);
+        $expected = $hash;
+
+        $this->assertEquals($expected, $actual);
+    }
+
     /**
-     * @expectedException App\Services\CredentialListServiceException
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Unable to write to destination file
      */
-    public function testGenerateCredentialListShouldThrowExceptionIfCredentialFileMakerCannotBeCreated()
+    public function testGenerateCredentialListWithExceptionThrownOnCreationOfCredentialFile()
     {
-        $this->credentialFileMakerFactory->shouldReceive('createCredentialFileMaker')
-        ->once()
-        ->with('unknown_prefix', 'test-unknown-prefix.csv')
-        ->andReturnNull();
-    
-        $this->service->generateCredentialListFile('unknown_prefix', 'test-unknown-prefix.csv');
-    }    
+        $this->credentialFileMakerFactory->shouldReceive('createCredentialFileMaker')->once()
+            ->with('njcredential', 'http://www.njcredential.com')->andReturn($this->mockCredentialFileMaker);
+
+        $this->mockCredentialFileMaker->shouldReceive('buildFile')->once()->andThrow(\RuntimeException::class, 'Unable to write to destination file');
+
+        $this->service->createCredentialDatabaseFile('njcredential', 'http://www.njcredential.com', $this->tempFile);
+    }
+
+
+    public function testSeedShouldReturnSeederResults()
+    {
+        $this->seederFactory->shouldReceive('createSeeder')->once()->with('njcredential')->andReturn($this->mockSeeder);
+
+        $expected = [
+            'succeeded' => 12345,
+            'failed' => 3
+        ];
+
+        $this->mockSeeder->shouldReceive('seed')->once()->with($this->tempFile)->andReturn($expected);
+
+        $actual = $this->service->seed('njcredential', $this->tempFile);
+
+        $this->assertEquals($expected, $actual);
+        
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Unable to parse file
+     */
+    public function testSeedWithExceptionThrownOnSeederSeeding()
+    {
+        $this->seederFactory->shouldReceive('createSeeder')->once()->with('njcredential')->andReturn($this->mockSeeder);
+
+        $this->mockSeeder->shouldReceive('seed')->once()->with($this->tempFile)->andThrow(\RuntimeException::class, 'Unable to parse file');
+
+        $this->service->seed('njcredential', $this->tempFile);
+    }
 }
