@@ -8,6 +8,7 @@ use Illuminate\Console\Command;
 
 abstract class BaseImportCredentials extends Command
 {
+    protected $name = 'baseimportcredentials';
 
     private $credentialListService;
     private $credentialDBRepo;
