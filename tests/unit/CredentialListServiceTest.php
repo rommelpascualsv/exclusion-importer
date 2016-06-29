@@ -4,21 +4,18 @@ namespace Test\Unit;
 
 use App\Import\CredentialLists\CredentialFileMaker;
 use App\Import\CredentialLists\CredentialFileMakerFactory;
-use App\Repositories\FileRepository;
 use App\Seeders\Seeder;
 use App\Seeders\SeederFactory;
 use App\Services\CredentialListService;
+use App\Services\FileHelper;
 use CDM\Test\TestCase;
 use Mockery;
 
 class CredentialListServiceTest extends TestCase
 {
-    /**
-     * @var CredentialListService
-     */
     private $service;
     private $credentialFileMakerFactory;
-    private $fileRepo;
+    private $fileHelper;
     private $seederFactory;
     private $mockCredentialFileMaker;
     private $mockSeeder;
@@ -31,15 +28,16 @@ class CredentialListServiceTest extends TestCase
         $this->app->withFacades();
         
         $this->credentialFileMakerFactory = Mockery::mock(CredentialFileMakerFactory::class)->makePartial();
-        $this->fileRepo = Mockery::mock(FileRepository::class)->makePartial();
         $this->seederFactory = Mockery::mock(SeederFactory::class)->makePartial();
+        $this->fileHelper = Mockery::mock(FileHelper::class)->makePartial();
+
         $this->mockCredentialFileMaker = Mockery::mock(CredentialFileMaker::class)->makePartial();
         $this->mockSeeder = Mockery::mock(Seeder::class);
 
         $this->service = new CredentialListService(
             $this->credentialFileMakerFactory,
-            $this->fileRepo,
-            $this->seederFactory
+            $this->seederFactory,
+            $this->fileHelper
         );
 
         $this->tempFile = tempnam(sys_get_temp_dir(), str_random(4));
@@ -55,66 +53,21 @@ class CredentialListServiceTest extends TestCase
 
     }
 
-    public function testGenerateCredentialListShouldInsertCredentialFileToFilesRepoIfFileDoesNotYetExistInRepo()
+    public function testGenerateCredentialListShouldBuildCredentialFileAndPersistItInFilesRepo()
     {
         $this->credentialFileMakerFactory->shouldReceive('createCredentialFileMaker')->once()
             ->with('njcredential', 'http://www.njcredential.com')->andReturn($this->mockCredentialFileMaker);
 
         $this->mockCredentialFileMaker->shouldReceive('buildFile')->once()->with($this->tempFile);
 
-        $hash = hash_file(CredentialListService::FILE_HASH_ALGO, $this->tempFile);
-        $fileContents = file_get_contents($this->tempFile);
+        $hash = hash_file(FileHelper::FILE_HASH_ALGO, $this->tempFile);
 
-        $record = [
-            'state_prefix' => 'njcredential',
-            'hash' => $hash,
-            'img_type' => 'csv',
-            'img_data' => $fileContents
-        ];
+        $this->fileHelper->shouldReceive('createAndSaveFileHash')->once()->with($this->tempFile, 'csv', 'njcredential')->andReturn($hash);
 
-        $this->fileRepo->shouldReceive('contains')->once()->with($record)->andReturnFalse();
-
-        $this->fileRepo->shouldReceive('create')->once()->withArgs(function($args) use ($hash, $fileContents){
-            return $args['state_prefix'] === 'njcredential' &&
-                   $args['hash'] === $hash &&
-                   $args['img_data'] === $fileContents &&
-                   $args['date_last_downloaded'] !== null;
-        });
-
-        $this->fileRepo->shouldNotReceive('update');
+        $this->fileHelper->shouldReceive('saveFileContents')->once()->with($this->tempFile, $hash, 'njcredential')->andReturnTrue();
 
         $actual = $this->service->createCredentialDatabaseFile('njcredential', 'http://www.njcredential.com', $this->tempFile);
-        $expected = $hash;
 
-        $this->assertEquals($expected, $actual);
-    }
-
-    public function testGenerateCredentialListShouldJustUpdateLastDownloadDateOfCrednentialFileIfFileAlreadyExistsInRepo()
-    {
-        $this->credentialFileMakerFactory->shouldReceive('createCredentialFileMaker')->once()
-            ->with('njcredential', 'http://www.njcredential.com')->andReturn($this->mockCredentialFileMaker);
-
-        $this->mockCredentialFileMaker->shouldReceive('buildFile')->once()->with($this->tempFile);
-
-        $hash = hash_file(CredentialListService::FILE_HASH_ALGO, $this->tempFile);
-        $fileContents = file_get_contents($this->tempFile);
-
-        $record = [
-            'state_prefix' => 'njcredential',
-            'hash' => $hash,
-            'img_type' => 'csv',
-            'img_data' => $fileContents
-        ];
-
-        $this->fileRepo->shouldReceive('contains')->once()->with($record)->andReturnTrue();
-
-        $this->fileRepo->shouldReceive('update')->once()->withArgs(function($arg1, $arg2) use ($record){
-            return $arg1 == $record && $arg2['date_last_downloaded'] !== null;
-        });
-
-        $this->fileRepo->shouldNotReceive('create');
-
-        $actual = $this->service->createCredentialDatabaseFile('njcredential', 'http://www.njcredential.com', $this->tempFile);
         $expected = $hash;
 
         $this->assertEquals($expected, $actual);
@@ -134,7 +87,6 @@ class CredentialListServiceTest extends TestCase
         $this->service->createCredentialDatabaseFile('njcredential', 'http://www.njcredential.com', $this->tempFile);
     }
 
-
     public function testSeedShouldReturnSeederResults()
     {
         $this->seederFactory->shouldReceive('createSeeder')->once()->with('njcredential')->andReturn($this->mockSeeder);
@@ -149,7 +101,7 @@ class CredentialListServiceTest extends TestCase
         $actual = $this->service->seed('njcredential', $this->tempFile);
 
         $this->assertEquals($expected, $actual);
-        
+
     }
 
     /**
