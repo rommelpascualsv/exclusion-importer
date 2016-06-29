@@ -60,7 +60,7 @@ return [
             'timezone'  => env('DB_TIMEZONE', '+00:00'),
             'strict'    => false,
             'options' => [
-                PDO::MYSQL_ATTR_MAX_BUFFER_SIZE => 100000000
+                PDO::MYSQL_ATTR_MAX_BUFFER_SIZE => 512000000
             ]            
         ],
         
@@ -77,7 +77,7 @@ return [
             'timezone'  => env('DB_TIMEZONE_BACKUP', '+00:00'),
             'strict'    => false,
             'options' => [
-                PDO::MYSQL_ATTR_MAX_BUFFER_SIZE => 100000000
+                PDO::MYSQL_ATTR_MAX_BUFFER_SIZE => 512000000
             ]            
         ],
         
@@ -94,7 +94,7 @@ return [
             'timezone'  => env('DB_TIMEZONE_PROD', '+00:00'),
             'strict'    => false,
             'options' => [
-                PDO::MYSQL_ATTR_MAX_BUFFER_SIZE => 100000000
+                PDO::MYSQL_ATTR_MAX_BUFFER_SIZE => 512000000
             ]
         ]        
     ],

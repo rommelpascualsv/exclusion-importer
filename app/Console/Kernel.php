@@ -46,5 +46,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('updateFiles')->daily();
         $schedule->command('njcredential:import')->weekly();
         $schedule->command('nppes:import')->weekly();
+        $schedule->command('njna:import')->weekly();
     }
 }
