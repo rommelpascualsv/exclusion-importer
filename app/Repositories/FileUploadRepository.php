@@ -3,6 +3,8 @@
 namespace App\Repositories;
 
 use App\Utils\FileSystemUtils;
+use Illuminate\Contracts\Filesystem\Filesystem;
+
 class FileUploadRepository implements Repository
 {
     const DEFAULT_UPLOAD_ROOT_DIRECTORY = 'exclusion-lists';
@@ -10,10 +12,10 @@ class FileUploadRepository implements Repository
     private $uploadRootDirectory;
     private $fileSystem;
     
-    public function __construct()
+    public function __construct(Filesystem $fileSystem)
     {
         $this->uploadRootDirectory = self::DEFAULT_UPLOAD_ROOT_DIRECTORY;
-        $this->fileSystem = app('filesystem');
+        $this->fileSystem = $fileSystem;
     }
     
     public function create($record)
