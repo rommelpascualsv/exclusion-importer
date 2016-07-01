@@ -632,7 +632,10 @@ class ImportFileService implements ImportFileServiceInterface
     {
         event('file.saverecords.failed', FileImportEvent::newSaveRecordsFailed()
             ->setObjectId($prefix)
-            ->setDescription(json_encode([get_class($e) => 'Failed to save records : ' . $e->getMessage()]))
+            ->setDescription(json_encode([
+                get_class($e) => 'Failed to save records : ' . $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]))
         );
     }
     

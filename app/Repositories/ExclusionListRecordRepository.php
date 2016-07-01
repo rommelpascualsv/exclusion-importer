@@ -10,7 +10,7 @@ use App\Models\ImportStats;
 class ExclusionListRecordRepository implements Repository
 {
     
-    const DEFAULT_STAGING_SCHEMA = 'exclusion_lists_cdm';
+    const DEFAULT_STAGING_SCHEMA = 'exclusion_lists_staging';
     const DEFAULT_PROD_SCHEMA    = 'exclusion_lists';
     const DEFAULT_BACKUP_SCHEMA  = 'exclusion_lists_backup';
     
@@ -27,17 +27,17 @@ class ExclusionListRecordRepository implements Repository
     
     public function create($record)
     {
-        throw new Exception("This operation is not supported");
+        throw new \Exception("This operation is not supported");
     }
     
     public function clear()
     {
-        throw new Exception("This operation is not supported");
+        throw new \Exception("This operation is not supported");
     }
     
     public function find($id)
     {
-        throw new Exception("This operation is not supported");    
+        throw new \Exception("This operation is not supported");
     }
     
     /**
