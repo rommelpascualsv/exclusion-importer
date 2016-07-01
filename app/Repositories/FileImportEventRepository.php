@@ -2,7 +2,6 @@
 namespace App\Repositories;
 
 use App\Events\FileImportEvent;
-use App\Repositories\Repository;
 
 class FileImportEventRepository implements Repository
 {

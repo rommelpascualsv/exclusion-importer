@@ -1,16 +1,16 @@
 <?php 
 namespace App\Events;
 
-use App\Events\Event;
-
 class FileImportEvent extends Event
 {
+    const EVENTTYPE_FILE_UPLOAD   = 'file.upload';
     const EVENTTYPE_FILE_DOWNLOAD = 'file.download';
     const EVENTTYPE_FILE_UPDATE   = 'file.update';
     const EVENTTYPE_FILE_PARSE    = 'file.parse';
     const EVENTTYPE_SAVE_RECORDS  = 'records.save'; 
     
     const EVENT_TYPES = [
+        self::EVENTTYPE_FILE_UPLOAD,
         self::EVENTTYPE_FILE_DOWNLOAD, 
         self::EVENTTYPE_FILE_UPDATE,
         self::EVENTTYPE_FILE_PARSE,
@@ -20,6 +20,7 @@ class FileImportEvent extends Event
     const EVENTSTATUS_SUCCESS = '1';
     const EVENTSTATUS_FAIL    = '0';
     
+    const DEFAULT_FILE_UPLOAD_SUCCESS_DESCRIPTION = 'File uploaded successfully';
     const DEFAULT_FILE_DOWNLOAD_SUCCESS_DESCRIPTION = 'File downloaded successfully';
     const DEFAULT_FILE_PARSE_SUCCESS_DESCRIPTION    = 'File parsed successfully';
     const DEFAULT_FILE_UPDATE_SUCCESS_DESCRIPTION   = 'File updated successfully';
@@ -89,6 +90,25 @@ class FileImportEvent extends Event
         
         return $instance;
     }
+    
+    public static function newFileUploadFailed()
+    {
+        $instance = (new FileImportEvent())
+        ->setEventType(self::EVENTTYPE_FILE_UPLOAD)
+        ->setStatus(self::EVENTSTATUS_FAIL);
+    
+        return $instance;
+    }
+    
+    public static function newFileUploadSucceeded()
+    {
+        $instance = (new FileImportEvent())
+        ->setEventType(self::EVENTTYPE_FILE_UPLOAD)
+        ->setStatus(self::EVENTSTATUS_SUCCESS)
+        ->setDescription(json_encode(['message' => self::DEFAULT_FILE_UPLOAD_SUCCESS_DESCRIPTION]));
+    
+        return $instance;
+    }    
     
     public static function newSaveRecordsFailed()
     {
