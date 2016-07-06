@@ -15,5 +15,6 @@ class ExclusionListMgmtServiceProvider extends ServiceProvider
     {
         $this->app->bind('App\Services\Contracts\ExclusionListServiceInterface', 'App\Services\ExclusionListService');
         $this->app->bind('App\Services\Contracts\ImportFileServiceInterface', 'App\Services\ImportFileService');
+        $this->app->bind('App\Services\Contracts\FileUploadServiceInterface', 'App\Services\FileUploadService');
     }
 }

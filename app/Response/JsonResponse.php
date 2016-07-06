@@ -8,14 +8,15 @@ trait JsonResponse
 	 *
 	 * @param string $isSuccess
 	 * @param string $message
-	 *
+	 * @param object|array $data the message data
 	 * @return object The response object
 	 */
-	protected function createResponse($message, $isSuccess)
+	protected function createResponse($message, $isSuccess, $data = null)
 	{
 		return response()->json([
 				'success' => $isSuccess,
-				'message' => $message
+				'message' => $message,
+		        'data' => $data
 		]);
 	}
 }
