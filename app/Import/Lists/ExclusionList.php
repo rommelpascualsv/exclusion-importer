@@ -104,7 +104,7 @@ abstract class ExclusionList
     public function convertDatesToMysql($row, $dateColumns)
     {
         foreach ($dateColumns as $columnName => $index) {
-            $columnValue = $row[$index];
+            $columnValue = trim($row[$index]);
             if (strtotime($columnValue)) {
                 $date = new \DateTime($columnValue);
                 $row[$index] = $date->format('Y-m-d');
