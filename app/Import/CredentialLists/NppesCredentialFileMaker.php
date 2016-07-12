@@ -52,13 +52,38 @@ class NppesCredentialFileMaker extends CredentialFileMaker
     {
         $crawler = new Crawler(file_get_contents($this->sourceUri));
 
-        $link = $crawler->selectLink(self::WEEKLY_INCREMENTAL_NPI_FILES_LINK_SELECTOR)->attr('href');
+        $link = $this->getWeeklyUpdateLink($crawler);
 
         if (empty($link)) {
             throw new \RuntimeException('Unable to find link for weekly incremental NPI files of Nppes from ' . $this->sourceUri);
         }
 
         return $this->sourceUri . '/.' . $link;
+    }
+
+    private function getWeeklyUpdateLink($crawler)
+    {
+        $dateRanges = [
+            '1_week_ago'  => date('mdy',strtotime('monday last week')) . '-' . date('mdy',strtotime('sunday last week')),
+            '2_weeks_ago' => date('mdy',strtotime('monday last week -1 week')) . '-' . date('mdy',strtotime('sunday last week -1 week')),
+            '3_weeks_ago' => date('mdy',strtotime('monday last week -2 weeks')) . '-' . date('mdy',strtotime('sunday last week -2 weeks')),
+            '4_weeks_ago' => date('mdy',strtotime('monday last week -3 weeks')) . '-' . date('mdy',strtotime('sunday last week -3 weeks'))
+        ];
+
+        $link = null;
+
+        //Find the most recent weekly update link and return its link address
+        foreach($dateRanges as $dateRange)
+        {
+            $weeklyUpdateLink = $crawler->selectLink(self::WEEKLY_INCREMENTAL_NPI_FILES_LINK_SELECTOR . ' - ' .  $dateRange);
+
+            if (! empty($weeklyUpdateLink)) {
+                $link = $weeklyUpdateLink->attr('href');
+                break;
+            }
+        }
+
+        return $link;
     }
 
     private function downloadTo($sourceFile, $sourceFileLink)
