@@ -6,7 +6,7 @@ class Nevada extends ExclusionList
 {
     public $dbPrefix = 'nv1';
 
-    public $pdfToText = "java -jar ../etc/tabula.jar -p all -c 125,242,333,372,425,464,518,556,604,654,701";
+    public $pdfToText = "java -jar ../etc/tabula.jar -p all -g -r -u";
 
     public $uri = "http://dhcfp.nv.gov/uploadedFiles/dhcfpnvgov/content/Providers/PI/NevadaProviderExclusions.pdf";
     
@@ -57,12 +57,11 @@ class Nevada extends ExclusionList
      * @var contains the headers of the pdf that should be excluded
      */
     private $headers = [
-    	',,,,,,,,,,Mar 2016',
-    	',,,,,,,,,"NV ",',
-    	',,,,,,,,,"Medicaid ",',
-    	',,"Persons with ",,,,,,,"Sanction ","Federal "',
-    	',,"controlling inerest of ","Medicaid ",,"Provider ","Termination ","Sanction ","Sanction ","Period End ","Reinstate "',
-    	'Business Name,Legal Entity,5% or more,Provider,NPI,Type,Date,Tier,Period,Date,Date'
+    	'NV Medicaid',
+    	'Sanction Federal',
+    	'Persons with controlling Medicaid Provider Termination Sanction Sanction Period End Reinstate',
+    	'Business Name Legal Entity inerest of 5% or more Provider',
+    	'NPI Type Date Tier Period Date Date'
     ];
     
     /**
@@ -97,7 +96,7 @@ class Nevada extends ExclusionList
         foreach ($rows as $key => $value) {
         	
         	// do not include if row is empty or contains page number
-        	if (empty($value)) {
+        	if (empty($value) || $this->isHeader($value)) {
         		continue;
         	}
         	
@@ -223,5 +222,10 @@ class Nevada extends ExclusionList
         }
         
         return '';
+    }
+
+    private function isHeader($value)
+    {
+        return str_contains(trim($value), $this->headers);
     }
 }
