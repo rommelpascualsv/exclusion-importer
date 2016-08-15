@@ -14,7 +14,7 @@ class Kansas extends ExclusionList
      */
     public $uri = 'http://www.kdheks.gov/hcf/medicaid_program_integrity/download/Termination_List.pdf';
     
-    public $pdfToText = "java -jar ../etc/tabula.jar -p all";
+    public $pdfToText = "java -jar ../etc/tabula.jar -p all -c 82,187,351,467,550,613,983";
 
     /**
      * @var string
@@ -70,9 +70,9 @@ class Kansas extends ExclusionList
      * @var contains the headers of the pdf that should be excluded
      */
     private $headers = [
-    		'"",,,,,,,"REVISED March 25, 2016"',
-    		'"Termination ",,,,,,,',
-    		'"Date: ","Name: ","d/b/a: ","Provider Type: ","KMAP Provider #: ","NPI #: ",Comments:,'
+            '"",,,,,,"REVISED',
+    		'"Termination ",,,,,,',
+    		'Date:,Name:,d/b/a:,Provider Type:,KMAP Provider #:,NPI #:,Comments:',
     ];
     
     public function preProcess()
@@ -83,9 +83,7 @@ class Kansas extends ExclusionList
     
     public function parse()
     {
-    	// remove all headers
-    	$this->data = str_replace($this->headers, "", $this->data);
-    	
+
     	// split into rows
     	$rows = preg_split('/(\r)?\n(\s+)?/', $this->data);
     
@@ -94,16 +92,13 @@ class Kansas extends ExclusionList
     	foreach ($rows as $key => $value) {
     		 
     		// do not include if row is empty or contains page number
-    		if (empty($value)) {
+    		if (empty($value) || $this->isHeader($value)) {
     			continue;
     		}
     		 
     		// convert string row to comma-delimited array
     		$columns = str_getcsv($value);
-    		
-    		// remove excess column
-    		array_pop($columns);
-    		 
+
     		// checks if termination_date if empty then this record belongs to another record
     		if (empty($columns[0])) {
     			$mergeData = $this->buildMergeData($mergeData, $columns);
@@ -181,5 +176,10 @@ class Kansas extends ExclusionList
         $columns = PNHelper::setNpiValue($columns, PNHelper::getNpiValue($columns, $npiColumnIndex), $npiColumnIndex);
     
     	return $columns;
+    }
+
+    private function isHeader($value)
+    {
+        return str_contains($value, $this->headers);
     }
 }
