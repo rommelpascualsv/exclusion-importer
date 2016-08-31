@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="sv" id="svg-629-increase-ks1-records-name-max-length" context="prod">
+        <modifyDataType columnName="name"
+                        newDataType="varchar(100)"
+                        tableName="ks1_records"/>
+    </changeSet>
+
+    <changeSet author="sv" id="svg-629-increase-ks1-records-dba-max-length" context="prod">
+        <modifyDataType columnName="d_b_a"
+                        newDataType="varchar(200)"
+                        tableName="ks1_records"/>
+
+    </changeSet>
+
+</databaseChangeLog>
