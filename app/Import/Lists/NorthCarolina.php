@@ -19,6 +19,7 @@ class NorthCarolina extends ExclusionList
         'npi',
         'last_name',
         'first_name',
+        'ownership',
         'address_1',
         'city',
         'state',
@@ -32,6 +33,7 @@ class NorthCarolina extends ExclusionList
     public $hashColumns = [
         'first_name',
         'last_name',
+        'ownership',
         'address_1',
         'city',
         'state',
@@ -41,7 +43,7 @@ class NorthCarolina extends ExclusionList
     ];
 
     public $dateColumns = [
-        'date_excluded' => 9
+        'date_excluded' => 10
     ];
 
     public $shouldHashListName = true;
@@ -60,8 +62,8 @@ class NorthCarolina extends ExclusionList
     	array_shift($this->data);
     	
     	$this->data = array_map(function($row) {
-    		if (count($row) > 11) {
-    			unset($row[11]);
+    		if (count($row) > 12) {
+    			unset($row[12]);
     			return $row;
     		}
     		return $row;
