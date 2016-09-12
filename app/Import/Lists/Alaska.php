@@ -4,7 +4,7 @@ class Alaska extends ExclusionList
 {
     public $dbPrefix = 'ak1';
 
-    public $pdfToText = "java -Dfile.encoding=utf-8 -jar ../etc/tabula.jar -p 2-7 -r -u -g";
+    public $pdfToText = "java -Dfile.encoding=utf-8 -jar ../etc/tabula.jar -p 2-8 -g -c 120,275,387,534,594,739";
 
     public $uri = "http://dhss.alaska.gov/Commissioner/Documents/PDF/AlaskaExcludedProviderList.pdf";
     

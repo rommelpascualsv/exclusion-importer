@@ -75,7 +75,9 @@ class NewJersey extends ExclusionList
     public $shouldHashListName = true;
 
     protected $npiColumnName = "npi";
-    
+
+    protected $zipCodeLength = 5;
+
     /**
      * @inherit preProcess
      */
@@ -111,7 +113,9 @@ class NewJersey extends ExclusionList
     {
     	// remove underscore from name field
     	$row = $this->normalizeName($row);
-    	
+
+        $row = $this->normalizeZipCodes($row, ['firm_zip', 'zip']);
+
     	$npiColumnIndex = $this->getNpiColumnIndex();
 			 
 		// set provider number
@@ -119,7 +123,7 @@ class NewJersey extends ExclusionList
 		
 		// set npi number array
 		$row = PNHelper::setNpiValue($row, PNHelper::getNpiValue($row, $npiColumnIndex), $npiColumnIndex);
-		
+
     	return $row;
     }
     
@@ -134,5 +138,23 @@ class NewJersey extends ExclusionList
     	$row[1] = str_replace('_', ' ', $row[1]);
     	
     	return $row;
+    }
+    
+    private function normalizeZipCodes($row, $zipCodeFieldNames)
+    {
+        foreach ($zipCodeFieldNames as $zipCodeFieldName) {
+
+            $zipCodeFieldIndex = array_search($zipCodeFieldName, $this->fieldNames);
+
+            if ($zipCodeFieldIndex === false) {
+                continue;
+            }
+
+            $zipCode = trim($row[$zipCodeFieldIndex]);
+
+            $row[$zipCodeFieldIndex] = empty($zipCode) ? $zipCode : str_pad($zipCode, $this->zipCodeLength, '0', STR_PAD_LEFT);
+        }
+
+        return $row;
     }
 }
