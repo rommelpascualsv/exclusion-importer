@@ -27,7 +27,7 @@ class Alaska extends ExclusionList
         'last_name',
         'first_name',
         'middle_name',
-        'exclusion_authority',
+        'provider_type',
     ];
 
     public $retrieveOptions = [
