@@ -17,6 +17,7 @@ class Alaska extends ExclusionList
         'last_name',
         'first_name',
         'middle_name',
+        'reinstated',
         'provider_type',
         'exclusion_authority',
         'exclusion_reason'
@@ -28,6 +29,7 @@ class Alaska extends ExclusionList
         'first_name',
         'middle_name',
         'provider_type',
+        'reinstated',
     ];
 
     public $retrieveOptions = [
@@ -36,7 +38,8 @@ class Alaska extends ExclusionList
     ];
 
     public $dateColumns = [
-        'exclusion_date' => 0
+        'exclusion_date' => 0,
+        'reinstated' => 4
     ];
 
     private $headers = [
