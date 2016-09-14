@@ -4,7 +4,9 @@ class Alaska extends ExclusionList
 {
     public $dbPrefix = 'ak1';
 
-    public $pdfToText = "java -Dfile.encoding=utf-8 -jar ../etc/tabula.jar -p 2-8 -g -c 120,275,387,534,594,739";
+    public $pdfToText = "java -Dfile.encoding=utf-8 -jar ../etc/tabula.jar -p 2-8 -c 106,249,348,408,530,588";
+
+//    public $pdfToText = "java -Dfile.encoding=utf-8 -jar ../etc/tabula.jar -p 2-8 -g -c 120,275,387,534,594,739";
 
     public $uri = "http://dhss.alaska.gov/Commissioner/Documents/PDF/AlaskaExcludedProviderList.pdf";
     
@@ -38,11 +40,11 @@ class Alaska extends ExclusionList
     ];
 
     private $headers = [
-    		'"",,Alas,ka Medical Assistance Excluded Provider List,,',
-    		'"",,,May 2016,,',
-    		'"EXCLUSION ",,,,"EXCLUSION ",',
-    		'"",LAST NAME,FIRST NAME,PROVIDER TYPE,,EXCLUSION REASON',
-    		'DATE,,,,AUTHORITY,'
+    		'"",,Alaska Medica,l Assistance E,xcluded Provider List,,',
+    		'"",,,September," 2016",,',
+    		'"EXCLUSION ",,,,,"EXCLUSION ",',
+    		'DATE,LAST NAME,FIRST NAME,REINSTATED,PROVIDER TYPE,AUTHORITY,EXCLUSION REASON'
+//    		'DATE,,,,AUTHORITY,'
     ];
     
     public function preProcess()
@@ -57,8 +59,8 @@ class Alaska extends ExclusionList
     	$this->data = str_replace($this->headers, "", $this->data);
     	
     	// remove all page numbers
-    	$this->data = preg_replace('/"",,,Page \\d of \\d,,/', "", $this->data);
-    	
+        $this->data = preg_replace('/"",,,"Page \\d of ",\\d,,/', "", $this->data);
+
     	$rows = preg_split('/(\r)?\n(\s+)?/', $this->data);
     	
     	$data = [];
