@@ -31,6 +31,11 @@ class Missouri extends ExclusionList
 		'termination_date' => 0,
 		'letter_date' => 1
 	];
+
+    public $retrieveOptions = [
+        'offset' => 3
+    ];
+
 	
 	public $shouldHashListName = true;
 	

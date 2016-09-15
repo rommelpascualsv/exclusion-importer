@@ -57,6 +57,8 @@
     <include file="./changelog/svg-15-add-import-stats.changelog.xml" relativeToChangelogFile="true" />
     <include file="./changelog/svg-484-credential-databases-table.changelog.xml" relativeToChangelogFile="true" />
     <include file="./changelog/svg-487-create-vermont-importer.changelog.xml" relativeToChangelogFile="true" />
+    <include file="./changelog/svg-629-increase-ks1-records-name-and-dba-column-max-lengths.xml" relativeToChangelogFile="true" />
+    <include file="./changelog/svg-716-add-column-reinstated-to-ak1-records.changelog.xml" relativeToChangelogFile="true" />
     <include file="./changelog/svg-709-add-ownership-column-to-nc1-records.changelog.xml" relativeToChangelogFile="true" />
 
 </databaseChangeLog>
