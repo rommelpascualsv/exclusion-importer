@@ -45,7 +45,8 @@ return [
     */
 
     'connections' => [
-
+        
+        # primary - exclusion_lists_cdm
         'mysql' => [
             'driver'    => 'mysql',
             'host'      => env('DB_HOST', 'localhost'),
@@ -61,7 +62,41 @@ return [
             'options' => [
                 PDO::MYSQL_ATTR_MAX_BUFFER_SIZE => 100000000
             ]            
-        ]
+        ],
+        
+        'exclusion_lists_backup' => [
+            'driver'    => 'mysql',
+            'host'      => env('DB_HOST_BACKUP', 'localhost'),
+            'port'      => env('DB_PORT_BACKUP', 3306),
+            'database'  => env('DB_DATABASE_BACKUP', 'forge'),
+            'username'  => env('DB_USERNAME_BACKUP', 'forge'),
+            'password'  => env('DB_PASSWORD_BACKUP', ''),
+            'charset'   => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix'    => env('DB_PREFIX_BACKUP', ''),
+            'timezone'  => env('DB_TIMEZONE_BACKUP', '+00:00'),
+            'strict'    => false,
+            'options' => [
+                PDO::MYSQL_ATTR_MAX_BUFFER_SIZE => 100000000
+            ]            
+        ],
+        
+        'exclusion_lists' => [
+            'driver'    => 'mysql',
+            'host'      => env('DB_HOST_PROD', 'localhost'),
+            'port'      => env('DB_PORT_PROD', 3306),
+            'database'  => env('DB_DATABASE_PROD', 'forge'),
+            'username'  => env('DB_USERNAME_PROD', 'forge'),
+            'password'  => env('DB_PASSWORD_PROD', ''),
+            'charset'   => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix'    => env('DB_PREFIX_PROD', ''),
+            'timezone'  => env('DB_TIMEZONE_PROD', '+00:00'),
+            'strict'    => false,
+            'options' => [
+                PDO::MYSQL_ATTR_MAX_BUFFER_SIZE => 100000000
+            ]
+        ]        
     ],
 
     /*

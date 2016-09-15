@@ -21,11 +21,12 @@ class California extends ExclusionList
         'provider_numbers',
         'date_of_suspension',
         'active_period',
-        'npi'
+        'npi',
+        'business'
     ];
     
     public $dateColumns = [
-    		'date_of_suspension' => 8
+        'date_of_suspension' => 8
     ];
     
     public $shouldHashListName = true;
@@ -33,6 +34,17 @@ class California extends ExclusionList
     protected $npiColumnName = "npi";
     
     protected $providerNumberColumnName = "provider_numbers";
+    
+    private $lastNameColumnIndex;
+    private $firstNameColumnIndex;
+    
+    public function __construct()
+    {
+        parent::__construct();
+        
+        $this->lastNameColumnIndex = array_search('last_name', $this->fieldNames);
+        $this->firstNameColumnIndex = array_search('first_name', $this->fieldNames);
+    }
     
     /**
      * @inherit preProcess
@@ -61,10 +73,26 @@ class California extends ExclusionList
     	    // set provider number
     	    $row = PNHelper::setProviderNumberValue($row, PNHelper::getProviderNumberValue($row, $providerNoIndex), $providerNoIndex);
     	    
+    	    $business = $this->getBusinessFrom($row);
+            
+       	    $row[] = $business; 	
+    	    
+    	    if (! empty($business)) {
+    	        $row[$this->lastNameColumnIndex] = '';
+    	    }
+    	    	
     		$data[] = $row;
     	}
     	
     	// set back to global data
     	$this->data = $data;
+    }
+    
+    private function getBusinessFrom($row)
+    {
+        $lastName = $row[$this->lastNameColumnIndex];
+        $firstName = $row[$this->firstNameColumnIndex];
+        
+        return empty(trim($firstName)) ? trim($lastName) : '';
     }
 }

@@ -5,6 +5,7 @@ namespace Test\Unit;
 use App\Import\Lists\OIG;
 use CDM\Test\TestCase;
 use Mockery;
+use App\Services\ExclusionListService;
 
 /**
  * Unit test for ExclusionListService 
@@ -16,40 +17,28 @@ class ExclusionListServiceTest extends TestCase
 {
 
     private $service;
-    
-    private $exclusionListVersionRepo;
     private $exclusionListRepo;
     private $exclusionListFileRepo;
-    
-    private $listProcessorMock;
-    
+    private $exclusionListStatusHelper;
+        
     public function setUp()
     {
         parent::setUp();
         
         $this->app->withFacades();
         
-        $this->exclusionListVersionRepo = Mockery::mock('App\Repositories\ExclusionListVersionRepository')->makePartial();
         $this->exclusionListRepo = Mockery::mock('App\Repositories\ExclusionListRepository')->makePartial();
-        $this->exclusionListFileRepo = Mockery::mock('App\Repositories\ExclusionListFileRepository');
+        $this->exclusionListFileRepo = Mockery::mock('App\Repositories\ExclusionListFileRepository')->makePartial();
+        $this->exclusionListStatusHelper = Mockery::mock('App\Services\ExclusionListStatusHelper')->makePartial();
         
-        $this->service = Mockery::mock('App\Services\ExclusionListService', [
-            $this->exclusionListVersionRepo,
+        $this->service = new ExclusionListService(
             $this->exclusionListRepo,
-            $this->exclusionListFileRepo
-        ])->makePartial();
-        
-        $this->service->shouldAllowMockingProtectedMethods();
-        
-        $this->withoutEvents();
+            $this->exclusionListFileRepo,
+            $this->exclusionListStatusHelper
+        );
     }
 
-    public function tearDown()
-    {
-       	Mockery::close();
-    }
-    
-    public function testGetExclusionListShouldReturnActiveExclusionListsWithUpdateRequiredTrueIfThereAreNoFilesForList()
+    public function testGetExclusionListShouldReturnActiveExclusionLists()
     {   
         $this->exclusionListRepo->shouldReceive('getActiveExclusionLists')->once()->andReturn([
             (object)[
@@ -59,12 +48,21 @@ class ExclusionListServiceTest extends TestCase
                 'description' => 'Office of the Inspector General',
                 'import_url' => 'http://www.fedoig.com',
                 'is_auto_import' => 0,
-                'is_active' => 1
+                'is_active' => 1,
+                'last_imported_hash' => '0e0e8f90a0425a08413cec6248b1d60feea475ca01d7dab33d0c6cfdde5e81bf',
+                'last_imported_date' => '2016-06-09 11:43:54',
+                'last_import_stats' => '{"added":6025,"deleted":0,"brokenHashPct":0,"previousRecordCount":0,"currentRecordCount":6044}'
             ]
         ]);
         
-        // No file in files repo for list, update_required should be true
-        $this->exclusionListFileRepo->shouldReceive('getFilesForPrefix')->once()->with('oig')->andReturnNull();
+        $this->exclusionListFileRepo->shouldReceive('getFilesForPrefix')->once()->with('oig')->andReturn([(object)[
+            'state_prefix' => 'oig',
+            'img_data' => null,
+            'hash' => 'latest_file_hash',
+            'img_type' => 'zip'
+        ]]);
+        
+        $this->exclusionListStatusHelper->shouldReceive('isUpdateRequired')->once()->with('oig', 'latest_file_hash')->andReturnTrue();
         
         $actual = $this->service->getActiveExclusionLists();
         
@@ -77,111 +75,14 @@ class ExclusionListServiceTest extends TestCase
                 'import_url' => 'http://www.fedoig.com',
                 'is_auto_import' => 0,
                 'is_active' => 1,
-                'update_required' => true
+                'update_required' => true,
+                'last_imported_hash' => '0e0e8f90a0425a08413cec6248b1d60feea475ca01d7dab33d0c6cfdde5e81bf',
+                'last_imported_date' => '2016-06-09 11:43:54',
+                'last_import_stats' => '{"added":6025,"deleted":0,"brokenHashPct":0,"previousRecordCount":0,"currentRecordCount":6044}'
             ]
         ];
         
         $this->assertEquals($expected, $actual);
         
     }
-    
-    public function testGetExclusionListShouldReturnActiveExclusionListsWithUpdateRequiredFalseIfListIsUpToDate()
-    {
-        $exclusionListTestFile = base_path('tests/unit/files/tn1-0.pdf');
-        
-        $this->exclusionListRepo->shouldReceive('getActiveExclusionLists')->once()->andReturn([
-            (object)[
-                'id' => 1,
-                'prefix' => 'tn1',
-                'accr' => 'TennCare',
-                'description' => 'Tennesee State Medicaid Program',
-                'import_url' => 'http://www.tn.gov/assets/entities/tenncare/attachments/terminatedproviderlist.pdf',
-                'is_auto_import' => '0',
-                'is_active' => '1'
-            ]
-        ]);
-    
-        $hash = hash_file('sha256', $exclusionListTestFile);
-
-        // 
-        $this->exclusionListFileRepo->shouldReceive('getFilesForPrefix')->once()->with('tn1')->andReturn([(object)[
-            'state_prefix' => 'tn1',
-            'img_data' => file_get_contents($exclusionListTestFile),
-            'hash' => $hash,
-            'img_type' => 'pdf'
-        ]]);
-    
-        $this->exclusionListVersionRepo->shouldReceive('find')->once()->with('tn1')->andReturn([(object)[
-            'prefix' => 'tn1',
-            'last_imported_hash' => $hash,
-            'last_imported_date' => '2016-06-03 10:29:18'
-        ]]);
-        
-        $actual = $this->service->getActiveExclusionLists();
-    
-        $expected = [
-            'tn1' => [
-                'id' => 1,
-                'prefix' => 'tn1',
-                'accr' => 'TennCare',
-                'description' => 'Tennesee State Medicaid Program',
-                'import_url' => 'http://www.tn.gov/assets/entities/tenncare/attachments/terminatedproviderlist.pdf',
-                'is_auto_import' => '0',
-                'is_active' => '1',
-                'update_required' => false
-            ]
-        ];
-    
-        $this->assertEquals($expected, $actual);
-    }
-    
-    public function testGetExclusionListShouldReturnActiveExclusionListsWithUpdateRequiredTrueIfListIsNotUpToDate()
-    {
-        $exclusionListTestFile = base_path('tests/unit/files/tn1-0-dummy.pdf');
-    
-        $this->exclusionListRepo->shouldReceive('getActiveExclusionLists')->once()->andReturn([
-            (object)[
-                'id' => 1,
-                'prefix' => 'tn1',
-                'accr' => 'TennCare',
-                'description' => 'Tennesee State Medicaid Program',
-                'import_url' => 'http://www.tn.gov/assets/entities/tenncare/attachments/terminatedproviderlist.pdf',
-                'is_auto_import' => '0',
-                'is_active' => '1'
-            ]
-        ]);
-    
-        $hash = hash_file('sha256', $exclusionListTestFile);
-    
-        $this->exclusionListFileRepo->shouldReceive('getFilesForPrefix')->once()->with('tn1')->andReturn([(object)[
-            'state_prefix' => 'tn1',
-            'img_data' => file_get_contents($exclusionListTestFile),
-            'hash' => 'some_old_hash',
-            'img_type' => 'pdf'
-        ]]);
-    
-        $this->exclusionListVersionRepo->shouldReceive('find')->once()->with('tn1')->andReturn([(object)[
-            'prefix' => 'tn1',
-            'last_imported_hash' => $hash,
-            'last_imported_date' => '2016-06-03 10:29:18'
-        ]]);
-    
-        $actual = $this->service->getActiveExclusionLists();
-    
-        $expected = [
-            'tn1' => [
-                'id' => 1,
-                'prefix' => 'tn1',
-                'accr' => 'TennCare',
-                'description' => 'Tennesee State Medicaid Program',
-                'import_url' => 'http://www.tn.gov/assets/entities/tenncare/attachments/terminatedproviderlist.pdf',
-                'is_auto_import' => '0',
-                'is_active' => '1',
-                'update_required' => true
-            ]
-        ];
-    
-        $this->assertEquals($expected, $actual);
-    
-    }    
 }

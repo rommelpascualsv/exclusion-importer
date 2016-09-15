@@ -16,3 +16,35 @@ body {
   color: #660000;
   font-weight: bold;
 }
+
+.import-stat {
+    color : #777;
+    margin-right: 10px;
+}
+
+.start-btn,#fileupload-btn {
+    width : 107px;
+}
+
+.icon-upload-cloud-outline {
+    cursor: pointer;
+    font-size: 30px;
+    color: #31b0d5;
+}
+
+.icon-upload-cloud-outline.disabled {
+    cursor: default;
+    color: #ccc;
+}
+
+#fileupload-message, #fileupload-progress, #fileupload-file {
+    margin-top: 10px;    
+}
+
+.modal-dialog.fileupload {
+    width: 400px; 
+}
+
+.note {
+    font-size: 11px; 
+}

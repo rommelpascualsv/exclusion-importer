@@ -2,44 +2,46 @@
 <project name="ExclusionImporter" default="init" basedir="."
 	description="Runs codeception tests">
 
-	<property file="./build.properties" />
+	<property file="./cdm.build.properties" prefix="cdm" />
+	<property file="./prod.build.properties" prefix="prod" />
 
 	<taskdef name="codeception" classname="tests.tasks.RunCodeceptionTask" />
 	<taskdef name="update" classname="LiquibaseTask" />
 	<taskdef name="tag" classname="LiquibaseTagTask" />
     <taskdef name="rollback" classname="LiquibaseRollbackTask" />
 	
-	<!-- initialize the database -->
-    <target name="init">
-        
+    <target name="db:cdm-update">
         <update
-            command="update"
-            jar="${liquibase.jar}"
-            classpathref="${mysql.driver}"
-            changelogFile="${changelogFile}"
-            username="${username}"
-            password="${password}"
-            url="${url}">
-             
-            <parameter name='contexts' value='prod' />
-        </update>
+                command="update"
+                jar="${cdm.liquibase.jar}"
+                classpathref="${cdm.mysql.driver}"
+                changelogFile="${cdm.changelogFile}"
+                username="${cdm.username}"
+                password="${cdm.password}"
+                url="${cdm.url}">
+
+            <parameter name='contexts' value='cdm,prod' />
+        </update>    	
+    	
     </target>
 
 	<target name="db:prod-update">
 
 		<update
 				command="update"
-				jar="${liquibase.jar}"
-				classpathref="${mysql.driver}"
-				changelogFile="${changelogFile}"
-				username="${username}"
-				password="${password}"
-				url="${url}">
+				jar="${prod.liquibase.jar}"
+				classpathref="${prod.mysql.driver}"
+				changelogFile="${prod.changelogFile}"
+				username="${prod.username}"
+				password="${prod.password}"
+				url="${prod.url}">
 
 			<parameter name='contexts' value='prod' />
 		</update>
 	</target>
 	
+    <target name="init" depends="db:cdm-update,db:prod-update" />
+        
     <!-- run all tests -->
     <target name="test" depends="loadTestData">
         <!-- run codeception tests. "type" value can be "unit", "functional", "acceptance" or "" (blank means all types)-->
@@ -49,33 +51,33 @@
         
         <rollback
             rollbackTag="checkpoint"
-            jar="${liquibase.jar}"
-            classpathref="${mysql.driver}"
-            changelogFile="${changelogFile}"
-            username="${username}"
-            password="${password}"
-            url="${url}" />
+            jar="${cdm.liquibase.jar}"
+            classpathref="${cdm.mysql.driver}"
+            changelogFile="${cdm.changelogFile}"
+            username="${cdm.username}"
+            password="${cdm.password}"
+            url="${cdm.url}" />
     </target>
 	
     <target name="loadTestData"
         description="Load test data into database">
         <tag
             tag="checkpoint"
-            jar="${liquibase.jar}"
-            classpathref="${mysql.driver}"
-            changelogFile="${changelogFile}"
-            username="${username}"
-            password="${password}"
-            url="${url}" />
+            jar="${cdm.liquibase.jar}"
+            classpathref="${cdm.mysql.driver}"
+            changelogFile="${cdm.changelogFile}"
+            username="${cdm.username}"
+            password="${cdm.password}"
+            url="${cdm.url}" />
             
         <update
             command="update"
-            jar="${liquibase.jar}"
-            classpathref="${mysql.driver}"
-            changelogFile="${changelogFile}"
-            username="${username}"
-            password="${password}"
-            url="${url}">
+            jar="${cdm.liquibase.jar}"
+            classpathref="${cdm.mysql.driver}"
+            changelogFile="${cdm.changelogFile}"
+            username="${cdm.username}"
+            password="${cdm.password}"
+            url="${cdm.url}">
              
             <parameter name='contexts' value='test' />
         </update>

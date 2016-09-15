@@ -43,24 +43,36 @@ class DataCsvConverter
      */
     protected function convertDataToCsvFile($fileContent, $prefix)
     {
-//        $directory = storage_path('app') . '/' . $prefix . '_files';
-//
-//        if ( ! is_dir($directory))
-//        {
-//            mkdir($directory, 02777);
-//
-//            chmod($directory, 02777);
-//        }
-
         $filePath = storage_path('app') . '/' . $prefix . '_temp.xls';
-        $newFilePath = storage_path('app') . '/' . $prefix . '_temp.csv';
+        
+        try {
+            
+            $newFilePath = storage_path('app') . '/' . $prefix . '_temp.csv';
+            
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
+            
+            if (file_exists($newFilePath)) {
+                unlink($newFilePath);
+            }
+            
+            file_put_contents($filePath, $fileContent);
+            
+            exec("ssconvert $filePath $newFilePath", $output, $returnCode);
+            
+            if ($returnCode !== 0 || ! file_exists($newFilePath)) {
+                throw new DataCsvConversionException('Unable to convert the input file\'s contents to a parsable format');
+            }
+            
+            return $newFilePath;
+            
+        } finally {
+            
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
+        }
 
-        file_put_contents($filePath, $fileContent);
-
-        exec("ssconvert $filePath $newFilePath 2>/dev/null");
-
-        unlink($filePath);
-
-        return $newFilePath;
     }
 }

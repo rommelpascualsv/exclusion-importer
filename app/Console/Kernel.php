@@ -13,28 +13,24 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        '\App\Console\Commands\ImportSDN',
-        '\App\Console\Commands\ImportSam',
-        '\App\Console\Commands\DeleteOIGDuplicates',
-        '\App\Console\Commands\DeleteOPMExtras',
-        '\App\Console\Commands\MigrateSam',
-
-        '\App\Console\Commands\Nppes\Seed',
-        '\App\Console\Commands\Nppes\Update',
-        '\App\Console\Commands\Nppes\Deactivate',
-
-        '\App\Console\Commands\Taxonomy\Seed',
-        '\App\Console\Commands\Taxonomy\Clear',
-
-        '\App\Console\Commands\Njna\Seed',
-        '\App\Console\Commands\Njna\Clear',
-
-        '\App\Console\Commands\NJCredential\Seed',
-        '\App\Console\Commands\NJCredential\Update',
-
-        '\App\Console\Commands\MICna\Seed',
-        '\App\Console\Commands\MICna\Clear',
-    	'\App\Console\Commands\UpdateFiles'
+        \App\Console\Commands\ImportSDN::class,
+        \App\Console\Commands\ImportSam::class,
+        \App\Console\Commands\DeleteOIGDuplicates::class,
+        \App\Console\Commands\DeleteOPMExtras::class,
+        \App\Console\Commands\MigrateSam::class,
+        \App\Console\Commands\Nppes\Seed::class,
+        \App\Console\Commands\Nppes\Update::class,
+        \App\Console\Commands\Nppes\Deactivate::class,
+        \App\Console\Commands\Taxonomy\Seed::class,
+        \App\Console\Commands\Taxonomy\Clear::class,
+        \App\Console\Commands\Njna\Seed::class,
+        \App\Console\Commands\Njna\Clear::class,
+        \App\Console\Commands\NJCredential\Seed::class,
+        \App\Console\Commands\NJCredential\Update::class,
+        \App\Console\Commands\MICna\Seed::class,
+        \App\Console\Commands\MICna\Clear::class,
+    	\App\Console\Commands\UpdateFiles::class,
+        \App\Console\Commands\NJCredential\Import::class
     ];
 
     /**
@@ -46,5 +42,6 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('updateFiles')->daily();
+        $schedule->command('njcredential:import')->weekly();
     }
 }

@@ -16,4 +16,4 @@ username=root
 password=root
 
 # url for connecting with the database
-url=jdbc:mysql://127.0.0.1:3306/exclusion_lists_staging?createDatabaseIfNotExist=true
+url=jdbc:mysql://127.0.0.1:3306/exclusion_lists?createDatabaseIfNotExist=true

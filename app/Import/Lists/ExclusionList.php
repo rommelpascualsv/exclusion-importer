@@ -104,7 +104,7 @@ abstract class ExclusionList
     public function convertDatesToMysql($row, $dateColumns)
     {
         foreach ($dateColumns as $columnName => $index) {
-            $columnValue = $row[$index];
+            $columnValue = trim($row[$index]);
             if (strtotime($columnValue)) {
                 $date = new \DateTime($columnValue);
                 $row[$index] = $date->format('Y-m-d');
@@ -127,6 +127,14 @@ abstract class ExclusionList
     
     public function convertToAssoc($row)
     {
+        $fieldCount = count($this->fieldNames);
+
+        if ($fieldCount < count($row)) {
+            // The parsing process may produce extra blank columns. We remove these extra blank columns and just
+            // get the portion of $row that lines up with $this->fieldNames so we can safely call array_combine below
+            $row = array_slice($row, 0, $fieldCount);
+        }
+
         return array_combine($this->fieldNames, $row);
     }
 
