@@ -31,6 +31,7 @@ if (! function_exists('error')) {
     }
 }
 
+if(!defined('STDOUT')) define('STDOUT', fopen('php://stdout', 'w'));
 /*
 |--------------------------------------------------------------------------
 | Register Container Bindings
