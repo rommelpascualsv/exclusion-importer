@@ -235,11 +235,11 @@ class UnSanctionsIndividuals extends ExclusionList
         $result = [];
 
         if ($node->LAST_DAY_UPDATED) {
-            $value = (! empty($node->LAST_DAY_UPDATED) ? $node->LAST_DAY_UPDATED->VALUE[count($node->LAST_DAY_UPDATED->VALUE)-1] : '' );
-            $result[] = $this->prepareItem($value);
+            $value = (! empty($node->LAST_DAY_UPDATED->VALUE) ? $node->LAST_DAY_UPDATED->VALUE[count($node->LAST_DAY_UPDATED->VALUE)-1] : '' );
+            return $this->prepareItem($value);
         }
 
-        return implode('; ', $result);
+        return '';
     }
 
     private function prepareItem($item)
