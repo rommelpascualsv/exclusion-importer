@@ -39,7 +39,8 @@ class XmlRetriever extends Retriever
             foreach ($xml->{$list->nodes['title']}->{$list->nodes['subject']} as $node) {
                 $linesItem = [];
                 foreach ($list->nodeMap as $line) {
-                    $linesItem[] = (is_array($line)) ? $list->$line[0]($node) : $this->prepareItem($node->{$line});
+                    $item = (is_array($line)) ? $list->$line[0]($node) : $node->{$line};
+                    $linesItem[] = $this->prepareItem($item);
                 }
 
                 $data[] = $linesItem;
