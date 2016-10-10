@@ -232,8 +232,6 @@ class UnSanctionsIndividuals extends ExclusionList
      */
     public function generateEntityLastUpdated($node)
     {
-        $result = [];
-
         if ($node->LAST_DAY_UPDATED) {
             $value = (! empty($node->LAST_DAY_UPDATED->VALUE) ? $node->LAST_DAY_UPDATED->VALUE[count($node->LAST_DAY_UPDATED->VALUE)-1] : '' );
             return $this->prepareItem($value);
