@@ -11,7 +11,7 @@ class XmlRetriever extends Retriever
     private function prepareItem($item)
     {
         $item = (string) $item;
-        $item = trim($item);
+        $item = trim(preg_replace('/\s+/', ' ', $item));
 
         return $item;
     }

@@ -51,7 +51,7 @@ class UnSanctionsEntities extends ExclusionList
         'LISTED_ON',
         'SUBMITTED_ON',
         'COMMENTS1',
-        'SORT_KEY_LAST_MOD',
+        ['generateEntityLastUpdated'],
         ['generateEntityAlias'],
         ['generateEntityAddress'],
     ];
@@ -109,6 +109,21 @@ class UnSanctionsEntities extends ExclusionList
         }
 
         return implode('; ', $result);
+    }
+
+    /**
+     * Generate last_updated for Entity
+     * @param $node SimpleXMLElement
+     * @return array
+     */
+    public function generateEntityLastUpdated($node)
+    {
+        if ($node->LAST_DAY_UPDATED) {
+            $value = (! empty($node->LAST_DAY_UPDATED->VALUE) ? $node->LAST_DAY_UPDATED->VALUE[count($node->LAST_DAY_UPDATED->VALUE)-1] : '' );
+            return $this->prepareItem($value);
+        }
+
+        return '';
     }
 
     private function prepareItem($item)
