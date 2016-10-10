@@ -66,7 +66,7 @@ class UnSanctionsIndividuals extends ExclusionList
         ['generateIndividualNationality'],
         'NATIONALITY2',
         ['generateIndividualDesignation'],
-        'SORT_KEY_LAST_MOD',
+        ['generateEntityLastUpdated'],
         ['generateIndividualAlias'],
         ['generateIndividualAddress'],
         ['generateIndividualDateOfBirth'],
@@ -220,6 +220,23 @@ class UnSanctionsIndividuals extends ExclusionList
                     $result[] = implode(', ', $place);
                 }
             }
+        }
+
+        return implode('; ', $result);
+    }
+
+    /**
+     * Generate last_updated for Individual
+     * @param $node SimpleXMLElement
+     * @return array
+     */
+    public function generateEntityLastUpdated($node)
+    {
+        $result = [];
+
+        if ($node->LAST_DAY_UPDATED) {
+            $value = (! empty($node->LAST_DAY_UPDATED) ? $node->LAST_DAY_UPDATED->VALUE[count($node->LAST_DAY_UPDATED->VALUE)-1] : '' );
+            $result[] = $this->prepareItem($value);
         }
 
         return implode('; ', $result);
