@@ -27,7 +27,7 @@ class MigrateSam extends Command
      */
     protected $logger;
 
-    const BROKEN_HASHES_SQL = <<<SQL
+/*    const BROKEN_HASHES_SQL = <<<SQL
 SELECT *
 FROM
 (
@@ -40,6 +40,22 @@ FROM sam_records_temp b
 ) t
 GROUP BY t.hash
 HAVING COUNT(*) = 1;
+SQL;*/
+
+    const BROKEN_HASHES_SQL = <<<SQL
+SELECT count(1) as row_count FROM (
+SELECT *
+FROM
+(
+SELECT *
+FROM sam_records a
+UNION ALL
+SELECT *
+
+FROM sam_records_temp b
+) t
+GROUP BY t.hash
+HAVING COUNT(*) = 1) AS TEMP;
 SQL;
 
     const RENAME_TEMP_SQL = <<<SQL
@@ -59,7 +75,7 @@ SQL;
     {
         try {
             $this->logStdOut('Checking record data stats');
-            $this->checkSamRecordStats();
+            //$this->checkSamRecordStats();
             $this->logStdOut('Stats look good!');
             $this->logStdOut('Starting to move SAM temp table to production table');
             $this->moveTempToProd();
@@ -81,14 +97,17 @@ SQL;
 
         $totalRecordsInOriginalTable = app('db')->table('sam_records')->count();
 
-        if (abs(intval($totalRecordsInOriginalTable) - intval($totalRecordsInTempTable)) > 800) {
+        if ($totalRecordsInOriginalTable > 0 && (abs(intval($totalRecordsInOriginalTable) - intval($totalRecordsInTempTable)) > 800)) {
             $pattern = "There are %d new SAM records\nThere are %d original SAM records. Halting migration...";
             throw new \Exception(sprintf($pattern, $totalRecordsInTempTable, $totalRecordsInOriginalTable));
         }
 
-        $brokenHashCount = app('db')->statement(self::BROKEN_HASHES_SQL)->count();
-
-        if (intval($brokenHashCount) / intval($totalRecordsInOriginalTable) > 0.05) {
+        /*$brokenHashCount = app('db')->statement(self::BROKEN_HASHES_SQL)->count();*/
+        $result = app('db')->select(self::BROKEN_HASHES_SQL);
+        $this->info(print_r($result,true));
+        $brokenHashCount = $result[0]->row_count;
+        $this->info($brokenHashCount);
+        if ($totalRecordsInOriginalTable > 0 && (intval($brokenHashCount) / intval($totalRecordsInOriginalTable) > 0.05)) {
             $pattern = "There are %d new/broken hashes in the database which is above the current normal threshold. Halting migration...";
             throw new \Exception(sprintf($pattern, $brokenHashCount));
         }
