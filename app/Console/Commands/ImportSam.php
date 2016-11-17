@@ -36,6 +36,10 @@ class ImportSam extends Command
     
     protected $columnsToImport;
 
+    private $header = [
+        'Classification','Name','Prefix','First','Middle','Last','Suffix'
+    ];
+
     /**
      * Construct
      */
@@ -103,14 +107,14 @@ class ImportSam extends Command
         $skipped = 0;
         $total = 0;
         // Iterate csv
-        foreach ($file->csvlineIterator($totalLines) as $idx => $row) {
-            // skip first line (header)
-            if ($idx == 0) {
-                continue;
-            }
+        foreach ($file->csvlineIterator($totalLines) as $row) {
             
             if (empty($row)) {
                 break;
+            }
+
+            if ($this->isHeader($row)) {
+                continue;
             }
 
             $rowData = array_combine($columnsInFile, array_intersect_key($row, $columnsInFile));
@@ -301,4 +305,10 @@ class ImportSam extends Command
 
 		return $affectedRows;
 	}
+
+    private function isHeader($row)
+    {
+        $output = array_slice($row, 0, 7);
+        return ($this->header == $output);
+    }
 }
