@@ -108,7 +108,7 @@ class ImportSam extends Command
             if ($idx == 0) {
                 continue;
             }
-            $this->info(print_r($idx, true));
+            
             if (empty($row)) {
                 break;
             }
