@@ -103,7 +103,12 @@ class ImportSam extends Command
         $skipped = 0;
         $total = 0;
         // Iterate csv
-        foreach ($file->csvlineIterator($totalLines) as $row) {
+        foreach ($file->csvlineIterator($totalLines) as $idx => $row) {
+            // skip first line (header)
+            if ($idx == 0) {
+                continue;
+            }
+            $this->info(print_r($idx, true));
             if (empty($row)) {
                 break;
             }
