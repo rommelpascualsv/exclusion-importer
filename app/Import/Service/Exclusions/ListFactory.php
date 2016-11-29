@@ -51,7 +51,8 @@ class ListFactory
         'unsancentities'    => 'UnSanctionsEntities',
         'healthmil'         => 'HealthMil',
     	'csl'               => 'ConsolidatedScreeningList',
-        'vt1'               => 'Vermont'
+        'vt1'               => 'Vermont',
+        'sam'               => 'Sam'
     ];
 
     /**

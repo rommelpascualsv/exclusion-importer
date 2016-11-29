@@ -96,9 +96,14 @@ class ImportFileService implements ImportFileServiceInterface
             $this->parseRecords($exclusionList);
                 
             info('Saving records for ' . $prefix);
-            
-            $importResults = $this->saveRecords($exclusionList, $hash);
-            
+
+            if ($prefix == 'sam') {
+                $exclusionList->doUpdate();
+                $importResults = $this->onRecordsSaveSucceeded($prefix, $hash);
+            } else {
+                $importResults = $this->saveRecords($exclusionList, $hash);
+            }
+
             info('File import successfully completed for ' . $prefix . ' in staging server. Import stats : ' . json_encode($importResults));
             
             //$this->exclusionListRecordRepo->pushRecordsToProduction($prefix);
