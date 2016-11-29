@@ -14,7 +14,6 @@ class ExclusionListRecordRepository implements Repository
     const DEFAULT_PROD_SCHEMA    = 'exclusion_lists';
     const DEFAULT_BACKUP_SCHEMA  = 'exclusion_lists_backup';
     
-    private $listFactory;
     private $stagingSchema;
     private $prodSchema;
     private $backupSchema;
@@ -28,17 +27,17 @@ class ExclusionListRecordRepository implements Repository
     
     public function create($record)
     {
-        throw new Exception("This operation is not supported");
+        throw new \Exception("This operation is not supported");
     }
     
     public function clear()
     {
-        throw new Exception("This operation is not supported");
+        throw new \Exception("This operation is not supported");
     }
     
     public function find($id)
     {
-        throw new Exception("This operation is not supported");    
+        throw new \Exception("This operation is not supported");
     }
     
     /**
@@ -59,7 +58,7 @@ class ExclusionListRecordRepository implements Repository
      * @param string $prefix The exclusion list prefix whose import stats will
      * be returned. Required.
      * @param string $source [optional] the source table name. Defaults to 
-     * 'exclusion_lists_staging.<prefix>_records' if not specified.
+     * 'exclusion_lists_cdm.<prefix>_records' if not specified.
      * @param string $target [optional] the target table name. Defaults to 
      * 'exclusion_lists.<prefix>_records if not specified.
      * @return \App\Models\ImportStats
@@ -104,7 +103,7 @@ class ExclusionListRecordRepository implements Repository
         $stagingSchemaDotPrefix = $this->stagingSchema . '.' . $prefix;
         $backupSchemaDotPrefix  = $this->backupSchema . '.' . $prefix;
     
-        // Copy *_records in exclusion_lists_staging to *_records_new table in exclusion_lists
+        // Copy *_records in exclusion_lists_cdm to *_records_new table in exclusion_lists
         $db->statement('DROP TABLE IF EXISTS ' . $prodSchemaDotPrefix . '_records_new');
         $db->statement('CREATE TABLE ' . $prodSchemaDotPrefix . '_records_new LIKE ' . $prodSchemaDotPrefix . '_records');
         $db->statement('INSERT INTO '. $prodSchemaDotPrefix . '_records_new SELECT * FROM ' .$stagingSchemaDotPrefix . '_records');

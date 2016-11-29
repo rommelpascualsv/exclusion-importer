@@ -38,11 +38,6 @@ class ExclusionListServiceTest extends TestCase
         );
     }
 
-    public function tearDown()
-    {
-       	Mockery::close();
-    }
-    
     public function testGetExclusionListShouldReturnActiveExclusionLists()
     {   
         $this->exclusionListRepo->shouldReceive('getActiveExclusionLists')->once()->andReturn([

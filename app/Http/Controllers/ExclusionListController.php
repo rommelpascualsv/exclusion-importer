@@ -1,21 +1,28 @@
 <?php namespace App\Http\Controllers;
 
+use App\Response\JsonResponse;
 use App\Services\Contracts\ExclusionListServiceInterface;
+use App\Services\Contracts\FileUploadServiceInterface;
 use App\Services\Contracts\ImportFileServiceInterface;
+use App\Services\FileUploadException;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
-class ImportController extends BaseController
+class ExclusionListController extends BaseController
 {
     private $exclusionListService;
     private $importFileService;
-
+    private $fileUploadService;
+    
+    use JsonResponse;
+    
     public function __construct(ExclusionListServiceInterface $exclusionListService,
-        ImportFileServiceInterface $importFileService)
+        ImportFileServiceInterface $importFileService,
+        FileUploadServiceInterface $fileUploadService)
     {
         $this->exclusionListService = $exclusionListService;
-        
         $this->importFileService = $importFileService;
+        $this->fileUploadService = $fileUploadService;
 
         $this->initPhpSettings();
     }
@@ -83,8 +90,8 @@ class ImportController extends BaseController
         ];
         foreach ($lists as $list) {
             app('db')->statement('DROP TABLE IF EXISTS `exclusion_lists_backup`.`' . $list . '_older`');
-            app('db')->statement('CREATE TABLE `exclusion_lists_backup`.`' . $list . '_older` LIKE `exclusion_lists_staging`.`' . $list . '`');
-            app('db')->statement('INSERT INTO `exclusion_lists_backup`.`' . $list . '_older` SELECT * FROM `exclusion_lists_staging`.`' . $list . '`');
+            app('db')->statement('CREATE TABLE `exclusion_lists_backup`.`' . $list . '_older` LIKE `exclusion_lists_cdm`.`' . $list . '`');
+            app('db')->statement('INSERT INTO `exclusion_lists_backup`.`' . $list . '_older` SELECT * FROM `exclusion_lists_cdm`.`' . $list . '`');
         }
 	}
 
@@ -97,10 +104,44 @@ class ImportController extends BaseController
     {
         return $this->importFileService->importFile($request->input('url'), $listPrefix);
     }
+    
+    public function upload(Request $request)
+    {   
+        $prefix = trim($request->input('prefix'));
+        
+        try {
+            
+            if (empty($prefix)) {
+                throw new FileUploadException('No exclusion list was specified in the request');
+            }
+            
+            if (! $request->hasFile('file')) {
+                throw new FileUploadException('No file was detected in the request');
+            }
+            
+            $file = $request->file('file');
+            
+            if (! $file->isValid()) {
+                throw new FileUploadException('The uploaded file is not valid');
+            }            
+            
+            $fileUrl = $this->fileUploadService->uploadFile($file, $prefix);
+            
+            return $this->createResponse('', true, [
+                'prefix' => $prefix,
+                'url' => $fileUrl
+            ]);            
+            
+        } catch (\Exception $e) {
+            
+            return $this->createResponse('Failed to upload file : ' . $e->getMessage(), false, ['prefix' => $prefix]);
+        }
+    }
 
     private function initPhpSettings()
     {
         ini_set('memory_limit', '1024M');
         ini_set('max_execution_time', '300');
     }
+
 }

@@ -31,6 +31,7 @@ if (! function_exists('error')) {
     }
 }
 
+if(!defined('STDOUT')) define('STDOUT', fopen('php://stdout', 'w'));
 /*
 |--------------------------------------------------------------------------
 | Register Container Bindings
@@ -86,9 +87,9 @@ $app->singleton(
 |
 */
 
-// $app->register(App\Providers\AppServiceProvider::class);
+$app->register(App\Providers\AppServiceProvider::class);
 $app->register(App\Providers\EventServiceProvider::class);
-$app->register('App\Providers\MongoServiceProvider');
+$app->register(App\Providers\MongoServiceProvider::class);
 $app->register(App\Providers\ExclusionListMgmtServiceProvider::class);
 
 /*
