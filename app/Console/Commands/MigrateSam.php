@@ -88,9 +88,9 @@ SQL;
         }
 
         $result = app('db')->select(self::BROKEN_HASHES_SQL);
-        $this->info(print_r($result,true));
+
         $brokenHashCount = $result[0]->row_count;
-        $this->info($brokenHashCount);
+
         if ($totalRecordsInOriginalTable > 0 && (intval($brokenHashCount) / intval($totalRecordsInOriginalTable) > 0.05)) {
             $pattern = "There are %d new/broken hashes in the database which is above the current normal threshold. Halting migration...";
             throw new \Exception(sprintf($pattern, $brokenHashCount));
