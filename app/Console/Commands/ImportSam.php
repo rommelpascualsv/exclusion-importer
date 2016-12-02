@@ -185,19 +185,22 @@ class ImportSam extends Command
 
     private function getCurrentRecords()
     {
-        // TODO: figure out what to do with the as_array thingy
-        return app('db')->table('sam_records')
+        $collection =  collect(app('db')->table('sam_records')
             ->select('*')
             ->addSelect(app('db')->raw('HEX(new_hash) as hex_new_hash'))
-            ->get();
-//            ->as_array('hex_new_hash');
+            ->get());
+        return $collection->keyBy('hex_new_hash')->all();
+
     }
 
     private function createNewRecords($toInsert)
     {
-        app('db')->transaction(function () use ($toInsert){
-            app('db')->table('sam_records_temp')->insert($toInsert);
-        });
+        $chunks = array_chunk($toInsert, 10);
+        foreach ($chunks as $chunk) {
+            app('db')->transaction(function () use ($chunk) {
+                app('db')->table('sam_records_temp')->insert($chunk);
+            });
+        }
     }
 
     /**
