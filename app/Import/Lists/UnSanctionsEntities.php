@@ -39,7 +39,6 @@ class UnSanctionsEntities extends ExclusionList
         'dataid',
         'entity_name',
         'listed_on',
-        'last_updated',
         'entity_alias',
     ];
 

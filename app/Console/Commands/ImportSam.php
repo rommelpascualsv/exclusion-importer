@@ -36,6 +36,10 @@ class ImportSam extends Command
     
     protected $columnsToImport;
 
+    private $header = [
+        'Classification','Name','Prefix','First','Middle','Last','Suffix'
+    ];
+
     /**
      * Construct
      */
@@ -104,8 +108,13 @@ class ImportSam extends Command
         $total = 0;
         // Iterate csv
         foreach ($file->csvlineIterator($totalLines) as $row) {
+            
             if (empty($row)) {
                 break;
+            }
+
+            if ($this->isHeader($row)) {
+                continue;
             }
 
             $rowData = array_combine($columnsInFile, array_intersect_key($row, $columnsInFile));
@@ -176,12 +185,6 @@ class ImportSam extends Command
 
     private function getCurrentRecords()
     {
-        // TODO: figure out what to do with the as_array thingy
-        /*return app('db')->table('sam_records')
-            ->select('*')
-            ->addSelect(app('db')->raw('HEX(new_hash) as hex_new_hash'))
-            ->get();*/
-//            ->as_array('hex_new_hash');
         $collection =  collect(app('db')->table('sam_records')
             ->select('*')
             ->addSelect(app('db')->raw('HEX(new_hash) as hex_new_hash'))
@@ -192,9 +195,6 @@ class ImportSam extends Command
 
     private function createNewRecords($toInsert)
     {
-        /*app('db')->transaction(function () use ($toInsert){
-            app('db')->table('sam_records_temp')->insert($toInsert);
-        });*/
         $chunks = array_chunk($toInsert, 10);
         foreach ($chunks as $chunk) {
             app('db')->transaction(function () use ($chunk) {
@@ -308,4 +308,10 @@ class ImportSam extends Command
 
 		return $affectedRows;
 	}
+
+    private function isHeader($row)
+    {
+        $output = array_slice($row, 0, 7);
+        return ($this->header == $output);
+    }
 }

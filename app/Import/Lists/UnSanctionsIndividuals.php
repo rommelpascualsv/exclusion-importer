@@ -49,7 +49,6 @@ class UnSanctionsIndividuals extends ExclusionList
         'third_name',
         'fourth_name',
         'listed_on',
-        'last_updated',
         'alias',
         'date_of_birth',
     ];

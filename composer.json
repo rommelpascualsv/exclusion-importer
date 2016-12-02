@@ -18,7 +18,8 @@
         "streamlineverify/support": "~2.1",
         "league/flysystem-ziparchive": "^1.0",
         "codeception/codeception":"*",
-        "league/flysystem-aws-s3-v3":"~1.0"
+        "league/flysystem-aws-s3-v3":"~1.0",
+        "smalot/pdfparser": "^0.9.26"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.0",
@@ -50,4 +51,3 @@
         }
     ]
 }
-
