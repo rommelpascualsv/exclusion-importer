@@ -26,22 +26,21 @@ class CredentialDatabaseRepository implements Repository
 
         $record = head($results);
 
-        if ($record) {
-
-            $credentialDatabase = new CredentialDatabase();
-
-            $credentialDatabase->setId($record->id)
-                ->setPrefix($record->prefix)
-                ->setDescription($record->description)
-                ->setSourceUri($record->source_uri)
-                ->setAutoSeed($record->auto_seed)
-                ->setLastImportHash($record->last_import_hash)
-                ->setLastImportDate($record->last_import_date);
-
-            return $credentialDatabase;
+        if (! $record) {
+            return null;
         }
 
-        return null;
-        
+        $credentialDatabase = new CredentialDatabase();
+
+        $credentialDatabase->setId($record->id)
+            ->setPrefix($record->prefix)
+            ->setDescription($record->description)
+            ->setSourceUri($record->source_uri)
+            ->setAutoSeed($record->auto_seed)
+            ->setLastImportHash($record->last_import_hash)
+            ->setLastImportDate($record->last_import_date);
+
+        return $credentialDatabase;
+
     }
 }
