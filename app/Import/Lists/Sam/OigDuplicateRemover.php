@@ -6,7 +6,7 @@ class OigDuplicateRemover
 
     private $tempTable = 'sam_records_temp';
 
-    public function markOigDuplicates()
+    private function markOigDuplicates()
     {
         $records_updated = app('db')
             ->table($this->tempTable)

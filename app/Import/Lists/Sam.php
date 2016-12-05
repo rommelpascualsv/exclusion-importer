@@ -53,7 +53,6 @@ SQL;
 
     public function __construct()
     {
-        ini_set('memory_limit', '2048M');
         $this->samService = new SamService();
         $this->samRepository = new SamRepository();
         $this->opmExtrasRemover = new OpmExtrasRemover();
@@ -91,9 +90,10 @@ SQL;
 
 
     /**
-     * Get all the new_hash of the active table
+     *  Get all the new_hash of the active table
+     *
+     * @return array
      */
-    // Should this be in dao class?
     private function getHashOfCurrentRecords()
     {
         $collection =  collect(app('db')->table(SamRepository::SAM_TABLE_NAME)
@@ -111,14 +111,29 @@ SQL;
     }
 
 
+    /**
+     * Removes double quote in the String
+     *
+     * @param $value - array of String
+     *
+     * @return array of String
+     */
+    private function sanitizeStringArray($value)
+    {
+        $rawString = implode('|',$value);
+        $sanitized = str_replace('"', '', $rawString);
+        $newValue = explode("|", $sanitized);
+        return $newValue;
+    }
+
+
     private function getRecordsToDeactivate($currentRecords, $activeRecordHashes)
     {
         return array_keys(array_diff_key($currentRecords, array_flip($activeRecordHashes)));
     }
 
 
-    // Should this be split?
-    public function checkSamRecordStats()
+    private function checkSamRecordStats()
     {
         $totalRecordsInTempTable = app('db')->table(SamRepository::SAM_TEMP_TABLE_NAME)->count();
 
@@ -143,7 +158,7 @@ SQL;
 
     private function finalizeRecord()
     {
-        self::checkSamRecordStats();
+        $this->checkSamRecordStats();
 
         app('db')->statement(app('db')->raw(sprintf(self::RENAME_TEMP_SQL, strftime('%Y%m%d_%H%M%S'))));
 
@@ -155,9 +170,13 @@ SQL;
     {
         $startTime = microtime(true);
 
-        $csv = Reader::createFromPath(storage_path(
+        $csvFileLocation = storage_path(
                 ExclusionListHttpDownloader::DEFAULT_DOWNLOAD_DIRECTORY) .
-                    '/' .$this->samService->getFileName() .'.CSV');
+            '/' .$this->samService->getFileName() .'.CSV';
+
+        $totalRecordCount = count(file($csvFileLocation)) - 1; // w/out header
+
+        $csv = Reader::createFromPath($csvFileLocation);
 
         $this->prepareTempTable();
 
@@ -166,6 +185,7 @@ SQL;
         $hashOfActiveRecords = [];
 
         $csvContent = $csv->fetch();
+        $rowCnt = 1;
 
         // this loop will insert new records and update the existing
         foreach ($csvContent as $key => $value) {
@@ -173,6 +193,8 @@ SQL;
             if ($key == 0) {
                 continue;
             }
+
+            $value = $this->sanitizeStringArray($value);
 
             $data = array_combine($this->columns, array_intersect_key($value, $this->columns));
 
@@ -193,15 +215,13 @@ SQL;
                 $data['hash'] = self::getUnhexValue($newHash);
                 $data['new_hash'] = self::getUnhexValue($newHash);
                 $this->toCreate[] = $data;
-
-                if (sizeof($this->toCreate) == 10) {
+                
+                if (sizeof($this->toCreate) == 10 || $rowCnt == $totalRecordCount) {
                     $this->samRepository->createRecords($this->toCreate);
                     unset($this->toCreate);
                 }
 
-            }
-            // existing record
-            else {
+            } else { // existing record
                 $hashOfActiveRecords[] = strtoupper($newHash);
 
                 // update existing record
@@ -209,6 +229,7 @@ SQL;
                     $this->samRepository->updateRecord($data, $newHash);
                 }
             }
+            $rowCnt++;
         }
 
         info('Done inserting records.');

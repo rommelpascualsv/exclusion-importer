@@ -1,17 +1,16 @@
 <?php namespace App\Import\Lists\Sam;
 
+use App\Services\ExclusionListHttpDownloader;
+
 class SamService
 {
 
-    const SAM_TABLE_NAME = 'sam_records';
-    const SAM_TEMP_TABLE_NAME = 'sam_records_temp';
     private $fileName;
-
 
     public function __construct()
     {
         ini_set('memory_limit', '2048M');
-        $this->fileName = self::generateFileName();
+        $this->fileName = $this->generateFileName();
     }
 
 
@@ -49,7 +48,7 @@ class SamService
 
     public function getSamRecordsFromSource()
     {
-        copy($this->generateUrl(), ExclusionListHttpDownloader::DEFAULT_DOWNLOAD_DIRECTORY . '/');
+        copy($this->getUrl(), ExclusionListHttpDownloader::DEFAULT_DOWNLOAD_DIRECTORY . '/');
     }
 
 
