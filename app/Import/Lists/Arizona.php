@@ -50,7 +50,7 @@ class Arizona extends ExclusionList
     		//First Name
     		$value[2] = $this->extractFirstMiddle(str_replace(["\xA0", "\xC2"], '', trim($value[2])))[0];
     		//Term Date
-    		$value[3] = str_replace(["\xA0", "\xC2"], '', trim($value[3]));
+			$value[3] = $this->formatDate($value[3]);
     		//Specialty
     		$value[4] = str_replace(["\xA0", "\xC2"], '', trim($value[4]));
     		//NPI
@@ -83,4 +83,17 @@ class Arizona extends ExclusionList
     	
     	return $nameArr;
     }
+
+	/**
+	 * Format date to Y-m-d
+	 *
+	 * @param $value
+	 * @return bool|string
+	 */
+	private function formatDate($value)
+	{
+		$date = date_create(str_replace(["\xA0", "\xC2"], '', trim($value)));
+		$formattedDate = date_format($date, 'Y-m-d');
+		return $formattedDate;
+	}
 }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="sv" id="svg-811-az1-term-date-should-be-formatted-as-a-date-1" context="prod">
+        <sql>
+            UPDATE exclusion_lists_cdm.az1_records
+            SET term_date = STR_TO_DATE( term_date, '%m/%d/%Y' );
+        </sql>
+    </changeSet>
+
+    <changeSet author="sv" id="svg-811-az1-term-date-should-be-formatted-as-a-date-2" context="prod">
+        <modifyDataType
+                columnName="term_date"
+                newDataType="DATE"
+                tableName="az1_records"/>
+    </changeSet>
+
+</databaseChangeLog>
