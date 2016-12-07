@@ -4,11 +4,11 @@ namespace Test\Unit;
 
 use CDM\Test\TestCase;
 use App\Services\ExclusionListStatusHelper;
-use App\Repositories\ExclusionListFileRepository;
+use App\Repositories\FileRepository;
 use App\Repositories\ExclusionListRepository;
-use App\Repositories\FileImportEventRepository;
+use App\Repositories\EventRepository;
 use Mockery;
-use App\Events\FileImportEvent;
+use App\Events\FileImportEventFactory;
 
 class ExclusionListStatusHelperTest extends TestCase
 {
@@ -26,9 +26,9 @@ class ExclusionListStatusHelperTest extends TestCase
         $this->app->withFacades();
     
         $this->exclusionListRepo = Mockery::mock('App\Repositories\ExclusionListRepository')->makePartial();
-        $this->exclusionListFileRepo = Mockery::mock('App\Repositories\ExclusionListFileRepository');
+        $this->exclusionListFileRepo = Mockery::mock('App\Repositories\FileRepository');
         $this->exclusionListRecordRepo = Mockery::mock('App\Repositories\ExclusionListRecordRepository')->makePartial();
-        $this->fileImportEventRepo = Mockery::mock('App\Repositories\FileImportEventRepository')->makePartial();
+        $this->fileImportEventRepo = Mockery::mock('App\Repositories\EventRepository')->makePartial();
         
         $this->helper = new ExclusionListStatusHelper(
             $this->exclusionListRepo,
@@ -70,7 +70,7 @@ class ExclusionListStatusHelperTest extends TestCase
         
         $this->exclusionListRecordRepo->shouldReceive('size')->with('tn1')->andReturn(100);
         
-        $this->fileImportEventRepo->shouldReceive('findLatestEventOfPrefix')->once()->with('tn1')->andReturn(FileImportEvent::newFileUpdateFailed());
+        $this->fileImportEventRepo->shouldReceive('findLatestEventOfObjectId')->once()->with('tn1', FileImportEventFactory::EVENT_TYPES)->andReturn(FileImportEventFactory::newFileUpdateFailed());
         
         $this->assertTrue($this->helper->isUpdateRequired('tn1', 'latest_hash'));
     }
@@ -84,7 +84,7 @@ class ExclusionListStatusHelperTest extends TestCase
     
         $this->exclusionListRecordRepo->shouldReceive('size')->with('tn1')->andReturn(100);
     
-        $this->fileImportEventRepo->shouldReceive('findLatestEventOfPrefix')->once()->with('tn1')->andReturn(FileImportEvent::newSaveRecordsSucceeded());
+        $this->fileImportEventRepo->shouldReceive('findLatestEventOfObjectId')->once()->with('tn1', FileImportEventFactory::EVENT_TYPES)->andReturn(FileImportEventFactory::newSaveRecordsSucceeded());
     
         $this->assertFalse($this->helper->isUpdateRequired('tn1', 'latest_hash'));
     }    

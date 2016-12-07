@@ -4,7 +4,7 @@ namespace App\Import\CredentialLists;
 
 use App\Import\CredentialLists\Scrapers\NJCredential;
 
-class NJCredentialFileMaker
+class NJCredentialFileMaker extends CredentialFileMaker
 {
     const DOWNLOAD_WAIT = 5;
 
@@ -21,19 +21,23 @@ class NJCredentialFileMaker
 
     private $retryList = [];
 
-    public function __construct($dataFilePath, $reScrapeFilePath)
+    public function __construct($sourceUri)
     {
-        $this->parser = new NJCredential();
-        $this->dataFilePath = $dataFilePath;
-        $this->reScrapeFilePath = $reScrapeFilePath;
+        parent::__construct($sourceUri);
+        $this->parser = new NJCredential($sourceUri);
     }
 
     /**
      * Starting point for building a file.
      */
-    public function buildFile()
+    public function buildFile($destinationFilePath)
     {
+        $this->dataFilePath = $destinationFilePath;
+
+        $this->reScrapeFilePath = $this->getRescrapeFilePath($destinationFilePath);
+
         $initialResponse = $this->parser->crawlFormPage();
+
         if (! $initialResponse) {
             $this->output('red', 'Failed to crawl form page.');
             return;
@@ -50,6 +54,11 @@ class NJCredentialFileMaker
         }
 
         $this->makeReScrapeFile($this->retryList);
+    }
+
+    private function getRescrapeFilePath($dataFilePath)
+    {
+        return $dataFilePath . '.rescrape';
     }
 
     /**
