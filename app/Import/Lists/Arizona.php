@@ -48,9 +48,9 @@ class Arizona extends ExclusionList
     		//Last Name Company name
     		$value[0] = str_replace(["\xA0", "\xC2"], '', trim($value[0]));
     		//First Name
-    		$value[2] = $this->extractFirstMiddle(str_replace(["\xA0", "\xC2"], '', trim($value[2])))[0];
+            $value[2] = $this->extractFirstMiddle(str_replace(["\xA0", "\xC2"], '', trim($value[2])))[0];
     		//Term Date
-			$value[3] = $this->formatDate($value[3]);
+            $value[3] = $this->formatDate(array_get($value, 3, ''));
     		//Specialty
     		$value[4] = str_replace(["\xA0", "\xC2"], '', trim($value[4]));
     		//NPI
@@ -92,8 +92,12 @@ class Arizona extends ExclusionList
 	 */
 	private function formatDate($value)
 	{
-		$date = date_create(str_replace(["\xA0", "\xC2"], '', trim($value)));
-		$formattedDate = date_format($date, 'Y-m-d');
-		return $formattedDate;
+        if ($value == '') {
+            return '';
+        } else {
+            $date = date_create(str_replace(["\xA0", "\xC2"], '', trim($value)));
+            $formattedDate = date_format($date, 'Y-m-d');
+            return $formattedDate;
+        }
 	}
 }
