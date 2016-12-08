@@ -170,9 +170,9 @@ SQL;
     {
         $startTime = microtime(true);
 
-        $csvFileLocation = storage_path(
-                ExclusionListHttpDownloader::DEFAULT_DOWNLOAD_DIRECTORY) .
-            '/' .$this->samService->getFileName() .'.CSV';
+        $downloadDirectory = storage_path(ExclusionListHttpDownloader::DEFAULT_DOWNLOAD_DIRECTORY) . '/';
+
+        $csvFileLocation = $downloadDirectory .$this->samService->getFileName() .'.CSV';
 
         $totalRecordCount = count(file($csvFileLocation)) - 1; // w/out header
 
@@ -217,7 +217,7 @@ SQL;
                 $this->toCreate[] = $data;
                 
                 if (sizeof($this->toCreate) == 10 || $rowCnt == $totalRecordCount) {
-                    $this->samRepository->createRecords($this->toCreate);
+                    $this->samRepository->create($this->toCreate);
                     unset($this->toCreate);
                 }
 

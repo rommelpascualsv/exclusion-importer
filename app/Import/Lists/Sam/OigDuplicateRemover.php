@@ -24,10 +24,6 @@ class OigDuplicateRemover
 
         info('Record(s) updated is ' .$records_updated);
 
-        /*if ($records_updated == null) {
-            info('No records updated');
-        }*/
-
         return $records_updated;
     }
 

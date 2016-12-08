@@ -48,10 +48,6 @@ AND sam_records_temp_alias1.Excluding_Agency = 'OPM'
 AND sam_records_temp_alias1.Active_Date > sam_records_temp_alias2.Active_Date;
 SQL;
 
-    public function __construct()
-    {
-    }
-
     public function invoke()
     {
         return app('db')->statement(self::DELETE_OPM_SQL);

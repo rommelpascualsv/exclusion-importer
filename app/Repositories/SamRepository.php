@@ -1,6 +1,6 @@
 <?php namespace App\Repositories;
 
-class SamRepository
+class SamRepository implements Repository
 {
 
     const SAM_TABLE_NAME = 'sam_records';
@@ -10,11 +10,11 @@ class SamRepository
     /**
      * Create Sam record(s) by batch
      *
-     * @param $toCreate
+     * @param $record
      */
-    public function createRecords($toCreate)
+    public function create($record)
     {
-        $chunks = array_chunk($toCreate, 10);
+        $chunks = array_chunk($record, 10);
         foreach ($chunks as $chunk) {
             app('db')->transaction(function () use ($chunk) {
                 app('db')->table(self::SAM_TEMP_TABLE_NAME)->insert($chunk);
@@ -58,6 +58,16 @@ class SamRepository
         info('Total Records deactivated ' .$affectedRows);
 
         return $affectedRows;
+    }
+
+    public function clear()
+    {
+        throw new \Exception("This operation is not supported");
+    }
+
+    public function find($id)
+    {
+        throw new \Exception("This operation is not supported");
     }
 
     
