@@ -3,7 +3,7 @@ namespace App\Services;
 
 use App\Services\Contracts\ExclusionListServiceInterface;
 use App\Repositories\ExclusionListRepository;
-use App\Repositories\ExclusionListFileRepository;
+use App\Repositories\FileRepository;
 
 /**
  * Service class for retrieval and management of exclusion lists
@@ -16,8 +16,8 @@ class ExclusionListService implements ExclusionListServiceInterface
     private $exclusionListStatusHelper;
     
     public function __construct(ExclusionListRepository $exclusionListRepo,
-        ExclusionListFileRepository $exclusionListFileRepo, 
-        ExclusionListStatusHelper $exclusionListStatusHelper)
+                                FileRepository $exclusionListFileRepo,
+                                ExclusionListStatusHelper $exclusionListStatusHelper)
     {
         $this->exclusionListRepo = $exclusionListRepo;
         $this->exclusionListFileRepo = $exclusionListFileRepo;

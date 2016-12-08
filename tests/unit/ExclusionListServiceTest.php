@@ -28,7 +28,7 @@ class ExclusionListServiceTest extends TestCase
         $this->app->withFacades();
         
         $this->exclusionListRepo = Mockery::mock('App\Repositories\ExclusionListRepository')->makePartial();
-        $this->exclusionListFileRepo = Mockery::mock('App\Repositories\ExclusionListFileRepository')->makePartial();
+        $this->exclusionListFileRepo = Mockery::mock('App\Repositories\FileRepository')->makePartial();
         $this->exclusionListStatusHelper = Mockery::mock('App\Services\ExclusionListStatusHelper')->makePartial();
         
         $this->service = new ExclusionListService(
