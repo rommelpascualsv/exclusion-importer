@@ -1,9 +1,9 @@
 <?php
 namespace App\Repositories;
 
-use App\Events\FileImportEvent;
+use App\Events\Event;
 
-class FileImportEventRepository implements Repository
+class EventRepository implements Repository
 {
     public function create($event)
     {
@@ -37,28 +37,32 @@ class FileImportEventRepository implements Repository
         
         return $results;
     }
-    
+
     /**
-     * Returns the latest file import event of the given exclusion list prefix.
-     * 
-     * @param string $prefix the exclusion list prefix
-     * @return \App\Events\FileImportEvent the FileImportEvent corresponding to 
-     * the latest event recorded for the prefix
+     * Returns the latest event of the given object id.
+     *
+     * @param string $objectId the object_id of the event to search
+     * @param array $eventTypes [optional] array of event_type values to constrain which type of latest event should be
+     * returned for the given object id
+     * @return \App\Events\Event the Event corresponding to the latest event recorded for the prefix
      */
-    public function findLatestEventOfPrefix($prefix) 
+    public function findLatestEventOfObjectId($objectId, $eventTypes = null)
     {
-        $record = app('db')->table('events')
-            ->where('object_id', $prefix)
-            ->whereIn('event_type', FileImportEvent::EVENT_TYPES)
-            ->orderBy('timestamp', 'desc')
-            ->first();
-        
+        $query = app('db')->table('events')
+            ->where('object_id', $objectId);
+
+        if ($eventTypes) {
+            $query->whereIn('event_type', $eventTypes);
+        }
+
+        $record = $query->orderBy('timestamp', 'desc')->first();
+
         return $record ? $this->mapRecord($record) : null;
     }
     
     private function mapRecord(\stdClass $record)
     {
-        $event = new FileImportEvent();
+        $event = new Event();
         
         $event->setDescription($record->description);
         $event->setEventType($record->event_type);

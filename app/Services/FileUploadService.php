@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
+use App\Events\FileImportEventFactory;
 use App\Services\Contracts\FileUploadServiceInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use App\Repositories\FileUploadRepository;
-use App\Events\FileImportEvent;
 
 class FileUploadService implements FileUploadServiceInterface
 {
@@ -76,7 +76,7 @@ class FileUploadService implements FileUploadServiceInterface
     
     private function onFileSaveSucceeded($filePath, $prefix)
     {
-        event('file.upload.succeeded', FileImportEvent::newFileUploadSucceeded()
+        event('file.upload.succeeded', FileImportEventFactory::newFileUploadSucceeded()
             ->setObjectId($prefix)
             ->setDescription(json_encode(['message' => 'Successfully saved uploaded file in ' . $filePath]))
         );
@@ -84,7 +84,7 @@ class FileUploadService implements FileUploadServiceInterface
     
     private function onFileSaveFailed(\Exception $e, $filePath, $prefix)
     {
-        event('file.upload.failed', FileImportEvent::newFileUploadFailed()
+        event('file.upload.failed', FileImportEventFactory::newFileUploadFailed()
             ->setObjectId($prefix)
             ->setDescription(json_encode([get_class($e) => 'Failed to save uploaded file in ' . $filePath . ':' . $e->getMessage()]))
         );

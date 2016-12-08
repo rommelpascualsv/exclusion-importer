@@ -3,10 +3,10 @@
 namespace App\Repositories;
 
 /**
- * Repository for exclusion list files
+ * Repository for files
  *   
  */
-class ExclusionListFileRepository implements Repository
+class FileRepository implements Repository
 {
     /**
      * Creates a record in the files table.
