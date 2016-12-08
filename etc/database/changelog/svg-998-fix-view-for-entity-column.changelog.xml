@@ -72,7 +72,7 @@
 
             union
 
-            (select 18 AS `exclusion_list_id`,`md1_records`.`id` AS `exclusion_list_record_id`,`md1_records`.`first_name` AS `first_name`,NULL AS `middle_name`,`md1_records`.`last_name` AS `last_name`,NULL AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth`,hex(`md1_records`.`hash`) AS `hash` from `md1_records`)
+            (select 18 AS `exclusion_list_id`,`md1_records`.`id` AS `exclusion_list_record_id`,`md1_records`.`first_name` AS `first_name`,NULL AS `middle_name`,`md1_records`.`last_name` AS `last_name`,(IF (`md1_records`.`first_name` > '' OR `md1_records`.`last_name` > '', TRIM(CONCAT(`md1_records`.`first_name`, ' ', `md1_records`.`last_name`)), NULL)) AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth`,hex(`md1_records`.`hash`) AS `hash` from `md1_records`)
 
             union
 
@@ -84,7 +84,7 @@
 
             union
 
-            (select 21 AS `exclusion_list_id`,`wy1_records`.`id` AS `exclusion_list_record_id`,`wy1_records`.`first_name` AS `first_name`,NULL AS `middle_name`,`wy1_records`.`last_name` AS `last_name`,`wy1_records`.`business_name` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,`wy1_records`.`npi` AS `npi`,NULL AS `upin`,NULL AS `date_of_birth`,hex(`wy1_records`.`hash`) AS `hash` from `wy1_records`)
+            (select 21 AS `exclusion_list_id`,`wy1_records`.`id` AS `exclusion_list_record_id`,`wy1_records`.`first_name` AS `first_name`,NULL AS `middle_name`,`wy1_records`.`last_name` AS `last_name`,`wy1_records`.`business_name` AS `entity1`,(IF (`wy1_records`.`first_name` > '' OR `wy1_records`.`last_name` > '', TRIM(CONCAT(`wy1_records`.`first_name`, ' ', `wy1_records`.`last_name`)), NULL)) AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,`wy1_records`.`npi` AS `npi`,NULL AS `upin`,NULL AS `date_of_birth`,hex(`wy1_records`.`hash`) AS `hash` from `wy1_records`)
 
             union
 
@@ -92,35 +92,35 @@
 
             union
 
-            (select 23 AS `exclusion_list_id`,`ca1_records`.`id` AS `exclusion_list_record_id`,`ca1_records`.`first_name` AS `first_name`,`ca1_records`.`middle_name` AS `middle_name`,`ca1_records`.`last_name` AS `last_name`,`ca1_records`.`business` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,`ca1_records`.`npi` AS `npi`,NULL AS `upin`,NULL AS `date_of_birth`,hex(`ca1_records`.`hash`) AS `hash` from `ca1_records`)
+            (select 23 AS `exclusion_list_id`,`ca1_records`.`id` AS `exclusion_list_record_id`,`ca1_records`.`first_name` AS `first_name`,`ca1_records`.`middle_name` AS `middle_name`,`ca1_records`.`last_name` AS `last_name`,`ca1_records`.`business` AS `entity1`,(IF (`ca1_records`.`first_name` > '' OR `ca1_records`.`last_name` > '', TRIM(CONCAT(`ca1_records`.`first_name`, ' ', `ca1_records`.`last_name`)), NULL)) AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,`ca1_records`.`npi` AS `npi`,NULL AS `upin`,NULL AS `date_of_birth`,hex(`ca1_records`.`hash`) AS `hash` from `ca1_records`)
 
             union
 
-            (select 24 AS `exclusion_list_id`,`hi1_records`.`id` AS `exclusion_list_record_id`,`hi1_records`.`first_name` AS `first_name`,NULL AS `middle_name`,`hi1_records`.`last_name_or_business` AS `last_name`,NULL AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth`,hex(`hi1_records`.`hash`) AS `hash` from `hi1_records`)
+            (select 24 AS `exclusion_list_id`,`hi1_records`.`id` AS `exclusion_list_record_id`,`hi1_records`.`first_name` AS `first_name`,NULL AS `middle_name`,`hi1_records`.`last_name_or_business` AS `last_name`,(IF (`hi1_records`.`first_name` > '' OR `hi1_records`.`last_name_or_business` > '', TRIM(CONCAT(`hi1_records`.`first_name`, ' ', `hi1_records`.`last_name_or_business`)), NULL)) AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth`,hex(`hi1_records`.`hash`) AS `hash` from `hi1_records`)
 
             union
 
-            (select 25 AS `exclusion_list_id`,`az1_records`.`id` AS `exclusion_list_record_id`,`az1_records`.`first_name` AS `first_name`,`az1_records`.`middle` AS `middle_name`,`az1_records`.`last_name_company_name` AS `last_name`,NULL AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,`az1_records`.`npi_number` AS `npi`,NULL AS `upin`,NULL AS `date_of_birth`,hex(`az1_records`.`hash`) AS `hash` from `az1_records`)
+            (select 25 AS `exclusion_list_id`,`az1_records`.`id` AS `exclusion_list_record_id`,`az1_records`.`first_name` AS `first_name`,`az1_records`.`middle` AS `middle_name`,`az1_records`.`last_name_company_name` AS `last_name`,(IF (`az1_records`.`first_name` > '' OR `az1_records`.`last_name_company_name` > '', TRIM(CONCAT(`az1_records`.`first_name`, ' ', `az1_records`.`last_name_company_name`)), NULL)) AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,`az1_records`.`npi_number` AS `npi`,NULL AS `upin`,NULL AS `date_of_birth`,hex(`az1_records`.`hash`) AS `hash` from `az1_records`)
 
             union
 
-            (select 26 AS `exclusion_list_id`,`tn1_records`.`id` AS `exclusion_list_record_id`,`tn1_records`.`first_name` AS `first_name`,NULL AS `middle_name`,`tn1_records`.`last_name` AS `last_name`,NULL AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,`tn1_records`.`npi` AS `npi`,NULL AS `upin`,NULL AS `date_of_birth`,hex(`tn1_records`.`hash`) AS `hash` from `tn1_records`)
+            (select 26 AS `exclusion_list_id`,`tn1_records`.`id` AS `exclusion_list_record_id`,`tn1_records`.`first_name` AS `first_name`,NULL AS `middle_name`,`tn1_records`.`last_name` AS `last_name`,(IF (`tn1_records`.`first_name` > '' OR `tn1_records`.`last_name` > '', TRIM(CONCAT(`tn1_records`.`first_name`, ' ', `tn1_records`.`last_name`)), NULL)) AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,`tn1_records`.`npi` AS `npi`,NULL AS `upin`,NULL AS `date_of_birth`,hex(`tn1_records`.`hash`) AS `hash` from `tn1_records`)
 
             union
 
-            (select 27 AS `exclusion_list_id`,`mn1_records`.`id` AS `exclusion_list_record_id`,`mn1_records`.`first_name` AS `first_name`,`mn1_records`.`middle_name` AS `middle_name`,`mn1_records`.`last_name` AS `last_name`,`mn1_records`.`sort_name` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth`,hex(`mn1_records`.`hash`) AS `hash` from `mn1_records`)
+            (select 27 AS `exclusion_list_id`,`mn1_records`.`id` AS `exclusion_list_record_id`,`mn1_records`.`first_name` AS `first_name`,`mn1_records`.`middle_name` AS `middle_name`,`mn1_records`.`last_name` AS `last_name`,`mn1_records`.`sort_name` AS `entity1`,(IF (`mn1_records`.`first_name` > '' OR `mn1_records`.`last_name` > '', TRIM(CONCAT(`mn1_records`.`first_name`, ' ', `mn1_records`.`last_name`)), NULL)) AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth`,hex(`mn1_records`.`hash`) AS `hash` from `mn1_records`)
 
             union
 
-            (select 29 AS `exclusion_list_id`,`ak1_records`.`id` AS `exclusion_list_record_id`,`ak1_records`.`first_name` AS `first_name`,`ak1_records`.`middle_name` AS `middle_name`,`ak1_records`.`last_name` AS `last_name`,NULL AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth`,hex(`ak1_records`.`hash`) AS `hash` from `ak1_records`)
+            (select 29 AS `exclusion_list_id`,`ak1_records`.`id` AS `exclusion_list_record_id`,`ak1_records`.`first_name` AS `first_name`,`ak1_records`.`middle_name` AS `middle_name`,`ak1_records`.`last_name` AS `last_name`,(IF (`ak1_records`.`first_name` > '' OR `ak1_records`.`last_name` > '', TRIM(CONCAT(`ak1_records`.`first_name`, ' ', `ak1_records`.`last_name`)), NULL)) AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth`,hex(`ak1_records`.`hash`) AS `hash` from `ak1_records`)
 
             union
 
-            (select 30 AS `exclusion_list_id`,`ms1_records`.`id` AS `exclusion_list_record_id`,`ms1_records`.`first_name` AS `first_name`,`ms1_records`.`middle_name` AS `middle_name`,`ms1_records`.`last_name` AS `last_name`,`ms1_records`.`entity_name` AS `entity1`,`ms1_records`.`dba` AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,`ms1_records`.`npi` AS `npi`,NULL AS `upin`,NULL AS `date_of_birth`,hex(`ms1_records`.`hash`) AS `hash` from `ms1_records`)
+            (select 30 AS `exclusion_list_id`,`ms1_records`.`id` AS `exclusion_list_record_id`,`ms1_records`.`first_name` AS `first_name`,`ms1_records`.`middle_name` AS `middle_name`,`ms1_records`.`last_name` AS `last_name`,`ms1_records`.`entity_name` AS `entity1`,`ms1_records`.`dba` AS `entity2`,(IF (`ms1_records`.`first_name` > '' OR `ms1_records`.`last_name` > '', TRIM(CONCAT(`ms1_records`.`first_name`, ' ', `ms1_records`.`last_name`)), NULL)) AS `entity3`,NULL AS `ssn_last_four`,`ms1_records`.`npi` AS `npi`,NULL AS `upin`,NULL AS `date_of_birth`,hex(`ms1_records`.`hash`) AS `hash` from `ms1_records`)
 
             union
 
-            (select 31 AS `exclusion_list_id`,`nc1_records`.`id` AS `exclusion_list_record_id`,`nc1_records`.`first_name` AS `first_name`,NULL AS `middle_name`,`nc1_records`.`last_name` AS `last_name`,`ownership` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,`nc1_records`.`npi` AS `npi`,NULL AS `upin`,NULL AS `date_of_birth`,hex(`nc1_records`.`hash`) AS `hash` from `nc1_records`)
+            (select 31 AS `exclusion_list_id`,`nc1_records`.`id` AS `exclusion_list_record_id`,`nc1_records`.`first_name` AS `first_name`,NULL AS `middle_name`,`nc1_records`.`last_name` AS `last_name`,`ownership` AS `entity1`,(IF (`nc1_records`.`first_name` > '' OR `nc1_records`.`last_name` > '', TRIM(CONCAT(`nc1_records`.`first_name`, ' ', `nc1_records`.`last_name`)), NULL)) AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,`nc1_records`.`npi` AS `npi`,NULL AS `upin`,NULL AS `date_of_birth`,hex(`nc1_records`.`hash`) AS `hash` from `nc1_records`)
 
             union
 
@@ -128,7 +128,7 @@
 
             union
 
-            (select 33 AS `exclusion_list_id`,`wa1_records`.`id` AS `exclusion_list_record_id`,`wa1_records`.`first_name` AS `first_name`,`wa1_records`.`middle_etc` AS `middle_name`,`wa1_records`.`last_name` AS `last_name`,`wa1_records`.`entity` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth`,hex(`wa1_records`.`hash`) AS `hash` from `wa1_records`)
+            (select 33 AS `exclusion_list_id`,`wa1_records`.`id` AS `exclusion_list_record_id`,`wa1_records`.`first_name` AS `first_name`,`wa1_records`.`middle_etc` AS `middle_name`,`wa1_records`.`last_name` AS `last_name`,`wa1_records`.`entity` AS `entity1`,(IF (`wa1_records`.`first_name` > '' OR `wa1_records`.`last_name` > '', TRIM(CONCAT(`wa1_records`.`first_name`, ' ', `wa1_records`.`last_name`)), NULL)) AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth`,hex(`wa1_records`.`hash`) AS `hash` from `wa1_records`)
 
             union
 
@@ -136,7 +136,7 @@
 
             union
 
-            (select 35 AS `exclusion_list_id`,`la1_records`.`id` AS `exclusion_list_record_id`,`la1_records`.`first_name` AS `first_name`,NULL AS `middle_name`,`la1_records`.`last_or_entity_name` AS `last_name`,`la1_records`.`last_or_entity_name` AS `entity1`,`la1_records`.`affiliated_entity` AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,`la1_records`.`npi` AS `npi`,NULL AS `upin`,`la1_records`.`birthdate` AS `date_of_birth`,hex(`la1_records`.`hash`) AS `hash` from `la1_records`)
+            (select 35 AS `exclusion_list_id`,`la1_records`.`id` AS `exclusion_list_record_id`,`la1_records`.`first_name` AS `first_name`,NULL AS `middle_name`,`la1_records`.`last_or_entity_name` AS `last_name`,`la1_records`.`last_or_entity_name` AS `entity1`,`la1_records`.`affiliated_entity` AS `entity2`,(IF (`la1_records`.`first_name` > '' OR `la1_records`.`last_or_entity_name` > '', TRIM(CONCAT(`la1_records`.`first_name`, ' ', `la1_records`.`last_or_entity_name`)), NULL)) AS `entity3`,NULL AS `ssn_last_four`,`la1_records`.`npi` AS `npi`,NULL AS `upin`,`la1_records`.`birthdate` AS `date_of_birth`,hex(`la1_records`.`hash`) AS `hash` from `la1_records`)
 
             union
 
@@ -148,19 +148,19 @@
 
             union
 
-            (select 38 AS `exclusion_list_id`,`dc1_records`.`id` AS `exclusion_list_record_id`,`dc1_records`.`first_name` AS `first_name`,`dc1_records`.`middle_name` AS `middle_name`,`dc1_records`.`last_name` AS `last_name`,`dc1_records`.`company_name` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth`,hex(`dc1_records`.`hash`) AS `hash` from `dc1_records`)
+            (select 38 AS `exclusion_list_id`,`dc1_records`.`id` AS `exclusion_list_record_id`,`dc1_records`.`first_name` AS `first_name`,`dc1_records`.`middle_name` AS `middle_name`,`dc1_records`.`last_name` AS `last_name`,`dc1_records`.`company_name` AS `entity1`,(IF (`dc1_records`.`first_name` > '' OR `dc1_records`.`last_name` > '', TRIM(CONCAT(`dc1_records`.`first_name`, ' ', `dc1_records`.`last_name`)), NULL)) AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth`,hex(`dc1_records`.`hash`) AS `hash` from `dc1_records`)
 
             union
 
-            (select 39 AS `exclusion_list_id`,`ia1_records`.`id` AS `exclusion_list_record_id`,`ia1_records`.`individual_first_name` AS `first_name`,NULL AS `middle_name`,`ia1_records`.`individual_last_name` AS `last_name`,`ia1_records`.`entity_name` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,`ia1_records`.`npi` AS `npi`,NULL AS `upin`,NULL AS `date_of_birth`,hex(`ia1_records`.`hash`) AS `hash` from `ia1_records`)
+            (select 39 AS `exclusion_list_id`,`ia1_records`.`id` AS `exclusion_list_record_id`,`ia1_records`.`individual_first_name` AS `first_name`,NULL AS `middle_name`,`ia1_records`.`individual_last_name` AS `last_name`,`ia1_records`.`entity_name` AS `entity1`,(IF (`ia1_records`.`individual_first_name` > '' OR `ia1_records`.`individual_last_name` > '', TRIM(CONCAT(`ia1_records`.`individual_first_name`, ' ', `ia1_records`.`individual_last_name`)), NULL)) AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,`ia1_records`.`npi` AS `npi`,NULL AS `upin`,NULL AS `date_of_birth`,hex(`ia1_records`.`hash`) AS `hash` from `ia1_records`)
 
             union
 
-            (select 40 AS `exclusion_list_id`,`ga1_records`.`id` AS `exclusion_list_record_id`,`ga1_records`.`first_name` AS `first_name`,NULL AS `middle_name`,`ga1_records`.`last_name` AS `last_name`,`ga1_records`.`business_name` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth`,hex(`ga1_records`.`hash`) AS `hash` from `ga1_records`)
+            (select 40 AS `exclusion_list_id`,`ga1_records`.`id` AS `exclusion_list_record_id`,`ga1_records`.`first_name` AS `first_name`,NULL AS `middle_name`,`ga1_records`.`last_name` AS `last_name`,`ga1_records`.`business_name` AS `entity1`,(IF (`ga1_records`.`first_name` > '' OR `ga1_records`.`last_name` > '', TRIM(CONCAT(`ga1_records`.`first_name`, ' ', `ga1_records`.`last_name`)), NULL)) AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth`,hex(`ga1_records`.`hash`) AS `hash` from `ga1_records`)
 
             union
 
-            (select 41 AS `exclusion_list_id`,`me1_records`.`id` AS `exclusion_list_record_id`,`me1_records`.`first_name` AS `first_name`,`me1_records`.`middle_initial` AS `middle_name`,`me1_records`.`last_name` AS `last_name`,`me1_records`.`entity` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth`,hex(`me1_records`.`hash`) AS `hash` from `me1_records`)
+            (select 41 AS `exclusion_list_id`,`me1_records`.`id` AS `exclusion_list_record_id`,`me1_records`.`first_name` AS `first_name`,`me1_records`.`middle_initial` AS `middle_name`,`me1_records`.`last_name` AS `last_name`,`me1_records`.`entity` AS `entity1`,(IF (`me1_records`.`first_name` > '' OR `me1_records`.`last_name` > '', TRIM(CONCAT(`me1_records`.`first_name`, ' ', `me1_records`.`last_name`)), NULL)) AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth`,hex(`me1_records`.`hash`) AS `hash` from `me1_records`)
 
             union
 
@@ -168,7 +168,7 @@
 
             union
 
-            (select 43 AS `exclusion_list_id`,`phs_records`.`id` AS `exclusion_list_record_id`,`phs_records`.`first_name` AS `first_name`,`phs_records`.`middle_name` AS `middle_name`,`phs_records`.`last_name` AS `last_name`,NULL AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth`,hex(`phs_records`.`hash`) AS `hash` from `phs_records`)
+            (select 43 AS `exclusion_list_id`,`phs_records`.`id` AS `exclusion_list_record_id`,`phs_records`.`first_name` AS `first_name`,`phs_records`.`middle_name` AS `middle_name`,`phs_records`.`last_name` AS `last_name`,(IF (`phs_records`.`first_name` > '' OR `phs_records`.`last_name` > '', TRIM(CONCAT(`phs_records`.`first_name`, ' ', `phs_records`.`last_name`)), NULL)) AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth`,hex(`phs_records`.`hash`) AS `hash` from `phs_records`)
 
             union
 
@@ -196,7 +196,7 @@
 
             union
 
-            (select 50 AS `exclusion_list_id`,`healthmil_records`.`id` AS `exclusion_list_record_id`,`healthmil_records`.`first_name` AS `first_name`,`healthmil_records`.`middle_name` AS `middle_name`,`healthmil_records`.`last_name` AS `last_name`,`healthmil_records`.`companies` AS `entity1`,NULL AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth`,hex(`healthmil_records`.`hash`) AS `hash` from `healthmil_records`)
+            (select 50 AS `exclusion_list_id`,`healthmil_records`.`id` AS `exclusion_list_record_id`,`healthmil_records`.`first_name` AS `first_name`,`healthmil_records`.`middle_name` AS `middle_name`,`healthmil_records`.`last_name` AS `last_name`,`healthmil_records`.`companies` AS `entity1`,(IF (`healthmil_records`.`first_name` > '' OR `healthmil_records`.`last_name` > '', TRIM(CONCAT(`healthmil_records`.`first_name`, ' ', `healthmil_records`.`last_name`)), NULL)) AS `entity2`,NULL AS `entity3`,NULL AS `ssn_last_four`,NULL AS `npi`,NULL AS `upin`,NULL AS `date_of_birth`,hex(`healthmil_records`.`hash`) AS `hash` from `healthmil_records`)
 
             union
 
