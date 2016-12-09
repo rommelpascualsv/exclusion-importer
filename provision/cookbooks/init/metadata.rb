@@ -1,0 +1,5 @@
+name             'init'
+maintainer       'SV Developers'
+maintainer_email 'SVDevelopers@streamlineverify.com'
+description      'Initilization recipes'
+version          '0.1.0'

@@ -1,0 +1,5 @@
+name             'tools'
+maintainer       'SV Developers'
+maintainer_email 'SVDevelopers@streamlineverify.com'
+description      'sets up helper tools for cdm'
+version          '0.1.0'

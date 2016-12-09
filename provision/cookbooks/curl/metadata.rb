@@ -1,0 +1,5 @@
+name             'curl'
+maintainer       'SV Developers'
+maintainer_email 'SVDevelopers@streamlineverify.com'
+description      'sets up curl'
+version          '0.1.0'

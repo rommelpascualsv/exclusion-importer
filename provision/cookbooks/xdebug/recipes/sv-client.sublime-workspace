@@ -1,0 +1,1321 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"uniq",
+				"unique_identifier"
+			],
+			[
+				"en",
+				"engine_displacement"
+			],
+			[
+				"imp",
+				"implode〔function〕"
+			],
+			[
+				"array",
+				"array_diff"
+			],
+			[
+				"ret",
+				"return〔keyword〕"
+			],
+			[
+				"$re",
+				"$response〔variable〕"
+			],
+			[
+				"in",
+				"in_array"
+			],
+			[
+				"str_re",
+				"str_replace"
+			],
+			[
+				"print",
+				"print_r〔function〕"
+			],
+			[
+				"c",
+				"class\tclass …"
+			],
+			[
+				"font",
+				"font-weight"
+			],
+			[
+				"margin",
+				"margin-top"
+			],
+			[
+				"$im",
+				"$images〔variable〕"
+			],
+			[
+				"arra",
+				"array"
+			],
+			[
+				"mar",
+				"margin-top"
+			],
+			[
+				"depen",
+				"depends"
+			],
+			[
+				"vid",
+				"video"
+			],
+			[
+				"vi",
+				"videos"
+			],
+			[
+				"ex",
+				"extend"
+			],
+			[
+				"inline",
+				"inline-block"
+			],
+			[
+				"t",
+				"throw\tThrow Exception"
+			],
+			[
+				"account",
+				"account_id"
+			],
+			[
+				"emp",
+				"empty〔keyword〕"
+			],
+			[
+				"is",
+				"isset"
+			],
+			[
+				"process",
+				"processExclusionListNames"
+			],
+			[
+				"$e",
+				"$exclusionListNames〔variable〕"
+			],
+			[
+				"E",
+				"ExclusionList"
+			],
+			[
+				"enti",
+				"exclusionListNames〔variable〕"
+			],
+			[
+				"pad",
+				"padding"
+			],
+			[
+				"end",
+				"endif"
+			],
+			[
+				"no",
+				"nowrap"
+			],
+			[
+				"w",
+				"white-space"
+			],
+			[
+				"n",
+				"nowrap"
+			],
+			[
+				"$ke",
+				"$key〔variable〕"
+			],
+			[
+				"$key",
+				"$keyId〔variable〕"
+			],
+			[
+				"ce",
+				"cellWidth"
+			],
+			[
+				"tab",
+				"tableHeader〔variable〕"
+			],
+			[
+				"le",
+				"length"
+			],
+			[
+				"padd",
+				"padding-left"
+			],
+			[
+				"ta",
+				"tableHeader"
+			],
+			[
+				"ENI",
+				"ENVIRONMENT"
+			],
+			[
+				"PHP",
+				"PHP_POOL_PATH〔variable〕"
+			],
+			[
+				"$st",
+				"$strArray〔variable〕"
+			],
+			[
+				"is_",
+				"is_numeric〔function〕"
+			],
+			[
+				"uns",
+				"unset〔keyword〕"
+			],
+			[
+				"s",
+				"start〔function〕"
+			],
+			[
+				"Au",
+				"AutoResolver〔class〕"
+			],
+			[
+				"ssn",
+				"ssn_hash"
+			],
+			[
+				"con",
+				"continue〔keyword〕"
+			],
+			[
+				"$pa",
+				"$params〔variable〕"
+			],
+			[
+				"En",
+				"Entitlements"
+			],
+			[
+				"prin",
+				"print_r"
+			],
+			[
+				"$ma",
+				"$matches〔variable〕"
+			],
+			[
+				"to",
+				"toArray〔function〕"
+			],
+			[
+				"$matc",
+				"$matches"
+			],
+			[
+				"ver",
+				"verify"
+			],
+			[
+				"$par",
+				"$payload〔variable〕"
+			],
+			[
+				"func",
+				"function"
+			],
+			[
+				"get",
+				"getMatches"
+			],
+			[
+				"$user",
+				"$userId〔variable〕"
+			],
+			[
+				"prit",
+				"print_r"
+			],
+			[
+				"res",
+				"resolveChecker〔function〕"
+			],
+			[
+				"check",
+				"check_id"
+			],
+			[
+				"__",
+				"__DIR__"
+			],
+			[
+				"In",
+				"InputInterface"
+			],
+			[
+				"get_clas",
+				"get_class_methods"
+			],
+			[
+				"__c",
+				"__construct〔function〕"
+			],
+			[
+				"var",
+				"var_dump〔function〕"
+			],
+			[
+				"pro",
+				"protected〔keyword〕"
+			],
+			[
+				"unse",
+				"unserialize〔function〕"
+			],
+			[
+				"Jo",
+				"Jobs〔class〕"
+			],
+			[
+				"$p",
+				"$process〔variable〕"
+			],
+			[
+				"Se",
+				"Service〔namespace〕"
+			],
+			[
+				"dir",
+				"dirname〔function〕"
+			],
+			[
+				"pri",
+				"print_r〔function〕"
+			],
+			[
+				"pr",
+				"print_r"
+			],
+			[
+				"array_",
+				"array_map〔function〕"
+			],
+			[
+				"fun",
+				"function〔keyword〕"
+			],
+			[
+				"array_fil",
+				"array_filter〔function〕"
+			],
+			[
+				"alt",
+				"alt_bussiness_2"
+			],
+			[
+				"$pdf",
+				"$pdfContent〔variable〕"
+			],
+			[
+				"ty",
+				"_typeList〔variable〕"
+			],
+			[
+				"set",
+				"setEnv"
+			],
+			[
+				"clea",
+				"cleanCSS〔variable〕"
+			],
+			[
+				"$f",
+				"$field_name_data〔variable〕"
+			],
+			[
+				"margin-",
+				"margin-right"
+			],
+			[
+				"$ex",
+				"$exclusion_lists〔variable〕"
+			],
+			[
+				"$exclus",
+				"$exclusion_lists"
+			],
+			[
+				"exclu",
+				"exclusion_lists"
+			],
+			[
+				"array_f",
+				"array_flip〔function〕"
+			],
+			[
+				"$fie",
+				"$fieldList〔variable〕"
+			],
+			[
+				"array_re",
+				"array_replace〔function〕"
+			],
+			[
+				"em",
+				"empty"
+			],
+			[
+				"ar",
+				"array_map"
+			],
+			[
+				"apt",
+				"apt_package"
+			],
+			[
+				"is_nu",
+				"is_numeric〔function〕"
+			],
+			[
+				"array_us",
+				"array_unshift〔function〕"
+			],
+			[
+				"$em",
+				"$employees〔variable〕"
+			],
+			[
+				"$fi",
+				"$field_data〔variable〕"
+			],
+			[
+				"ma",
+				"max_height"
+			],
+			[
+				"new",
+				"new_table〔variable〕"
+			],
+			[
+				"document",
+				"document.getElementById"
+			],
+			[
+				"start",
+				"start_table"
+			],
+			[
+				"html",
+				"htmlStr"
+			],
+			[
+				"tabe",
+				"table_id〔variable〕"
+			],
+			[
+				"table",
+				"table_header"
+			],
+			[
+				"a",
+				"appendChild〔function〕"
+			],
+			[
+				"ge",
+				"getElementById〔function〕"
+			],
+			[
+				"o",
+				"offsetHeight"
+			],
+			[
+				"hea",
+				"header"
+			],
+			[
+				"v",
+				"version"
+			],
+			[
+				"strto",
+				"strtoupper〔function〕"
+			],
+			[
+				"for",
+				"foreach\tforeach …"
+			],
+			[
+				"is_s",
+				"is_string〔function〕"
+			],
+			[
+				"ne",
+				"newjersy"
+			],
+			[
+				"strT",
+				"strtoupper"
+			],
+			[
+				"array_fi",
+				"array_filter〔function〕"
+			],
+			[
+				"min",
+				"minnesota"
+			],
+			[
+				"cle",
+				"clearInvalidNpiValue"
+			],
+			[
+				"re",
+				"results"
+			],
+			[
+				"bus",
+				"business_name"
+			],
+			[
+				"requ",
+				"required_with"
+			],
+			[
+				"va",
+				"validation"
+			],
+			[
+				"fied",
+				"fields"
+			],
+			[
+				"call_user_m",
+				"call_user_method_array"
+			],
+			[
+				"call_",
+				"call_user_func_array"
+			],
+			[
+				"call",
+				"call_user_method_array"
+			],
+			[
+				"firs",
+				"first_name"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "/C/Users/Joseph Molinas/Desktop/WorkFolder/client/provision/local.json",
+			"settings":
+			{
+				"buffer_size": 3299,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/C/Users/Joseph Molinas/Desktop/WorkFolder/client/provision/cookbooks/liquibase/recipes/default.rb",
+			"settings":
+			{
+				"buffer_size": 1509,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Users/Joseph Molinas/AppData/Roaming/Sublime Text 3/Packages/User/Xdebug.sublime-settings",
+			"settings":
+			{
+				"buffer_size": 48,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "default.rb",
+			"settings":
+			{
+				"buffer_size": 387,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 392.0,
+		"last_filter": "in",
+		"selected_items":
+		[
+			[
+				"in",
+				"Package Control: Install Package"
+			],
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: ",
+				"Package Control: Install Package"
+			],
+			[
+				"remo",
+				"Package Control: Remove Package"
+			],
+			[
+				"rem",
+				"Package Control: Remove Package"
+			],
+			[
+				"pac",
+				"Package Control: Install Package"
+			],
+			[
+				"",
+				"PHP Coding Standards Fixer: Fix this file (PHP Code Beautifier)"
+			]
+		],
+		"width": 528.0
+	},
+	"console":
+	{
+		"height": 126.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '2915d1851351e5ee549c20394736b442' + '8bc59f460fa1548d1514676163dafc88'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/client",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/client/.vagrant/machines",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/client/.vagrant/machines/default",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/client/.vagrant/machines/default/virtualbox",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/client/provision/cookbooks",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/client/provision/cookbooks/liquibase/recipes",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/client/provision/cookbooks/mysql/recipes",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/client/provision/cookbooks/nginx/recipes",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/client/provision/cookbooks/nginx/templates",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/client/provision/cookbooks/nginx/templates/default",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/client/provision/cookbooks/php/recipes",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/client/provision/cookbooks/xdebug",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/client/provision/cookbooks/xdebug/recipes"
+	],
+	"file_history":
+	[
+		"/C/Users/Joseph Molinas/AppData/Roaming/Sublime Text 3/Packages/Xdebug Client/Xdebug.sublime-settings",
+		"/C/Users/Joseph Molinas/Desktop/asdasd",
+		"/C/Users/Joseph Molinas/Desktop/ebs",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/sphinx-index/Vagrantfile",
+		"/C/Users/Joseph Molinas/VirtualBox VMs/sphinx-index/sphinx-index.vbox-prev",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/jmolinas-backend-test/composer.json",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/jmolinas-backend-test/.gitignore",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/jmolinas-backend-test/Vagrantfile",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/jmolinas-backend-test/vendor/container-interop/container-interop/src/Interop/Container/ContainerInterface.php",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/jmolinas-backend-test/src/routes.php",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/jmolinas-backend-test/app/Models/Vehicle.php",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/jmolinas-backend-test/src/bootstrap.php",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/jmolinas-backend-test/src/dependencies.php",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/jmolinas-backend-test/src/settings.php",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/jmolinas-backend-test/app/Controller/Vehicle.php",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/jmolinas-backend-test/app/ApiResponse.php",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/jmolinas-backend-test/public/index.php",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/jmolinas-backend-test/provision/cookbooks/nginx/recipes/default.rb",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/jmolinas-backend-test/provision/cookbooks/mysql/recipes/default.rb",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/jmolinas-backend-test/provision/local.json.sample",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/jmolinas-backend-test/provision/local.json",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/backend-test/jmolinas-backend-test/logs/README.md",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/vmail/vendor/slim/slim/Slim/Helper/Set.php",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/vmail/app/config.php",
+		"/C/Users/Joseph Molinas/Desktop/routes.php",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/vmail/app/routes.php",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/simple-php-router/src/Router.php",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/simple-php-router/README.md",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/vmail/vendor/slim/slim/Slim/Middleware.php",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/simple-php-router/src/ServiceContainer.php",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/simple-php-router/src/Http.php",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/simple-php-router/composer.json",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/client/vendor/streamlineverify/SV/composer.json",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/vmail/vendor/slim/slim/composer.json",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/armorfeeds/modules/custom/armorfeeds_branch/src/Plugin/Block/DefaultBlock.php",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/armorfeeds/themes/custom/armorfeeds/templates/forms/contact/contact-us.html.twig",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/armorfeeds/themes/custom/armorfeeds/armorfeeds.info.yml",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/armorfeeds/themes/custom/armorfeeds/resources/sass/_mixins.scss",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/armorfeeds/themes/custom/armorfeeds/resources/sass/_footer.scss",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/armorfeeds/themes/custom/armorfeeds/resources/sass/_header.scss",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/armorfeeds/themes/custom/armorfeeds/gulpfile.js",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/armorfeeds/themes/custom/armorfeeds/resources/sass/_variables.scss",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/armorfeeds/themes/custom/armorfeeds/resources/sass/_fonts.scss",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/armorfeeds/modules/custom/armorfeeds_branch/armorfeeds_branch.libraries.yml",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/armorfeeds/themes/custom/armorfeeds/armorfeeds.theme",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/armorfeeds/themes/custom/armorfeeds/templates/forms/input.html.twig",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/armorfeeds/modules/custom/banner/templates/banner_standard.html.twig",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/armorfeeds/modules/custom/banner/assets/css/style.css",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/armorfeeds/themes/custom/armorfeeds/resources/sass/_content.scss",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/armorfeeds/themes/custom/armorfeeds/resources/sass/_navigation.scss",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/armorfeeds/themes/custom/armorfeeds/templates/nav/menu.html.twig",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/armorfeeds/themes/custom/armorfeeds/templates/forms/form-element.html.twig",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/armorfeeds/modules/custom/armorfeeds_branch/assets/js/gmap.js",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/armorfeeds/modules/custom/armorfeeds_branch/armorfeeds_branch.module",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/armorfeeds/modules/custom/armorfeeds_branch/armorfeeds_branch.info.yml",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/armorfeeds/core/lib/Drupal/Core/Entity/Routing/AdminHtmlRouteProvider.php",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/armorfeeds/modules/devel/kint/kint/config.default.php",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/armorfeeds/sites/default/services.yml",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/armorfeeds/themes/custom/armorfeeds/resources/sass/_hovereffect.scss",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/armorfeeds/themes/custom/armorfeeds/templates/views/guidelines/views-view-fields--guidelines--block.html.twig",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/pmcc4wimus/sites/all/themes/pmcc/template.php",
+		"/C/Users/Joseph Molinas/AppData/Local/Temp/scp04763/usr/local/nginx/sites.conf/pmcc4wimus.org.conf",
+		"/C/Users/Joseph Molinas/AppData/Local/Temp/scp04863/usr/local/nginx/conf/nginx.conf",
+		"/C/Users/Joseph Molinas/AppData/Local/Temp/scp38453/srv/www/pmcc4wimus.org/prod/sites/all/themes/pmcc/template.php",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/exclusa/app/Search/Provider.php",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/exclusa/app/Http/Response/SearchResponse.php",
+		"/C/PhotoshopPortable/PhotoshopPortable.ini",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/client/provision/cookbooks/nginx/recipes/default.rb",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/client/tests/_pages/Acceptance/AcceptanceImportStartPage.php",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/client/packer.json",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/client/provision/local.json",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/client/provision/local.json.sample",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/client/packer/chef.sample.json",
+		"/C/Users/Joseph Molinas/AppData/Local/Temp/scp59616/srv/www/pmcc4wimus.org/prod/sites/all/themes/pmcc/template.php",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/client/provision/cookbooks/sv-client/recipes/aws_ec2.rb",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/client/provision/cookbooks/sv-client/recipes/default.rb",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/client/provision/cookbooks/sv-client/metadata.rb",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/client/provision/cookbooks/sv-client/Berksfile",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/client/provision/cookbooks/init/recipes/default.rb",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/client/provision/cookbooks/mailcatcher/recipes/default.rb",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/client/provision/cookbooks/liquibase/recipes/default.rb",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/client/provision/cookbooks/nginx/templates/default/nginx.erb",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/client/provision/cookbooks/nginx/templates/default/site-config.erb",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/client/Vagrantfile",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/client/provision/cookbooks/sv-client/Berksfile.lock",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/newnemarph/themes/custom/nemar/assets/lib/jquerytools/js/script.js",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/newnemarph/modules/custom/nemar_motorcycle/assets/scripts/script.js",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/newnemarph/modules/custom/nemar_branch/nemar_branch.libraries.yml",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/armorfeeds/.gitignore",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/armorfeeds/.gitattributes",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/armorfeeds/modules/custom/responsive_slides/templates/responsiveslides.html.twig",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/armorfeeds/themes/custom/armorfeeds/assets/js/main.js",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/newnemarph/themes/custom/nemar/nemar.info.yml",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/newnemarph/modules/custom/nemar_motorcycle/assets/css/styles.css",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/newnemarph/themes/custom/nemar/templates/views/motorcycles/views-exposed-form--motorcycles.html.twig",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/newnemarph/themes/custom/nemar/resources/sass/_overrides.scss",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/newnemarph/themes/custom/nemar/resources/sass/_content.scss",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/armorfeeds/modules/custom/responsive_slides/responsive_slides.module",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/newnemarph/modules/custom/nemar_motorcycle/nemar_motorcycle.libraries.yml",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/newnemarph/modules/custom/nemar_motorcycle/nemar_motorcycle.module",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/newnemarph/sites/default/services.yml",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/drupal8/modules/custom/responsive_slides/templates/responsiveslides.html.twig",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/drupal8/modules/custom/bootstrap_carousel/src/Plugin/Block/BootstrapCarouselBlock.php",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/drupal8/modules/custom/bootstrap_carousel/bootstrap_carousel.module",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/drupal8/modules/custom/responsive_slides/src/Plugin/Block/ResponsiveSlidesBlock.php",
+		"/C/Windows/System32/drivers/etc/HOSTS.BackupByPhotoshopPortable",
+		"/C/Windows/System32/drivers/etc/us_back_hosts",
+		"/C/Windows/System32/drivers/etc/hosts",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/drupal8/modules/custom/responsive_slides/responsive_slides.module",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/drupal8/modules/custom/responsive_slides/src/Entity/slides.php",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/drupal8/sites/default/services.yml",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/drupal8/core/lib/Drupal/Core/Field/BaseFieldDefinition.php",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/drupal8/modules/custom/bootstrap_carousel/templates/bootstrap_carousel.html.twig",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/newnemarph/core/lib/Drupal/Core/Field/FieldStorageDefinitionInterface.php",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/newnemarph/core/lib/Drupal/Core/Field/BaseFieldDefinition.php",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/armorfeeds/core/lib/Drupal/Core/Field/BaseFieldDefinition.php",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/ushers-report/app/User.php",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/ushers-report/database/migrations/2014_10_12_000000_create_users_table.php",
+		"/C/Users/Joseph Molinas/Desktop/ushers-report/ushers-report/app/User.php",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/ushers-report/app/Http/routes.php",
+		"/C/Users/Joseph Molinas/Desktop/ushers-report/ushers-report/database/migrations/2014_10_12_000000_create_users_table.php",
+		"/C/Users/Joseph Molinas/Desktop/ushers-report/ushers-report/app/Providers/RouteServiceProvider.php",
+		"/C/Users/Joseph Molinas/Desktop/ushers-report/composer.json",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/weirdcycles/themes/custom/weirdcycles/resources/sass/_mixins.scss",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/weirdcycles/themes/custom/weirdcycles/templates/content/page.html.twig",
+		"/C/Users/Joseph Molinas/AppData/Local/Temp/scp39407/srv/www/weirdcyclesph.com/dev/sites/default/settings.php",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/weirdcycles/themes/custom/weirdcycles/resources/sass/_components.scss",
+		"/C/Users/Joseph Molinas/Desktop/WorkFolder/JosephProj/weirdcycles/themes/custom/weirdcycles/resources/sass/_hovereffect.scss"
+	],
+	"find":
+	{
+		"height": 34.0
+	},
+	"find_in_files":
+	{
+		"height": 90.0,
+		"where_history":
+		[
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\exclusa\\.vagrant",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\simple-php-router\\src",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\JosephProj\\armorfeeds\\modules\\custom\\armorfeeds_branch",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\JosephProj\\armorfeeds\\themes\\custom\\armorfeeds\\bower_components\\bootstrap-sass\\assets\\stylesheets\\bootstrap",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\JosephProj\\armorfeeds\\themes\\custom\\armorfeeds\\resources\\sass",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\JosephProj\\pmcc4wimus\\sites\\all\\modules\\videojs",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\exclusa\\app",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\JosephProj\\armorfeeds\\themes\\custom\\armorfeeds\\templates",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\JosephProj\\armorfeeds\\themes\\custom\\armorfeeds\\resources\\sass",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\JosephProj\\newnemarph\\themes\\custom\\nemar",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\JosephProj\\armorfeeds\\themes\\custom\\armorfeeds\\resources\\sass",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\JosephProj\\newnemarph\\themes\\custom\\nemar\\resources\\sass",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\JosephProj\\newnemarph\\modules\\custom\\nemar_motorcycle",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\JosephProj\\newnemarph\\themes\\custom\\nemar",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\JosephProj\\drupal8\\core\\modules\\image",
+			"C:\\Users\\Joseph Molinas\\Desktop\\ushers-report\\ushers-report\\app",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\JosephProj\\weirdcycles\\themes\\custom\\weirdcycles\\resources\\sass",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\JosephProj\\newnemarph\\themes\\custom\\nemar\\templates",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\JosephProj\\weirdcycles\\themes\\custom\\weirdcycles\\resources\\sass",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\JosephProj\\armorfeeds\\themes\\custom\\armorfeeds\\resources\\sass",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\JosephProj\\armorfeeds\\themes\\custom\\armorfeeds\\templates",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\JosephProj\\armorfeeds\\themes\\custom\\armorfeeds\\resources\\sass",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\JosephProj\\armorfeeds\\core\\themes\\classy\\templates",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\JosephProj\\armorfeeds\\themes\\custom\\armorfeeds\\resources\\sass",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\application",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\etc\\database",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\tests",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\tests\\_fixtures",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\tests\\api",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\JosephProj\\vmail\\public",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\JosephProj\\vmail\\templates",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\JosephProj\\newnemarph\\themes\\custom\\nemar\\resources\\sass",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\vendor\\streamlineverify\\SV",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\etc",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\data",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client-dev\\application",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client-dev\\vendor\\streamlineverify\\SV\\src",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\etc",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\application\\views\\app\\import",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\vendor\\streamlineverify\\SV",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\application",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\tests",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\vendor\\streamlineverify",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\tests",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\application",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\vendor\\streamlineverify\\SV\\src",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\www\\js\\app_check",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\www\\js",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\vendor\\streamlineverify\\SV\\src",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\www\\js\\app_check",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\vendor\\streamlineverify",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\application\\classes",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\application",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\svbot\\provision",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\application\\classes\\Service\\Cron",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\application\\classes\\Controller",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\application",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\application\\classes",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\application\\classes\\Controller",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\application",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\application\\classes",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\application",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client-dev\\application",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client-dev\\application\\classes",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client-dev\\application",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client-dev\\vendor",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client-dev\\application",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client-dev",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client-dev\\vendor",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client-dev\\tests",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\application\\views",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\etc\\database",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\application\\views",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client-develop\\application\\classes",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client-develop\\application",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client-develop\\www",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client-develop\\www\\jsapp",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client-develop\\www\\app_files",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client-develop\\application\\classes",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client-develop\\application\\classes\\Controller",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client-develop\\etc\\database\\migrations",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client-develop",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client-develop\\etc\\database\\migrations",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client-develop\\www\\js",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client-develop\\www\\js\\app_check",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client-develop\\vendor\\streamlineverify\\exclusions-searcher\\src",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client-develop\\vendor\\streamlineverify\\SV\\src",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\JosephProj\\drupal8\\core\\modules\\node",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\JosephProj\\drupal8\\core\\modules\\field",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\application",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\application\\classes",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\application",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\JosephProj\\weirdcycles\\themes\\custom\\weirdcycles\\assets",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\JosephProj\\weirdcycles\\themes\\custom\\weirdcycles\\bower_components",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\JosephProj\\weirdcycles\\themes\\custom\\weirdcycles\\resources\\sass",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\application",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\www",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\application\\classes",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client",
+			"C:\\Users\\Joseph Molinas\\Desktop\\print",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\provision",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\provision",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\etc\\database",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\application",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\provision",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\provision",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\client\\provision",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\JosephProj\\drupal8\\modules\\custom\\responsive_slides",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\manila\\exclusion-importer\\tests",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\JosephProj",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\manila\\exclusion-importer\\app",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\import-only\\application",
+			"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\search-api\\exclusa\\vendor\\streamlineverify\\exclusions-searcher\\src"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"log_ip",
+			"private",
+			"private_key",
+			"f87103d3e5774972b99c474968c84dad",
+			"a093ccaf-03db-47fa-8363-6c694119c2de",
+			"f87103d3e5774972b99c474968c84dad",
+			"select",
+			"$this->post",
+			"$this->get",
+			"$app",
+			"add",
+			"clear",
+			"message",
+			"url",
+			"http",
+			"args",
+			"_args",
+			"nemar",
+			"body",
+			"layout-submenu",
+			"twig",
+			"getRoutes",
+			"cdn",
+			"4",
+			"version_compare",
+			"but this version is not supported",
+			"SearchServiceProvider",
+			"navbar-nav",
+			"a:hover",
+			".layout-nav",
+			".nav",
+			".navbar-toggle",
+			"navbar-header",
+			"navbar-toggle",
+			".container",
+			".form-control",
+			"scrol",
+			"post",
+			"alt",
+			"desc",
+			"body",
+			"Cardinality",
+			"unli",
+			"getSettings",
+			"setSetting",
+			"web.php",
+			"route",
+			"blue",
+			"highlight",
+			".btn",
+			"layout-subcontent",
+			"sub-content",
+			"input-group",
+			"specsTable",
+			"getEntity",
+			"title",
+			"arrayManipulate",
+			"responsive_slides_block_image_fid",
+			"twig",
+			".layout-content",
+			".content-wrapper",
+			".container",
+			".content-wrapper",
+			"navbar-collapse",
+			"navbar-nav",
+			".btn",
+			"logo",
+			".navbar-header",
+			".layout-nav",
+			"Raleway",
+			"sear",
+			"?)\"[",
+			"raw",
+			"createCheckReportView",
+			"check",
+			"resultsRe",
+			"results",
+			"employeeIdsString",
+			"query",
+			"resul",
+			"check",
+			"checkresu",
+			"check",
+			"get",
+			"log",
+			"readFromFile",
+			"getVideo",
+			"ChecResultsFetcher",
+			"sidebar-first",
+			"one",
+			"content-war",
+			"brand",
+			"dd(",
+			"sear",
+			"Sphi",
+			"svg-641-add-sphinx-counter-table.sql",
+			"sphi",
+			"getCheckDateSheet",
+			"new",
+			"$value",
+			"getCellLabel",
+			"new",
+			"export",
+			"check-match-query-builder",
+			"export",
+			"excel",
+			"/templates",
+			"login",
+			"30px 0",
+			"getSlimConfigAction",
+			"matc",
+			"isValidQuery",
+			"Matcher",
+			"search",
+			"matche",
+			"fieldNames",
+			"$fieldNames",
+			"search",
+			"id",
+			"getId",
+			"construct",
+			"inllis",
+			"model",
+			"getId",
+			"exce",
+			"dateFieldKeys",
+			"convertDateFieldsToDateTime",
+			"apd"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"$app->post",
+			"$app->get",
+			"$this",
+			"",
+			"            SELECT @a + 1 as id, id as employee_id, 'custom_id', 'first_name', 'alt_first_name', \\ alt_first_name_2, alt_first_name_3', 'alt_first_name_4', 'alt_first_name_5, \\\n            alt_middle_name', 'alt_middle_name_2', 'alt_middle_name_3', 'alt_middle_name_4', \\\n            alt_middle_name_5', 'middle_name', 'maiden_name', 'last_name', \\\n            alt_last_name', 'alt_last_name_2', 'alt_last_name_3', 'alt_last_name_4', \\\n            alt_last_name_5', 'business', 'alt_business1', 'alt_business_2', 'business', 'address', \\\n            full_address, 'state', 'zip', 'address1', 'address2', 'city', \\\n            date_of_birth, 'upin', 'npi', 'ssn_last_four', 'certification_number' \\",
+			"newjersey",
+			"fieldNames"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 3,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "/C/Users/Joseph Molinas/Desktop/WorkFolder/client/provision/local.json",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3299,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								787,
+								787
+							]
+						],
+						"settings":
+						{
+							"auto_complete": true,
+							"syntax": "Packages/JavaScript/JSON.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1296.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/C/Users/Joseph Molinas/Desktop/WorkFolder/client/provision/cookbooks/liquibase/recipes/default.rb",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1509,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								149,
+								149
+							]
+						],
+						"settings":
+						{
+							"auto_complete": false,
+							"syntax": "Packages/Ruby/Ruby.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/C/Users/Joseph Molinas/AppData/Roaming/Sublime Text 3/Packages/User/Xdebug.sublime-settings",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 48,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "default.rb",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 387,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								387,
+								387
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 24.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 100.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.xdebug":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "sv-client.sublime-project",
+	"replace":
+	{
+		"height": 44.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"streamlineverify/sv/check/checkedemployee",
+				"vendor\\streamlineverify\\SV\\src\\Check\\CheckedEmployee.php"
+			],
+			[
+				"tenn",
+				"app\\Import\\Lists\\Tennessee.php"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"C:\\Users\\Joseph Molinas\\Desktop\\WorkFolder\\sv-client.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+		"xdebug":
+		{
+			"restore_index":
+			{
+				"60":
+				{
+					"group": 0,
+					"index": 0
+				},
+				"71":
+				{
+					"group": 0,
+					"index": 1
+				},
+				"93":
+				{
+					"group": 0,
+					"index": 2
+				},
+				"94":
+				{
+					"group": 0,
+					"index": 3
+				}
+			},
+			"restore_layout":
+			{
+				"cells":
+				[
+					[
+						0,
+						0,
+						1,
+						1
+					]
+				],
+				"cols":
+				[
+					0.0,
+					1.0
+				],
+				"rows":
+				[
+					0.0,
+					1.0
+				]
+			}
+		}
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 361.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

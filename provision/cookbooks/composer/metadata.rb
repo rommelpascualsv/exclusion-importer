@@ -1,0 +1,5 @@
+name             'composer'
+maintainer       'SV Developers'
+maintainer_email 'SVDevelopers@streamlineverify.com'
+description      'sets up composer'
+version          '0.1.0'
