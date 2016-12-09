@@ -145,15 +145,10 @@ class NorthDakota extends ExclusionList
 
         $splitValue = preg_split('/\s+/', $value);
 
-        if (count($splitValue) > 1) {
-            $exclusion['type'] = $splitValue[0];
-            $exclusion['date'] = $this->formatDate($splitValue[1]);
-        } else {
-            $exclusion['type'] = null;
-            $exclusion['date'] = $this->formatDate($splitValue[0]);
-        }
+        return count($splitValue) > 1
+            ? ['type' => $splitValue[0], 'date' => $this->formatDate($splitValue[1])]
+            : ['type' => null, 'date' => $this->formatDate($splitValue[0])];
 
-        return $exclusion;
     }
 
     /**
