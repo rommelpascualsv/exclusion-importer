@@ -141,7 +141,6 @@ class NorthDakota extends ExclusionList
      */
     private function splitExclusionDateField($value)
     {
-
         $value = trim($value);
 
         $splitValue = preg_split('/\s+/', $value);
@@ -165,8 +164,7 @@ class NorthDakota extends ExclusionList
      */
     private function formatDate($date)
     {
-        $formattedDate = date('Y-m-d', strtotime($date));
-        return $formattedDate;
+        return $formattedDate = date('Y-m-d', strtotime($date));
     }
 
     /**
