@@ -8,7 +8,7 @@ apt_package "mongodb-org" do
     action :install
 end
 
-emplate "/etc/systemd/system/mongodb.service" do
+template "/etc/systemd/system/mongodb.service" do
     source "mongodb.service.erb"
     action :create
     notifies :run, "execute[reload_services]", :immediately
@@ -16,5 +16,5 @@ end
 
 execute "sudo systemctl enable mongodb"
 
-execute 'echo "memory_limit = 1G" > /etc/php/#{PHP_VER}/mods-available/gnupg.ini/mods-available/memory_limit.ini && ln -s /etc/php/#{PHP_VER}/mods-available/memory_limit.ini /etc/php/#{PHP_VER}/cli/conf.d/10-memory_limit.ini' do
+execute 'echo "memory_limit = 1G" > /etc/php/#{PHP_VER}/mods-available/gnupg.ini/mods-available/memory_limit.ini && ln -s /etc/php/#{PHP_VER}/mods-available/memory_limit.ini /etc/php/#{PHP_VER}/cli/conf.d/10-memory_limit.ini'
 

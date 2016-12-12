@@ -1,7 +1,7 @@
 LIQUIBASE_MYSQL = node['mysql']
 URL = node['liquibase']
 uri = URI.parse(URL)
-FILE_NAME File.basename(uri.path)
+FILE_NAME = File.basename(uri.path)
 
 # Install Java
 apt_package "openjdk-#{node['java_version']}-jre-headless" do
@@ -13,7 +13,7 @@ end
 execute "liquibase_install" do
     cwd "/root"
     action :run
-    command "wget -q #{URL} -O #{FILE_NAME} && sudo mkdir -p /usr/local/liquibase && sudo unzip -o liquibase-3.5.1-bin -d /usr/local/liquibase && sudo chmod +x /usr/local/liquibase"
+    command "wget -q #{URL} -O #{FILE_NAME} && sudo mkdir -p /usr/local/liquibase && sudo unzip -o #{FILE_NAME} -d /usr/local/liquibase && sudo chmod +x /usr/local/liquibase"
 end
 
 # Create liquibase properties
