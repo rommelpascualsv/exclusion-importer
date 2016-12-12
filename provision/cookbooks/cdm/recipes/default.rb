@@ -1,6 +1,8 @@
 include_recipe "init"
+include_recipe "tools"
 include_recipe "nginx"
 include_recipe "php"
+include_recipe "mongodb"
 include_recipe "mysql"
 include_recipe "curl"
 include_recipe "git"
