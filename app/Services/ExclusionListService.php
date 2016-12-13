@@ -40,6 +40,10 @@ class ExclusionListService implements ExclusionListServiceInterface
             
             $activeExclusionList->update_required = $this->exclusionListStatusHelper->isUpdateRequired($prefix, $this->getLatestFileHashFor($prefix));
 
+            $files = $this->exclusionListFileRepo->getFilesForPrefix($prefix);
+
+            $activeExclusionList->last_file_hash_changed = ($files ? $files[0]->date_created : null);
+
             $collection[$prefix] = json_decode(json_encode($activeExclusionList), true);
         }
         return $collection;
