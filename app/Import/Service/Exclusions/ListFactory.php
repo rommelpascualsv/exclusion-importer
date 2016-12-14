@@ -20,6 +20,7 @@ class ListFactory
         'ne1'               => 'Nebraska',
         'nv1'               => 'Nevada',
         'njcdr'             => 'NewJersey',
+        'njmfdper'          => 'NewJerseyMedicaidFraudDivision',
         'nyomig'            => 'NewYork',
         'oh1'               => 'Ohio',
         'oig'               => 'OIG',
