@@ -1,5 +1,5 @@
 USER_HOME_DIR = "/home/#{node['root_user']}"
-COMPOSER_INSTALL_CMD = node['app_context'] == 'development' ? 'COMPOSER_DISCARD_CHANGES=true composer install --prefer-dist' : 'COMPOSER_DISCARD_CHANGES=true composer install --prefer-dist --no-dev'
+COMPOSER_INSTALL_CMD = 'COMPOSER_DISCARD_CHANGES=true composer install --prefer-dist'
 COMPOSER_HOME = "#{USER_HOME_DIR}/.composer"
 
 execute "install_composer" do

@@ -9,6 +9,10 @@ apt_package "openjdk-#{node['java_version']}-jre-headless" do
     timeout 3000
 end
 
+apt_package "libmysql-java" do
+    action :install
+end
+
 # Install liquibase
 execute "liquibase_install" do
     cwd "/root"
@@ -29,9 +33,19 @@ template "#{node['project_root']}/cdm.build.properties" do
     action :create
 end
 
-execute "run_migrations" do
-    cwd "#{node['project_root']}/vendor/bin"
-    action :run
-    command "phing init"
+template "#{node['project_root']}/prod.build.properties" do
+    source "prod.build.properties.erb"
+    variables({
+        :db_host => LIQUIBASE_MYSQL['host'],
+        :db_port => LIQUIBASE_MYSQL['port'],
+        :db_user => LIQUIBASE_MYSQL['user'],
+        :db_pass => LIQUIBASE_MYSQL['pass'],
+        :db_name => LIQUIBASE_MYSQL['name']
+    })
+    action :create
+end
+
+execute "vendor/bin/phing init" do
+    cwd node['project_root']
 end
 
