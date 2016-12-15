@@ -41,6 +41,10 @@ class ExclusionListService implements ExclusionListServiceInterface
             
             $activeExclusionList->update_required = $this->exclusionListStatusHelper->isUpdateRequired($prefix, $this->getLatestFileHashFor($prefix));
 
+            $files = $this->exclusionListFileRepo->getFilesForPrefix($prefix);
+
+            $activeExclusionList->last_file_hash_changed = ($files ? $files[0]->date_created : null);
+
             if ($activeExclusionList->prefix == 'sam') {
                 $sam = new Sam\SamService();
                 $activeExclusionList->import_url = $sam->getUrl();
