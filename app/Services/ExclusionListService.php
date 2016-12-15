@@ -1,9 +1,10 @@
 <?php
 namespace App\Services;
 
+use App\Import\Lists\Sam;
 use App\Services\Contracts\ExclusionListServiceInterface;
 use App\Repositories\ExclusionListRepository;
-use App\Repositories\ExclusionListFileRepository;
+use App\Repositories\FileRepository;
 
 /**
  * Service class for retrieval and management of exclusion lists
@@ -16,8 +17,8 @@ class ExclusionListService implements ExclusionListServiceInterface
     private $exclusionListStatusHelper;
     
     public function __construct(ExclusionListRepository $exclusionListRepo,
-        ExclusionListFileRepository $exclusionListFileRepo, 
-        ExclusionListStatusHelper $exclusionListStatusHelper)
+                                FileRepository $exclusionListFileRepo,
+                                ExclusionListStatusHelper $exclusionListStatusHelper)
     {
         $this->exclusionListRepo = $exclusionListRepo;
         $this->exclusionListFileRepo = $exclusionListFileRepo;
@@ -43,6 +44,11 @@ class ExclusionListService implements ExclusionListServiceInterface
             $files = $this->exclusionListFileRepo->getFilesForPrefix($prefix);
 
             $activeExclusionList->last_file_hash_changed = ($files ? $files[0]->date_created : null);
+
+            if ($activeExclusionList->prefix == 'sam') {
+                $sam = new Sam\SamService();
+                $activeExclusionList->import_url = $sam->getUrl();
+            }
 
             $collection[$prefix] = json_decode(json_encode($activeExclusionList), true);
         }

@@ -50,4 +50,5 @@ INSERT INTO `exclusion_lists` (`id`, `prefix`, `accr`, `description`, `import_ur
 (49,  'unsancentities', 'UN Sanc Entities', 'UN Sanctions Entities List', 'https://www.un.org/sc/suborg/sites/www.un.org.sc.suborg/files/consolidated.xml', 0,  0),
 (50,  'healthmil',  'Health Mil', 'Military Health System', 'http://www.health.mil/Military-Health-Topics/Access-Cost-Quality-and-Safety/Quality-And-Safety-of-Healthcare/Program-Integrity/Sanctioned-Providers', 0,  0),
 (51,  'csl', 'Consolidated Screening List', 'Consolidated Screening List', 'https://api.trade.gov/consolidated_screening_list/search.csv?api_key=OHZYuksFHSFao8jDXTkfiypO', 0,0),
-(52,  'vt1', 'VT DVHA', 'Department of Vermont Health Access', '', 0,0);
+(52,  'vt1', 'VT DVHA', 'Department of Vermont Health Access', '', 0,0),
+(53,  'njmfdper', 'NJMFDPER', 'State of New Jersey Medicaid Fraud Division Provider Exclusion Report', 'http://nj.gov/comptroller/divisions/medicaid/disqualified/monthly_exclusion_report.pdf', 0,0);
