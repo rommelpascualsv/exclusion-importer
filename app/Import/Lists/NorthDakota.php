@@ -159,7 +159,7 @@ class NorthDakota extends ExclusionList
      */
     private function formatDate($date)
     {
-        return $formattedDate = date('Y-m-d', strtotime($date));
+        return date('Y-m-d', strtotime($date));
     }
 
     /**
