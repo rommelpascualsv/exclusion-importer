@@ -63,6 +63,6 @@
     <include file="./changelog/svg-337-schedule-credential-db-imports.changelog.xml" relativeToChangelogFile="true" />
     <include file="./changelog/svg-811-az1-term-date-should-be-formatted-as-a-date.changelog.xml" relativeToChangelogFile="true" />
     <include file="./changelog/svg-810-nd1-exclusion_date-should-be-split-from-exclusion-type.changelog.xml" relativeToChangelogFile="true" />
-
+    <include file="./changelog/svg-1027-new-jersey-(njcdr)-to-use-pdf-in-importing-list.changelog.xml" relativeToChangelogFile="true" />
 
 </databaseChangeLog>

@@ -97,6 +97,7 @@
                 foreach ($exclusionLists as $prefix => $info)
                 {
                     $lastImportedDate = $info['last_imported_date'] ? $info['last_imported_date'] : '--';
+                    $lastUpdatedDate = $info['last_file_hash_changed'] ? $info['last_file_hash_changed'] : '--';
                     $lastImportStats = $info['last_import_stats'] ? json_decode($info['last_import_stats']) : null;
                     
                     $added = $lastImportStats ? $lastImportStats->added : 0;
@@ -104,6 +105,7 @@
                     $previousRecordCount = $lastImportStats ? $lastImportStats->previousRecordCount : 0;
                     $currentRecordCount = $lastImportStats ? $lastImportStats->currentRecordCount : 0;                  
                 ?>
+
                     <tr>
                         <td><?= $info['accr'] ?></td>
                         <td>
@@ -113,6 +115,10 @@
                         		Last imported on <span id="<?= $info['prefix'] ?>-last-import-ts"><?= $lastImportedDate ?></span>
                        		</span>
                        		<br />
+                            <span class="small import-stat">
+                        		Last updated on <span id="<?= $info['prefix'] ?>-last-import-ts"><?= $lastUpdatedDate ?></span>
+                       		</span>
+                            <br />
                        		<span class="small import-stat">
                         		CDM : <span id="<?= $info['prefix'] ?>-current-record-count"><?= $currentRecordCount ?></span>
                        		</span>
