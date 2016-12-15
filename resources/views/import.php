@@ -121,7 +121,7 @@
                        		</span>
                         <br />
                         <?php if($lastImportError): ?>
-                            <span class="small import-stat">
+                            <span class="small error-stat">
                         		Last import error: <span id="<?= $info['prefix'] ?>-last-import-ts"><?= $lastImportError->message ?></span>
                        		</span>
                             <br />
