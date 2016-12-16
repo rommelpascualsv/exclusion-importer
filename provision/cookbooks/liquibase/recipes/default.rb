@@ -1,4 +1,6 @@
 LIQUIBASE_MYSQL = node['mysql']
+MYSQL_ROOT_PASS = node['mysql']['pass']
+MYSQL_DB_NAME = node['mysql']['name']
 URL = node['liquibase']
 uri = URI.parse(URL)
 FILE_NAME = File.basename(uri.path)
@@ -49,3 +51,7 @@ execute "vendor/bin/phing init" do
     cwd node['project_root']
 end
 
+SQL_COMMAND = "USE #{MYSQL_DB_NAME}; \
+    UPDATE exclusion_lists SET is_active = 1 WHERE id <> 0;"
+
+execute "mysql -u root -p#{MYSQL_ROOT_PASS} -e \"#{SQL_COMMAND}\" 2>/dev/null"
