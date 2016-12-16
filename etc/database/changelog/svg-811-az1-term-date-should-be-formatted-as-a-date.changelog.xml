@@ -3,7 +3,7 @@
 
     <changeSet author="sv" id="svg-811-az1-term-date-should-be-formatted-as-a-date-1" context="prod">
         <sql>
-            UPDATE exclusion_lists_cdm.az1_records
+            UPDATE az1_records
             SET term_date = STR_TO_DATE( term_date, '%m/%d/%Y' );
         </sql>
     </changeSet>

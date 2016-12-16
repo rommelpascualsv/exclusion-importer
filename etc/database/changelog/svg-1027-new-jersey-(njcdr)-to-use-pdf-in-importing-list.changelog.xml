@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="sv" id="svg-1027-new-jersey-(njcdr)-to-use-pdf-in-importing-list.changelog-1" context="prod">
+        <createTable tableName="njmfdper_records">
+            <column autoIncrement="true" name="id" type="INT(11)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="id"/>
+            </column>
+            <column name="provider_name" type="VARCHAR(255)" />
+            <column name="title" type="VARCHAR(45)" />
+            <column name="npi_number" type="VARCHAR(45)" />
+            <column name="date_of_birth" type="DATE" />
+            <column name="street" type="VARCHAR(100)" />
+            <column name="city" type="VARCHAR(50)" />
+            <column name="state" type="VARCHAR(50)" />
+            <column name="zip" type="VARCHAR(10)" />
+            <column name="action" type="VARCHAR(50)" />
+            <column name="effective_date" type="DATE" />
+            <column name="expiration_date" type="DATE" />
+            <column name="new_hash" type="BINARY(16)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="hash" type="BINARY(16)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_created" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+        
+</databaseChangeLog>
