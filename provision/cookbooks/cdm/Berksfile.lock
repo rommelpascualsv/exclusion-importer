@@ -3,6 +3,8 @@ DEPENDENCIES
     path: ../codeception
   composer
     path: ../composer
+  config
+    path: ../config
   curl
     path: ../curl
   git
@@ -27,6 +29,7 @@ DEPENDENCIES
 GRAPH
   codeception (0.1.0)
   composer (0.1.0)
+  config (0.1.0)
   curl (0.1.0)
   git (0.1.0)
   init (0.1.0)

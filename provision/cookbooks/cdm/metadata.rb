@@ -6,6 +6,7 @@ version          '0.1.0'
 
 depends          'codeception'
 depends          'composer'
+depends          'config'
 depends          'curl'
 depends          'git'
 depends          'init'

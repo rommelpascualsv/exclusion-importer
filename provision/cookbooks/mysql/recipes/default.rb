@@ -1,6 +1,6 @@
 MYSQL_VER = node['mysql_version']
 MYSQL_SERVER = "mysql-server-#{MYSQL_VER}"
-MYSQL_ROOT_PASS = "root"
+MYSQL_ROOT_PASS = node['mysql']['pass']
 MYSQL_CONF_FILE = "mysqld_custom.cnf"
 MYSQL_CONF_FILE_PATH = "/etc/mysql/mysql.conf.d/#{MYSQL_CONF_FILE}"
 
@@ -34,3 +34,9 @@ template "#{MYSQL_CONF_FILE_PATH}" do
     action :create
     notifies :restart, resources(:service => "mysql"), :immediately
 end
+
+INSTALL_SQL = "GRANT ALL ON *.* TO 'root'@'%' IDENTIFIED BY '#{MYSQL_ROOT_PASS}' WITH GRANT OPTION; \
+    FLUSH PRIVILEGES; \
+    CREATE SCHEMA IF NOT EXISTS exclusion_lists_backup;"
+
+execute "mysql -u root -p#{MYSQL_ROOT_PASS} -e \"#{INSTALL_SQL}\" 2>/dev/null"

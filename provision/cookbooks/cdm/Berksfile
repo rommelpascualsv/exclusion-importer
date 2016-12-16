@@ -2,6 +2,7 @@ source 'https://supermarket.chef.io'
 
 cookbook 'codeception', path: '../codeception'
 cookbook 'composer', path: '../composer'
+cookbook 'config', path: '../config'
 cookbook 'curl', path: '../curl'
 cookbook 'git', path: '../git'
 cookbook 'init', path: '../init'

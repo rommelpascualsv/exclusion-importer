@@ -10,4 +10,6 @@ tests/_support/_generated/*
 tests/**/*Tester.php
 tests/**/*suite.yml
 build.properties
+cdm.build.properties
+prod.build.properties
 provision/local.json

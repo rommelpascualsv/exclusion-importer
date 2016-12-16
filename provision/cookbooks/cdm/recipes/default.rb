@@ -1,4 +1,5 @@
 include_recipe "init"
+include_recipe "config"
 include_recipe "tools"
 include_recipe "nginx"
 include_recipe "php"

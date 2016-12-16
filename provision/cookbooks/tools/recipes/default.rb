@@ -9,6 +9,7 @@ end
 # gnumeric which includes ssconvert for converting excel to csv
 apt_package 'gnumeric' do
     action :install
+    timeout 3000
 end
 
 # this package contains pdftotext
