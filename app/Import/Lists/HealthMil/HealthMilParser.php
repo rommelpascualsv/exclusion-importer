@@ -49,7 +49,25 @@ class HealthMilParser
         $postData['pagecolumns_0$content_2$ddlState'] = "";
         $postData['pagecolumns_0$content_2$btnViewAll'] = "View All";
 
-        return $response = $this->scraper->fetchPostResource(self::FORM_URL, $postData, $this->headers);
+        return $this->scraper->fetchPostResource(self::FORM_URL, $postData,$this->headers);
+
+    }
+
+    public function getResultsFromPagination($response) {
+
+        $html = (string)$response->getBody();
+        $this->scraper->setDom($html);
+
+        $paginationItems = $this->scraper->xPathQuery("//span[@id='pagecolumns_0_content_2_dpResults']/a");
+        $lastPageLink = $paginationItems->item($paginationItems->length - 1)->getAttribute('href');
+        $maxPage = explode('=', $lastPageLink)[1];
+        $items = [];
+        for ($i = 1; $i <= $maxPage; $i++) {
+            $response = $this->scraper->fetchGetResource(self::FORM_URL . '?page=' . $i . '#pagingAnchor',$this->headers);
+            $items[] = $this->getItems($response);
+        }
+
+        return $items;
     }
 
     public function getItems($response)

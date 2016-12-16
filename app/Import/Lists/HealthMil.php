@@ -42,7 +42,7 @@ class HealthMil extends ExclusionList
         $this->parser = new HealthMilParser();
         $response = $this->parser->crawlFormPage();
         $response = $this->parser->getViewAllList($response);
-        $items = $this->parser->getItems($response);
+        $items = $this->parser->getResultsFromPagination($response);
         $this->data = $items;
     }
 }
