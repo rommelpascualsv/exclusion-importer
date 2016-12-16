@@ -1,11 +1,13 @@
 <?php
 namespace App\Services;
 
-use App\Events\FileImportEvent;
-use App\Repositories\FileImportEventRepository;
+use App\Events\Event;
+use App\Events\FileImportEventFactory;
+use App\Repositories\EventRepository;
+use App\Import\Lists\Sam;
 use App\Services\Contracts\ExclusionListServiceInterface;
 use App\Repositories\ExclusionListRepository;
-use App\Repositories\ExclusionListFileRepository;
+use App\Repositories\FileRepository;
 
 /**
  * Service class for retrieval and management of exclusion lists
@@ -16,17 +18,17 @@ class ExclusionListService implements ExclusionListServiceInterface
     private $exclusionListRepo;
     private $exclusionListFileRepo;
     private $exclusionListStatusHelper;
-    private $fileImportEventRepo;
+    private $eventRepo;
 
     public function __construct(ExclusionListRepository $exclusionListRepo,
-                                ExclusionListFileRepository $exclusionListFileRepo,
+                                FileRepository $exclusionListFileRepo,
                                 ExclusionListStatusHelper $exclusionListStatusHelper,
-                                FileImportEventRepository $fileImportEventRepo)
+                                EventRepository $eventRepo)
     {
         $this->exclusionListRepo = $exclusionListRepo;
         $this->exclusionListFileRepo = $exclusionListFileRepo;
         $this->exclusionListStatusHelper = $exclusionListStatusHelper;
-        $this->fileImportEventRepo = $fileImportEventRepo;
+        $this->eventRepo = $eventRepo;
 
     }
     /**
@@ -47,11 +49,18 @@ class ExclusionListService implements ExclusionListServiceInterface
 
             $files = $this->exclusionListFileRepo->getFilesForPrefix($prefix);
 
-            $lastEventForPrefix = $this->fileImportEventRepo->findLatestEventOfPrefix($prefix);
+            $lastEventForPrefix = $this->eventRepo->findLatestEventOfObjectId($prefix);
 
             $activeExclusionList->last_file_hash_changed = ($files ? $files[0]->date_created : null);
 
-            $activeExclusionList->last_import_error = ($lastEventForPrefix && $lastEventForPrefix->getStatus() == FileImportEvent::EVENTSTATUS_FAIL ? $lastEventForPrefix->getDescription() : null);
+            $activeExclusionList->last_import_error = ($lastEventForPrefix && $lastEventForPrefix->getStatus() == Event::EVENTSTATUS_FAIL ? $lastEventForPrefix->getDescription() : null);
+
+            $activeExclusionList->last_file_hash_changed = ($files ? $files[0]->date_created : null);
+
+            if ($activeExclusionList->prefix == 'sam') {
+                $sam = new Sam\SamService();
+                $activeExclusionList->import_url = $sam->getUrl();
+            }
 
             $collection[$prefix] = json_decode(json_encode($activeExclusionList), true);
         }
