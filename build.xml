@@ -4,7 +4,7 @@
 
 	<property file="./cdm.build.properties" prefix="cdm" />
 	<property file="./prod.build.properties" prefix="prod" />
-    <property file="./stage.build.properties" prefix="prod" />
+    <property file="./stage.build.properties" prefix="stage" />
 
 	<taskdef name="codeception" classname="tests.tasks.RunCodeceptionTask" />
 	<taskdef name="update" classname="LiquibaseTask" />

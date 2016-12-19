@@ -12,4 +12,5 @@ tests/**/*suite.yml
 build.properties
 cdm.build.properties
 prod.build.properties
+stage.build.properties
 provision/local.json
