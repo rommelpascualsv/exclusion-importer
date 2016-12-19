@@ -1,6 +1,8 @@
-LIQUIBASE_MYSQL = node['mysql']
-MYSQL_ROOT_PASS = node['mysql']['pass']
-MYSQL_DB_NAME = node['mysql']['name']
+LIQUIBASE_MYSQL_CDM = node['mysql']['cdm']
+LIQUIBASE_MYSQL_PROD = node['mysql']['prod']
+LIQUIBASE_MYSQL_STAGE = node['mysql']['stage']
+MYSQL_ROOT_PASS = node['mysql']['cdm']['pass']
+MYSQL_DB_NAME = node['mysql']['cdm']['name']
 URL = node['liquibase']
 uri = URI.parse(URL)
 FILE_NAME = File.basename(uri.path)
@@ -24,29 +26,42 @@ end
 
 # Create liquibase properties
 template "#{node['project_root']}/cdm.build.properties" do
-    source "cdm.build.properties.erb"
+    source "build.properties.erb"
     variables({
-        :db_host => LIQUIBASE_MYSQL['host'],
-        :db_port => LIQUIBASE_MYSQL['port'],
-        :db_user => LIQUIBASE_MYSQL['user'],
-        :db_pass => LIQUIBASE_MYSQL['pass'],
-        :db_name => LIQUIBASE_MYSQL['name']
+        :db_host => LIQUIBASE_MYSQL_CDM['host'],
+        :db_port => LIQUIBASE_MYSQL_CDM['port'],
+        :db_user => LIQUIBASE_MYSQL_CDM['user'],
+        :db_pass => LIQUIBASE_MYSQL_CDM['pass'],
+        :db_name => LIQUIBASE_MYSQL_CDM['name']
     })
     action :create
 end
 
+# Create liquibase properties
 template "#{node['project_root']}/prod.build.properties" do
-    source "prod.build.properties.erb"
+    source "build.properties.erb"
     variables({
-        :db_host => LIQUIBASE_MYSQL['host'],
-        :db_port => LIQUIBASE_MYSQL['port'],
-        :db_user => LIQUIBASE_MYSQL['user'],
-        :db_pass => LIQUIBASE_MYSQL['pass'],
-        :db_name => LIQUIBASE_MYSQL['name']
+        :db_host => LIQUIBASE_MYSQL_PROD['host'],
+        :db_port => LIQUIBASE_MYSQL_PROD['port'],
+        :db_user => LIQUIBASE_MYSQL_PROD['user'],
+        :db_pass => LIQUIBASE_MYSQL_PROD['pass'],
+        :db_name => LIQUIBASE_MYSQL_PROD['name']
     })
     action :create
 end
 
+# Create liquibase properties
+template "#{node['project_root']}/stage.build.properties" do
+    source "build.properties.erb"
+    variables({
+        :db_host => LIQUIBASE_MYSQL_STAGE['host'],
+        :db_port => LIQUIBASE_MYSQL_STAGE['port'],
+        :db_user => LIQUIBASE_MYSQL_STAGE['user'],
+        :db_pass => LIQUIBASE_MYSQL_STAGE['pass'],
+        :db_name => LIQUIBASE_MYSQL_STAGE['name']
+    })
+    action :create
+end
 execute "vendor/bin/phing init" do
     cwd node['project_root']
 end

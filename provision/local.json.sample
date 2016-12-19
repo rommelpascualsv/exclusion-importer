@@ -20,14 +20,31 @@ Please follow these steps to ensure proper provisioning:
     "php_version": "5.6",
     "java_version": "9",
     "mysql_version": "5.7",
+    "app_context": "development",
     "npi_data": "https://www.dropbox.com/s/ran8415mozl18mx/npidata_20050523-20150412.sample.csv",
     "liquibase": "https://github.com/liquibase/liquibase/releases/download/liquibase-parent-3.5.3/liquibase-3.5.3-bin.zip",
     "mysql": {
-        "host": "localhost",
-        "port": 3306,
-        "name": "exclusion_lists_cdm",
-        "user": "root",
-        "pass": "root"
+        "cdm" : {
+            "host": "localhost",
+            "port": 3306,
+            "name": "exclusion_lists_cdm",
+            "user": "root",
+            "pass": "root"
+        },
+        "prod" : {
+            "host": "localhost",
+            "port": 3306,
+            "name": "exclusion_lists",
+            "user": "root",
+            "pass": "root"
+        },
+        "stage" : {
+            "host": "localhost",
+            "port": 3306,
+            "name": "exclusion_lists_staging",
+            "user": "root",
+            "pass": "root"
+        }
     },
     "xdebug": {
         "remote_host": "10.0.2.2",

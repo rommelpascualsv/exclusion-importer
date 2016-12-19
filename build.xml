@@ -4,12 +4,13 @@
 
 	<property file="./cdm.build.properties" prefix="cdm" />
 	<property file="./prod.build.properties" prefix="prod" />
+    <property file="./stage.build.properties" prefix="prod" />
 
 	<taskdef name="codeception" classname="tests.tasks.RunCodeceptionTask" />
 	<taskdef name="update" classname="LiquibaseTask" />
 	<taskdef name="tag" classname="LiquibaseTagTask" />
     <taskdef name="rollback" classname="LiquibaseRollbackTask" />
-	
+
     <target name="db:cdm-update">
         <update
                 command="update"
@@ -21,8 +22,8 @@
                 url="${cdm.url}">
 
             <parameter name='contexts' value='cdm,prod' />
-        </update>    	
-    	
+        </update>
+
     </target>
 
 	<target name="db:prod-update">
@@ -39,16 +40,31 @@
 			<parameter name='contexts' value='prod' />
 		</update>
 	</target>
-	
-    <target name="init" depends="db:cdm-update,db:prod-update" />
-        
+
+    <target name="db:stage-update">
+
+        <update
+                command="update"
+                jar="${stage.liquibase.jar}"
+                classpathref="${stage.mysql.driver}"
+                changelogFile="${stage.changelogFile}"
+                username="${stage.username}"
+                password="${stage.password}"
+                url="${stage.url}">
+
+            <parameter name='contexts' value='stage' />
+        </update>
+    </target>
+
+    <target name="init" depends="db:cdm-update, db:stage-update, db:prod-update" />
+
     <!-- run all tests -->
     <target name="test" depends="loadTestData">
         <!-- run codeception tests. "type" value can be "unit", "functional", "acceptance" or "" (blank means all types)-->
         <codeception type="" />
-        
+
         <echo msg="${line.separator}" />
-        
+
         <rollback
             rollbackTag="checkpoint"
             jar="${cdm.liquibase.jar}"
@@ -58,7 +74,7 @@
             password="${cdm.password}"
             url="${cdm.url}" />
     </target>
-	
+
     <target name="loadTestData"
         description="Load test data into database">
         <tag
@@ -69,7 +85,7 @@
             username="${cdm.username}"
             password="${cdm.password}"
             url="${cdm.url}" />
-            
+
         <update
             command="update"
             jar="${cdm.liquibase.jar}"
@@ -78,7 +94,7 @@
             username="${cdm.username}"
             password="${cdm.password}"
             url="${cdm.url}">
-             
+
             <parameter name='contexts' value='test' />
         </update>
     </target>
