@@ -10,17 +10,20 @@ use App\Import\Lists\NewYork;
 use App\Import\Lists\Tennessee;
 use App\Import\Lists\UnSanctionsIndividuals;
 use App\Services\ExclusionListHttpDownloader;
+use CDM\Test\TestCase;
 
 /**
  * vendor/bin/codecept run unit Import/Services/ExclusionListHttpDownloaderTest --debug
  */
-class ExclusionListHttpDownloaderTest extends \Codeception\TestCase\Test
+class ExclusionListHttpDownloaderTest extends TestCase
 {
     private $downloader;
     private $downloadDirectory;
     
-    protected function _before()
+    public function setUp()
     {
+        parent::setUp();
+
         $this->downloader = new ExclusionListHttpDownloader();
         
         $this->downloadDirectory = base_path('tests/unit/Services/download-test');
