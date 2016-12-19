@@ -7,7 +7,7 @@ class NewJerseyMedicaidFraudDivision extends ExclusionList
 {
     public $dbPrefix = 'njmfdper';
 
-    public $pdfToText = "java -Dfile.encoding=utf-8 -jar /vagrant/etc/tabula.jar -g -p all -r";
+    public $pdfToText = "java -Dfile.encoding=utf-8 -jar /vagrant/etc/tabula.jar -g -p all -r -u";
 
     public $uri = "http://nj.gov/comptroller/divisions/medicaid/disqualified/monthly_exclusion_report.pdf";
 
@@ -41,8 +41,8 @@ class NewJerseyMedicaidFraudDivision extends ExclusionList
     ];
 
     private $listOfExcludedRows = [
-        'PROVIDER NAME,TITLE,"DATE OFBIRTH",NPI NUMBER,STREET,CITY,"STATE",ZIP,ACTION,"EFFECTIVEDATE","EXPIRATIONDATE",',
-        'PROVIDER NAME,TITLE,"DATE OFBIRTH",NPI NUMBER,STREET,CITY,"STATE",ZIP,ACTION,"EFFECTIVEDATE","EXPIRATIONDATE"'
+        'PROVIDER NAME,TITLE,"DATE OF BIRTH",NPI NUMBER,STREET,CITY,"STA TE",ZIP,ACTION,"EFFECTIVE DATE","EXPIRATION DATE",',
+        'PROVIDER NAME,TITLE,"DATE OF BIRTH",NPI NUMBER,STREET,CITY,"STA TE",ZIP,ACTION,"EFFECTIVE DATE","EXPIRATION DATE"'
     ];
 
     public $dateColumns = [
@@ -64,7 +64,7 @@ class NewJerseyMedicaidFraudDivision extends ExclusionList
         $rows = preg_split('/(\r)?\n(\s+)?/', $this->data);
         $data = [];
         foreach ($rows as $value) {
-            $value = preg_replace('/\r/', '', $value);
+            $value = preg_replace('/\r/', ' ', trim($value));
             if (empty($value) || $this->isExcludedRow($value)) {
                 continue;
             }
