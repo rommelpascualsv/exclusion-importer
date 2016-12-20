@@ -38,4 +38,6 @@ end
 INSTALL_SQL = "GRANT ALL ON *.* TO 'root'@'%' IDENTIFIED BY '#{MYSQL_ROOT_PASS}' WITH GRANT OPTION; \
     FLUSH PRIVILEGES;"
 
-execute "mysql -u root -p#{MYSQL_ROOT_PASS} -e \"#{INSTALL_SQL}\" 2>/dev/null"
+execute "mysql -u root -p#{MYSQL_ROOT_PASS} -e \"#{INSTALL_SQL}\" 2>/dev/null" do
+    notifies :restart, resources(:service => "mysql")
+end
