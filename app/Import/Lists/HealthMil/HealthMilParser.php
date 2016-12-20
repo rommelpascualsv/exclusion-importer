@@ -15,10 +15,13 @@ class HealthMilParser
         'Host' => 'www.health.mil'
     ];
 
-    const BASE_URL = "http://www.health.mil";
+    const BASE_URL = "https://www.health.mil";
 
     const FORM_URL = "Military-Health-Topics/Access-Cost-Quality-and-Safety/Quality-And-Safety-of-Healthcare/Program-Integrity/Sanctioned-Providers";
 
+    const SESS_COOKIE_NAME = 'ASP.NET_SessionId';
+
+    const DOMAIN = 'health.mil';
     /**
      * HealthMilParser constructor.
      */
@@ -41,7 +44,12 @@ class HealthMilParser
     {
         $html = (string)$response->getBody();
         $this->scraper->setDom($html);
-        $this->headers['Cookie'] = $response->getSetCookie();
+
+        $cookie = $response->getSetCookie();
+        $this->headers['Cookie'] = $cookie;
+
+        $this->scraper->setSessCookie($cookie, self::SESS_COOKIE_NAME, self::DOMAIN);
+
         $postData = $this->getHiddenInputFields();
         $postData['ctl01$txtSearch'] = "";
         $postData['pagecolumns_0$content_2$txtName'] = "";
@@ -53,24 +61,27 @@ class HealthMilParser
 
     }
 
-    public function getResultsFromPagination($response) {
+    public function getItems($response) {
 
         $html = (string)$response->getBody();
         $this->scraper->setDom($html);
 
-        $paginationItems = $this->scraper->xPathQuery("//span[@id='pagecolumns_0_content_2_dpResults']/a");
-        $lastPageLink = $paginationItems->item($paginationItems->length - 1)->getAttribute('href');
+        $paginationNodes = $this->scraper->xPathQuery("//span[@id='pagecolumns_0_content_2_dpResults']/a");
+        $lastPageLink = $paginationNodes->item($paginationNodes->length - 1)->getAttribute('href');
+
         $maxPage = explode('=', $lastPageLink)[1];
+
         $items = [];
+
         for ($i = 1; $i <= $maxPage; $i++) {
             $response = $this->scraper->fetchGetResource(self::FORM_URL . '?page=' . $i . '#pagingAnchor',$this->headers);
-            $items[] = $this->getItems($response);
+            $items = array_merge($items, $this->getNodeItems($response));
         }
 
         return $items;
     }
 
-    public function getItems($response)
+    public function getNodeItems($response)
     {
         $items = [];
         $html = (string)$response->getBody();
@@ -80,7 +91,6 @@ class HealthMilParser
             $processData = $this->extractData($item);
             $items[] = $this->processData($processData);
         }
-
         return $items;
     }
 
