@@ -90,11 +90,11 @@ SQL;
 
 
     /**
-     *  Get all the new_hash of the active table
+     *  Get all the records of the active table
      *
-     * @return array
+     * @return associative array - where key is the new hash of the record
      */
-    private function getHashOfCurrentRecords()
+    private function getAllCurrentRecords()
     {
         $collection =  collect(app('db')->table(SamRepository::SAM_TABLE_NAME)
             ->select('*')
@@ -180,7 +180,7 @@ SQL;
 
         $this->prepareTempTable();
 
-        $hashOfCurrentRecords = $this->getHashOfCurrentRecords();
+        $allCurrentRecords = $this->getAllCurrentRecords();
 
         $hashOfActiveRecords = [];
 
@@ -211,7 +211,7 @@ SQL;
             }
 
             // new record
-            if (! array_key_exists(strtoupper($newHash), $hashOfCurrentRecords)) {
+            if (! array_key_exists(strtoupper($newHash), $allCurrentRecords)) {
                 $data['hash'] = self::getUnhexValue($newHash);
                 $data['new_hash'] = self::getUnhexValue($newHash);
                 $this->toCreate[] = $data;
@@ -225,7 +225,7 @@ SQL;
                 $hashOfActiveRecords[] = strtoupper($newHash);
 
                 // update existing record
-                if (! $data == $hashOfCurrentRecords[strtoupper($newHash)]) {
+                if (! $data == $allCurrentRecords[strtoupper($newHash)]) {
                     $this->samRepository->updateRecord($data, $newHash);
                 }
             }
@@ -234,7 +234,7 @@ SQL;
 
         info('Done inserting records.');
 
-        $toDeactivate = $this->getRecordsToDeactivate($hashOfCurrentRecords, $hashOfActiveRecords);
+        $toDeactivate = $this->getRecordsToDeactivate($allCurrentRecords, $hashOfActiveRecords);
         $this->samRepository->deactivateRecordsByHash($toDeactivate);
 
         $this->opmExtrasRemover->invoke();
