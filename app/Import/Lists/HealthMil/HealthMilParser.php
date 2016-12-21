@@ -48,7 +48,8 @@ class HealthMilParser
         $cookie = $response->getSetCookie();
         $this->headers['Cookie'] = $cookie;
 
-        $this->scraper->setSessCookie($cookie, self::SESS_COOKIE_NAME, self::DOMAIN);
+        $sessCookie = $this->getSessionCookie($cookie);
+        $this->scraper->setSessCookie($sessCookie, self::SESS_COOKIE_NAME, self::DOMAIN);
 
         $postData = $this->getHiddenInputFields();
         $postData['ctl01$txtSearch'] = "";
@@ -57,7 +58,7 @@ class HealthMilParser
         $postData['pagecolumns_0$content_2$ddlState'] = "";
         $postData['pagecolumns_0$content_2$btnViewAll'] = "View All";
 
-        return $this->scraper->fetchPostResource(self::FORM_URL, $postData,$this->headers);
+        return $this->scraper->fetchPostResource(self::FORM_URL, $postData, $this->headers);
 
     }
 
@@ -163,5 +164,25 @@ class HealthMilParser
         }
 
         return $inputArray;
+    }
+
+    /**
+     * @param $headerCookie
+     * @return array
+     */
+    public function getSessionCookie($cookie)
+    {
+        $headerCookie = explode(';', $cookie);
+        $sessCookie = array_filter($headerCookie,
+            function ($segment) {
+                return preg_match('/' . self::SESS_COOKIE_NAME . '/', $segment);
+            }
+        );
+
+        if (! $sessCookie) {
+            throw new \Exception('Session cookie name invalid.');
+        }
+
+        return explode('=', $sessCookie[0])[1];
     }
 }
