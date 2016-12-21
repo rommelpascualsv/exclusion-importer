@@ -48,6 +48,7 @@ class HealthMilParser
         $cookie = $response->getSetCookie();
         $this->headers['Cookie'] = $cookie;
 
+        //set session cookie for consistency across all pages
         $sessCookie = $this->getSessionCookie($cookie);
         $this->scraper->setSessCookie($sessCookie, self::SESS_COOKIE_NAME, self::DOMAIN);
 
@@ -67,13 +68,16 @@ class HealthMilParser
         $html = (string)$response->getBody();
         $this->scraper->setDom($html);
 
+        //get pagination nodes and get the max number of pages
         $paginationNodes = $this->scraper->xPathQuery("//span[@id='pagecolumns_0_content_2_dpResults']/a");
         $lastPageLink = $paginationNodes->item($paginationNodes->length - 1)->getAttribute('href');
 
+        //get the max page value from the href value of the node
         $maxPage = explode('=', $lastPageLink)[1];
 
         $items = [];
 
+        //loop in getting items per page
         for ($i = 1; $i <= $maxPage; $i++) {
             $response = $this->scraper->fetchGetResource(self::FORM_URL . '?page=' . $i . '#pagingAnchor',$this->headers);
             $items = array_merge($items, $this->getNodeItems($response));
