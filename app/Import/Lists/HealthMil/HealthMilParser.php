@@ -73,13 +73,18 @@ class HealthMilParser
         $lastPageLink = $paginationNodes->item($paginationNodes->length - 1)->getAttribute('href');
 
         //get the max page value from the href value of the node
-        $maxPage = explode('=', $lastPageLink)[1];
+        $maxPage = explode('=', $lastPageLink);
+
+        if (! isset($maxPage[1])) {
+            throw new \Exception('Max page not set.');
+        }
 
         $items = [];
 
         //loop in getting items per page
-        for ($i = 1; $i <= $maxPage; $i++) {
-            $response = $this->scraper->fetchGetResource(self::FORM_URL . '?page=' . $i . '#pagingAnchor',$this->headers);
+        for ($i = 1; $i <= $maxPage[1]; $i++) {
+            $page = '?page=' . $i;
+            $response = $this->scraper->fetchGetResource(self::FORM_URL . $page, $this->headers);
             $items = array_merge($items, $this->getNodeItems($response));
         }
 
@@ -177,16 +182,21 @@ class HealthMilParser
     public function getSessionCookie($cookie)
     {
         $headerCookie = explode(';', $cookie);
-        $sessCookie = array_filter($headerCookie,
-            function ($segment) {
+        $sessCookie = array_filter($headerCookie, function ($segment) {
                 return preg_match('/' . self::SESS_COOKIE_NAME . '/', $segment);
             }
         );
 
-        if (! $sessCookie) {
+        if (! $sessCookie && ! isset($sessCookie[0])) {
             throw new \Exception('Session cookie name invalid.');
         }
 
-        return explode('=', $sessCookie[0])[1];
+        $cookie = explode('=', $sessCookie[0]);
+
+        if (! isset($cookie[1])) {
+            throw new \Exception('Session cookie not set.');
+        }
+
+        return $cookie[1];
     }
 }
