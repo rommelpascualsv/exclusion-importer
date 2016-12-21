@@ -22,4 +22,21 @@ class AliasSeparatorUtil
         return json_encode($processed);
     }
 
+    /**
+     * This will remove the AKAs and DBAs from the provided string.
+     *
+     * @param $toProcess e.g. "BYERS, RAYMOND AKA FAYE BYERS DBA HATIM"
+     * @return string e.g. "BYERS, RAYMOND"
+     */
+    public static function removeAliases($toProcess)
+    {
+        if ( ! empty(trim($toProcess))) {
+            $pattern = '/(?i)(AKA|DBA)[\s]?[:]?[;]?[\s]?\W/';
+            $split = preg_split($pattern, $toProcess);
+            $trimmed = array_map('trim', $split);
+            return implode("", array_slice($trimmed, 0, 1));
+        }
+        return '';
+    }
+
 }

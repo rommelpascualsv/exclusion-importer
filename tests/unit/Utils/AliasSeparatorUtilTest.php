@@ -126,4 +126,12 @@ class AliasSeparatorUtilTest extends TestCase
         $actual = AliasSeparatorUtil::getAliases($string);
         $this->assertEquals($expected, $actual);
     }
+
+    public function testShouldReturnValueWithoutAlias()
+    {
+        $string = 'BYERS, RAYMOND AKA FAYE BYERS DBA BYERS AKA FAYE';
+        $expected = 'BYERS, RAYMOND';
+        $actual = AliasSeparatorUtil::removeAliases($string);
+        $this->assertEquals($expected, $actual);
+    }
 }
