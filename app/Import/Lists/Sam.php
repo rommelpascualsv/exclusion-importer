@@ -104,6 +104,39 @@ SQL;
 
     }
 
+    private function getUniqueRows($csvContent)
+    {
+        $rows = [];
+
+        // this loop will insert new records and update the existing
+        foreach ($csvContent as $key => $value) {
+
+            if ($key == 0) {
+                continue;
+            }
+
+            $value = $this->sanitizeStringArray($value);
+
+            $data = array_combine($this->columns, array_intersect_key($value, $this->columns));
+
+            $data['Record_Status'] = 1;
+
+            $activeDate = strtotime($data['Active_Date']);
+            $data['Active_Date'] = ($activeDate) ? strftime('%Y-%m-%d', $activeDate) : NULL;
+
+            try {
+                $newHash = new SamHash($data);
+            } catch (\InvalidArgumentException $e) {
+                $this->warn('An error occurred at value ' . $key . ': ' . $e->getMessage());
+                continue;
+            }
+
+            $rows[(string)$newHash] = $data;
+
+        }
+        return $rows;
+    }
+
 
     private static function getUnhexValue($value)
     {
@@ -174,8 +207,6 @@ SQL;
 
         $csvFileLocation = $downloadDirectory .$this->samService->getFileName() .'.CSV';
 
-        $totalRecordCount = count(file($csvFileLocation)) - 1; // w/out header
-
         $csv = Reader::createFromPath($csvFileLocation);
 
         $this->prepareTempTable();
@@ -185,35 +216,18 @@ SQL;
         $hashOfActiveRecords = [];
 
         $csvContent = $csv->fetch();
+
+        $uniqueRowsInFile = $this->getUniqueRows($csvContent);
+
+        $totalRecordCount = count($uniqueRowsInFile);
+
         $rowCnt = 1;
 
-        // this loop will insert new records and update the existing
-        foreach ($csvContent as $key => $value) {
-
-            if ($key == 0) {
-                continue;
-            }
-
-            $value = $this->sanitizeStringArray($value);
-
-            $data = array_combine($this->columns, array_intersect_key($value, $this->columns));
-
-            $data['Record_Status'] = 1;
-
-            $activeDate = strtotime($data['Active_Date']);
-            $data['Active_Date'] = ($activeDate) ? strftime('%Y-%m-%d', $activeDate) : NULL;
-
-            try {
-                $newHash = new SamHash($data);
-            } catch (\InvalidArgumentException $e) {
-                $this->warn('An error occurred at value ' . $key . ': ' . $e->getMessage());
-                continue;
-            }
-
+        foreach ($uniqueRowsInFile as $hash => $data) {
             // new record
-            if (! array_key_exists(strtoupper($newHash), $hashOfCurrentRecords)) {
-                $data['hash'] = self::getUnhexValue($newHash);
-                $data['new_hash'] = self::getUnhexValue($newHash);
+            if (! array_key_exists($hash, $hashOfCurrentRecords)) {
+                $data['hash'] = self::getUnhexValue($hash);
+                $data['new_hash'] = self::getUnhexValue($hash);
                 $this->toCreate[] = $data;
                 
                 if (sizeof($this->toCreate) == 10 || $rowCnt == $totalRecordCount) {
@@ -222,13 +236,13 @@ SQL;
                 }
 
             } else { // existing record
-                $hashOfActiveRecords[] = strtoupper($newHash);
+                $hashOfActiveRecords[] = $hash;
 
                 // update existing record
-                $currentRecord = array_intersect_key($hashOfCurrentRecords[strtoupper($newHash)], $data);
+                $currentRecord = array_intersect_key($hashOfCurrentRecords[$hash], $data);
                 $currentRecord['Record_Status'] = (int)$currentRecord['Record_Status'];
                 if ( $data !== $currentRecord) {
-                    $this->samRepository->updateRecord($data, $newHash);
+                    $this->samRepository->updateRecord($data, $hash);
                 }
             }
             $rowCnt++;
