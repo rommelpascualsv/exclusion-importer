@@ -15,12 +15,11 @@ interface ImportFileServiceInterface
 	 */
 	public function refreshRecords();
 	
-	/**
-	 * Imports the downloaded file to database
-	 * @param $request The Request object from frontend
-	 * @param $listPrefix The state prefix
-	 *
-	 * @return object The object containing the result of the operation
-	 */
+    /**
+     * Imports the downloaded file to database
+     * @param $url the URL of the file to import
+     * @param $listPrefix the prefix of the list
+     * @return mixed
+     */
 	public function importFile($url, $listPrefix);
 }

@@ -35,10 +35,10 @@ INNER JOIN sam_records_temp sam_records_temp_alias2 ON (
 	sam_records_temp_alias1.Classification = sam_records_temp_alias2.Classification
 )
 AND (
-	sam_records_temp_alias1. NAME = sam_records_temp_alias2. NAME
+	sam_records_temp_alias1.NAME = sam_records_temp_alias2.NAME
 )
 AND (
-	sam_records_temp_alias1. FIRST = sam_records_temp_alias2. FIRST
+	sam_records_temp_alias1.FIRST = sam_records_temp_alias2.FIRST
 )
 AND (
 	sam_records_temp_alias1.Middle = sam_records_temp_alias2.Middle

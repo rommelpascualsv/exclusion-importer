@@ -1,5 +1,7 @@
 <?php namespace App\Import\Lists;
 
+use Smalot\PdfParser\Parser;
+
 class Alaska extends ExclusionList
 {
     public $dbPrefix = 'ak1';
@@ -48,7 +50,14 @@ class Alaska extends ExclusionList
     	$this->parse();
     	parent::preProcess();
     }
-    
+
+    public function retrieveData()
+    {
+        $this->pdfToText = "java -Dfile.encoding=utf-8 -jar ../etc/tabula.jar -p 2-" .$this->getPdfPageCount();
+        parent::retrieveData();
+    }
+
+
     public function parse()
     {
     	// remove all page numbers
@@ -76,7 +85,7 @@ class Alaska extends ExclusionList
     
     	$this->data = $data;
     }
-    
+
     /**
      * Applies the specific overrides to correct the data
      * @param array $columns the column array
@@ -121,5 +130,13 @@ class Alaska extends ExclusionList
             || strpos($value, 'EXCLUSION REASON') !== false
             || strpos($value, 'DATEAUTHORITY') !== false
             || preg_match($this->monthNameAndFourDigitYearRegex, $value) === 1;
+    }
+
+    private function getPdfPageCount()
+    {
+        $parsePdf = new Parser();
+        $pdf = $parsePdf->parseFile($this->uri);
+        $pdfPageCount = count($pdf->getPages());
+        return $pdfPageCount;
     }
 }
