@@ -81,10 +81,10 @@ class HealthMilParser
 
         $items = [];
 
+        $url = self::FORM_URL . '?page=';
         //loop in getting items per page
         for ($i = 1; $i <= $maxPage[1]; $i++) {
-            $page = '?page=' . $i;
-            $response = $this->scraper->fetchGetResource(self::FORM_URL . $page, $this->headers);
+            $response = $this->scraper->fetchGetResource($url . $i, $this->headers);
             $items = array_merge($items, $this->getNodeItems($response));
         }
 
