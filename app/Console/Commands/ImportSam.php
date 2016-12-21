@@ -112,15 +112,15 @@ class ImportSam extends Command
 
         foreach ($uniqueRowsInFile as $hash => $rowData) {
             $total++;
-            if (! array_key_exists(strtoupper($hash), $currentRecords)) {
+            if (! array_key_exists($hash, $currentRecords)) {
                 $rowData['hash'] = app('db')->raw("UNHEX('{$hash}')");
                 $rowData['new_hash'] = app('db')->raw("UNHEX('{$hash}')");
                 // can we just create it here?!?!
                 $this->toCreate[] = $rowData;
             }
             else {
-				$activeRecordHashes[] = strtoupper($hash);
-                $currentRecord = array_intersect_key($currentRecords[strtoupper($hash)], $rowData);
+				$activeRecordHashes[] = $hash;
+                $currentRecord = array_intersect_key($currentRecords[$hash], $rowData);
                 $currentRecord['Record_Status'] = (int)$currentRecord['Record_Status'];
                 if ($rowData !== $currentRecord) {
                     $affectedRows = $this->updateRecords($rowData, $hash);
