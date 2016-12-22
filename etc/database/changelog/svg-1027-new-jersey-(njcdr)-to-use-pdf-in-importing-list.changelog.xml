@@ -28,5 +28,16 @@
             </column>
         </createTable>
     </changeSet>
+
+    <changeSet author="sv" id="svg-1027-new-jersey-(njcdr)-to-use-pdf-in-importing-list.changelog-2" context="cdm">
+        <insert tableName="exclusion_lists">
+            <column name="prefix" value="njmfdper" />
+            <column name="accr" value="NJMFDPER" />
+            <column name="description" value="State of New Jersey Medicaid Fraud Division Provider Exclusion Report" />
+            <column name="import_url" value="http://nj.gov/comptroller/divisions/medicaid/disqualified/monthly_exclusion_report.pdf" />
+            <column name="is_auto_import" value="0" />
+            <column name="is_active" value="0" />
+        </insert>
+    </changeSet>
         
 </databaseChangeLog>
