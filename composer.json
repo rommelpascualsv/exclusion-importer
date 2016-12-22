@@ -14,7 +14,7 @@
         "symfony/dom-crawler": "2.7.*",
         "vlucas/phpdotenv": "~1.0",
         "league/flysystem": "^1.0",
-        "streamlineverify/svbot": "~0.4",
+        "streamlineverify/svbot": "dev-SVG-435_CDM_is_only_importing_15_Health_Mil_records",
         "streamlineverify/support": "~2.1",
         "league/flysystem-ziparchive": "^1.0",
         "codeception/codeception":"*",
