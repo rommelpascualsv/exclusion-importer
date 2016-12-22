@@ -17,7 +17,7 @@ class AliasSeparatorUtilTest extends TestCase
 
     public function testShouldReturnEmptyArrayWhenNoAkaOrDbaIsFound()
     {
-        $string = '2258 PHARMACY, INC.';
+        $string = 'DOSHI, PRIYAKANT';
         $expected = json_encode([]);
         $actual = AliasSeparatorUtil::getAliases($string);
         $this->assertEquals($expected, $actual);
@@ -105,8 +105,8 @@ class AliasSeparatorUtilTest extends TestCase
 
     public function testShouldReturnAliasesWhenAkaIsMoreThanOne()
     {
-        $string = 'BYERS, RAYMOND AKA FAYE BYERS AKA BYERS AKA FAYE';
-        $expected = json_encode(['FAYE BYERS', 'BYERS', 'FAYE']);
+        $string = 'BYERS, RAYMOND AKA FAYE BYERS AKA 1BYERS AKA FAYE';
+        $expected = json_encode(['FAYE BYERS', '1BYERS', 'FAYE']);
         $actual = AliasSeparatorUtil::getAliases($string);
         $this->assertEquals($expected, $actual);
     }

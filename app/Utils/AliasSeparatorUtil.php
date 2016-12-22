@@ -13,8 +13,8 @@ class AliasSeparatorUtil
     public static function getAliases($toProcess)
     {
         $processed = [];
-        if ( ! empty(trim($toProcess))) {
-            $pattern = '/(?i)(AKA|DBA)[\s]?[:]?[;]?[\s]?\W/';
+        if (! empty(trim($toProcess))) {
+            $pattern = '/(?i)(AKA|DBA)\s?[:;]?\s?\W/';
             $split = preg_split($pattern, $toProcess);
             $trimmed = array_map('trim', $split);
             $processed = array_slice($trimmed, 1);
@@ -30,13 +30,14 @@ class AliasSeparatorUtil
      */
     public static function removeAliases($toProcess)
     {
-        if ( ! empty(trim($toProcess))) {
-            $pattern = '/(?i)(AKA|DBA)[\s]?[:]?[;]?[\s]?\W/';
-            $split = preg_split($pattern, $toProcess);
-            $trimmed = array_map('trim', $split);
-            return implode("", array_slice($trimmed, 0, 1));
+        if (empty(trim($toProcess))) {
+            return '';
         }
-        return '';
+
+        $pattern = '/(?i)(AKA|DBA)\s?[:;]?\s?/';
+        $split = preg_split($pattern, $toProcess);
+        $trimmed = array_map('trim', $split);
+        return implode("", array_slice($trimmed, 0, 1));
     }
 
 }
