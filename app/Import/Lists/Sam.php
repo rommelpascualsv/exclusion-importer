@@ -241,7 +241,7 @@ SQL;
                 // update existing record
                 $currentRecord = array_intersect_key($hashOfCurrentRecords[$hash], $data);
                 $currentRecord['Record_Status'] = (int)$currentRecord['Record_Status'];
-                if ( $data !== $currentRecord) {
+                if ($data !== $currentRecord) {
                     $this->samRepository->updateRecord($data, $hash);
                 }
             }

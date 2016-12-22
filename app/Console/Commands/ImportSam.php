@@ -117,9 +117,8 @@ class ImportSam extends Command
                 $rowData['new_hash'] = app('db')->raw("UNHEX('{$hash}')");
                 // can we just create it here?!?!
                 $this->toCreate[] = $rowData;
-            }
-            else {
-				$activeRecordHashes[] = $hash;
+            } else {
+                $activeRecordHashes[] = $hash;
                 $currentRecord = array_intersect_key($currentRecords[$hash], $rowData);
                 $currentRecord['Record_Status'] = (int)$currentRecord['Record_Status'];
                 if ($rowData !== $currentRecord) {
