@@ -37,7 +37,7 @@ class AliasSeparatorUtil
         $pattern = '/(?i)(AKA|DBA)\s?[:;]?\s?/';
         $split = preg_split($pattern, $toProcess);
         $trimmed = array_map('trim', $split);
-        return implode("", array_slice($trimmed, 0, 1));
+        return implode('', array_slice($trimmed, 0, 1));
     }
 
 }
