@@ -1,5 +1,7 @@
 <?php namespace App\Import\Lists;
 
+use App\Import\Lists\WashingtonDC\WashingtonDCParser;
+
 class WashingtonDC extends ExclusionList
 {
     /**
@@ -10,12 +12,12 @@ class WashingtonDC extends ExclusionList
     /**
      * @var string
      */
-    public $uri = 'https://s3.amazonaws.com/StreamlineVerify-Storage/exclusion-lists/washington-dc/dc1.xlsx';
+    public $uri = 'http://ocp.dc.gov/page/excluded-parties-list';
 
     /**
      * @var string
      */
-    public $type = 'xlsx';
+    public $type = 'custom';
 
     /**
      * @var array
@@ -56,4 +58,14 @@ class WashingtonDC extends ExclusionList
     public $dateColumns = [
         'termination_date' => 7
     ];
+
+    private $parser;
+
+    public function retrieveData()
+    {
+        $this->parser = new WashingtonDCParser();
+        $response = $this->parser->crawlFormPage();
+        $items = $this->parser->getItems($response);
+        $this->data = $items;
+    }
 }
