@@ -10,7 +10,7 @@ class AliasSeparatorUtilTest extends TestCase
     public function testShouldReturnEmptyJsonObjectWhenPassedWithEmptyString()
     {
         $string = '';
-        $expected = json_encode([]);
+        $expected = '';
         $actual = AliasSeparatorUtil::getAliases($string);
         $this->assertEquals($expected, $actual);
     }
@@ -18,7 +18,7 @@ class AliasSeparatorUtilTest extends TestCase
     public function testShouldReturnEmptyArrayWhenNoAkaOrDbaIsFound()
     {
         $string = 'DOSHI, PRIYAKANT';
-        $expected = json_encode([]);
+        $expected = '';
         $actual = AliasSeparatorUtil::getAliases($string);
         $this->assertEquals($expected, $actual);
     }
@@ -130,6 +130,14 @@ class AliasSeparatorUtilTest extends TestCase
     public function testShouldReturnValueWithoutAlias()
     {
         $string = 'BYERS, RAYMOND AKA FAYE BYERS DBA BYERS AKA FAYE';
+        $expected = 'BYERS, RAYMOND';
+        $actual = AliasSeparatorUtil::removeAliases($string);
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testShouldReturnTheSameValue()
+    {
+        $string = 'BYERS, RAYMOND ';
         $expected = 'BYERS, RAYMOND';
         $actual = AliasSeparatorUtil::removeAliases($string);
         $this->assertEquals($expected, $actual);
