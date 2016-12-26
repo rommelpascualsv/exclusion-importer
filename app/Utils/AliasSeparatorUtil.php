@@ -9,17 +9,24 @@ class AliasSeparatorUtil
      *
      * @param $toProcess e.g. "BYERS, RAYMOND AKA FAYE BYERS DBA HATIM"
      * @return json object e.g. ([0] => FAYE BYERS, [1] => HATIM)
+     *         otherwise empty string.
      */
     public static function getAliases($toProcess)
     {
-        $processed = [];
-        if (! empty(trim($toProcess))) {
-            $pattern = '/(?i)(AKA|DBA)\s?[:;]?\s?\W/';
-            $split = preg_split($pattern, $toProcess);
-            $trimmed = array_map('trim', $split);
-            $processed = array_slice($trimmed, 1);
+        if (empty(trim($toProcess))) {
+            return '';
         }
-        return json_encode($processed);
+
+        $pattern = '/(?i)(AKA|DBA)\s?[:;]?\s?\W/';
+        $split = preg_split($pattern, $toProcess);
+        $trimmed = array_map('trim', $split);
+        $processed = array_slice($trimmed, 1);
+
+        if (empty($processed)) {
+            return '';
+        } else {
+            return json_encode($processed);
+        }
     }
 
     /**
