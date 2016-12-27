@@ -225,7 +225,9 @@ SQL;
                 $hashOfActiveRecords[] = strtoupper($newHash);
 
                 // update existing record
-                if (! $data == $hashOfCurrentRecords[strtoupper($newHash)]) {
+                $currentRecord = array_intersect_key($hashOfCurrentRecords[strtoupper($newHash)], $data);
+                $currentRecord['Record_Status'] = (int)$currentRecord['Record_Status'];
+                if ($data !== $currentRecord) {
                     $this->samRepository->updateRecord($data, $newHash);
                 }
             }
