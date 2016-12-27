@@ -31,14 +31,14 @@ class WashingtonDC extends ExclusionList
      * @var array
      */
     public $fieldNames = [
+        'action_date',
+        'termination_date',
         'company_name',
         'first_name',
         'middle_name',
         'last_name',
         'address',
-        'principals',
-        'action_date',
-        'termination_date'
+        'principals'
     ];
 
     /**
@@ -56,7 +56,7 @@ class WashingtonDC extends ExclusionList
      * @var array
      */
     public $dateColumns = [
-        'termination_date' => 7
+        'termination_date' => 'termination_date'
     ];
 
     private $parser;

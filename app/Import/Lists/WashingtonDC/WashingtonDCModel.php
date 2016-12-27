@@ -4,11 +4,9 @@ namespace App\Import\Lists\WashingtonDC;
 
 class WashingtonDCModel
 {
-    private $dateExcluded;
+    private $actionDate;
 
-    private $term;
-
-    private $exclusionDate;
+    private $terminationDate;
 
     private $companies;
 
@@ -18,47 +16,50 @@ class WashingtonDCModel
 
     private $lastName;
 
-    private $title;
-    
     private $addresses;
 
-    private $summary;
+    private $principals;
 
-    public function setDateExcluded($dateExcluded)
+    const HEADER_MAP = [
+        'companies' => 'company_name',
+        'firstName' => 'first_name',
+        'middleName' => 'middle_name',
+        'lastName' => 'last_name',
+        'addresses' => 'address',
+        'principals' => 'principals',
+        'actionDate' => 'action_date',
+        'terminationDate' => 'termination_date'
+    ];
+
+    public function setActionDate($actionDate)
     {
-        $date = new \DateTime($dateExcluded);
-        $this->dateExcluded = $date->format('Y-m-d');
+        $this->actionDate = $actionDate;
     }
 
-    public function getDateExcluded()
+    public function getActionDate()
     {
-        return $this->dateExcluded;
+        return $this->actionDate;
     }
 
-    public function setTerm($term)
+    public function setPrincipals($principals)
     {
-        $this->term = $term;
+        $this->principals = $principals;
     }
 
-    public function getTerm()
+    public function getPrincipals()
     {
-        return $this->term;
+        return $this->principals;
     }
 
-    public function setExclusionDate($term, $exclusionDate)
+    public function getTerminationDate()
     {
-        if (($timestamp = strtotime($term)) === false) {
-            return;
-        } else {
-            $date = new \DateTime($exclusionDate);
-            $date->modify($term);
-            $this->exclusionDate = $date->format('Y-m-d');
-        }
+        return $this->terminationDate;
     }
 
-    public function getExclusionDate()
+    public function setTerminationDate($terminationDate)
     {
-        return $this->exclusionDate;
+        $date = new \DateTime($terminationDate);
+        $this->terminationDate = $date->format('Y-m-d');
     }
 
     public function setCompanies($companies)
@@ -79,16 +80,6 @@ class WashingtonDCModel
     public function getAddresses()
     {
         return $this->addresses;
-    }
-
-    public function setSummary($summary)
-    {
-        $this->summary = $summary;
-    }
-
-    public function getSummary()
-    {
-        return $this->summary;
     }
 
     public function setNames($people)
@@ -132,11 +123,6 @@ class WashingtonDCModel
         }
     }
     
-    public function getTitle()
-    {
-    	return $this->title;
-    }
-
     public function getFirstName()
     {
         return $this->firstName;
@@ -158,7 +144,7 @@ class WashingtonDCModel
         $array = array();
         foreach ($reflectionClass->getProperties() as $property) {
             $property->setAccessible(true);
-            $array[$property->getName()] = $property->getValue($this);
+            $array[self::HEADER_MAP[$property->getName()]] = $property->getValue($this);
             $property->setAccessible(false);
         }
 

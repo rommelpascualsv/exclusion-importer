@@ -8,6 +8,7 @@ class WashingtonDCParser
 {
     /**
      * @var BaseScraper
+     *
      */
     private $scraper;
 
@@ -42,77 +43,78 @@ class WashingtonDCParser
         $html = (string)$response->getBody();
         $this->scraper->setDom($html);
 
-        //get pagination nodes and get the max number of pages
-        $headerNodes = $this->scraper->xPathQuery("//h3");
-        $currentTableNode = [];
-        foreach ($headerNodes as $header) {
-            if (preg_match('/Current/',$header->nodeValue)) {
-                $currentTableNode['individual'] =  $this->extractData($this->scraper->xPathQuery("following-sibling::table/tbody", $header)->item(0));
-                $currentTableNode['company'] = $this->extractData($this->scraper->xPathQuery("following-sibling::table/tbody", $header)->item(1));
-            }
+        //get the tables containing the past and current excluded entities
+        $tableNodes = $this->scraper->xPathQuery("//table");
+        $items = [];
+
+        foreach ($tableNodes as $tableNode) {
+            $headerNode = $this->scraper->xPathQuery("./thead/tr/th", $tableNode);
+            $tableContents = $this->scraper->xPathQuery("./tbody/tr", $tableNode);
+            $items = array_merge($items, $this->extractData($tableContents, $headerNode));
         }
 
-        return array_merge($currentTableNode['individual'], $currentTableNode['company']);
+        return $items;
     }
 
-    private function extractData($tableNode)
+    private function getHeaders ($headerNode)
+    {
+        $headers = [];
+        foreach ($headerNode as $header) {
+            $value = rtrim(preg_replace(['/\s+|:/'], '', ($header->nodeValue)));
+            if ($value != "") {
+                $headers[] = $value;
+            }
+        }
+        return $headers;
+    }
+
+    private function extractData($itemNode, $headerNode)
     {
 
         $itemData = [];
-//        $exclusionDateNode = $this->scraper->xPathQuery("//h3")->item(0);
-//        if ($exclusionDateNode) {
-//            $itemData['date-excluded'] = preg_replace(['/\s+|-/'], '', ($exclusionDateNode->nodeValue));
-//        }
+        $headers = $this->getHeaders($headerNode);
 
-        foreach ($tableNode->childNodes as $rows) {
-            $item = [];
-            foreach ($rows->childNodes as $column) {
-                $item[] =  preg_replace(['/\s+|-/'], '', ($column->nodeValue));
+        foreach ($itemNode as $item) {
+
+            $items = [];
+            $entities = $this->scraper->xPathQuery("./td", $item);
+
+            foreach ($entities as $key => $entity) {
+                //remove nbsp; characters
+                $content = html_entity_decode(str_replace("&nbsp;", "", htmlentities($entity->nodeValue, null, 'utf-8')));
+                $items[$headers[$key]] = trim(preg_replace('/\s+|:/', ' ', ($content)));
             }
-
-            $itemData[] = $item;
+            $itemData[] = $this->processData($items);
         }
-//
-//        $tableNodes = $this->scraper->xPathQuery("./dl/dt", $item);
-//        foreach ($tableNodes as $tableItem) {
-//            $key = preg_replace('/\s|:/', '', strtolower($tableItem->nodeValue));
-//            $value = $this->scraper->xPathQuery("./following-sibling::dd", $tableItem)->item(0);
-//            $itemData[$key] = $value->nodeValue;
-//        }
 
         return $itemData;
     }
 
-
     private function processData($item)
     {
         $model = new WashingtonDCModel();
-        if (isset($item['date-excluded'])) {
-            $model->setDateExcluded($item['date-excluded']);
+        if (isset($item['ActionDate'])) {
+            $model->setActionDate($item['ActionDate']);
         }
 
-        if (isset($item['term'])) {
-            $model->setTerm($item['term']);
+        if (isset($item['Principals'])) {
+            $model->setPrincipals($item['Principals']);
         }
 
-        if (isset($item['term']) && isset($item['date-excluded'])) {
-            $model->setExclusionDate($item['term'], $item['date-excluded']);
+        if (isset($item['TerminationDate﻿﻿'])) {
+            $model->setTerminationDate($item['TerminationDate﻿﻿']);
         }
 
-        if (isset($item['companies'])) {
-            $model->setCompanies($item['companies']);
+        if (isset($item['NameofCompany'])) {
+            $model->setCompanies($item['NameofCompany']);
         }
 
-        if (isset($item['addresses'])) {
-            $model->setAddresses($item['addresses']);
+        if (isset($item['PrincipalAddress'])) {
+            $model->setAddresses($item['PrincipalAddress']);
         }
 
-        if (isset($item['summary'])) {
-            $model->setSummary($item['summary']);
-        }
-
-        if (isset($item['people'])) {
-            $model->setNames($item['people']);
+        if (isset($item['NameofIndividual'])) {
+            $model->setNames($item['NameofIndividual']);
         }
 
         return $model->toArray();
