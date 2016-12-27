@@ -17,9 +17,17 @@ class AliasSeparatorUtil
             return '';
         }
 
+        // remove parentheses
+        $noParentheses = preg_replace('/\(|\)/', '', $toProcess);
+
+        // separate non-alias and aliases
         $pattern = '/(?i)(AKA|DBA)\s?[:;]?\s?\W/';
-        $split = preg_split($pattern, $toProcess);
+        $split = preg_split($pattern, $noParentheses);
+
+        // remove whitespace
         $trimmed = array_map('trim', $split);
+
+        // get aliases
         $processed = array_slice($trimmed, 1);
 
         if (empty($processed)) {
@@ -41,9 +49,16 @@ class AliasSeparatorUtil
             return '';
         }
 
-        $pattern = '/(?i)(AKA|DBA)\s?[:;]?\s?/';
-        $split = preg_split($pattern, $toProcess);
+        // remove parentheses
+        $noParentheses = preg_replace('/\(|\)/', '', $toProcess);
+
+        // separate non-alias and aliases
+        $pattern = '/(?i)(AKA|DBA)\s?[:;]?\s?\W/';
+        $split = preg_split($pattern, $noParentheses);
+
+        // remove whitespace
         $trimmed = array_map('trim', $split);
+
         return implode('', array_slice($trimmed, 0, 1));
     }
 
