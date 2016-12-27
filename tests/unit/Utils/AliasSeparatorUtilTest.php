@@ -142,4 +142,29 @@ class AliasSeparatorUtilTest extends TestCase
         $actual = AliasSeparatorUtil::removeAliases($string);
         $this->assertEquals($expected, $actual);
     }
+
+    public function testShouldReturnAliasesWhenAkaIsEnclosedInParentheses()
+    {
+        $string = 'KIM (aka Cepeda)';
+        $expected = json_encode(['Cepeda']);
+        $actual = AliasSeparatorUtil::getAliases($string);
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testShouldReturnValueWithoutAliasesWhenAkaIsEnclosedInParentheses()
+    {
+        $string = 'KIM (aka Cepeda)';
+        $expected = 'KIM';
+        $actual = AliasSeparatorUtil::removeAliases($string);
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testShouldReturnValueWithoutAliasesWhenDbaIsEnclosedInParentheses()
+    {
+        $string = 'KIM (dba Cepeda)';
+        $expected = 'KIM';
+        $actual = AliasSeparatorUtil::removeAliases($string);
+        $this->assertEquals($expected, $actual);
+    }
+
 }
