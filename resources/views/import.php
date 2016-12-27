@@ -98,6 +98,7 @@
                 {
                     $lastImportedDate = $info['last_imported_date'] ? $info['last_imported_date'] : '--';
                     $lastImportStats = $info['last_import_stats'] ? json_decode($info['last_import_stats']) : null;
+                    $lastCheckedDate = $info['last_check_for_changes'] ? $info['last_check_for_changes'] : '--';
                     
                     $added = $lastImportStats ? $lastImportStats->added : 0;
                     $deleted = $lastImportStats ? $lastImportStats->deleted : 0;
@@ -113,6 +114,10 @@
                         		Last imported on <span id="<?= $info['prefix'] ?>-last-import-ts"><?= $lastImportedDate ?></span>
                        		</span>
                        		<br />
+                            <span class="small import-stat">
+                        		Last checked on <span id="<?= $info['last_check_for_changes'] ?>-last-import-ts"><?= $lastCheckedDate ?></span>
+                       		</span>
+                            <br />
                        		<span class="small import-stat">
                         		CDM : <span id="<?= $info['prefix'] ?>-current-record-count"><?= $currentRecordCount ?></span>
                        		</span>
