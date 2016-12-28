@@ -57,7 +57,7 @@ class ExclusionListService implements ExclusionListServiceInterface
 
             $activeExclusionList->last_file_hash_changed = ($files ? $files[0]->date_created : null);
 
-            if ($activeExclusionList->prefix == 'sam') {
+            if ($activeExclusionList->prefix === 'sam') {
                 $sam = new Sam\SamService();
                 $activeExclusionList->import_url = $sam->getUrl();
             }
