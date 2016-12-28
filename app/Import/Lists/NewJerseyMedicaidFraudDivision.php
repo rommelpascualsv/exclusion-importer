@@ -2,12 +2,13 @@
 namespace App\Import\Lists;
 
 use \App\Import\Lists\ProviderNumberHelper as PNHelper;
+use \App\Utils\AliasSeparatorUtil;
 
 class NewJerseyMedicaidFraudDivision extends ExclusionList
 {
     public $dbPrefix = 'njmfdper';
 
-    public $pdfToText = "java -Dfile.encoding=utf-8 -jar /vagrant/etc/tabula.jar -g -p all -r";
+    public $pdfToText = "java -Dfile.encoding=utf-8 -jar /vagrant/etc/tabula.jar -g -p all -r -u";
 
     public $uri = "http://nj.gov/comptroller/divisions/medicaid/disqualified/monthly_exclusion_report.pdf";
 
@@ -24,7 +25,8 @@ class NewJerseyMedicaidFraudDivision extends ExclusionList
         'zip',
         'action',
         'effective_date',
-        'expiration_date'
+        'expiration_date',
+        'aka_dba'
     ];
 
     public $hashColumns = [
@@ -41,8 +43,8 @@ class NewJerseyMedicaidFraudDivision extends ExclusionList
     ];
 
     private $listOfExcludedRows = [
-        'PROVIDER NAME,TITLE,"DATE OFBIRTH",NPI NUMBER,STREET,CITY,"STATE",ZIP,ACTION,"EFFECTIVEDATE","EXPIRATIONDATE",',
-        'PROVIDER NAME,TITLE,"DATE OFBIRTH",NPI NUMBER,STREET,CITY,"STATE",ZIP,ACTION,"EFFECTIVEDATE","EXPIRATIONDATE"'
+        'PROVIDER NAME,TITLE,"DATE OF BIRTH",NPI NUMBER,STREET,CITY,"STA TE",ZIP,ACTION,"EFFECTIVE DATE","EXPIRATION DATE",',
+        'PROVIDER NAME,TITLE,"DATE OF BIRTH",NPI NUMBER,STREET,CITY,"STA TE",ZIP,ACTION,"EFFECTIVE DATE","EXPIRATION DATE"'
     ];
 
     public $dateColumns = [
@@ -64,19 +66,29 @@ class NewJerseyMedicaidFraudDivision extends ExclusionList
         $rows = preg_split('/(\r)?\n(\s+)?/', $this->data);
         $data = [];
         foreach ($rows as $value) {
-            $value = preg_replace('/\r/', '', $value);
+            $value = preg_replace('/\r/', ' ', $value);
             if (empty($value) || $this->isExcludedRow($value)) {
                 continue;
             }
             $row = str_getcsv($value);
 
-            // set provider number
+            // set Alias
+            $row[12] = AliasSeparatorUtil::getAliases($row[0]);
+            if (empty($row[12])) {
+                $row[12] = NULL;
+            }
+
+            // set Provider Name
+            $row[0] = AliasSeparatorUtil::removeAliases($row[0]);
+
+            // set Provider Number
             $row = PNHelper::setProviderNumberValue($row,
                 PNHelper::getProviderNumberValue($row, $this->getNpiColumnIndex()));
 
-            // set npi number array
+            // set Npi Number Array
             $row = PNHelper::setNpiValue($row,
                 PNHelper::getNpiValue($row, $this->getNpiColumnIndex()), $this->getNpiColumnIndex());
+
             array_push($data, $row);
         }
         $this->data = $data;

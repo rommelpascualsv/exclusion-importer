@@ -15,10 +15,13 @@ class HealthMilParser
         'Host' => 'www.health.mil'
     ];
 
-    const BASE_URL = "http://www.health.mil";
+    const BASE_URL = "https://www.health.mil";
 
     const FORM_URL = "Military-Health-Topics/Access-Cost-Quality-and-Safety/Quality-And-Safety-of-Healthcare/Program-Integrity/Sanctioned-Providers";
 
+    const SESS_COOKIE_NAME = 'ASP.NET_SessionId';
+
+    const DOMAIN = 'health.mil';
     /**
      * HealthMilParser constructor.
      */
@@ -41,7 +44,14 @@ class HealthMilParser
     {
         $html = (string)$response->getBody();
         $this->scraper->setDom($html);
-        $this->headers['Cookie'] = $response->getSetCookie();
+
+        $cookie = $response->getSetCookie();
+        $this->headers['Cookie'] = $cookie;
+
+        //set session cookie for consistency across all pages
+        $sessCookie = $this->getSessionCookie($cookie);
+        $this->scraper->setSessCookie($sessCookie, self::SESS_COOKIE_NAME, self::DOMAIN);
+
         $postData = $this->getHiddenInputFields();
         $postData['ctl01$txtSearch'] = "";
         $postData['pagecolumns_0$content_2$txtName'] = "";
@@ -49,10 +59,39 @@ class HealthMilParser
         $postData['pagecolumns_0$content_2$ddlState'] = "";
         $postData['pagecolumns_0$content_2$btnViewAll'] = "View All";
 
-        return $response = $this->scraper->fetchPostResource(self::FORM_URL, $postData, $this->headers);
+        return $this->scraper->fetchPostResource(self::FORM_URL, $postData, $this->headers);
+
     }
 
-    public function getItems($response)
+    public function getItems($response) {
+
+        $html = (string)$response->getBody();
+        $this->scraper->setDom($html);
+
+        //get pagination nodes and get the max number of pages
+        $paginationNodes = $this->scraper->xPathQuery("//span[@id='pagecolumns_0_content_2_dpResults']/a");
+        $lastPageLink = $paginationNodes->item($paginationNodes->length - 1)->getAttribute('href');
+
+        //get the max page value from the href value of the node
+        $maxPage = explode('=', $lastPageLink);
+
+        if (! isset($maxPage[1])) {
+            throw new \Exception('Max page not set.');
+        }
+
+        $items = [];
+
+        $url = self::FORM_URL . '?page=';
+        //loop in getting items per page
+        for ($i = 1; $i <= $maxPage[1]; $i++) {
+            $response = $this->scraper->fetchGetResource($url . $i, $this->headers);
+            $items = array_merge($items, $this->getNodeItems($response));
+        }
+
+        return $items;
+    }
+
+    public function getNodeItems($response)
     {
         $items = [];
         $html = (string)$response->getBody();
@@ -62,7 +101,6 @@ class HealthMilParser
             $processData = $this->extractData($item);
             $items[] = $this->processData($processData);
         }
-
         return $items;
     }
 
@@ -135,5 +173,30 @@ class HealthMilParser
         }
 
         return $inputArray;
+    }
+
+    /**
+     * @param $headerCookie
+     * @return array
+     */
+    public function getSessionCookie($cookie)
+    {
+        $headerCookie = explode(';', $cookie);
+        $sessCookie = array_filter($headerCookie, function ($segment) {
+                return preg_match('/' . self::SESS_COOKIE_NAME . '/', $segment);
+            }
+        );
+
+        if (! $sessCookie && ! isset($sessCookie[0])) {
+            throw new \Exception('Session cookie name invalid.');
+        }
+
+        $cookie = explode('=', $sessCookie[0]);
+
+        if (! isset($cookie[1])) {
+            throw new \Exception('Session cookie not set.');
+        }
+
+        return $cookie[1];
     }
 }
