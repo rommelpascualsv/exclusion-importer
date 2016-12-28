@@ -34,7 +34,7 @@ class SamRepository implements Repository
     {
         $affectedRows = app('db')->table(self::SAM_TEMP_TABLE_NAME)
             ->update($toUpdate)
-            ->where(app('db')->raw("HEX(new_hash)"), strtoupper($newHash));
+            ->where(app('db')->raw("HEX(new_hash)"), $newHash);
 
         info('Total Records updated ' .$affectedRows);
 
