@@ -106,7 +106,7 @@ class ImportSam extends Command
         $this->info('Total unique lines in file: ' . count($uniqueRowsInFile));
 
         $activeRecordHashes = [];
-		$updated = 0;
+        $updated = 0;
         $skipped = 0;
         $total = 0;
 
