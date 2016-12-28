@@ -20,7 +20,7 @@ class WashingtonDCTest extends \Codeception\TestCase\Test
     {
     }
 
-    public function testHealthMilHashColumnsExistsInFieldNames()
+    public function testWashingtonDCHashColumnsExistsInFieldNames()
     {
         $fieldNames = $this->washingtonDC->fieldNames;
         $hashColumns = $this->washingtonDC->hashColumns;
@@ -36,46 +36,48 @@ class WashingtonDCTest extends \Codeception\TestCase\Test
 
         $items = $this->washingtonDCParser->getItems($response);
 
+        dd($items);
+
         $expectedItems = [
             [
-                'companies' => null,
-                'firstName' => 'Ebeneezer',
-                'middleName' => null,
-                'lastName' => 'Adewumni',
-                'addresses' => '9418 Annapolis Rd., Suite 204 Lanham, MD 20706',
+                'company_name' => null,
+                'first_name' => 'Ebeneezer',
+                'middle_name' => null,
+                'last_name' => 'Adewumni',
+                'address' => '9418 Annapolis Rd., Suite 204 Lanham, MD 20706',
                 'principals' => null,
-                'actionDate' => 'August 4, 2016',
-                'terminationDate' => null
+                'action_date' => 'August 4, 2016',
+                'termination_date' => null
             ],
             [
-                'companies' => 'Matrix Corporation',
-                'firstName' => null,
-                'middleName' => null,
-                'lastName' => null,
-                'addresses' => '4047 Minnesota Avenue NE, Washington, DC 20019',
+                'company_name' => 'Matrix Corporation',
+                'first_name' => null,
+                'middle_name' => null,
+                'last_name' => null,
+                'address' => '4047 Minnesota Avenue NE, Washington, DC 20019',
                 'principals' => null,
-                'actionDate' => 'May 11, 2015',
-                'terminationDate' => null
+                'action_date' => 'May 11, 2015',
+                'termination_date' => null
             ],
             [
-                'companies' => 'company_name',
-                'firstName' => 'first_name',
-                'middleName' => 'middle_name',
-                'lastName' => 'last_name',
-                'addresses' => 'address',
-                'principals' => 'principals',
-                'actionDate' => 'action_date',
-                'terminationDate' => 'termination_date'
+                'company_name' => null,
+                'first_name' => ' Yusuf',
+                'middle_name' => null,
+                'last_name' => 'Acar',
+                'address' => 'Washington, DC 20008-1005',
+                'principals' => null,
+                'action_date' => 'May 28, 2009 and June 14, 2010',
+                'termination_date' => '2012-05-27'
             ],
             [
-                'companies' => 'company_name',
-                'firstName' => 'first_name',
-                'middleName' => 'middle_name',
-                'lastName' => 'last_name',
-                'addresses' => 'address',
-                'principals' => 'principals',
-                'actionDate' => 'action_date',
-                'terminationDate' => 'termination_date'
+                'company_name' => 'Advanced Integrated Technologies Corporation',
+                'first_name' => null,
+                'middle_name' => null,
+                'last_name' => null,
+                'address' => '900 17th Street, NW, Suite 900, Washington, DC 20006',
+                'principals' => 'Sushil Bansal, President and Chief Executive Officer',
+                'action_date' => 'May 28, 2009 and August 18, 2010',
+                'termination_date' => '2012-05-27'
             ]
         ];
 
