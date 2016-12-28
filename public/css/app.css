@@ -17,6 +17,10 @@ body {
   font-weight: bold;
 }
 
+.error-stat {
+    color: #FF0000;
+}
+
 .import-stat {
     color : #777;
     margin-right: 10px;

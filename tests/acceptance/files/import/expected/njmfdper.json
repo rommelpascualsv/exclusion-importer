@@ -1,0 +1,27 @@
+[{
+    "provider_name" : "2258 PHARMACY, INC.",
+    "title" : "",
+    "npi_number" : "",
+    "date_of_birth" : null,
+    "street" : "2258 THIRD AVENUE",
+    "city" : "NEW YORK",
+    "state" : "NY",
+    "zip" : "10035",
+    "action" : "SUSPENSION",
+    "effective_date" : "2003-07-20",
+    "expiration_date" : null,
+    "aka_dba" : ""
+},{
+    "provider_name" : "ZUCKERMAN, DAVID H.",
+    "title" : "DPM",
+    "npi_number" : "",
+    "date_of_birth" : null,
+    "street" : "1803 COUNTRY CLUB DRIVE",
+    "city" : "CHERRY HILL",
+    "state" : "NJ",
+    "zip" : "08003",
+    "action" : "DISQUALIFICATION",
+    "effective_date" : "2012-09-20",
+    "expiration_date" : null,
+    "aka_dba" : null
+}]

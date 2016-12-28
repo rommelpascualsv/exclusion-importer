@@ -17,7 +17,7 @@ Vagrant.configure(2) do |config|
   config.vm.provider :virtualbox do |vb|
 
     vb.name = "external-data-manager"
-    vb.customize ["modifyvm", :id, "--memory", 2048]
+    vb.customize ["modifyvm", :id, "--memory", 3072]
     vb.customize ["guestproperty", "set", :id, "/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold", 10000]
 
   end

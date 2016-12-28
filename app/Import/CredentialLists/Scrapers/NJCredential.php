@@ -34,10 +34,14 @@ class NJCredential
     /**
      * NJParser constructor.
      */
-    public function __construct()
+    public function __construct($sourceUri)
     {
-        $this->scraper = new BaseScraper(self::BASE_URL, ['exceptions' => false]);
+        $baseUrl = $sourceUri ?: self::BASE_URL;
+
+        $this->scraper = new BaseScraper($baseUrl, ['exceptions' => false]);
         $this->cookies = $this->getCookies();
+        $this->headers['Host'] = parse_url($baseUrl, PHP_URL_HOST);
+        $this->headers['Origin'] = $baseUrl;
         $this->headers['Cookie'] = $this->cookies;
     }
 
