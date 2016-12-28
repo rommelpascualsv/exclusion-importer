@@ -84,17 +84,20 @@ class WashingtonDCModel
 
     public function setNames($people)
     {
-        // Ignore all commas after the first.
-        $name = explode(',', $people);
-        if (is_array($name) && isset($name[0])) {
-            $value = $name[0];
-            if (isset($name[1])) {
-            	$this->title = $name[1];
+
+        if (strpos($people, ',')) {
+            $name = explode(',', $people);
+            if (is_array($name) && isset($name[0])) {
+                $this->lastName = $name[0];
+                if (isset($name[1])) {
+                    $this->firstName = $name[1];
+                }
             }
+            return;
         }
 
         // Space separated first and middle and last name.
-        $value = explode(' ', $value);
+        $value = explode(' ', $people);
         if (is_string($value)) {
             $this->firstName = $value;
 
