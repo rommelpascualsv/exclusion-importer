@@ -29,7 +29,6 @@ class NewJerseyMedicaidFraudDivision extends ExclusionList
 
     public $hashColumns = [
         'provider_name',
-        'title',
         'date_of_birth',
         'npi_number',
         'street',
