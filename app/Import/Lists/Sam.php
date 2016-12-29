@@ -58,7 +58,7 @@ SQL;
         $this->opmExtrasRemover = new OpmExtrasRemover();
         $this->oigDuplicateRemover = new OigDuplicateRemover();
 
-        $this->uri = $this->samService->getUrl();
+        $this->uri = $this->getUrl();
     }
 
 
