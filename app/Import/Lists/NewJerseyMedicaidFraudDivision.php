@@ -39,7 +39,8 @@ class NewJerseyMedicaidFraudDivision extends ExclusionList
         'state',
         'zip',
         'effective_date',
-        'expiration_date'
+        'expiration_date',
+        'aka_dba'
     ];
 
     private $listOfExcludedRows = [
