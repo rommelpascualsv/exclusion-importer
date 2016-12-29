@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="sv" id="svg-810-nd1-exclusion_date-should-be-split-from-exclusion-type-1" context="prod">
+        <addColumn tableName="nd1_records">
+            <column name="exclusion_date_new" type="VARCHAR(45)" defaultValue="NULL" afterColumn="exclusion_date" />
+            <column name="exclusion_type" type="VARCHAR(45)" defaultValue="NULL" afterColumn="exclusion_date_new" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="sv" id="svg-810-nd1-exclusion_date-should-be-split-from-exclusion-type-2" context="prod">
+        <sql>
+            UPDATE `nd1_records`
+            SET `exclusion_type` = SUBSTRING_INDEX(`exclusion_date`,' ', LENGTH(`exclusion_date`) - LENGTH(REPLACE(`exclusion_date`, ' ', ''))),
+            `exclusion_date_new` = SUBSTRING_INDEX(`exclusion_date`,' ', -1);
+        </sql>
+    </changeSet>
+
+    <changeSet author="sv" id="svg-810-nd1-exclusion_date-should-be-split-from-exclusion-type-3" context="prod">
+        <sql>
+            UPDATE `nd1_records`
+            SET `exclusion_date_new` = CASE WHEN STR_TO_DATE( `exclusion_date_new`, '%m/%d/%Y' ) IS NULL THEN `exclusion_date_new`
+            ELSE STR_TO_DATE( `exclusion_date_new`, '%m/%d/%Y' ) END;
+        </sql>
+    </changeSet>
+
+    <changeSet author="sv" id="svg-810-nd1-exclusion_date-should-be-split-from-exclusion-type-4" context="prod">
+        <modifyDataType
+                columnName="exclusion_date_new"
+                newDataType="DATE"
+                tableName="nd1_records"/>
+    </changeSet>
+
+    <changeSet author="sv" id="svg-810-nd1-exclusion_date-should-be-split-from-exclusion-type-5" context="prod">
+        <dropColumn columnName="exclusion_date"
+                    tableName="nd1_records"/>
+    </changeSet>
+
+    <changeSet author="sv" id="svg-810-nd1-exclusion_date-should-be-split-from-exclusion-type-6" context="prod">
+        <renameColumn newColumnName="exclusion_date"
+                      oldColumnName="exclusion_date_new"
+                      columnDataType="DATE"
+                      tableName="nd1_records"/>
+    </changeSet>
+
+
+</databaseChangeLog>
