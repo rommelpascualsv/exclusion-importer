@@ -21,8 +21,6 @@ class NewYork extends ExclusionList
 		'npi',
 		'provtype',
 		'action_date',
-		'action_type',
-		'provider_number_2'
 	];
 
 	public $hashColumns = [

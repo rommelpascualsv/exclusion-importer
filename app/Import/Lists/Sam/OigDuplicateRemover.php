@@ -37,7 +37,7 @@ class OigDuplicateRemover
             ->delete();
 
         if ($total_records_deleted == null) {
-            info('No records deleted!');
+            throw new \Exception('No Oig records deleted!');
         }
 
         info('Done removing Oig records.');
