@@ -36,8 +36,6 @@ class WashingtonDCTest extends \Codeception\TestCase\Test
 
         $items = $this->washingtonDCParser->getItems($response);
 
-        dd($items);
-
         $expectedItems = [
             [
                 'company_name' => null,

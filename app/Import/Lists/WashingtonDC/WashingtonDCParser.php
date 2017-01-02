@@ -60,7 +60,9 @@ class WashingtonDCParser
     {
         $headers = [];
         foreach ($headerNode as $header) {
-            $value = rtrim(preg_replace(['/\s+|:/'], '', ($header->nodeValue)));
+            //remove nbsp; characters
+            $content = html_entity_decode(str_replace("&nbsp;", "", htmlentities($header->nodeValue, null, 'utf-8')));
+            $value = rtrim(preg_replace(['/\s+|:/'], '', ($content)));
             if ($value != "") {
                 $headers[] = $value;
             }
@@ -101,8 +103,8 @@ class WashingtonDCParser
             $model->setPrincipals($item['Principals']);
         }
 
-        if (isset($item['TerminationDate﻿﻿'])) {
-            $model->setTerminationDate($item['TerminationDate﻿﻿']);
+        if (array_key_exists('TerminationDate', $item)) {
+            $model->setTerminationDate($item['TerminationDate']);
         }
 
         if (isset($item['NameofCompany'])) {
