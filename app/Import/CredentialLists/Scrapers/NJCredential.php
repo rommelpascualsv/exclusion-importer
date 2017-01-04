@@ -2,7 +2,7 @@
 
 namespace App\Import\CredentialLists\Scrapers;
 
-use Streamlineverify\SVBot\BaseScraper;
+use App\Import\Service\Scrapers\BaseScraper;
 
 class NJCredential
 {
