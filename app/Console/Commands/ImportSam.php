@@ -105,10 +105,71 @@ class ImportSam extends Command
         $totalLines = $file->getTotalLines();
         $this->info('Total lines in file: ' . $totalLines);
 
+        $uniqueRowsInFile = $this->getUniqueRows($file, $totalLines, $columnsInFile);
+        $this->info('Total unique lines in file: ' . count($uniqueRowsInFile));
+
         $activeRecordHashes = [];
-		$updated = 0;
+        $updated = 0;
         $skipped = 0;
         $total = 0;
+
+        foreach ($uniqueRowsInFile as $hash => $rowData) {
+            $total++;
+            if (! array_key_exists($hash, $currentRecords)) {
+                $rowData['hash'] = app('db')->raw("UNHEX('{$hash}')");
+                $rowData['new_hash'] = app('db')->raw("UNHEX('{$hash}')");
+                // can we just create it here?!?!
+                $this->toCreate[] = $rowData;
+            } else {
+                $activeRecordHashes[] = $hash;
+                $currentRecord = array_intersect_key($currentRecords[$hash], $rowData);
+                $currentRecord['Record_Status'] = (int)$currentRecord['Record_Status'];
+                if ($rowData !== $currentRecord) {
+                    $affectedRows = $this->updateRecords($rowData, $hash);
+                    $updated += $affectedRows;
+                } else {
+                    $skipped++;
+                }
+            }
+            $total = ($toCreate = count($this->toCreate)) + $updated + $skipped;
+            if ($total % 1000 === 0) {
+                $statsPattern = 'Total unique lines processed: %d -- Total Records to Create: %d -- Total Records Updated: %d -- Total Lines Skipped: %d';
+                $this->info(sprintf($statsPattern, $total, count($this->toCreate), $updated, $skipped));
+            }
+        }
+
+		$this->info('Creating new records...');
+        $this->createNewRecords($this->toCreate);
+        $this->info('Finished creating new records');
+
+		$toDeactivate = $this->getRecordsToDeactivate($currentRecords, $activeRecordHashes);
+		$this->info(count($toDeactivate) . ' Total to Deactivate.');
+		$this->info('Deactivating...');
+		$deactivated = $this->deactivate($toDeactivate);
+		$this->info('Finished deactivating');
+
+        $this->info('===================================================');
+        $this->info($total . ' Total Unique Lines Processed From New File');
+        $this->info(count($this->toCreate) . ' Records Created');
+        $this->info($updated . ' Records Updated');
+        $this->info($skipped . ' Lines Skipped');
+        $this->info($deactivated . ' Total Records Deactivated');
+        $this->info('DONE!');
+        $this->info('===================================================');
+
+        date_default_timezone_set('UTC');
+    }
+
+    /**
+     * @param $file  File
+     * @param $totalLines int
+     * @param $columnsInFile array
+     * @return array
+     */
+    private function getUniqueRows($file, $totalLines, $columnsInFile)
+    {
+        $rows = [];
+
         // Iterate csv
         foreach ($file->csvlineIterator($totalLines) as $row) {
 
@@ -136,48 +197,9 @@ class ImportSam extends Command
                 ? strftime('%Y-%m-%d', $unixActiveDate)
                 : NULL;
 
-            if (! array_key_exists(strtoupper($newHash), $currentRecords)) {
-                $rowData['hash'] = app('db')->raw("UNHEX('{$newHash}')");
-                $rowData['new_hash'] = app('db')->raw("UNHEX('{$newHash}')");
-                // can we just create it here?!?!
-                $this->toCreate[] = $rowData;
-            }
-            else {
-				$activeRecordHashes[] = strtoupper($newHash);
-				if (! $rowData == $currentRecords[strtoupper($newHash)]) {
-                    $affectedRows = $this->updateRecords($rowData, $newHash);
-                    $updated += $affectedRows;
-                } else {
-                    $skipped++;
-                }
-            }
-            $total = ($toCreate = count($this->toCreate)) + $updated + $skipped;
-            if ($total % 1000 === 0) {
-                $statsPattern = 'Total processed: %d -- Total to Create: %d -- Total Updated: %d -- Total Skipped: %d';
-                $this->info(sprintf($statsPattern, $total, $toCreate, $updated, $skipped));
-            }
+            $rows[(string)$newHash] = $rowData;
         }
-
-		$this->info('Creating new records...');
-        $this->createNewRecords($this->toCreate);
-        $this->info('Finished creating new records');
-
-		$toDeactivate = $this->getRecordsToDeactivate($currentRecords, $activeRecordHashes);
-		$this->info(count($toDeactivate) . ' Total to Deactivate.');
-		$this->info('Deactivating...');
-		$deactivated = $this->deactivate($toDeactivate);
-		$this->info('Finished deactivating');
-
-        $this->info('===================================================');
-        $this->info(count($this->toCreate) . ' Records Created');
-        $this->info($updated . ' Records Updated');
-        $this->info($skipped . ' Records Skipped');
-        $this->info($total . ' Total Processed From New File');
-        $this->info($deactivated . ' Total Records Deactivated');
-        $this->info('DONE!');
-        $this->info('===================================================');
-
-        date_default_timezone_set('UTC');
+        return $rows;
     }
 
     private function getDBColumns()
