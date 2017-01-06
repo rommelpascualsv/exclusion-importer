@@ -100,18 +100,4 @@ class IndividualNameParserTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function test()
-    {
-        $name = 'BRETTLER, NORMAN AKA NORBERT BRETTLER';
-
-        $expected = new IndividualName();
-        $expected->setFirstName('NORMAN AKA NORBERT');
-        $expected->setMiddleName('BRETTLER');
-        $expected->setLastName('BRETTLER');
-
-        $actual = IndividualNameParser::parseName($name);
-
-        $this->assertEquals($expected, $actual);
-    }
-
 }

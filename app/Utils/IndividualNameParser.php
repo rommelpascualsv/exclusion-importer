@@ -71,10 +71,7 @@ class IndividualNameParser
     private static function getSuffix($name)
     {
         $key = trim(array_search(strtolower($name), array_map('strtolower',self::$nameSuffixes)));
-        if (empty(trim($key))) {
-            return null;
-        }
-        return $name;
+        return empty(trim($key)) ? null : $name;
     }
 
 }
