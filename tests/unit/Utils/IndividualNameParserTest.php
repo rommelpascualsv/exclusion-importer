@@ -1,7 +1,7 @@
 <?php namespace Test\Unit;
 
-use App\Models\IndividualName;
-use App\Utils\IndividualNameParser;
+use App\Import\Entity\IndividualName;
+use App\Import\Entity\IndividualNameParser;
 use CDM\Test\TestCase;
 
 class IndividualNameParserTest extends TestCase

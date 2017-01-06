@@ -1,7 +1,5 @@
-<?php namespace App\Utils;
+<?php namespace App\Import\Entity;
 
-use App\Models\IndividualName;
-use App\Models\PersonName;
 
 class IndividualNameParser
 {
