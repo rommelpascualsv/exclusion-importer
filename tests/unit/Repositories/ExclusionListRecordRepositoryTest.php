@@ -3,7 +3,7 @@ namespace Test\Unit;
 
 use App\Import\Lists\HashUtils;
 use App\Import\Lists\Tennessee;
-use App\Models\ImportStats;
+use App\Import\ImportStats;
 use App\Repositories\ExclusionListRecordRepository;
 use CDM\Test\TestCase;
 use Illuminate\Support\Facades\DB;

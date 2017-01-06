@@ -22,7 +22,7 @@ class BaseImportCredentialsTest extends TestCase
 
         $this->credentialListService = Mockery::mock(CredentialListService::class);
         $this->credentialDBRepo = Mockery::mock(CredentialDatabaseRepository::class);
-        $this->mockCredentialDatabase = Mockery::mock('App\Models\CredentialDatabase[save]');
+        $this->mockCredentialDatabase = Mockery::mock('App\CredentialDatabase\CredentialDatabase[save]');
 
         $this->command = $this->getMockForAbstractClass(BaseImportCredentials::class,[
             $this->credentialListService,

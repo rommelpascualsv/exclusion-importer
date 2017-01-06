@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Models\CredentialDatabase;
+use App\CredentialDatabase\CredentialDatabase;
 
 class CredentialDatabaseRepository implements Repository
 {
