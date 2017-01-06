@@ -71,13 +71,5 @@ class IndividualName
     {
         $this->suffix = $suffix;
     }
-    
-    /*public function __toString()
-    {
-        return  $this->getLastName() . ' ' .
-                $this->getSuffix() . ', ' .
-                $this->getFirstName() . ' ' .
-                $this->getMiddleName();
-    }*/
 
 }
