@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Import;
 
 class ImportStats implements \JsonSerializable
 {

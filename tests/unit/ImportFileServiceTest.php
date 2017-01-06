@@ -4,7 +4,7 @@ namespace Test\Unit;
 
 use App\Import\Lists\Tennessee;
 use App\Import\Service\ListProcessor;
-use App\Models\ImportStats;
+use App\Import\ImportStats;
 use App\Repositories\ExclusionListRecordRepository;
 use App\Repositories\ExclusionListRepository;
 use App\Services\ExclusionListHttpDownloader;
