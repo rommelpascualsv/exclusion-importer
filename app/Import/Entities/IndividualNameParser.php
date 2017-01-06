@@ -1,4 +1,4 @@
-<?php namespace App\Import\Entity;
+<?php namespace App\Import\Entities;
 
 
 class IndividualNameParser
