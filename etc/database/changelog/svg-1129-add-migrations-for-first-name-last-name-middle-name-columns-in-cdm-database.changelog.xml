@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="sv" id="svg-1129-add-migrations-for-first-name-last-name-middle-name-columns-in-cdm-database" context="prod">
+        <addColumn tableName="njmfdper_records">
+            <column name="first_name" type="VARCHAR(45)" defaultValue="NULL" afterColumn="expiration_date" />
+            <column name="middle_name" type="VARCHAR(45)" defaultValue="NULL" afterColumn="first_name" />
+            <column name="last_name" type="VARCHAR(45)" defaultValue="NULL" afterColumn="middle_name" />
+            <column name="suffix" type="VARCHAR(45)" defaultValue="NULL" afterColumn="last_name" />
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>
