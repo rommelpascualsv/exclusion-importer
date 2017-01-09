@@ -2,7 +2,9 @@
 namespace App\Import\Lists;
 
 use \App\Import\Lists\ProviderNumberHelper as PNHelper;
+use App\Import\Entities\IndividualName;
 use \App\Utils\AliasSeparatorUtil;
+use App\Import\Entities\IndividualNameParser;
 
 class NewJerseyMedicaidFraudDivision extends ExclusionList
 {
@@ -26,6 +28,10 @@ class NewJerseyMedicaidFraudDivision extends ExclusionList
         'action',
         'effective_date',
         'expiration_date',
+        'first_name',
+        'middle_name',
+        'last_name',
+        'suffix',
         'aka_dba'
     ];
 
@@ -54,6 +60,8 @@ class NewJerseyMedicaidFraudDivision extends ExclusionList
 
     protected $npiColumnName = "npi_number";
 
+    private $businessTypeAbbreviation = ['INC.', 'LLC.'];
+
     public function preProcess()
     {
         $this->parse();
@@ -71,14 +79,27 @@ class NewJerseyMedicaidFraudDivision extends ExclusionList
             }
             $row = str_getcsv($value);
 
-            // set Alias
-            $row[12] = AliasSeparatorUtil::getAliases($row[0]);
-            if (empty($row[12])) {
-                $row[12] = NULL;
+            $providerName = $row[0];
+            if ($this->isBusinessName($providerName)) {
+                // set Provider Name
+                $row[0] = AliasSeparatorUtil::removeAliases($providerName);
+                $individualName = new IndividualName();
+            } else {
+                // set Individual Name
+                $individualName = IndividualNameParser::parseName($providerName);
+                $row[0] = null;
             }
 
-            // set Provider Name
-            $row[0] = AliasSeparatorUtil::removeAliases($row[0]);
+            $row[11] = $individualName->getFirstName();
+            $row[12] = $individualName->getMiddleName();
+            $row[13] = $individualName->getLastName();
+            $row[14] = $individualName->getSuffix();
+
+            // set Alias
+            $row[15] = AliasSeparatorUtil::getAliases($providerName);
+            if (empty($row[15])) {
+                $row[15] = NULL;
+            }
 
             // set Provider Number
             $row = PNHelper::setProviderNumberValue($row,
@@ -89,6 +110,7 @@ class NewJerseyMedicaidFraudDivision extends ExclusionList
                 PNHelper::getNpiValue($row, $this->getNpiColumnIndex()), $this->getNpiColumnIndex());
 
             array_push($data, $row);
+
         }
         $this->data = $data;
     }
@@ -102,5 +124,22 @@ class NewJerseyMedicaidFraudDivision extends ExclusionList
         }
         return false;
     }
+
+    public function isBusinessName($name) {
+        $wordParts = explode(',', $name);
+
+        if (! (count($wordParts) > 1)) {
+            return true;
+        }
+
+        $firstPart = explode(' ', head($wordParts));
+        $lastPart = explode(' ', last($wordParts));
+        if (count($firstPart) > 1 &&
+            !(in_array(strtolower('AKA'), array_map('strtolower', $firstPart))) &&
+            in_array(strtolower(last($lastPart)), array_map('strtolower', $this->businessTypeAbbreviation))) {
+            return true;
+        }
+    }
+
 
 }
