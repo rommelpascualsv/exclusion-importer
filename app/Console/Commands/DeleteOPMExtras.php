@@ -98,7 +98,7 @@ SQL;
 
     private function deleteOPMExtras()
     {
-        return app('db')->statement(self::DELETE_OPM_SQL);
+        return app('db')->delete(self::DELETE_OPM_SQL);
     }
 
     private function logStdOut($string)
