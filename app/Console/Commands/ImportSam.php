@@ -6,7 +6,7 @@ use GuzzleHttp\Client as HTTPClient;
 use App\Common\File;
 use App\Common\Entity\SamHash;
 
-class ImportSam extends Command 
+class ImportSam extends Command
 {
     /**
      * The console command name.
@@ -33,7 +33,7 @@ class ImportSam extends Command
         ['url' => null],
     ];
     protected $toCreate = [];
-    
+
     protected $columnsToImport;
 
     private $header = [
@@ -68,6 +68,9 @@ class ImportSam extends Command
 
     public function fire()
     {
+        //the hash is derived based on the timestamp of the active date so the hash will depend on timezone
+        date_default_timezone_set('America/New_York');
+
         $parsedUrl = parse_url($this->argument('url'));
 
         $filepath = tempnam(storage_path('app') . '/temp/', 'samdb');
@@ -128,7 +131,7 @@ class ImportSam extends Command
                     $skipped++;
                 }
             }
-
+            $total = ($toCreate = count($this->toCreate)) + $updated + $skipped;
             if ($total % 1000 === 0) {
                 $statsPattern = 'Total unique lines processed: %d -- Total Records to Create: %d -- Total Records Updated: %d -- Total Lines Skipped: %d';
                 $this->info(sprintf($statsPattern, $total, count($this->toCreate), $updated, $skipped));
@@ -146,7 +149,6 @@ class ImportSam extends Command
 		$this->info('Finished deactivating');
 
         $this->info('===================================================');
-
         $this->info($total . ' Total Unique Lines Processed From New File');
         $this->info(count($this->toCreate) . ' Records Created');
         $this->info($updated . ' Records Updated');
@@ -154,6 +156,8 @@ class ImportSam extends Command
         $this->info($deactivated . ' Total Records Deactivated');
         $this->info('DONE!');
         $this->info('===================================================');
+
+        date_default_timezone_set('UTC');
     }
 
     /**
@@ -325,9 +329,7 @@ class ImportSam extends Command
 	protected function deactivate($toDeactivateHexHashes)
 	{
         $sql = "UPDATE sam_records_temp SET Record_Status = 0 WHERE new_hash IN (unhex('" . implode("'),unhex('", $toDeactivateHexHashes) . "'))";
-
-        $affectedRows = 0;
-        $affectedRows += app('db')->statement(app('db')->raw($sql));
+        $affectedRows = app('db')->update($sql);
 
 		return $affectedRows;
 	}

@@ -2,7 +2,7 @@
 
 namespace App\Import\Lists\WashingtonDC;
 
-use Streamlineverify\SVBot\BaseScraper;
+use App\Import\Service\Scrapers\BaseScraper;
 
 class WashingtonDCParser
 {

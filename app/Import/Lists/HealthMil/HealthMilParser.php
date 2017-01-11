@@ -2,7 +2,7 @@
 
 namespace App\Import\Lists\HealthMil;
 
-use Streamlineverify\SVBot\BaseScraper;
+use App\Import\Service\Scrapers\BaseScraper;
 
 class HealthMilParser
 {
@@ -27,7 +27,7 @@ class HealthMilParser
      */
     public function __construct()
     {
-        $this->scraper = new BaseScraper(self::BASE_URL);
+        $this->scraper = new BaseScraper(self::BASE_URL, ['verify' => false]);
     }
 
     /**

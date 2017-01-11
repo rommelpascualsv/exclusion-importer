@@ -61,7 +61,7 @@ class NppesCredentialFileMaker extends CredentialFileMaker
         return $this->sourceUri . '/.' . $link;
     }
 
-    private function getWeeklyUpdateLink($crawler)
+    private function getWeeklyUpdateLink(Crawler $crawler)
     {
         $dateRanges = [
             '1_week_ago'  => date('mdy',strtotime('monday last week')) . '-' . date('mdy',strtotime('sunday last week')),
@@ -77,7 +77,7 @@ class NppesCredentialFileMaker extends CredentialFileMaker
         {
             $weeklyUpdateLink = $crawler->selectLink(self::WEEKLY_INCREMENTAL_NPI_FILES_LINK_SELECTOR . ' - ' .  $dateRange);
 
-            if (! empty($weeklyUpdateLink)) {
+            if ($weeklyUpdateLink->count() > 0) {
                 $link = $weeklyUpdateLink->attr('href');
                 break;
             }

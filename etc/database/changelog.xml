@@ -66,6 +66,7 @@
     <include file="./changelog/svg-1027-new-jersey-(njcdr)-to-use-pdf-in-importing-list.changelog.xml" relativeToChangelogFile="true" />
     <include file="./changelog/svg-1040-filter-out-aka-in-new-jersey-pdf.changelog.xml" relativeToChangelogFile="true" />
     <include file="./changelog/svg-998-fix-view-for-entity-column.changelog.xml" relativeToChangelogFile="true" />
+    <include file="./changelog/svg-1100-change-sam-record-status-to-tinyint.changelog.xml" relativeToChangelogFile="true" />
     <include file="./changelog/svg-1129-add-migrations-for-first-name-last-name-middle-name-columns-in-cdm-database.changelog.xml" relativeToChangelogFile="true" />
 
 </databaseChangeLog>

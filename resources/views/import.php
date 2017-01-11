@@ -101,7 +101,8 @@
                     $added = $lastImportStats ? $lastImportStats->added : 0;
                     $deleted = $lastImportStats ? $lastImportStats->deleted : 0;
                     $previousRecordCount = $lastImportStats ? $lastImportStats->previousRecordCount : 0;
-                    $currentRecordCount = $lastImportStats ? $lastImportStats->currentRecordCount : 0;                  
+                    $currentRecordCount = $lastImportStats ? $lastImportStats->currentRecordCount : 0;
+                    $lastImportError = $lastImportError ? array_values(get_object_vars($lastImportError))[0] : null;
                 ?>
 
                     <tr>
@@ -119,7 +120,7 @@
                             <br />
                             <?php if($lastImportError): ?>
                                 <span class="small error-stat">
-                                    Last import error: <span id="<?= $info['prefix'] ?>-last-import-ts"><?= $lastImportError->message ?></span>
+                                    Last import error: <span id="<?= $info['prefix'] ?>-last-import-ts"><?= $lastImportError ?></span>
                                 </span>
                                 <br />
                             <?php endif; ?>
