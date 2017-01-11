@@ -55,6 +55,31 @@ apt_package "#{PHP}-zip" do
     action :install
 end
 
+apt_package "php-pear" do
+    action :install
+end
+
+apt_package "#{PHP}-dev"
+
+execute "sudo pecl install mongo"
+
+file "/etc/php/#{node['php_version']}/mods-available/mongo.ini" do
+    content 'extension=mongo.so'
+    mode '0755'
+    owner 'ubuntu'
+    group 'ubuntu'
+end
+
+link "/etc/php/#{node['php_version']}/fpm/conf.d/20-mongo.ini" do
+    to "/etc/php/#{node['php_version']}/mods-available/mongo.ini"
+    link_type :symbolic
+end
+
+link "/etc/php/#{node['php_version']}/cli/conf.d/20-mongo.ini" do
+    to "/etc/php/#{node['php_version']}/mods-available/mongo.ini"
+    link_type :symbolic
+end
+
 execute "sudo sed -i \"s/user = www-data/user = ubuntu/\" #{PHP_POOL_PATH}" do
     only_if { File.readlines(PHP_POOL_PATH).grep(/user = ubuntu/).size == 0 }
     notifies :restart, resources(:service => "php-fpm")
@@ -64,4 +89,3 @@ execute "sudo sed -i \"s/group = www-data/group = ubuntu/\" #{PHP_POOL_PATH}" do
     only_if { File.readlines(PHP_POOL_PATH).grep(/group = ubuntu/).size == 0 }
     notifies :restart, resources(:service => "php-fpm")
 end
-

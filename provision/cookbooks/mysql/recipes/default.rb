@@ -27,7 +27,7 @@ template "#{MYSQL_CONF_FILE_PATH}" do
     source "#{MYSQL_CONF_FILE}.erb"
     variables({
         :bind_address => "0.0.0.0",
-        :max_allowed_packet => "64M",
+        :max_allowed_packet => "512M",
         :innodb_log_file_size => "128M",
         :sql_mode => "ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"
     })
