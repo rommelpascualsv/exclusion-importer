@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Models\ImportStats;
+use App\Import\ImportStats;
 /**
  * Repository for exclusion list records
  *
@@ -51,7 +51,7 @@ class ExclusionListRecordRepository implements Repository
     }
     
     /**
-     * Returns an App\\Models\\ImportStats object containing metrics for
+     * Returns an App\\Import\\ImportStats object containing metrics for
      * how many records will potentially get affected if records in the target 
      * table are updated with records from the source table. 
      * 
@@ -61,7 +61,7 @@ class ExclusionListRecordRepository implements Repository
      * 'exclusion_lists_cdm.<prefix>_records' if not specified.
      * @param string $target [optional] the target table name. Defaults to 
      * 'exclusion_lists.<prefix>_records if not specified.
-     * @return \App\Models\ImportStats
+     * @return \App\Import\ImportStats
      */
     public function getImportStats($prefix, $source = null, $target = null)
     {
