@@ -1,0 +1,5 @@
+name             'git'
+maintainer       'SV Developers'
+maintainer_email 'SVDevelopers@streamlineverify.com'
+description      'sets up git'
+version          '0.1.0'

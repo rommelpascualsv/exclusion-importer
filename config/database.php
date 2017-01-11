@@ -45,7 +45,7 @@ return [
     */
 
     'connections' => [
-        
+
         # primary - exclusion_lists_cdm
         'mysql' => [
             'driver'    => 'mysql',
@@ -59,11 +59,8 @@ return [
             'prefix'    => env('DB_PREFIX', ''),
             'timezone'  => env('DB_TIMEZONE', '+00:00'),
             'strict'    => false,
-            'options' => [
-                PDO::MYSQL_ATTR_MAX_BUFFER_SIZE => 512000000
-            ]            
         ],
-        
+
         'exclusion_lists_backup' => [
             'driver'    => 'mysql',
             'host'      => env('DB_HOST_BACKUP', 'localhost'),
@@ -76,11 +73,8 @@ return [
             'prefix'    => env('DB_PREFIX_BACKUP', ''),
             'timezone'  => env('DB_TIMEZONE_BACKUP', '+00:00'),
             'strict'    => false,
-            'options' => [
-                PDO::MYSQL_ATTR_MAX_BUFFER_SIZE => 512000000
-            ]            
         ],
-        
+
         'exclusion_lists' => [
             'driver'    => 'mysql',
             'host'      => env('DB_HOST_PROD', 'localhost'),
@@ -93,10 +87,7 @@ return [
             'prefix'    => env('DB_PREFIX_PROD', ''),
             'timezone'  => env('DB_TIMEZONE_PROD', '+00:00'),
             'strict'    => false,
-            'options' => [
-                PDO::MYSQL_ATTR_MAX_BUFFER_SIZE => 512000000
-            ]
-        ]        
+        ]
     ],
 
     /*

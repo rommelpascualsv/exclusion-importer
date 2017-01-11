@@ -1,0 +1,5 @@
+name             'mysql'
+maintainer       'SV Developers'
+maintainer_email 'SVDevelopers@streamlineverify.com'
+description      'sets up mysql'
+version          '0.1.0'

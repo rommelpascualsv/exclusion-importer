@@ -1,0 +1,54 @@
+/*
+
+DO NOT CHANGE THE CONTENTS OF THIS FILE.
+
+Please follow these steps to ensure proper provisioning:
+    1. Copy the JSON block below into a new file in this directory and name the file "local.json".
+    2. Replace the contents with the credentials of your local database.
+    3. Make sure that the database user has rights to access the database from the ip address of the VM.
+    4. Remove these comments from your new JSON file.
+    5. Vagrant Up.
+    6. Build great software.
+
+*/
+{
+    "root_user": "ubuntu",
+    "project_root": "/vagrant",
+    "server_root": "/vagrant/public",
+    "server_name": "app.exclusions-import.dev",
+    "composer_token": "94a7453db2de246ac0a620902745f0a79fb4d01f",
+    "php_version": "5.6",
+    "java_version": "9",
+    "mysql_version": "5.7",
+    "app_context": "development",
+    "npi_data": "https://www.dropbox.com/s/ran8415mozl18mx/npidata_20050523-20150412.sample.csv",
+    "liquibase": "https://github.com/liquibase/liquibase/releases/download/liquibase-parent-3.5.3/liquibase-3.5.3-bin.zip",
+    "mysql": {
+        "cdm" : {
+            "host": "localhost",
+            "port": 3306,
+            "name": "exclusion_lists_cdm",
+            "user": "root",
+            "pass": "root"
+        },
+        "prod" : {
+            "host": "localhost",
+            "port": 3306,
+            "name": "exclusion_lists",
+            "user": "root",
+            "pass": "root"
+        },
+        "stage" : {
+            "host": "localhost",
+            "port": 3306,
+            "name": "exclusion_lists_staging",
+            "user": "root",
+            "pass": "root"
+        }
+    },
+    "xdebug": {
+        "remote_host": "10.0.2.2",
+        "remote_port": 9000,
+        "ide_key": "vagrant"
+    }
+}

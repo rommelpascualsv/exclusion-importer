@@ -1,0 +1,19 @@
+# liquibase properties
+liquibase.home=/usr/local/liquibase
+liquibase.jar=${liquibase.home}/liquibase.jar
+
+# mysql properties
+mysql.home=/usr/share/java
+mysql.driver=${mysql.home}/mysql-connector-java.jar
+
+# defines the name of the changelog file which will be read
+changelogFile=./etc/database/changelog.xml
+
+# username for connecting with the database
+username=<%= @db_user %>
+
+# password for connecting with the database
+password=<%= @db_pass %>
+
+# url for connecting with the database
+url=jdbc:mysql://<%= @db_host %>:<%= @db_port %>/<%= @db_name %>?createDatabaseIfNotExist=true
