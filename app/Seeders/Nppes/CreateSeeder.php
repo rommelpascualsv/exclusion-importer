@@ -28,4 +28,9 @@ class CreateSeeder extends Seeder
 	{
 		$this->repository->create($record);
 	}
+
+    protected function updateRecord($record)
+    {
+        $this->repository->update($record);
+    }
 }

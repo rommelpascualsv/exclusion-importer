@@ -30,7 +30,8 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\MICna\Seed::class,
         \App\Console\Commands\MICna\Clear::class,
     	\App\Console\Commands\UpdateFiles::class,
-        \App\Console\Commands\NJCredential\Import::class
+        \App\Console\Commands\NJCredential\Import::class,
+        \App\Console\Commands\Nppes\Optout::class
     ];
 
     /**

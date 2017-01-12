@@ -25,8 +25,14 @@ abstract class BaseSeed extends Command {
             return;
         }
 
-        $this->info($this->database . ' seeding started');
-        $results = $this->seeder->seed($file, $this->argument('date'));
+        if ($this->name == 'nppes:optout') {
+            $this->info($this->database . ' opt out seeding started');
+            $results = $this->seeder->seedOptout($file);
+        } else {
+            $this->info($this->database . ' seeding started');
+            $results = $this->seeder->seed($file, $this->argument('date'));
+        }
+
         $this->outputResults($results);
     }
 
@@ -34,6 +40,11 @@ abstract class BaseSeed extends Command {
     {
         $this->info($results['succeeded'] . ' entries successfully created');
         $this->error($results['failed'] . ' entries failed to be parsed');
+
+        if (isset($results['matched'])) {
+            $this->info($results['matched'] . ' entries successfully matched');
+        }
+
         $this->info($this->database . ' seeding finished');
     }
 

@@ -1,9 +1,10 @@
 <?php namespace App\Seeders;
 
+use App\Import\CredentialLists\MedicareOptoutFileReader;
 use League\Csv\Reader;
 use Carbon\Carbon;
 
-abstract class Seeder 
+abstract class Seeder
 {
 	/**
 	 * @var \App\Repositories\Repository
@@ -44,6 +45,7 @@ abstract class Seeder
 			$record = $this->mapper->map($row);
 			$record['as_of'] = is_null($asOfDate) ? date('m/01/Y') : $asOfDate;
 			$record['last_modified'] = $lastModified;
+
 			$this->persistRecord($record);
 
 			++$successCount;
@@ -54,6 +56,34 @@ abstract class Seeder
 			"failed" => $failCount
 		];
 	}
+
+
+    /**
+     * Separate seeder for Opt out updating only the
+     * Opt out related fields of matching records in NPPES collection
+     * @param $file string containing the filename
+     * @return array of statistics
+     */
+    public function seedOptout($file)
+    {
+
+        try {
+
+            $optout = new MedicareOptoutFileReader($this->repository);
+            $result = $optout->getStats($file);
+
+            info('Successfully read and parsed opt out file');
+
+        } catch (\Exception $e) {
+            info('Error reading opt out file ' . $e);
+            throw $e;
+        }
+
+        info('Successfully read opt out file');
+
+        return $result;
+
+    }
 
 	protected function prepare() { }
 
