@@ -1,6 +1,8 @@
 <?php namespace App\Import\Lists;
 
 use App\Import\Service\Exclusions\RetrieverFactory;
+use App\Repositories\FileRepository;
+use App\Services\FileHelper;
 
 abstract class ExclusionList
 {
@@ -42,6 +44,13 @@ abstract class ExclusionList
      * @var
      */
     public $fileHeaders;
+
+    /**
+     * Holds the absolute path of the exclusion list files.
+     *
+     * @var array
+     */
+    private $exclusionListFiles = [];
 
     /**
      * Columns to create a hash from
@@ -99,6 +108,17 @@ abstract class ExclusionList
     {
         $retriever = $this->retrieverFactory->make($this->type);
         $this->data = $retriever->retrieveData($this);
+    }
+
+    public function generateFileHash()
+    {
+        $fileHelper = new FileHelper(new FileRepository());
+        $file = $fileHelper->zipMultiple($this->getExclusionListFiles());
+        
+        $fileType = count($this->getExclusionListFiles()) > 1 ?
+            'zip' : pathinfo($this->getExclusionListFiles()[0], PATHINFO_EXTENSION);
+
+        return $fileHelper->createFileHash($file, $fileType, $this->dbPrefix);
     }
 
     public function convertDatesToMysql($row, $dateColumns)
@@ -221,4 +241,24 @@ abstract class ExclusionList
     {
         return null;
     }
+
+    /**
+     * @param array $exclusionListFiles
+     */
+    public function setExclusionListFiles($newExclusionListFiles)
+    {
+        $this->exclusionListFiles = $newExclusionListFiles;
+    }
+
+    /**
+     * Returns the list of exclusion files.
+     *
+     * @return array
+     */
+    public function getExclusionListFiles()
+    {
+        return $this->exclusionListFiles;
+    }
+
+
 }

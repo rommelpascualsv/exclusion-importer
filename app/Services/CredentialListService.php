@@ -111,7 +111,8 @@ class CredentialListService implements CredentialListServiceInterface
         try {
 
             // Save the file hash first...
-            $hash = $this->fileHelper->createAndSaveFileHash($credentialFile, $fileType, $prefix);
+            $hash = $this->fileHelper->createFileHash($credentialFile, $fileType, $prefix);
+            $this->fileHelper->saveFileHash($prefix, $hash, $fileType);
 
             // Then save the actual contents of the file
             $updated = $this->fileHelper->saveFileContents($credentialFile, $hash, $prefix);

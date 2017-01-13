@@ -50,15 +50,14 @@ class FileHelper
     }
 
     /**
-     * Creates a hash of the file and saves it in the files repository, if a record with the given file type and prefix
-     * does not yet exist in the repository.
+     * Creates a hash of the file.
      *
-     * @param string $file the path to the file whose hash will be generated and saved in the file repository
-     * @param string $fileType the file type to associate with the generated file hash
-     * @param string $prefix the state prefix to associate with the generated file hash
-     * @return null|string the generated hash of the file, or null
+     * @param $file
+     * @param $fileType
+     * @param $prefix
+     * @return null|string
      */
-    public function createAndSaveFileHash($file, $fileType, $prefix)
+    public function createFileHash($file, $fileType, $prefix)
     {
         if (! $file) {
             return null;
@@ -86,6 +85,21 @@ class FileHelper
             $hash = hash_file(self::FILE_HASH_ALGO, $file);
         }
 
+        info('Generated hash => ' . $hash);
+
+        return $hash;
+    }
+
+    /**
+     * Saves file hash in the files repository
+     *
+     * @param $prefix
+     * @param $hash
+     * @param $fileType
+     * @return mixed
+     */
+    public function saveFileHash($prefix, $hash, $fileType)
+    {
         $record = [
             'state_prefix' => $prefix,
             'hash' => $hash,
@@ -96,21 +110,14 @@ class FileHelper
         // a hash for the given file prefix and file index, otherwise we don't need
         // to insert it in the files repository if a hash already exists
         if (! $this->fileRepo->contains($record)) {
-
             info('Inserting new file hash to the files repository for \''. $prefix .'\' : ' . $hash);
-
             $record['date_last_downloaded'] = $this->now();
-
-            $this->fileRepo->create($record);
-
+            return $this->fileRepo->create($record);
         } else {
-
-            $this->fileRepo->update($record, ['date_last_downloaded' => $this->now()]);
-
+            return $this->fileRepo->update($record, ['date_last_downloaded' => $this->now()]);
             info('Existing file hash found in files repository for \''. $prefix .'\' : ' . $hash);
         }
 
-        return $hash;
     }
 
     /**

@@ -4,6 +4,8 @@ use \App\Import\Lists\ProviderNumberHelper as PNHelper;
 
 class Louisiana extends ExclusionList
 {
+    const HASH_ALGO = 'sha256';
+
     public $dbPrefix = 'la1';
 
     public $uri = 'https://adverseactions.dhh.la.gov/SelSearch/GetCsv';
@@ -87,5 +89,15 @@ class Louisiana extends ExclusionList
     	
     	// set back to global data
     	$this->data = $data;
+    }
+
+    public function generateFileHash()
+    {
+        if (! count($this->data) > 0) {
+            parent::retrieveData();
+        }
+        $hash = hash($this::HASH_ALGO, print_r($this->data, true));
+        info('Generated hash => ' . $hash);
+        return $hash;
     }
 }

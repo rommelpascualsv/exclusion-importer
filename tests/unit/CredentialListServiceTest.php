@@ -4,6 +4,7 @@ namespace Test\Unit;
 
 use App\Import\CredentialLists\CredentialFileMaker;
 use App\Import\CredentialLists\CredentialFileMakerFactory;
+use App\Repositories\FileRepository;
 use App\Seeders\Seeder;
 use App\Seeders\SeederFactory;
 use App\Services\CredentialListService;
@@ -29,7 +30,8 @@ class CredentialListServiceTest extends TestCase
         
         $this->credentialFileMakerFactory = Mockery::mock(CredentialFileMakerFactory::class)->makePartial();
         $this->seederFactory = Mockery::mock(SeederFactory::class)->makePartial();
-        $this->fileHelper = Mockery::mock(FileHelper::class)->makePartial();
+        $fileRepo = Mockery::mock(FileRepository::class);
+        $this->fileHelper = Mockery::mock(new FileHelper($fileRepo));
 
         $this->mockCredentialFileMaker = Mockery::mock(CredentialFileMaker::class)->makePartial();
         $this->mockSeeder = Mockery::mock(Seeder::class);
@@ -62,7 +64,8 @@ class CredentialListServiceTest extends TestCase
 
         $hash = hash_file(FileHelper::FILE_HASH_ALGO, $this->tempFile);
 
-        $this->fileHelper->shouldReceive('createAndSaveFileHash')->once()->with($this->tempFile, 'csv', 'njcredential')->andReturn($hash);
+        $this->fileHelper->shouldReceive('createFileHash')->once()->with($this->tempFile, 'csv', 'njcredential')->andReturn($hash);
+        $this->fileHelper->shouldReceive('saveFileHash')->once()->with('njcredential',$hash,'csv');
 
         $this->fileHelper->shouldReceive('saveFileContents')->once()->with($this->tempFile, $hash, 'njcredential')->andReturnTrue();
 

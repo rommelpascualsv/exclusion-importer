@@ -48,8 +48,6 @@ class ImportFileService implements ImportFileServiceInterface
      */
     public function importFile($url, $prefix)
     {
-        $exclusionListFiles = null;
-        
         try {
             
             if (! trim($url)) {
@@ -69,11 +67,11 @@ class ImportFileService implements ImportFileServiceInterface
             if ($this->isExclusionListDownloadable($exclusionList)) {
                 
                 // Download the raw exclusion list file(s) to a local folder
-                $exclusionListFiles = $this->downloadExclusionListFiles($exclusionList);
+                $exclusionList->setExclusionListFiles($this->downloadExclusionListFiles($exclusionList));
                 
                 // Update the files table with the downloaded file content and its corresponding hash
-                $hash = $this->updateFiles($exclusionListFiles, $prefix);
-                
+                $hash = $this->updateFiles($exclusionList, $prefix);
+
                 if (! $this->exclusionListStatusHelper->isUpdateRequired($prefix, $hash)) {
                     
                     $message = 'Exclusion list for \'' . $prefix. '\' is already up-to-date';
@@ -84,14 +82,14 @@ class ImportFileService implements ImportFileServiceInterface
                 if ($exclusionList->type) {
                     // Set the ExclusionList's uri to the path of the locally downloaded file(s)
                     // so downstream processes would just work with the local copies
-                    $exclusionList->uri = implode(',', $exclusionListFiles);
+                    $exclusionList->uri = implode(',', $exclusionList->getExclusionListFiles());
                 }
             }
-            
-            info('Parsing records for ' . $prefix);
 
-            $this->parseRecords($exclusionList);
-                
+            if (! count($exclusionList->data) > 0) {
+                info('Parsing records for ' . $prefix);
+                $this->parseRecords($exclusionList);
+            }
             info('Saving records for ' . $prefix);
 
             if ($prefix == 'sam') {
@@ -121,7 +119,7 @@ class ImportFileService implements ImportFileServiceInterface
             
         } finally {
             
-            delete_if_in_dir($this->exclusionListDownloader->getDownloadDirectory(), $exclusionListFiles);
+            delete_if_in_dir($this->exclusionListDownloader->getDownloadDirectory(), $exclusionList->getExclusionListFiles());
         }
     }
 
@@ -181,7 +179,7 @@ class ImportFileService implements ImportFileServiceInterface
                     $exclusionListFiles = $this->downloadExclusionListFiles($exclusionList);
 
                     //If the list is not configured for auto-import, just update its file repository copy to the latest
-                    $this->updateFiles($exclusionListFiles, $prefix);
+                    $this->updateFiles($exclusionList);
                     
                 }
     
@@ -293,43 +291,47 @@ class ImportFileService implements ImportFileServiceInterface
     /**
      * Updates the files repository with the latest file content and its corresponding
      * hash, if applicable
-     * @param $exclusionListFiles
-     * @param $prefix
+     *
+     * @param ExclusionList $exclusionList
      * @return null|string
      * @throws \Exception
      */
-    private function updateFiles($exclusionListFiles, $prefix)
+    private function updateFiles(ExclusionList $exclusionList)
     {
         $versionFile = null;
     
         try {
-    
+            // Get File Hash
+            $hash = $exclusionList->generateFileHash();
+
             // If we have multiple files, zip them up into a single archive
-            $versionFile = $this->fileHelper->zipMultiple($exclusionListFiles);
-    
+            $versionFile = $this->fileHelper->zipMultiple($exclusionList->getExclusionListFiles());
+
             // Determine the version type (pdf, xls, html, etc). If multiple files
             // were downloaded, it's automatically 'zip' since we consolidated
             // the files into a single zip archive above. Otherwise, we get the
             // type from the file extension of the first element
-            $versionFileType = count($exclusionListFiles) > 1 ? 'zip' : pathinfo($exclusionListFiles[0], PATHINFO_EXTENSION);
-    
-            $hash = $this->fileHelper->createAndSaveFileHash($versionFile, $versionFileType, $prefix);
-    
+            $versionFileType = count($exclusionList->getExclusionListFiles()) > 1 ?
+                'zip' : pathinfo($exclusionList->getExclusionListFiles()[0], PATHINFO_EXTENSION);
+
+            // save File Hash
+            $this->fileHelper->saveFileHash($exclusionList->dbPrefix, $hash, $versionFileType);
+
             // Insert the file contents into the files repository
-            $updated = $this->fileHelper->saveFileContents($versionFile, $hash, $prefix);
+            $updated = $this->fileHelper->saveFileContents($versionFile, $hash, $exclusionList->dbPrefix);
             
-            $this->onFileUpdateSucceeded($prefix, $updated ? ['fileHash' => $hash] : ['message' => 'Last saved file is already up-to-date']);
+            $this->onFileUpdateSucceeded($exclusionList->dbPrefix, $updated ? ['fileHash' => $hash] : ['message' => 'Last saved file is already up-to-date']);
 
             return $hash;
     
         } catch (\PDOException $e) {
             
-            $this->onFileUpdateFailed($prefix, new LoggablePDOException($e));
+            $this->onFileUpdateFailed($exclusionList->dbPrefix, new LoggablePDOException($e));
             throw $e;
             
         } catch(\Exception $e) {
 
-            $this->onFileUpdateFailed($prefix, $e);
+            $this->onFileUpdateFailed($exclusionList->dbPrefix, $e);
             throw $e;
             
         } finally {
