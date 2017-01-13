@@ -25,15 +25,18 @@ abstract class BaseSeed extends Command {
             return;
         }
 
-        if ($this->name == 'nppes:optout') {
-            $this->info($this->database . ' opt out seeding started');
-            $results = $this->seeder->seedOptout($file);
-        } else {
+        if ($this->name == 'nppes:seed') {
             $this->info($this->database . ' seeding started');
             $results = $this->seeder->seed($file, $this->argument('date'));
+            $this->outputResults($results);
         }
 
+        //Opt out command will run after nppes seeding or on its own
+        $this->info($this->database . ' opt out seeding started');
+        $results = $this->seeder->seedOptout();
         $this->outputResults($results);
+
+
     }
 
     protected function outputResults($results)

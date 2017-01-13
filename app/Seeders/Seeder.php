@@ -64,7 +64,7 @@ abstract class Seeder
      * @param $file string containing the filename
      * @return array of statistics
      */
-    public function seedOptout($file)
+    public function seedOptout($file = null)
     {
 
         try {

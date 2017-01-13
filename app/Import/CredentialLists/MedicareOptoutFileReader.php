@@ -27,6 +27,8 @@ class MedicareOptoutFileReader
 
     const METADATA_LENGTH = 8;
 
+    const DEFAULT_SOURCE = 'home/optouttest.json';
+
     public function __construct(NppesRepository $filerepository)
     {
         $this->filerepository = $filerepository;
@@ -36,8 +38,11 @@ class MedicareOptoutFileReader
      * @param $source string containing the filename from command argument
      * @return  $stats array of statistic of successfil and failed update
      */
-    public function getStats ($source)
+    public function getStats ($source = null)
     {
+
+        $source = ($source != null ? $source : self::DEFAULT_SOURCE);
+
         // Create a resource handler to open the raw input
         $fo = fopen($source, 'rb');
 
